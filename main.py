@@ -4,10 +4,10 @@ import os
 
 # formatted part
 
-path = 'tests/regression/AES/cb_aes_40'
-inputfile = '/top.v'
-outputfile = '/pre_top.v'
-top_module = 'top'
+path = 'tests/regression/adder'
+inputfile = '/adder.v'
+outputfile = '/flatten_adder.v'
+top_module = 'adder_32bit'
 inputpath = path+inputfile
 formatpath = path+outputfile
 
