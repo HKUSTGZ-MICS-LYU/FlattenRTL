@@ -200,12 +200,12 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
         # if cur_list_of_ports_type[i] == 'reg' :
         #   cur_new_assign.append('always @(*)' + ' ' + cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ' = '+ cur_list_of_ports_rhs[i] + ';')
         # else:
-        cur_new_assign.append('assign ' + cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ' = '+ cur_list_of_ports_rhs[i] + ';')
+        cur_new_assign.append('assign ' + cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ' = '+ cur_list_of_ports_rhs[k*len(cur_list_of_ports_lhs)+i] + ';')
       else:
         # if cur_list_of_ports_type[i] == 'reg' :
         #   cur_new_assign.append('always @(*) ' + ' ' + cur_list_of_ports_rhs[i] + ' = '+ cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
         # else:
-          cur_new_assign.append('assign ' +  cur_list_of_ports_rhs[i] + ' = '+ cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
+          cur_new_assign.append('assign ' +  cur_list_of_ports_rhs[k*len(cur_list_of_ports_lhs)+i] + ' = '+ cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
 
 
   # 5. TODO: Get the start and stop index of the instance module
