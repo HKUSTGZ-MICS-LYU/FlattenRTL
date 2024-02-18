@@ -1,0 +1,8 @@
+set_mismatch_message_filter -warn FMR_ELAB-147
+read_verilog -r /home/ziyue/researchlib/Micro_Eletronic/pyflattenverilog/tests/regression/non-pipelined-microprocessor/main.v
+set_top main
+read_verilog -i /home/ziyue/researchlib/Micro_Eletronic/pyflattenverilog/tests/regression/non-pipelined-microprocessor/flatten_f_main.v
+set_top main
+verify
+report_unverified_points 
+exit

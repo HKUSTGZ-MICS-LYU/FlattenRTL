@@ -4,10 +4,17 @@ import os
 
 # formatted part
 
+<<<<<<< Updated upstream
 path = 'tests/regression/AES/AES-T500'
 inputfile = '/top.v'
 outputfile = '/f_top.v'
 top_module = 'top'
+=======
+path = 'tests/regression/non-pipelined-microprocessor'
+inputfile = '/main.v'
+outputfile = '/f_main.v'
+top_module = 'main'
+>>>>>>> Stashed changes
 inputpath = path+inputfile
 formatpath = path+outputfile
 

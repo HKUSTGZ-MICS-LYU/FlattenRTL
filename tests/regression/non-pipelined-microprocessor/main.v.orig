@@ -32,17 +32,17 @@
 `define DATA 4
 
 module main( clk );
-	input clk;
+input clk;
 
-	wire[0:4] aluOut;
-	wire[0:4] memOut1;
-	wire[0:4] memOut2;
-	wire[0:2] readLoc1;
-	wire[0:2] readLoc2;
-	wire[0:11] instruction;
-	wire[0:2] opcode;
-	wire [0:2] writeLoc;
-	wire [0:2] progCntr;
+wire[0:`DATA] aluOut;
+wire[0:`DATA] memOut1;
+wire[0:`DATA] memOut2;
+wire[0:`DATA_ADDR] readLoc1;
+wire[0:`DATA_ADDR] readLoc2;
+wire[0:`INSTR] instruction;
+wire[0:`OPCODE] opcode;
+wire [0:`DATA_ADDR] writeLoc;
+wire [0:`PROG_ADDR] progCntr;
 
 
 	memory M( clk, opcode, readLoc1, readLoc2, writeLoc, aluOut, memOut1, memOut2 );
@@ -57,7 +57,7 @@ module main( clk );
 
  	pc PC( clk, opcode, memOut1, memOut2, progCntr );
 
-  	//assert property1:	(!((opcode == 1) && (memOut1 == 0)) && (progCntr == memOut2[0:2]));
+  	//assert property1:	(!((opcode == `JMP) && (memOut1 == 0)) && (progCntr == memOut2[0:2]));
 
 endmodule
 
@@ -67,25 +67,25 @@ module
 memory( clk, opcode, readLoc1, readLoc2, writeLoc, data, memOut1, memOut2 );
      
 input clk;
-input[0:2]  opcode;
-input[0:2]    readLoc1;
-input[0:2]    readLoc2;
-input[0:2]    writeLoc;
-input[0:4]    data;
-output[0:4]   memOut1;
-output[0:4]   memOut2;
+input[0:`OPCODE]  opcode;
+input[0:`DATA_ADDR]    readLoc1;
+input[0:`DATA_ADDR]    readLoc2;
+input[0:`DATA_ADDR]    writeLoc;
+input[0:`DATA]    data;
+output[0:`DATA]   memOut1;
+output[0:`DATA]   memOut2;
 
-wire [0:4] memOut1;
-wire [0:4] memOut2;
+wire [0:`DATA] memOut1;
+wire [0:`DATA] memOut2;
 
-reg [0:4] m0;
-reg [0:4] m1;
-reg [0:4] m2;
-reg [0:4] m3;
-reg [0:4] m4;
-reg [0:4] m5;
-reg [0:4] m6;
-reg [0:4] m7;
+reg [0:`DATA] m0;
+reg [0:`DATA] m1;
+reg [0:`DATA] m2;
+reg [0:`DATA] m3;
+reg [0:`DATA] m4;
+reg [0:`DATA] m5;
+reg [0:`DATA] m6;
+reg [0:`DATA] m7;
 
 initial begin m0 = 1; end
 initial begin m1 = 0; end
@@ -114,7 +114,7 @@ assign memOut2 = (readLoc2 == 0) ? m0 :
 				   
      always @(posedge clk) 
           begin
-            if (opcode != 1)
+            if (opcode != `JMP)
               begin
 				if (writeLoc == 0 )
 				  begin
@@ -158,17 +158,17 @@ endmodule
 module program( clk, progCntr, instruction );
 
      input clk;
-     input[0:2] progCntr;
-     output[0:11] instruction;
+     input[0:`PROG_ADDR] progCntr;
+     output[0:`INSTR] instruction;
 
-	 wire[0:11] instr0;
-	 wire[0:11] instr1;
-	 wire[0:11] instr2;
-	 wire[0:11] instr3;
-	 wire[0:11] instr4;
-	 wire[0:11] instr5;
-	 wire[0:11] instr6;
-	 wire[0:11] instr7;
+	 wire[0:`INSTR] instr0;
+	 wire[0:`INSTR] instr1;
+	 wire[0:`INSTR] instr2;
+	 wire[0:`INSTR] instr3;
+	 wire[0:`INSTR] instr4;
+	 wire[0:`INSTR] instr5;
+	 wire[0:`INSTR] instr6;
+	 wire[0:`INSTR] instr7;
 
 	 // assign instr0 = 12'b001_001_000_000;
 	 assign instr0 = 576;
@@ -198,11 +198,12 @@ module program( clk, progCntr, instruction );
 endmodule
 
 /* split instruction; this gets opcode */
-module decodeOpcd( clk, instruction, opcode );
+module 
+decodeOpcd( clk, instruction, opcode );
 	
 	input  clk;
-	input[0:11] instruction;
-	output[0:2] opcode;
+	input[0:`INSTR] instruction;
+	output[0:`OPCODE] opcode;
 
 	assign opcode = instruction[0:2];
 
@@ -210,62 +211,67 @@ endmodule
 
 
 /* split instruction; this gets src_reg1 */
-module decodeLoc1( clk, instruction, readLoc1 );
+module 
+decodeLoc1( clk, instruction, readLoc1 );
 	
 	input  clk;
-	input[0:11] instruction;
-	output[0:2] readLoc1;
+	input[0:`INSTR] instruction;
+	output[0:`DATA_ADDR] readLoc1;
 
 	assign readLoc1 = instruction[3:5];
 
 endmodule
 
 /* split instruction; this gets src_reg2 */
-module decodeLoc2( clk, instruction, readLoc2 );
+module 
+decodeLoc2( clk, instruction, readLoc2 );
 	
 	input  clk;
-	input[0:11] instruction;
-	output[0:2] readLoc2;
+	input[0:`INSTR] instruction;
+	output[0:`DATA_ADDR] readLoc2;
 
 	assign readLoc2 = instruction[6:8];
 
 endmodule
 
 /* split instruction; this gets destn_reg1 */
-module decodeLoc3( clk, instruction, writeLoc );
+module 
+decodeLoc3( clk, instruction, writeLoc );
 	
 	input  clk;
-	input[0:11] instruction;
-	output[0:2] writeLoc;
+	input[0:`INSTR] instruction;
+	output[0:`DATA_ADDR] writeLoc;
 
 	assign writeLoc = instruction[9:11];
 
 endmodule
 
 /* 4 instruction alu */
-module alu( clk, opcode, operand1, operand2, aluOut );
+module
+alu( clk, opcode, operand1, operand2, aluOut );
 
 	input clk;
-	input[0:2] opcode;
-	input[0:4] operand1;
-	input[0:4] operand2;
-	output[0:4] aluOut;
+	input[0:`OPCODE] opcode;
+	input[0:`DATA] operand1;
+	input[0:`DATA] operand2;
+	output[0:`DATA] aluOut;
 
-assign aluOut = (opcode == 0) ? (operand1 + operand2) :
-                 (opcode == 3) ? (operand1^operand2) :
-				  (opcode == 1) ? (operand1 & operand2) : 0;
+assign aluOut = (opcode == `ADD) ? (operand1 + operand2) :
+                 (opcode == `XOR) ? (operand1^operand2) :
+				  (opcode == `AND) ? (operand1 & operand2) : 0;
 endmodule
 
 /* program counter - increment by one unless jmp */
-module pc( clk, opcode, operand1, operand2, progCntr );
+module 
+pc( clk, opcode, operand1, operand2, progCntr );
   
 	input clk;
-	input[0:2] opcode;
-	input[0:4]  operand1;
-	input[0:4]  operand2;
-	output[0:2] progCntr;
+	input[0:`OPCODE] opcode;
+	input[0:`DATA]  operand1;
+	input[0:`DATA]  operand2;
+	output[0:`PROG_ADDR] progCntr;
 
-	reg[0:2] progCntr;
+	reg[0:`PROG_ADDR] progCntr;
 	initial
 	  begin 
 		progCntr = 0;
@@ -273,7 +279,7 @@ module pc( clk, opcode, operand1, operand2, progCntr );
 	
     always @(posedge clk) 
 	  begin
-		if ( (opcode == 1) && (operand1 == 0) )
+		if ( (opcode == `JMP) && (operand1 == 0) )
 		  begin 
 		    progCntr = operand2[0:2];
           end
