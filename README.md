@@ -14,17 +14,16 @@ module adder_8bit(a, b, sum);
    input  [7:0] a;
    input  [7:0] b;
    output [7:0] sum;
-   wire   [7:0] sum;
-
    assign sum = a + b;
 endmodule
+
+
 
 // 16 bit adder
 module adder_16bit(a, b, sum);
    input  [15:0] a;
    input  [15:0] b;
    output [15:0] sum;
-   wire   [15:0] sum;
 
    adder_8bit add_high (
        .a(a[15:8]),
@@ -39,12 +38,15 @@ module adder_16bit(a, b, sum);
    );
 endmodule 
 
+
+
+endmodule 
+
 // 32 bit adder
 module adder_32bit(a, b, sum);
    input  [31:0] a;
    input  [31:0] b;
    output [31:0] sum;
-   wire   [31:0] sum;
 
    adder_16bit add_high (
        .a(a[31:16]),
@@ -58,6 +60,8 @@ module adder_32bit(a, b, sum);
        .sum(sum[15:0])
    );
 endmodule
+
+
 
 ```
 
