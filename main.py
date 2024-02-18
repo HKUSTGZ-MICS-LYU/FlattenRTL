@@ -4,10 +4,10 @@ import os
 
 # formatted part
 
-path = 'tests/regression/b19'
-inputfile = '/b19.v'
-outputfile = '/f_b19.v'
-top_module = 'b19'
+path = 'tests/regression/adder'
+inputfile = '/adder.v'
+outputfile = '/f_adder.v'
+top_module = 'adder_32bit'
 inputpath = path+inputfile
 formatpath = path+outputfile
 
