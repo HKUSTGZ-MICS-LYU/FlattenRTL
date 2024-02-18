@@ -4,10 +4,10 @@ import os
 
 # formatted part
 
-path = 'tests/regression/adder'
-inputfile = '/adder.v'
-outputfile = '/flatten_adder.v'
-top_module = 'adder_32bit'
+path = 'tests/regression/b19'
+inputfile = '/b19.v'
+outputfile = '/f_b19.v'
+top_module = 'b19'
 inputpath = path+inputfile
 formatpath = path+outputfile
 
@@ -16,6 +16,9 @@ if os.path.exists(formatpath):
 with open(path+inputfile, 'r') as f:
     design = f.read()
     preprocess.formatter_file(design, formatpath)
+    # copy the file to formatpath
+    # with open(formatpath, 'w') as f:
+    #     f.write(design)
 
 # flatten part
 

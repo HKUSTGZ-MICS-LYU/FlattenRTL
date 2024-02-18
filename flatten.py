@@ -59,20 +59,21 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
   # print(design[top_node_tree.start.start:top_node_tree.stop.stop+1])
 
   # 3. TODO: Walk to the first node with initialization
+  # According to module_identifier, we will get multiple name_of_module_instances
   class MyModuleInstantiationVisitor(VerilogParserVisitor):
     def __init__(self):
       self.is_first_instantiation_module = False
       self.module_identifier = ""
-      self.name_of_module_instance = ""
+      self.name_of_module_instances = []
       self.list_of_ports_rhs = []
       self.list_of_ports_rhs_width = []
 
     def visitModule_instantiation(self, ctx: VerilogParser.Module_instantiationContext):
-      if self.is_first_instantiation_module == False:
+      if self.is_first_instantiation_module == False or self.module_identifier==ctx.module_identifier().getText():
           self.is_first_instantiation_module = True
           self.first_instantiation = ctx
           self.module_identifier = ctx.module_identifier().getText()
-          self.name_of_module_instance = ctx.module_instance()[0].name_of_module_instance().getText()
+          self.name_of_module_instances.append(ctx.module_instance()[0].name_of_module_instance().getText())
           # get ports connections
           ports_connections = ctx.module_instance()[0].list_of_port_connections()
           for child in ports_connections.getChildren():
@@ -85,8 +86,8 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
   visitor = MyModuleInstantiationVisitor()
   visitor.visit(top_node_tree)
   cur_module_identifier = visitor.module_identifier
-  cur_name_of_module_instance = visitor.name_of_module_instance
-  cur_prefix = cur_name_of_module_instance
+  cur_name_of_module_instances = visitor.name_of_module_instances
+  cur_prefixs = cur_name_of_module_instances
   cur_list_of_ports_rhs = visitor.list_of_ports_rhs
 
   if cur_module_identifier == '':
@@ -101,7 +102,7 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
      os.system("bin/iStyle -n --style=ansi " + flatten_path)
      return -1
   else:
-    print("[Processing] MODULE: %s\tNAME:%s"%(cur_module_identifier,cur_name_of_module_instance))
+    print("[Processing] MODULE: %s\tNAME:%s"%(cur_module_identifier,cur_name_of_module_instances))
 
 
   class InstModulePortVisitor(VerilogParserVisitor):
@@ -186,29 +187,28 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
   cur_new_variable = []
   cur_new_assign = []
 
+  for k in range(0,len(cur_prefixs)):
+    for i in range(0,len(cur_list_of_ports_lhs)):
+      if cur_list_of_data_type[i] != '':
+        cur_new_variable.append(cur_list_of_data_type[i]  + cur_list_of_ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
+      elif cur_list_of_ports_type[i] == 'reg':
+        cur_new_variable.append('reg '  + cur_list_of_ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
+      else:
+        cur_new_variable.append('wire '  + cur_list_of_ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
+    
+      if cur_list_of_ports_direction[i] == 'input': 
+        # if cur_list_of_ports_type[i] == 'reg' :
+        #   cur_new_assign.append('always @(*)' + ' ' + cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ' = '+ cur_list_of_ports_rhs[i] + ';')
+        # else:
+        cur_new_assign.append('assign ' + cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ' = '+ cur_list_of_ports_rhs[i] + ';')
+      else:
+        # if cur_list_of_ports_type[i] == 'reg' :
+        #   cur_new_assign.append('always @(*) ' + ' ' + cur_list_of_ports_rhs[i] + ' = '+ cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
+        # else:
+          cur_new_assign.append('assign ' +  cur_list_of_ports_rhs[i] + ' = '+ cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
 
-  for i in range(0,len(cur_list_of_ports_lhs)):
-    if cur_list_of_data_type[i] != '':
-       cur_new_variable.append(cur_list_of_data_type[i]  + cur_list_of_ports_lhs_width[i] + ' '+cur_prefix + '_' + cur_list_of_ports_lhs[i] + ';')
-    elif cur_list_of_ports_type[i] == 'reg':
-      cur_new_variable.append('reg '  + cur_list_of_ports_lhs_width[i] + ' '+cur_prefix + '_' + cur_list_of_ports_lhs[i] + ';')
-    else:
-      cur_new_variable.append('wire '  + cur_list_of_ports_lhs_width[i] + ' '+cur_prefix + '_' + cur_list_of_ports_lhs[i] + ';')
-  
-    if cur_list_of_ports_direction[i] == 'input': 
-      # if cur_list_of_ports_type[i] == 'reg' :
-      #   cur_new_assign.append('always @(*)' + ' ' + cur_prefix + '_' + cur_list_of_ports_lhs[i] + ' = '+ cur_list_of_ports_rhs[i] + ';')
-      # else:
-       cur_new_assign.append('assign ' + cur_prefix + '_' + cur_list_of_ports_lhs[i] + ' = '+ cur_list_of_ports_rhs[i] + ';')
-    else:
-      # if cur_list_of_ports_type[i] == 'reg' :
-      #   cur_new_assign.append('always @(*) ' + ' ' + cur_list_of_ports_rhs[i] + ' = '+ cur_prefix + '_' + cur_list_of_ports_lhs[i] + ';')
-      # else:
-        cur_new_assign.append('assign ' +  cur_list_of_ports_rhs[i] + ' = '+ cur_prefix + '_' + cur_list_of_ports_lhs[i] + ';')
 
-
-  # 5. TODO: Rename all variable
-  # replace the corresponding variables with `cur_prefix`
+  # 5. TODO: Get the start and stop index of the instance module
   class InstModuleVisitor(VerilogParserVisitor):
     def __init__(self):
         super().__init__()
@@ -217,6 +217,30 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
         self.start = None
         self.stop = None
         self.indent = 2
+
+    def visitModule_declaration(self, ctx: VerilogParser.Module_declarationContext):
+        module_name = ctx.module_identifier().getText()
+        if module_name == cur_module_identifier:
+          self.start = ctx.start.start
+          self.stop = ctx.stop.stop
+          self.inst_module_node = ctx        
+        
+
+  visitor = InstModuleVisitor()
+  visitor.visit(tree)
+  inst_module_design = design[visitor.start:visitor.stop+1]
+
+  # 6. TODO: Rename all variable in the instance module
+  # replace the corresponding variables with `cur_prefixs`
+  class InstModuleVisitor(VerilogParserVisitor):
+    def __init__(self, cur_prefixs_index):
+        super().__init__()
+        self.inst_module_node = None
+        self.inst_module_design = None
+        self.start = None
+        self.stop = None
+        self.indent = 2
+        self.cur_prefixs_index = cur_prefixs_index
 
     "This function is used to traverse the tree and change the name of the instance"
     def _traverse_children(self,ctx):  
@@ -231,19 +255,69 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
               elif isinstance(child.parentCtx.parentCtx, VerilogParser.Port_identifierContext):
                   pass
               else:
-                  child.start.text = ' ' + cur_prefix + '_' + child.start.text + ' '
+                  child.start.text = ' ' + cur_prefixs[self.cur_prefixs_index] + '_' + child.start.text + ' '
           self._traverse_children(child)
 
     def visitModule_declaration(self, ctx: VerilogParser.Module_declarationContext):
         module_name = ctx.module_identifier().getText()
         if module_name == cur_module_identifier:
+          self.start = ctx.start.start
+          self.stop = ctx.stop.stop
           self.inst_module_node = ctx        
           self._traverse_children(self.inst_module_node)
-        
 
-  visitor = InstModuleVisitor()
-  visitor.visit(tree)
-  inst_module_node = visitor.inst_module_node
+  inst_module_design_trees = []
+  inst_module_nodes = []
+  for k in range(0,len(cur_prefixs)):
+     tmp_inst_module_design = Design2Tree(inst_module_design)
+     visitor = InstModuleVisitor(k)
+     visitor.visit(tmp_inst_module_design)
+     inst_module_design_trees.append(tmp_inst_module_design)
+     inst_module_nodes.append(visitor.inst_module_node)
+
+
+  # 5. TODO: Get the instance body
+  # '''
+  # The original instance body:
+  # // 16 bit adder
+  # module adder_16bit (
+  #   input [15:0] a,
+  #   input [15:0] b,
+  #   output [15:0] sum  
+  # );
+
+  #   // high 8 bit adder
+  #   adder_8bit add_high (
+  #     .a(a[15:8]),
+  #     .b(b[15:8]), 
+  #     .sum(sum[15:8])
+  #   );
+
+  #   // low 8 bit adder
+  #   adder_8bit add_low (
+  #     .a(a[7:0]),
+  #     .b(b[7:0]),
+  #     .sum(sum[7:0]) 
+  #   );
+
+  # endmodule 
+
+  # The output instance body:
+
+  # adder_8bit  add_high_add_high (.a( add_high_a [15:8]),.b( add_high_b [15:8]),.sum( add_high_sum [15:8])); 
+  # adder_8bit  add_high_add_low (.a( add_high_a [7:0]),.b( add_high_b [7:0]),.sum( add_high_sum [7:0]));
+
+  # '''
+  # inst_body_list = []
+  # if inst_module_node.getChildCount() >= 5:
+  #   for i in range(4, inst_module_node.getChildCount()-1):
+  #     inst_body_list.append(inst_module_node.getChild(i))
+  # else:
+  #   print("Instance body is empty!")
+
+  # print to check the instance body
+  # for i in range(0,len(inst_body_list)):
+  #    print(inst_body_list[i].getText())
 
   # 8. TODO: Process the format of the instance body
   class InstBodyVisitor(VerilogParserVisitor):
@@ -338,10 +412,12 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
       self.formatProcess(self.inst_module_node)
       self.inst_module_node = Design2Tree(self.text)
 
-  visitor = InstBodyVisitor()
-  visitor.visit(inst_module_node)
-  inst_module_node = visitor.inst_module_node
-  inst_module_design = visitor.text
+  inst_module_designs = []
+  for k in range(0,len(cur_prefixs)):
+     visitor = InstBodyVisitor()
+     visitor.visit(inst_module_nodes[k])
+     inst_module_nodes[k] = visitor.inst_module_node
+     inst_module_designs.append(visitor.text)
 
   # 7. TODO: Get the instance body
   class InstBodyVisitor(VerilogParserVisitor):
@@ -362,44 +438,51 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
     def visitModule_declaration(self, ctx: VerilogParser.Module_declarationContext):
       self.ExtractStartAndStop(ctx)
 
-  visitor = InstBodyVisitor()
-  visitor.visit(inst_module_node)
-  insert_part = inst_module_design[visitor.start:visitor.stop]
+  insert_parts = []
+  for k in range(0,len(cur_prefixs)):
+    visitor = InstBodyVisitor()
+    visitor.visit(inst_module_nodes[k])
+    insert_parts.append(inst_module_designs[k][visitor.start:visitor.stop])
 
 
   # 8. Replace the instance with new assignment and add instance body in the top module
   class VerilogIdentifierVisitor(VerilogParserVisitor):
       def __init__(self):
           super().__init__()
-          self.start = None
-          self.stop = None
+          self.start = []
+          self.stop = []
       def _traverse_children(self,ctx):
           if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
               pass
           else:
               for child in ctx.getChildren():
                 if isinstance(child, VerilogParser.Module_instantiationContext):
-                  if child.module_instance()[0].name_of_module_instance().getText() == cur_name_of_module_instance :
-                    self.start = child.start.start
-                    self.stop = child.stop.stop
+                  for cur_name in cur_name_of_module_instances:
+                    if child.module_instance()[0].name_of_module_instance().getText() == cur_name:
+                      self.start.append(child.start.start)
+                      self.stop.append(child.stop.stop)
                 self._traverse_children(child)
       def visitModule_declaration(self, ctx: VerilogParser.Module_declarationContext):
           if ctx.module_identifier().getText() == top_module:
                 self._traverse_children(ctx)
-                print(design[:self.start],file=of_handler)
+                print(design[:self.start[0]],file=of_handler)
                 for wire in cur_new_variable:
                     print(wire,file=of_handler)
                 for assign in cur_new_assign:
                     print(assign,file=of_handler)
-                print(insert_part,file=of_handler)
-                print(design[self.stop+1:],file=of_handler)
+                print(insert_parts[0],file=of_handler)
+                for i in range(1, len(self.start)):
+                    print(design[self.stop[i-1]+1:self.start[i]],file=of_handler)
+                    print(insert_parts[i],file=of_handler)
+                print(design[self.stop[-1]+1:],file=of_handler)
               
               
   # Create a visitor instance and visit the top module node
   visitor = VerilogIdentifierVisitor()
   visitor.visit(top_node_tree)
+  
 
   of_handler.close()
   of_handler = open(output_file,'r')
   tmp_flatten_design = of_handler.read()
-  return tmp_flatten_design                
+  return tmp_flatten_design
