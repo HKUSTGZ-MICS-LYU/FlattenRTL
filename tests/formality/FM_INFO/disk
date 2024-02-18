@@ -1,15 +1,10 @@
-Directory = /home/xiangchenmeng/rtl/pyflat_copy/tests/formality
-Total     = 1282 GB
-<<<<<<< HEAD
-Available = 227 GB
-Used      = 1055 GB (83%)
-=======
-Available = 350 GB
-Used      = 932 GB (73%)
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
+Directory = /hpc/home/connect.zzheng989/researchlib/pyflattenverilog/tests/formality
+Total     = 1.18076e+06 GB
+Available = 1.0885e+06 GB
+Used      = 92268 GB (8%)
 
 Directory = /tmp
-Total     = 500 GB
-Available = 29 GB
-Used      = 471 GB (95%)
+Total     = 1221 GB
+Available = 1211 GB
+Used      = 10 GB (1%)
 

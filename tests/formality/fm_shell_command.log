@@ -1,15 +1,11 @@
 #@ # 
-#@ # Running fm_shell Version T-2022.03-SP5 for linux64 -- Oct 18, 2022
-<<<<<<< HEAD
-#@ # Date:   Fri Oct 27 05:09:10 2023
-=======
-#@ # Date:   Fri Oct 27 22:46:25 2023
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-#@ # Run by: xiangchenmeng@mics-eda
+#@ # Running fm_shell Version V-2023.12 for linux64 -- Nov 16, 2023
+#@ # Date:   Sun Feb 18 20:16:18 2024
+#@ # Run by: connect.zzheng989@vm_yangdilyu
 #@ 
 
-source /usr/synopysys/install/formality/T-2022.03-SP5/admin/setup/.synopsys_fm.setup
-#@ # -- Starting source /usr/synopysys/install/formality/T-2022.03-SP5/admin/setup/.synopsys_fm.setup
+source /hpc/Edatools/synopsys/formality/V-2023.12/admin/setup/.synopsys_fm.setup
+#@ # -- Starting source /hpc/Edatools/synopsys/formality/V-2023.12/admin/setup/.synopsys_fm.setup
 
 #@ #
 #@ # .synopsys_fm.setup: Initialization File for Formality
@@ -50,25 +46,16 @@ source /usr/synopysys/install/formality/T-2022.03-SP5/admin/setup/.synopsys_fm.s
 #@ # output but exits the tool.
 #@ #
 #@ #alias q quit
-#@ # -- End source /usr/synopysys/install/formality/T-2022.03-SP5/admin/setup/.synopsys_fm.setup
+#@ # -- End source /hpc/Edatools/synopsys/formality/V-2023.12/admin/setup/.synopsys_fm.setup
 
 source -echo -verbose verify.fms
 #@ # -- Starting source verify.fms
 
 #@ set_mismatch_message_filter -warn FMR_ELAB-147
-<<<<<<< HEAD
-#@ read_verilog -r /home/xiangchenmeng/rtl/pyflattenverilog/tests/regression/b19/b19.v
-#@ set_top b19
-#@ read_verilog -i /home/xiangchenmeng/rtl/pyflattenverilog/tests/regression/b19/b19_temp.v
-#@ set_top b19
-#@ verify
-=======
-#@ set synopsys_auto_setup true
-#@ read_verilog -r /home/xiangchenmeng/rtl/pyflat_copy/tests/regression/i2c/src/top.v
-#@ set_top i2c_master_top
-#@ read_verilog -i /home/xiangchenmeng/rtl/pyflat_copy/tests/regression/i2c/src/pre_top.v
-#@ set_top i2c_master_top
+#@ read_verilog -r /hpc/home/connect.zzheng989/researchlib/pyflattenverilog/tests/regression/adder/adder.v
+#@ set_top adder_32bit
+#@ read_verilog -i /hpc/home/connect.zzheng989/researchlib/pyflattenverilog/tests/regression/adder/flatten_f_adder.v
+#@ set_top adder_32bit
 #@ verify
 #@ report_unverified_points 
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
 #@ exit

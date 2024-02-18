@@ -6,8 +6,6 @@ module adder_8bit(a, b, sum);
    assign sum = a + b;
 endmodule
 
-
-
 // 16 bit adder
 module adder_16bit(a, b, sum);
    input  [15:0] a;
@@ -25,10 +23,6 @@ module adder_16bit(a, b, sum);
        .b(b[7:0]),
        .sum(sum[7:0]) 
    );
-endmodule 
-
-
-
 endmodule 
 
 // 32 bit adder

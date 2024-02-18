@@ -1,10 +1,6 @@
 System name = Linux
-Host name   = mics-eda
-<<<<<<< HEAD
-Process     = 58652
-=======
-Process     = 19919
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
+Host name   = vm_yangdilyu
+Process     = 26634
 Release     = 3.10.0-1160.el7.x86_64
 Version     = #1 SMP Mon Oct 19 16:18:59 UTC 2020
 Machine     = x86_64

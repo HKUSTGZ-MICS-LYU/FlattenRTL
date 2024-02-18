@@ -2,2147 +2,415 @@ processor	: 0
 vendor_id	: GenuineIntel
 cpu family	: 6
 model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
+model name	: Intel(R) Xeon(R) Gold 6338 CPU @ 2.00GHz
 stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3541.625
-=======
-cpu MHz		: 3571.655
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
+microcode	: 0xd000375
+cpu MHz		: 1995.312
+cache size	: 49152 KB
 physical id	: 0
-siblings	: 36
+siblings	: 16
 core id		: 0
-cpu cores	: 18
+cpu cores	: 16
 apicid		: 0
 initial apicid	: 0
 fpu		: yes
 fpu_exception	: yes
 cpuid level	: 27
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon rep_good nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single ssbd ibrs ibpb stibp ibrs_enhanced fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 arat avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear spec_ctrl intel_stibp flush_l1d arch_capabilities
+bogomips	: 3990.62
 clflush size	: 64
 cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
+address sizes	: 45 bits physical, 48 bits virtual
 power management:
 
 processor	: 1
 vendor_id	: GenuineIntel
 cpu family	: 6
 model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
+model name	: Intel(R) Xeon(R) Gold 6338 CPU @ 2.00GHz
 stepping	: 6
-microcode	: 0xd000311
-cpu MHz		: 2410.583
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 0
-cpu cores	: 18
-apicid		: 128
-initial apicid	: 128
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 2
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3337.463
-=======
-cpu MHz		: 3297.546
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
+microcode	: 0xd000375
+cpu MHz		: 1995.312
+cache size	: 49152 KB
 physical id	: 0
-siblings	: 36
-core id		: 9
-cpu cores	: 18
-apicid		: 18
-initial apicid	: 18
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 3
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3387.084
-=======
-cpu MHz		: 1326.049
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 9
-cpu cores	: 18
-apicid		: 146
-initial apicid	: 146
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 4
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3341.491
-=======
-cpu MHz		: 3272.277
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 0
-siblings	: 36
+siblings	: 16
 core id		: 1
-cpu cores	: 18
-apicid		: 2
-initial apicid	: 2
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 5
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3599.853
-=======
-cpu MHz		: 1638.427
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 1
-cpu cores	: 18
-apicid		: 130
-initial apicid	: 130
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 6
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3565.246
-=======
-cpu MHz		: 3565.429
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 0
-siblings	: 36
-core id		: 10
-cpu cores	: 18
-apicid		: 20
-initial apicid	: 20
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 7
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3556.091
-=======
-cpu MHz		: 1655.273
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 10
-cpu cores	: 18
-apicid		: 148
-initial apicid	: 148
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 8
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 2391.357
-=======
-cpu MHz		: 3384.887
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 0
-siblings	: 36
-core id		: 2
-cpu cores	: 18
-apicid		: 4
-initial apicid	: 4
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 9
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3126.525
-=======
-cpu MHz		: 1163.085
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 2
-cpu cores	: 18
-apicid		: 132
-initial apicid	: 132
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 10
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3080.017
-=======
-cpu MHz		: 3598.754
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 0
-siblings	: 36
-core id		: 11
-cpu cores	: 18
-apicid		: 22
-initial apicid	: 22
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 11
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3596.923
-=======
-cpu MHz		: 1484.985
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 11
-cpu cores	: 18
-apicid		: 150
-initial apicid	: 150
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 12
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3535.034
-=======
-cpu MHz		: 3382.690
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 0
-siblings	: 36
-core id		: 3
-cpu cores	: 18
-apicid		: 6
-initial apicid	: 6
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 13
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3587.219
-=======
-cpu MHz		: 2897.460
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 3
-cpu cores	: 18
-apicid		: 134
-initial apicid	: 134
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 14
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 2642.028
-=======
-cpu MHz		: 3489.624
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 0
-siblings	: 36
-core id		: 12
-cpu cores	: 18
-apicid		: 24
-initial apicid	: 24
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 15
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 2969.604
-=======
-cpu MHz		: 2793.090
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 12
-cpu cores	: 18
-apicid		: 152
-initial apicid	: 152
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 16
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3191.345
-=======
-cpu MHz		: 3585.388
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 0
-siblings	: 36
-core id		: 4
-cpu cores	: 18
-apicid		: 8
-initial apicid	: 8
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 17
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3220.825
-=======
-cpu MHz		: 2427.429
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 4
-cpu cores	: 18
-apicid		: 136
-initial apicid	: 136
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 18
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3565.429
-=======
-cpu MHz		: 2343.933
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 0
-siblings	: 36
-core id		: 13
-cpu cores	: 18
-apicid		: 26
-initial apicid	: 26
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 19
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 2759.765
-=======
-cpu MHz		: 1186.340
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 13
-cpu cores	: 18
-apicid		: 154
-initial apicid	: 154
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 20
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3502.441
-=======
-cpu MHz		: 3071.044
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 0
-siblings	: 36
-core id		: 5
-cpu cores	: 18
-apicid		: 10
-initial apicid	: 10
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 21
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 2411.865
-=======
-cpu MHz		: 1449.645
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 5
-cpu cores	: 18
-apicid		: 138
-initial apicid	: 138
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 22
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3213.134
-=======
-cpu MHz		: 3313.110
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 0
-siblings	: 36
-core id		: 14
-cpu cores	: 18
-apicid		: 28
-initial apicid	: 28
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 23
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3544.189
-=======
-cpu MHz		: 1761.657
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 14
-cpu cores	: 18
-apicid		: 156
-initial apicid	: 156
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 24
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3599.853
-=======
-cpu MHz		: 3286.376
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 0
-siblings	: 36
-core id		: 6
-cpu cores	: 18
-apicid		: 12
-initial apicid	: 12
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 25
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3587.951
-=======
-cpu MHz		: 1099.548
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 6
-cpu cores	: 18
-apicid		: 140
-initial apicid	: 140
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 26
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3133.117
-=======
-cpu MHz		: 3242.431
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 0
-siblings	: 36
-core id		: 15
-cpu cores	: 18
-apicid		: 30
-initial apicid	: 30
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 27
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3390.747
-=======
-cpu MHz		: 1060.363
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 15
-cpu cores	: 18
-apicid		: 158
-initial apicid	: 158
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 28
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 2771.667
-=======
-cpu MHz		: 3430.480
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 0
-siblings	: 36
-core id		: 7
-cpu cores	: 18
-apicid		: 14
-initial apicid	: 14
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 29
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 2436.035
-=======
-cpu MHz		: 1305.541
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 7
-cpu cores	: 18
-apicid		: 142
-initial apicid	: 142
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 30
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 2681.945
-=======
-cpu MHz		: 3032.226
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 0
-siblings	: 36
-core id		: 16
-cpu cores	: 18
-apicid		: 32
-initial apicid	: 32
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 31
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3211.303
-=======
-cpu MHz		: 2485.656
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 16
-cpu cores	: 18
-apicid		: 160
-initial apicid	: 160
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 32
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-cpu MHz		: 3599.853
-cache size	: 39936 KB
-physical id	: 0
-siblings	: 36
-core id		: 8
-cpu cores	: 18
-apicid		: 16
-initial apicid	: 16
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 33
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3521.850
-=======
-cpu MHz		: 1239.807
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 8
-cpu cores	: 18
-apicid		: 144
-initial apicid	: 144
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 34
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3473.876
-=======
-cpu MHz		: 3597.290
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 0
-siblings	: 36
-core id		: 17
-cpu cores	: 18
-apicid		: 34
-initial apicid	: 34
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 35
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3518.554
-=======
-cpu MHz		: 998.657
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 17
-cpu cores	: 18
-apicid		: 162
-initial apicid	: 162
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 36
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3562.866
-=======
-cpu MHz		: 3453.918
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 0
-siblings	: 36
-core id		: 0
-cpu cores	: 18
+cpu cores	: 16
 apicid		: 1
 initial apicid	: 1
 fpu		: yes
 fpu_exception	: yes
 cpuid level	: 27
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon rep_good nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single ssbd ibrs ibpb stibp ibrs_enhanced fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 arat avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear spec_ctrl intel_stibp flush_l1d arch_capabilities
+bogomips	: 3990.62
 clflush size	: 64
 cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
+address sizes	: 45 bits physical, 48 bits virtual
 power management:
 
-processor	: 37
+processor	: 2
 vendor_id	: GenuineIntel
 cpu family	: 6
 model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
+model name	: Intel(R) Xeon(R) Gold 6338 CPU @ 2.00GHz
 stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3599.487
-=======
-cpu MHz		: 1458.251
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 0
-cpu cores	: 18
-apicid		: 129
-initial apicid	: 129
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 38
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3597.839
-=======
-cpu MHz		: 3592.712
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
+microcode	: 0xd000375
+cpu MHz		: 1995.312
+cache size	: 49152 KB
 physical id	: 0
-siblings	: 36
-core id		: 9
-cpu cores	: 18
-apicid		: 19
-initial apicid	: 19
+siblings	: 16
+core id		: 2
+cpu cores	: 16
+apicid		: 2
+initial apicid	: 2
 fpu		: yes
 fpu_exception	: yes
 cpuid level	: 27
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon rep_good nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single ssbd ibrs ibpb stibp ibrs_enhanced fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 arat avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear spec_ctrl intel_stibp flush_l1d arch_capabilities
+bogomips	: 3990.62
 clflush size	: 64
 cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
+address sizes	: 45 bits physical, 48 bits virtual
 power management:
 
-processor	: 39
+processor	: 3
 vendor_id	: GenuineIntel
 cpu family	: 6
 model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
+model name	: Intel(R) Xeon(R) Gold 6338 CPU @ 2.00GHz
 stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3478.637
-=======
-cpu MHz		: 3547.485
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 9
-cpu cores	: 18
-apicid		: 147
-initial apicid	: 147
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 40
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3457.580
-=======
-cpu MHz		: 3600.036
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
+microcode	: 0xd000375
+cpu MHz		: 1995.312
+cache size	: 49152 KB
 physical id	: 0
-siblings	: 36
-core id		: 1
-cpu cores	: 18
+siblings	: 16
+core id		: 3
+cpu cores	: 16
 apicid		: 3
 initial apicid	: 3
 fpu		: yes
 fpu_exception	: yes
 cpuid level	: 27
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon rep_good nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single ssbd ibrs ibpb stibp ibrs_enhanced fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 arat avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear spec_ctrl intel_stibp flush_l1d arch_capabilities
+bogomips	: 3990.62
 clflush size	: 64
 cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
+address sizes	: 45 bits physical, 48 bits virtual
 power management:
 
-processor	: 41
+processor	: 4
 vendor_id	: GenuineIntel
 cpu family	: 6
 model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
+model name	: Intel(R) Xeon(R) Gold 6338 CPU @ 2.00GHz
 stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3599.853
-=======
-cpu MHz		: 800.354
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 1
-cpu cores	: 18
-apicid		: 131
-initial apicid	: 131
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 42
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 2652.465
-=======
-cpu MHz		: 2833.190
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
+microcode	: 0xd000375
+cpu MHz		: 1995.312
+cache size	: 49152 KB
 physical id	: 0
-siblings	: 36
-core id		: 10
-cpu cores	: 18
-apicid		: 21
-initial apicid	: 21
+siblings	: 16
+core id		: 4
+cpu cores	: 16
+apicid		: 4
+initial apicid	: 4
 fpu		: yes
 fpu_exception	: yes
 cpuid level	: 27
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon rep_good nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single ssbd ibrs ibpb stibp ibrs_enhanced fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 arat avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear spec_ctrl intel_stibp flush_l1d arch_capabilities
+bogomips	: 3990.62
 clflush size	: 64
 cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
+address sizes	: 45 bits physical, 48 bits virtual
 power management:
 
-processor	: 43
+processor	: 5
 vendor_id	: GenuineIntel
 cpu family	: 6
 model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
+model name	: Intel(R) Xeon(R) Gold 6338 CPU @ 2.00GHz
 stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3383.605
-=======
-cpu MHz		: 2211.914
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 10
-cpu cores	: 18
-apicid		: 149
-initial apicid	: 149
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 44
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3233.825
-=======
-cpu MHz		: 3597.473
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
+microcode	: 0xd000375
+cpu MHz		: 1995.312
+cache size	: 49152 KB
 physical id	: 0
-siblings	: 36
-core id		: 2
-cpu cores	: 18
+siblings	: 16
+core id		: 5
+cpu cores	: 16
 apicid		: 5
 initial apicid	: 5
 fpu		: yes
 fpu_exception	: yes
 cpuid level	: 27
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon rep_good nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single ssbd ibrs ibpb stibp ibrs_enhanced fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 arat avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear spec_ctrl intel_stibp flush_l1d arch_capabilities
+bogomips	: 3990.62
 clflush size	: 64
 cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
+address sizes	: 45 bits physical, 48 bits virtual
 power management:
 
-processor	: 45
+processor	: 6
 vendor_id	: GenuineIntel
 cpu family	: 6
 model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
+model name	: Intel(R) Xeon(R) Gold 6338 CPU @ 2.00GHz
 stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3599.853
-=======
-cpu MHz		: 2433.654
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 2
-cpu cores	: 18
-apicid		: 133
-initial apicid	: 133
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 46
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3006.591
-=======
-cpu MHz		: 3598.022
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
+microcode	: 0xd000375
+cpu MHz		: 1995.312
+cache size	: 49152 KB
 physical id	: 0
-siblings	: 36
-core id		: 11
-cpu cores	: 18
-apicid		: 23
-initial apicid	: 23
+siblings	: 16
+core id		: 6
+cpu cores	: 16
+apicid		: 6
+initial apicid	: 6
 fpu		: yes
 fpu_exception	: yes
 cpuid level	: 27
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon rep_good nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single ssbd ibrs ibpb stibp ibrs_enhanced fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 arat avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear spec_ctrl intel_stibp flush_l1d arch_capabilities
+bogomips	: 3990.62
 clflush size	: 64
 cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
+address sizes	: 45 bits physical, 48 bits virtual
 power management:
 
-processor	: 47
+processor	: 7
 vendor_id	: GenuineIntel
 cpu family	: 6
 model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
+model name	: Intel(R) Xeon(R) Gold 6338 CPU @ 2.00GHz
 stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3599.121
-=======
-cpu MHz		: 2558.166
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 11
-cpu cores	: 18
-apicid		: 151
-initial apicid	: 151
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 48
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3583.007
-=======
-cpu MHz		: 3538.879
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
+microcode	: 0xd000375
+cpu MHz		: 1995.312
+cache size	: 49152 KB
 physical id	: 0
-siblings	: 36
-core id		: 3
-cpu cores	: 18
+siblings	: 16
+core id		: 7
+cpu cores	: 16
 apicid		: 7
 initial apicid	: 7
 fpu		: yes
 fpu_exception	: yes
 cpuid level	: 27
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon rep_good nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single ssbd ibrs ibpb stibp ibrs_enhanced fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 arat avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear spec_ctrl intel_stibp flush_l1d arch_capabilities
+bogomips	: 3990.62
 clflush size	: 64
 cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
+address sizes	: 45 bits physical, 48 bits virtual
 power management:
 
-processor	: 49
+processor	: 8
 vendor_id	: GenuineIntel
 cpu family	: 6
 model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
+model name	: Intel(R) Xeon(R) Gold 6338 CPU @ 2.00GHz
 stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3298.461
-=======
-cpu MHz		: 3458.496
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 3
-cpu cores	: 18
-apicid		: 135
-initial apicid	: 135
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 50
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 2883.728
-=======
-cpu MHz		: 3536.132
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
+microcode	: 0xd000375
+cpu MHz		: 1995.312
+cache size	: 49152 KB
 physical id	: 0
-siblings	: 36
-core id		: 12
-cpu cores	: 18
-apicid		: 25
-initial apicid	: 25
+siblings	: 16
+core id		: 8
+cpu cores	: 16
+apicid		: 8
+initial apicid	: 8
 fpu		: yes
 fpu_exception	: yes
 cpuid level	: 27
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon rep_good nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single ssbd ibrs ibpb stibp ibrs_enhanced fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 arat avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear spec_ctrl intel_stibp flush_l1d arch_capabilities
+bogomips	: 3990.62
 clflush size	: 64
 cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
+address sizes	: 45 bits physical, 48 bits virtual
 power management:
 
-processor	: 51
+processor	: 9
 vendor_id	: GenuineIntel
 cpu family	: 6
 model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
+model name	: Intel(R) Xeon(R) Gold 6338 CPU @ 2.00GHz
 stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3587.219
-=======
-cpu MHz		: 1064.941
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 12
-cpu cores	: 18
-apicid		: 153
-initial apicid	: 153
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 52
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 2719.665
-=======
-cpu MHz		: 3593.444
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
+microcode	: 0xd000375
+cpu MHz		: 1995.312
+cache size	: 49152 KB
 physical id	: 0
-siblings	: 36
-core id		: 4
-cpu cores	: 18
+siblings	: 16
+core id		: 9
+cpu cores	: 16
 apicid		: 9
 initial apicid	: 9
 fpu		: yes
 fpu_exception	: yes
 cpuid level	: 27
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon rep_good nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single ssbd ibrs ibpb stibp ibrs_enhanced fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 arat avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear spec_ctrl intel_stibp flush_l1d arch_capabilities
+bogomips	: 3990.62
 clflush size	: 64
 cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
+address sizes	: 45 bits physical, 48 bits virtual
 power management:
 
-processor	: 53
+processor	: 10
 vendor_id	: GenuineIntel
 cpu family	: 6
 model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
+model name	: Intel(R) Xeon(R) Gold 6338 CPU @ 2.00GHz
 stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 2847.473
-=======
-cpu MHz		: 820.495
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 4
-cpu cores	: 18
-apicid		: 137
-initial apicid	: 137
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 54
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3292.968
-=======
-cpu MHz		: 2994.689
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
+microcode	: 0xd000375
+cpu MHz		: 1995.312
+cache size	: 49152 KB
 physical id	: 0
-siblings	: 36
-core id		: 13
-cpu cores	: 18
-apicid		: 27
-initial apicid	: 27
+siblings	: 16
+core id		: 10
+cpu cores	: 16
+apicid		: 10
+initial apicid	: 10
 fpu		: yes
 fpu_exception	: yes
 cpuid level	: 27
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon rep_good nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single ssbd ibrs ibpb stibp ibrs_enhanced fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 arat avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear spec_ctrl intel_stibp flush_l1d arch_capabilities
+bogomips	: 3990.62
 clflush size	: 64
 cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
+address sizes	: 45 bits physical, 48 bits virtual
 power management:
 
-processor	: 55
+processor	: 11
 vendor_id	: GenuineIntel
 cpu family	: 6
 model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
+model name	: Intel(R) Xeon(R) Gold 6338 CPU @ 2.00GHz
 stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3497.497
-=======
-cpu MHz		: 3173.950
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 13
-cpu cores	: 18
-apicid		: 155
-initial apicid	: 155
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 56
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3589.233
-=======
-cpu MHz		: 3600.952
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
+microcode	: 0xd000375
+cpu MHz		: 1995.312
+cache size	: 49152 KB
 physical id	: 0
-siblings	: 36
-core id		: 5
-cpu cores	: 18
+siblings	: 16
+core id		: 11
+cpu cores	: 16
 apicid		: 11
 initial apicid	: 11
 fpu		: yes
 fpu_exception	: yes
 cpuid level	: 27
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon rep_good nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single ssbd ibrs ibpb stibp ibrs_enhanced fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 arat avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear spec_ctrl intel_stibp flush_l1d arch_capabilities
+bogomips	: 3990.62
 clflush size	: 64
 cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
+address sizes	: 45 bits physical, 48 bits virtual
 power management:
 
-processor	: 57
+processor	: 12
 vendor_id	: GenuineIntel
 cpu family	: 6
 model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
+model name	: Intel(R) Xeon(R) Gold 6338 CPU @ 2.00GHz
 stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3601.501
-=======
-cpu MHz		: 2568.603
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 5
-cpu cores	: 18
-apicid		: 139
-initial apicid	: 139
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 58
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3099.060
-=======
-cpu MHz		: 3585.571
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
+microcode	: 0xd000375
+cpu MHz		: 1995.312
+cache size	: 49152 KB
 physical id	: 0
-siblings	: 36
-core id		: 14
-cpu cores	: 18
-apicid		: 29
-initial apicid	: 29
+siblings	: 16
+core id		: 12
+cpu cores	: 16
+apicid		: 12
+initial apicid	: 12
 fpu		: yes
 fpu_exception	: yes
 cpuid level	: 27
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon rep_good nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single ssbd ibrs ibpb stibp ibrs_enhanced fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 arat avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear spec_ctrl intel_stibp flush_l1d arch_capabilities
+bogomips	: 3990.62
 clflush size	: 64
 cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
+address sizes	: 45 bits physical, 48 bits virtual
 power management:
 
-processor	: 59
+processor	: 13
 vendor_id	: GenuineIntel
 cpu family	: 6
 model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
+model name	: Intel(R) Xeon(R) Gold 6338 CPU @ 2.00GHz
 stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 2545.166
-=======
-cpu MHz		: 3226.501
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 14
-cpu cores	: 18
-apicid		: 157
-initial apicid	: 157
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 60
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-cpu MHz		: 3600.036
-cache size	: 39936 KB
+microcode	: 0xd000375
+cpu MHz		: 1995.312
+cache size	: 49152 KB
 physical id	: 0
-siblings	: 36
-core id		: 6
-cpu cores	: 18
+siblings	: 16
+core id		: 13
+cpu cores	: 16
 apicid		: 13
 initial apicid	: 13
 fpu		: yes
 fpu_exception	: yes
 cpuid level	: 27
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon rep_good nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single ssbd ibrs ibpb stibp ibrs_enhanced fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 arat avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear spec_ctrl intel_stibp flush_l1d arch_capabilities
+bogomips	: 3990.62
 clflush size	: 64
 cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
+address sizes	: 45 bits physical, 48 bits virtual
 power management:
 
-processor	: 61
+processor	: 14
 vendor_id	: GenuineIntel
 cpu family	: 6
 model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
+model name	: Intel(R) Xeon(R) Gold 6338 CPU @ 2.00GHz
 stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3466.369
-=======
-cpu MHz		: 1246.032
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 6
-cpu cores	: 18
-apicid		: 141
-initial apicid	: 141
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 62
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3571.838
-=======
-cpu MHz		: 3173.767
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
+microcode	: 0xd000375
+cpu MHz		: 1995.312
+cache size	: 49152 KB
 physical id	: 0
-siblings	: 36
-core id		: 15
-cpu cores	: 18
-apicid		: 31
-initial apicid	: 31
+siblings	: 16
+core id		: 14
+cpu cores	: 16
+apicid		: 14
+initial apicid	: 14
 fpu		: yes
 fpu_exception	: yes
 cpuid level	: 27
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon rep_good nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single ssbd ibrs ibpb stibp ibrs_enhanced fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 arat avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear spec_ctrl intel_stibp flush_l1d arch_capabilities
+bogomips	: 3990.62
 clflush size	: 64
 cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
+address sizes	: 45 bits physical, 48 bits virtual
 power management:
 
-processor	: 63
+processor	: 15
 vendor_id	: GenuineIntel
 cpu family	: 6
 model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
+model name	: Intel(R) Xeon(R) Gold 6338 CPU @ 2.00GHz
 stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 2321.777
-=======
-cpu MHz		: 2579.223
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 15
-cpu cores	: 18
-apicid		: 159
-initial apicid	: 159
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 64
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 2404.541
-=======
-cpu MHz		: 3334.350
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
+microcode	: 0xd000375
+cpu MHz		: 1995.312
+cache size	: 49152 KB
 physical id	: 0
-siblings	: 36
-core id		: 7
-cpu cores	: 18
+siblings	: 16
+core id		: 15
+cpu cores	: 16
 apicid		: 15
 initial apicid	: 15
 fpu		: yes
 fpu_exception	: yes
 cpuid level	: 27
 wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon rep_good nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single ssbd ibrs ibpb stibp ibrs_enhanced fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 arat avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear spec_ctrl intel_stibp flush_l1d arch_capabilities
+bogomips	: 3990.62
 clflush size	: 64
 cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 65
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3399.169
-=======
-cpu MHz		: 3553.894
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 7
-cpu cores	: 18
-apicid		: 143
-initial apicid	: 143
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 66
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 2122.741
-=======
-cpu MHz		: 3579.162
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 0
-siblings	: 36
-core id		: 16
-cpu cores	: 18
-apicid		: 33
-initial apicid	: 33
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 67
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3599.853
-=======
-cpu MHz		: 2205.322
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 16
-cpu cores	: 18
-apicid		: 161
-initial apicid	: 161
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 68
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3599.853
-=======
-cpu MHz		: 3573.852
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 0
-siblings	: 36
-core id		: 8
-cpu cores	: 18
-apicid		: 17
-initial apicid	: 17
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 69
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 2896.545
-=======
-cpu MHz		: 2937.011
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 8
-cpu cores	: 18
-apicid		: 145
-initial apicid	: 145
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 70
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3038.635
-=======
-cpu MHz		: 3599.853
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 0
-siblings	: 36
-core id		: 17
-cpu cores	: 18
-apicid		: 35
-initial apicid	: 35
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6000.00
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
-power management:
-
-processor	: 71
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 106
-model name	: Intel(R) Xeon(R) Gold 6354 CPU @ 3.00GHz
-stepping	: 6
-microcode	: 0xd000311
-<<<<<<< HEAD
-cpu MHz		: 3086.425
-=======
-cpu MHz		: 2898.559
->>>>>>> 2bebaaf6de55c4bd64027a51032432ddf1ee2c8f
-cache size	: 39936 KB
-physical id	: 1
-siblings	: 36
-core id		: 17
-cpu cores	: 18
-apicid		: 163
-initial apicid	: 163
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 27
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 invpcid_single intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear pconfig spec_ctrl intel_stibp flush_l1d arch_capabilities
-bogomips	: 6004.72
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 57 bits virtual
+address sizes	: 45 bits physical, 48 bits virtual
 power management:
 
