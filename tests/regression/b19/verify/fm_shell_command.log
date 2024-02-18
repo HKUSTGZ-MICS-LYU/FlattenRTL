@@ -1,0 +1,61 @@
+#@ # 
+#@ # Running fm_shell Version V-2023.12 for linux64 -- Nov 16, 2023
+#@ # Date:   Sun Feb 18 20:51:29 2024
+#@ # Run by: connect.zzheng989@vm_yangdilyu
+#@ 
+
+source /hpc/Edatools/synopsys/formality/V-2023.12/admin/setup/.synopsys_fm.setup
+#@ # -- Starting source /hpc/Edatools/synopsys/formality/V-2023.12/admin/setup/.synopsys_fm.setup
+
+#@ #
+#@ # .synopsys_fm.setup: Initialization File for Formality
+#@ #
+#@ 
+#@ 
+#@ #
+#@ # Enable stack trace output on fatal.  Not available for all architectures.
+#@ #
+#@ if { $sh_arch == "sparc" || $sh_arch == "sparcOS5" || \
+#@      $sh_arch == "hp700" || $sh_arch == "hpux10" } {
+#@   set_unix_variable SYNOPSYS_TRACE ""
+#@ }
+#@ 
+#@ #
+#@ # Variable settings
+#@ #
+#@ set sh_new_variable_message true
+#@ 
+#@ #
+#@ # Synopsys strongly recommends that you uncomment the following command
+#@ # in order to set sh_command_abbrev_mode to the value "Command-Line-Only".
+#@ # Command abbreviation is intended as an interactive convenience.  Using
+#@ # abbreviations in scripts can cause commands to fail in subsequent releases.
+#@ # 
+#@ #set sh_command_abbrev_mode "Command-Line-Only"
+#@ 
+#@ #
+#@ # Some useful aliases
+#@ #
+#@ alias list_commands		help
+#@ 
+#@ #
+#@ # The alias of q to quit is commented out.  Remove the comment 
+#@ # character if you want this alias.  Some users find that having 
+#@ # this particular alias causes problems when mixed with page-mode
+#@ # for reports - an accidental repeated 'q' not only cancels the
+#@ # output but exits the tool.
+#@ #
+#@ #alias q quit
+#@ # -- End source /hpc/Edatools/synopsys/formality/V-2023.12/admin/setup/.synopsys_fm.setup
+
+source -echo -verbose verify.fms
+#@ # -- Starting source verify.fms
+
+#@ set_mismatch_message_filter -warn FMR_ELAB-147
+#@ read_verilog -r /hpc/home/connect.zzheng989/researchlib/pyflattenverilog/tests/regression/b19/b19.v
+#@ set_top b19
+#@ read_verilog -i /hpc/home/connect.zzheng989/researchlib/pyflattenverilog/tests/regression/b19/flatten_f_b19.v
+#@ set_top b19
+#@ verify
+#@ report_unverified_points 
+#@ exit

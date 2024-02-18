@@ -1,6 +1,6 @@
 #@ # 
 #@ # Running fm_shell Version V-2023.12 for linux64 -- Nov 16, 2023
-#@ # Date:   Sun Feb 18 20:16:18 2024
+#@ # Date:   Sun Feb 18 20:45:59 2024
 #@ # Run by: connect.zzheng989@vm_yangdilyu
 #@ 
 
@@ -52,10 +52,10 @@ source -echo -verbose verify.fms
 #@ # -- Starting source verify.fms
 
 #@ set_mismatch_message_filter -warn FMR_ELAB-147
-#@ read_verilog -r /hpc/home/connect.zzheng989/researchlib/pyflattenverilog/tests/regression/adder/adder.v
-#@ set_top adder_32bit
-#@ read_verilog -i /hpc/home/connect.zzheng989/researchlib/pyflattenverilog/tests/regression/adder/flatten_f_adder.v
-#@ set_top adder_32bit
+#@ read_verilog -r /hpc/home/connect.zzheng989/researchlib/pyflattenverilog/tests/regression/b19/b19.v
+#@ set_top b19
+#@ read_verilog -i /hpc/home/connect.zzheng989/researchlib/pyflattenverilog/tests/regression/b19/flatten_f_b19.v
+#@ set_top b19
 #@ verify
 #@ report_unverified_points 
 #@ exit

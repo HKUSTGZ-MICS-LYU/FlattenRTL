@@ -468,12 +468,12 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
                 print(design[:self.start[0]],file=of_handler)
                 for wire in cur_new_variable:
                     print(wire,file=of_handler)
-                for assign in cur_new_assign:
-                    print(assign,file=of_handler)
                 print(insert_parts[0],file=of_handler)
                 for i in range(1, len(self.start)):
                     print(design[self.stop[i-1]+1:self.start[i]],file=of_handler)
                     print(insert_parts[i],file=of_handler)
+                for assign in cur_new_assign:
+                    print(assign,file=of_handler)
                 print(design[self.stop[-1]+1:],file=of_handler)
               
               
