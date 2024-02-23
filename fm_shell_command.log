@@ -1,6 +1,6 @@
 #@ # 
 #@ # Running fm_shell Version T-2022.03-SP5 for linux64 -- Oct 18, 2022
-#@ # Date:   Sat Feb 24 06:51:21 2024
+#@ # Date:   Sat Feb 24 06:57:07 2024
 #@ # Run by: xiangchenmeng@mics-eda
 #@ 
 
@@ -48,8 +48,8 @@ source /usr/synopysys/install/formality/T-2022.03-SP5/admin/setup/.synopsys_fm.s
 #@ #alias q quit
 #@ # -- End source /usr/synopysys/install/formality/T-2022.03-SP5/admin/setup/.synopsys_fm.setup
 
-source -echo -verbose verify.fms
-#@ # -- Starting source verify.fms
+source -echo -verbose tests/formality/verify.fms
+#@ # -- Starting source tests/formality/verify.fms
 
 #@ set_mismatch_message_filter -warn FMR_ELAB-147
 #@ read_verilog -r /home/xiangchenmeng/work/pyflattenverilog/tests/regression/delimeter_dot/delimeter_dot.v

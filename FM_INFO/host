@@ -1,6 +1,6 @@
 System name = Linux
 Host name   = mics-eda
-Process     = 44495
+Process     = 49022
 Release     = 3.10.0-1160.el7.x86_64
 Version     = #1 SMP Mon Oct 19 16:18:59 UTC 2020
 Machine     = x86_64

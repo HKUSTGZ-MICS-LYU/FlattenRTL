@@ -3,16 +3,18 @@ import preprocess
 import os
 import time
 import psutil
+import subprocess
 
 # 开始监测
 start_time = time.time()
 start_memory = psutil.Process(os.getpid()).memory_info().rss / (1024 * 1024)
 # formatted part
+name = "b14"
 
-path = '/home/xiangchenmeng/work/pyflattenverilog/tests/regression/delimeter_dot'
-inputfile = '/delimeter_dot.v'
+path = r'/home/xiangchenmeng/work/pyflattenverilog/tests/regression/{name}'.format(name=name)   
+inputfile = r'/{name}.v'.format(name=name)   
 outputfile = '/f_top.v'
-top_module = 'delimeter_dot'
+top_module = r'{name}'.format(name=name)
 inputpath = path+inputfile
 formatpath = path+outputfile
 
@@ -56,6 +58,43 @@ with open(formatpath,"r") as file:
 # 结束监测
 end_memory = psutil.Process(os.getpid()).memory_info().rss / (1024 * 1024)
 end_time = time.time()
+
+
+
+
+
+#执行eqv检查
+# 路径到你的.fms文件
+fms_file_path = 'tests/formality/verify.fms'
+
+
+# 读取.fms文件内容
+with open(fms_file_path, 'r') as file:
+    lines = file.readlines()
+
+# 修改包含特定read_verilog行的路径
+with open(fms_file_path, 'w') as file:
+    for line in lines:
+        if 'read_verilog -r' in line and 'b19.v' in line:
+            # 替换为新的inputpath
+            new_line = f"read_verilog -r {inputpath}\n"
+            file.write(new_line)
+        elif 'read_verilog -i' in line and 'flatten_f_b19.v' in line:
+            # 替换为新的outputpath
+            new_line = f"read_verilog -i {formatpath}\n"
+            file.write(new_line)
+        else:
+            file.write(line)
+
+formality_command = ['fm_shell', '-f', fms_file_path]
+
+# 运行命令
+try:
+    result = subprocess.run(formality_command, check=True, text=True, capture_output=True)
+    print("命令执行成功！")
+    print("标准输出：", result.stdout)
+except subprocess.CalledProcessError as e:
+    print("命令执行失败：", e)
 
 # 计算并打印结果
 print(f"执行时间：{end_time - start_time}秒")
