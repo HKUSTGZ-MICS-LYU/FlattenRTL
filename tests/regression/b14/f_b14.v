@@ -3,32 +3,33 @@ module b14 (
   input reset,
   output reg  [19:0] addr,
   input [31:0] datai,
-  output integer datao,
+  output reg  datao,
   output reg  rd,
   output reg  wr) ; 
- parameter FETCH =0; 
- parameter EXEC =1; 
    reg [1:0] s ;  
-   integer temp ;  
-   integer d ;  
-   integer t ;  
-   integer m ;  
-   integer r ;  
+   reg signed  [31:0] temp ;  
+   reg signed  [31:0] d ;  
+   reg signed  [31:0] t ;  
+   reg signed  [31:0] m ;  
+   reg signed  [31:0] r ;  
    reg [0:0] state ;  
-   integer IR ;  
+   reg signed  [31:0] IR ;  
    reg [19:0] tail ;  
    reg [3:0] ff ;  
    reg [0:0] cf ;  
    reg [2:0] df ;  
    reg [1:0] mf ;  
-   integer MBR ;  
+   reg signed  [31:0] MBR ;  
    reg [19:0] MAR ;  
    reg B ;  
-   integer reg3 ;  
-   integer reg2 ;  
-   integer reg1 ;  
+   reg signed  [31:0] reg3 ;  
+   reg signed  [31:0] reg2 ;  
+   reg signed  [31:0] reg1 ;  
+   reg signed  [31:0] reg0 ;  
+ parameter FETCH =0; 
+ parameter EXEC =1; 
   always @(  posedge clock or  posedge reset)
-       begin 
+       begin :xhdl0
          if (reset==1'b1)
             begin 
               MAR =0;
@@ -72,7 +73,9 @@ module b14 (
                EXEC :
                   begin 
                     if (IR<0)
-                       IR =-IR;
+                       begin 
+                         IR =-IR;
+                       end 
                     mf =(IR/2**27)%4;
                     df =(IR/2**24)%2**3;
                     ff =(IR/2**19)%2**4;
@@ -89,6 +92,7 @@ module b14 (
                         r =reg2;
                      3 :
                         r =reg3;
+                     default :;
                     endcase 
                     case (cf)
                      1 :
@@ -114,6 +118,7 @@ module b14 (
                                 rd <=1'b1;
                                 m =datai;
                               end 
+                           default :;
                           endcase 
                           case (ff)
                            0 :
@@ -212,6 +217,7 @@ module b14 (
                                  else 
                                    B =1'b0;
                               end 
+                           default :;
                           endcase 
                         end 
                      0 :
@@ -264,6 +270,7 @@ module b14 (
                                          rd <=1'b1;
                                          m =datai;
                                        end 
+                                    default :;
                                    endcase 
                                    t =0;
                                    case (d)
@@ -301,6 +308,7 @@ module b14 (
                                          rd <=1'b1;
                                          m =datai;
                                        end 
+                                    default :;
                                    endcase 
                                    reg2 =reg3;
                                    reg3 =m;
@@ -328,6 +336,7 @@ module b14 (
                                          rd <=1'b1;
                                          m =datai;
                                        end 
+                                    default :;
                                    endcase 
                                    case (d)
                                     0 :
@@ -364,6 +373,7 @@ module b14 (
                                          rd <=1'b1;
                                          m =datai;
                                        end 
+                                    default :;
                                    endcase 
                                    case (d)
                                     0 :
@@ -400,6 +410,7 @@ module b14 (
                                          rd <=1'b1;
                                          m =datai;
                                        end 
+                                    default :;
                                    endcase 
                                    case (d)
                                     0 :
@@ -436,6 +447,7 @@ module b14 (
                                          rd <=1'b1;
                                          m =datai;
                                        end 
+                                    default :;
                                    endcase 
                                    case (d)
                                     0 :
@@ -472,6 +484,7 @@ module b14 (
                                          rd <=1'b1;
                                          m =datai;
                                        end 
+                                    default :;
                                    endcase 
                                    case (d)
                                     0 :
@@ -508,6 +521,7 @@ module b14 (
                                          rd <=1'b1;
                                          m =datai;
                                        end 
+                                    default :;
                                    endcase 
                                    case (d)
                                     0 :
@@ -544,6 +558,7 @@ module b14 (
                                          rd <=1'b1;
                                          m =datai;
                                        end 
+                                    default :;
                                    endcase 
                                    case (d)
                                     0 :
@@ -580,6 +595,7 @@ module b14 (
                                          rd <=1'b1;
                                          m =datai;
                                        end 
+                                    default :;
                                    endcase 
                                    case (d)
                                     0 :
@@ -616,6 +632,7 @@ module b14 (
                                          rd <=1'b1;
                                          m =datai;
                                        end 
+                                    default :;
                                    endcase 
                                    case (d)
                                     0 :
@@ -652,6 +669,7 @@ module b14 (
                                          rd <=1'b1;
                                          m =datai;
                                        end 
+                                    default :;
                                    endcase 
                                    case (d)
                                     0 :
@@ -715,14 +733,16 @@ module b14 (
                                     m =(reg1%2**20)+(tail%2**20);
                                  3 :
                                     m =(reg2%2**20)+(tail%2**20);
+                                 default :;
                                 endcase 
                                 addr <=m%2*20;
                                 wr <=1'b1;
-                                datao <=r;
                               end 
+                     default :;
                     endcase 
                     state =FETCH;
                   end 
+               default :;
               endcase 
             end 
        end

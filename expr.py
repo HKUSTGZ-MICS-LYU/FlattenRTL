@@ -13,7 +13,7 @@ start_memory = psutil.Process(os.getpid()).memory_info().rss / (1024 * 1024)
 
 # formatted part
 name = "b14"
-path = r'/home/xiangchenmeng/work/pyflattenverilog/tests/regression/{name}/'.format(name=name)   
+path = r'tests/regression/{name}/'.format(name=name)   
 inputfile = r'{name}.v'.format(name=name)   
 outputfile = r'f_{name}.v'.format(name=name)
 top_module = r'{name}'.format(name=name)
@@ -97,13 +97,13 @@ with open(fms_file_path, 'w') as file:
 
 formality_command = ['fm_shell', '-f', fms_file_path]
 
-# 运行命令
-try:
-    result = subprocess.run(formality_command, check=True, text=True, capture_output=True)
-    print("命令执行成功！")
-    print("标准输出：", result.stdout)
-except subprocess.CalledProcessError as e:
-    print("命令执行失败：", e)
+# # 运行命令
+# try:
+#     result = subprocess.run(formality_command, check=True, text=True, capture_output=True)
+#     print("命令执行成功！")
+#     print("标准输出：", result.stdout)
+# except subprocess.CalledProcessError as e:
+#     print("命令执行失败：", e)
 
 # 计算并打印结果
 print(f"执行时间：{end_time - start_time}秒")

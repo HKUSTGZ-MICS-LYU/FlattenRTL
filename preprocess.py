@@ -67,6 +67,7 @@ def formatter_file(design, outputpath):
                pass
             else:
                for child in ctx.getChildren():
+                  print(type(child))  # Debugging: Print out the type of each child
                   if isinstance(child, VerilogParser.Port_declarationContext):
                      if isinstance(child.getChild(0), VerilogParser.Input_declarationContext):
                         self._visit_input_declaration(child.getChild(0))
@@ -85,11 +86,11 @@ def formatter_file(design, outputpath):
 
                   if isinstance(child, VerilogParser.Block_nameContext):
                      index_of_child = child.parentCtx.children.index(child)
-                     del child.parentCtx.children[index_of_child]
+                     # del child.parentCtx.children[index_of_child]
 
                   if isinstance(child, VerilogParser.Block_item_declarationContext):
                      self._visit_block_declaration(child)
-                  self._visit_port_declaration(child)
+               self._visit_port_declaration(child)
 
          # visit integer declaration
          def _visit_integer_declaration(self, ctx: VerilogParser.Integer_declarationContext):
