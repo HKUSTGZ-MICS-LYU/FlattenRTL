@@ -194,7 +194,7 @@ module b30(a_bus, clock, cs, digital_input, ds, fbk_pwm, inj_cmd, in_speed, i_fb
    
    
    
-   inj_ctrl instance_inj_ctrl(a_bus, clock, cs, digital_input, ds, fbk_pwm, inj_cmd, in_speed, i_fbk, nssm_in, rpm_in, reset, r_w, seg_speed_hall, seg_speed_pickup, trg_knock1, trg_knock2, turbo_speed, vehicle_speed, v_fbk, cam_smot, clock, digital_output, hlo, in_speed_lev, irq, knock1, knock1u, knock2, knock2u, relpot, rpm_out, seg_speed_lev, smot60, t1, t2, t3, turbo, turbo_speed_lev, vehicle, d_bus_ext);
+   inj_ctrl instance_inj_ctrl(a_bus, clock, cs, digital_input, ds, fbk_pwm, inj_cmd, in_speed, i_fbk, nssm_in, rpm_in, reset, r_w, seg_speed_hall, seg_speed_pickup, trg_knock1, trg_knock2, turbo_speed, vehicle_speed, v_fbk, cam_smot, digital_output, hlo, in_speed_lev, irq, knock1, knock1u, knock2, knock2u, relpot, rpm_out, seg_speed_lev, smot60, t1, t2, t3, turbo, turbo_speed_lev, vehicle, d_bus_ext);
    
    
    rst_inv instance_rst_inv(reset);

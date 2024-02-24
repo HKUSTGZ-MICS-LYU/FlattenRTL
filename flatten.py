@@ -158,6 +158,20 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
                 self.list_of_data_type.append(child.output_variable_type().getText())
               else:
                 self.list_of_data_type.append('')
+                
+            if isinstance(child, VerilogParser.Inout_declarationContext):
+              self.list_of_ports_direction.append(child.INOUT().getText())
+              self.list_of_ports_lhs.append(child.list_of_port_identifiers().getText())
+              self.list_of_ports_type.append('wire')
+              if child.range_() is not None:
+                self.list_of_ports_width.append(child.range_().getText())  
+              else:
+                 self.list_of_ports_width.append('')
+
+              if child.SIGNED() is not None:
+                self.list_of_data_type.append(child.SIGNED().getText())
+              else:
+                self.list_of_data_type.append('')
 
               
             self._traverse_children(child)
