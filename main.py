@@ -9,10 +9,10 @@ start_time = time.time()
 start_memory = psutil.Process(os.getpid()).memory_info().rss / (1024 * 1024)
 # formatted part
 
-path = 'tests/regression/AES/AES-T500'
-inputfile = '/top.v'
-outputfile = '/f_top.v'
-top_module = 'top'
+path = 'tests/regression/b30'
+inputfile = '/b30.v'
+outputfile = '/f_b30.v'
+top_module = 'b30'
 inputpath = path+inputfile
 formatpath = path+outputfile
 
