@@ -23,7 +23,496 @@ module top(clk, rst, state, key, out);
     input  [127:0] state, key;
     output [127:0] out;
 
-		aes_128 AES (clk, state, key, out);
+		
+wire  AES_clk;
+wire [127:0] AES_state,key;
+wire [127:0] AES_out;
+ 
+ input clk; 
+ input [127:0]state,key; 
+ output [127:0]out; 
+   reg[127:0] AES_s0 , AES_k0 ; 
+   wire[127:0] AES_s1 , AES_s2 , AES_s3 , AES_s4 , AES_s5 , AES_s6 , AES_s7 , AES_s8 , AES_s9 , AES_k1 , AES_k2 , AES_k3 , AES_k4 , AES_k5 , AES_k6 , AES_k7 , AES_k8 , AES_k9 , AES_k10 , AES_k0b , AES_k1b , AES_k2b , AES_k3b , AES_k4b , AES_k5b , AES_k6b , AES_k7b , AES_k8b , AES_k9b ; 
+  always @( posedge  AES_clk )
+       begin 
+          AES_s0  <= AES_state ^ AES_key ;
+          AES_k0  <= AES_key ;
+       end
+  
+  
+wire  AES_a1_clk;
+wire [127:0] AES_a1_in;
+wire [7:0] AES_a1_rcon;
+reg [127:0] AES_a1_out_1;
+wire [127:0] AES_a1_out_2;
+wire  AES_a2_clk;
+wire [127:0] AES_a2_in;
+wire [7:0] AES_a2_rcon;
+reg [127:0] AES_a2_out_1;
+wire [127:0] AES_a2_out_2;
+wire  AES_a3_clk;
+wire [127:0] AES_a3_in;
+wire [7:0] AES_a3_rcon;
+reg [127:0] AES_a3_out_1;
+wire [127:0] AES_a3_out_2;
+wire  AES_a4_clk;
+wire [127:0] AES_a4_in;
+wire [7:0] AES_a4_rcon;
+reg [127:0] AES_a4_out_1;
+wire [127:0] AES_a4_out_2;
+wire  AES_a5_clk;
+wire [127:0] AES_a5_in;
+wire [7:0] AES_a5_rcon;
+reg [127:0] AES_a5_out_1;
+wire [127:0] AES_a5_out_2;
+wire  AES_a6_clk;
+wire [127:0] AES_a6_in;
+wire [7:0] AES_a6_rcon;
+reg [127:0] AES_a6_out_1;
+wire [127:0] AES_a6_out_2;
+wire  AES_a7_clk;
+wire [127:0] AES_a7_in;
+wire [7:0] AES_a7_rcon;
+reg [127:0] AES_a7_out_1;
+wire [127:0] AES_a7_out_2;
+wire  AES_a8_clk;
+wire [127:0] AES_a8_in;
+wire [7:0] AES_a8_rcon;
+reg [127:0] AES_a8_out_1;
+wire [127:0] AES_a8_out_2;
+wire  AES_a9_clk;
+wire [127:0] AES_a9_in;
+wire [7:0] AES_a9_rcon;
+reg [127:0] AES_a9_out_1;
+wire [127:0] AES_a9_out_2;
+wire  AES_a10_clk;
+wire [127:0] AES_a10_in;
+wire [7:0] AES_a10_rcon;
+reg [127:0] AES_a10_out_1;
+wire [127:0] AES_a10_out_2;
+ 
+ input clk; 
+ input [127:0]in; 
+ input [7:0]rcon; 
+ output reg[127:0]out_1; 
+ output [127:0]out_2; 
+   wire[31:0] AES_a1_k0 , AES_a1_k1 , AES_a1_k2 , AES_a1_k3 , AES_a1_v0 , AES_a1_v1 , AES_a1_v2 , AES_a1_v3 ; 
+   reg[31:0] AES_a1_k0a , AES_a1_k1a , AES_a1_k2a , AES_a1_k3a ; 
+   wire[31:0] AES_a1_k0b , AES_a1_k1b , AES_a1_k2b , AES_a1_k3b , AES_a1_k4a ; 
+  assign  AES_a1_k0 = AES_a1_in [127:96]; 
+  assign  AES_a1_k1 = AES_a1_in [95:64]; 
+  assign  AES_a1_k2 = AES_a1_in [63:32]; 
+  assign  AES_a1_k3 = AES_a1_in [31:0]; 
+  assign  AES_a1_v0 ={ AES_a1_k0 [31:24]^ AES_a1_rcon , AES_a1_k0 [23:0]}; 
+  assign  AES_a1_v1 = AES_a1_v0 ^ AES_a1_k1 ; 
+  assign  AES_a1_v2 = AES_a1_v1 ^ AES_a1_k2 ; 
+  assign  AES_a1_v3 = AES_a1_v2 ^ AES_a1_k3 ; 
+  always @( posedge  AES_a1_clk )
+       begin 
+          AES_a1_k0a  <= AES_a1_v0 ;
+          AES_a1_k1a  <= AES_a1_v1 ;
+          AES_a1_k2a  <= AES_a1_v2 ;
+          AES_a1_k3a  <= AES_a1_v3 ;
+       end
+  
+  S4  AES_a1_S4_0 ( AES_a1_clk ,{ AES_a1_k3 [23:0], AES_a1_k3 [31:24]}, AES_a1_k4a ); 
+  assign  AES_a1_k0b = AES_a1_k0a ^ AES_a1_k4a ; 
+  assign  AES_a1_k1b = AES_a1_k1a ^ AES_a1_k4a ; 
+  assign  AES_a1_k2b = AES_a1_k2a ^ AES_a1_k4a ; 
+  assign  AES_a1_k3b = AES_a1_k3a ^ AES_a1_k4a ; 
+  always @( posedge  AES_a1_clk )
+        AES_a1_out_1  <={ AES_a1_k0b , AES_a1_k1b , AES_a1_k2b , AES_a1_k3b };
+ 
+  assign  AES_a1_out_2 ={ AES_a1_k0b , AES_a1_k1b , AES_a1_k2b , AES_a1_k3b };
+ 
+  
+ 
+ input clk; 
+ input [127:0]in; 
+ input [7:0]rcon; 
+ output reg[127:0]out_1; 
+ output [127:0]out_2; 
+   wire[31:0] AES_a2_k0 , AES_a2_k1 , AES_a2_k2 , AES_a2_k3 , AES_a2_v0 , AES_a2_v1 , AES_a2_v2 , AES_a2_v3 ; 
+   reg[31:0] AES_a2_k0a , AES_a2_k1a , AES_a2_k2a , AES_a2_k3a ; 
+   wire[31:0] AES_a2_k0b , AES_a2_k1b , AES_a2_k2b , AES_a2_k3b , AES_a2_k4a ; 
+  assign  AES_a2_k0 = AES_a2_in [127:96]; 
+  assign  AES_a2_k1 = AES_a2_in [95:64]; 
+  assign  AES_a2_k2 = AES_a2_in [63:32]; 
+  assign  AES_a2_k3 = AES_a2_in [31:0]; 
+  assign  AES_a2_v0 ={ AES_a2_k0 [31:24]^ AES_a2_rcon , AES_a2_k0 [23:0]}; 
+  assign  AES_a2_v1 = AES_a2_v0 ^ AES_a2_k1 ; 
+  assign  AES_a2_v2 = AES_a2_v1 ^ AES_a2_k2 ; 
+  assign  AES_a2_v3 = AES_a2_v2 ^ AES_a2_k3 ; 
+  always @( posedge  AES_a2_clk )
+       begin 
+          AES_a2_k0a  <= AES_a2_v0 ;
+          AES_a2_k1a  <= AES_a2_v1 ;
+          AES_a2_k2a  <= AES_a2_v2 ;
+          AES_a2_k3a  <= AES_a2_v3 ;
+       end
+  
+  S4  AES_a2_S4_0 ( AES_a2_clk ,{ AES_a2_k3 [23:0], AES_a2_k3 [31:24]}, AES_a2_k4a ); 
+  assign  AES_a2_k0b = AES_a2_k0a ^ AES_a2_k4a ; 
+  assign  AES_a2_k1b = AES_a2_k1a ^ AES_a2_k4a ; 
+  assign  AES_a2_k2b = AES_a2_k2a ^ AES_a2_k4a ; 
+  assign  AES_a2_k3b = AES_a2_k3a ^ AES_a2_k4a ; 
+  always @( posedge  AES_a2_clk )
+        AES_a2_out_1  <={ AES_a2_k0b , AES_a2_k1b , AES_a2_k2b , AES_a2_k3b };
+ 
+  assign  AES_a2_out_2 ={ AES_a2_k0b , AES_a2_k1b , AES_a2_k2b , AES_a2_k3b };
+ 
+  
+ 
+ input clk; 
+ input [127:0]in; 
+ input [7:0]rcon; 
+ output reg[127:0]out_1; 
+ output [127:0]out_2; 
+   wire[31:0] AES_a3_k0 , AES_a3_k1 , AES_a3_k2 , AES_a3_k3 , AES_a3_v0 , AES_a3_v1 , AES_a3_v2 , AES_a3_v3 ; 
+   reg[31:0] AES_a3_k0a , AES_a3_k1a , AES_a3_k2a , AES_a3_k3a ; 
+   wire[31:0] AES_a3_k0b , AES_a3_k1b , AES_a3_k2b , AES_a3_k3b , AES_a3_k4a ; 
+  assign  AES_a3_k0 = AES_a3_in [127:96]; 
+  assign  AES_a3_k1 = AES_a3_in [95:64]; 
+  assign  AES_a3_k2 = AES_a3_in [63:32]; 
+  assign  AES_a3_k3 = AES_a3_in [31:0]; 
+  assign  AES_a3_v0 ={ AES_a3_k0 [31:24]^ AES_a3_rcon , AES_a3_k0 [23:0]}; 
+  assign  AES_a3_v1 = AES_a3_v0 ^ AES_a3_k1 ; 
+  assign  AES_a3_v2 = AES_a3_v1 ^ AES_a3_k2 ; 
+  assign  AES_a3_v3 = AES_a3_v2 ^ AES_a3_k3 ; 
+  always @( posedge  AES_a3_clk )
+       begin 
+          AES_a3_k0a  <= AES_a3_v0 ;
+          AES_a3_k1a  <= AES_a3_v1 ;
+          AES_a3_k2a  <= AES_a3_v2 ;
+          AES_a3_k3a  <= AES_a3_v3 ;
+       end
+  
+  S4  AES_a3_S4_0 ( AES_a3_clk ,{ AES_a3_k3 [23:0], AES_a3_k3 [31:24]}, AES_a3_k4a ); 
+  assign  AES_a3_k0b = AES_a3_k0a ^ AES_a3_k4a ; 
+  assign  AES_a3_k1b = AES_a3_k1a ^ AES_a3_k4a ; 
+  assign  AES_a3_k2b = AES_a3_k2a ^ AES_a3_k4a ; 
+  assign  AES_a3_k3b = AES_a3_k3a ^ AES_a3_k4a ; 
+  always @( posedge  AES_a3_clk )
+        AES_a3_out_1  <={ AES_a3_k0b , AES_a3_k1b , AES_a3_k2b , AES_a3_k3b };
+ 
+  assign  AES_a3_out_2 ={ AES_a3_k0b , AES_a3_k1b , AES_a3_k2b , AES_a3_k3b };
+ 
+  
+ 
+ input clk; 
+ input [127:0]in; 
+ input [7:0]rcon; 
+ output reg[127:0]out_1; 
+ output [127:0]out_2; 
+   wire[31:0] AES_a4_k0 , AES_a4_k1 , AES_a4_k2 , AES_a4_k3 , AES_a4_v0 , AES_a4_v1 , AES_a4_v2 , AES_a4_v3 ; 
+   reg[31:0] AES_a4_k0a , AES_a4_k1a , AES_a4_k2a , AES_a4_k3a ; 
+   wire[31:0] AES_a4_k0b , AES_a4_k1b , AES_a4_k2b , AES_a4_k3b , AES_a4_k4a ; 
+  assign  AES_a4_k0 = AES_a4_in [127:96]; 
+  assign  AES_a4_k1 = AES_a4_in [95:64]; 
+  assign  AES_a4_k2 = AES_a4_in [63:32]; 
+  assign  AES_a4_k3 = AES_a4_in [31:0]; 
+  assign  AES_a4_v0 ={ AES_a4_k0 [31:24]^ AES_a4_rcon , AES_a4_k0 [23:0]}; 
+  assign  AES_a4_v1 = AES_a4_v0 ^ AES_a4_k1 ; 
+  assign  AES_a4_v2 = AES_a4_v1 ^ AES_a4_k2 ; 
+  assign  AES_a4_v3 = AES_a4_v2 ^ AES_a4_k3 ; 
+  always @( posedge  AES_a4_clk )
+       begin 
+          AES_a4_k0a  <= AES_a4_v0 ;
+          AES_a4_k1a  <= AES_a4_v1 ;
+          AES_a4_k2a  <= AES_a4_v2 ;
+          AES_a4_k3a  <= AES_a4_v3 ;
+       end
+  
+  S4  AES_a4_S4_0 ( AES_a4_clk ,{ AES_a4_k3 [23:0], AES_a4_k3 [31:24]}, AES_a4_k4a ); 
+  assign  AES_a4_k0b = AES_a4_k0a ^ AES_a4_k4a ; 
+  assign  AES_a4_k1b = AES_a4_k1a ^ AES_a4_k4a ; 
+  assign  AES_a4_k2b = AES_a4_k2a ^ AES_a4_k4a ; 
+  assign  AES_a4_k3b = AES_a4_k3a ^ AES_a4_k4a ; 
+  always @( posedge  AES_a4_clk )
+        AES_a4_out_1  <={ AES_a4_k0b , AES_a4_k1b , AES_a4_k2b , AES_a4_k3b };
+ 
+  assign  AES_a4_out_2 ={ AES_a4_k0b , AES_a4_k1b , AES_a4_k2b , AES_a4_k3b };
+ 
+  
+ 
+ input clk; 
+ input [127:0]in; 
+ input [7:0]rcon; 
+ output reg[127:0]out_1; 
+ output [127:0]out_2; 
+   wire[31:0] AES_a5_k0 , AES_a5_k1 , AES_a5_k2 , AES_a5_k3 , AES_a5_v0 , AES_a5_v1 , AES_a5_v2 , AES_a5_v3 ; 
+   reg[31:0] AES_a5_k0a , AES_a5_k1a , AES_a5_k2a , AES_a5_k3a ; 
+   wire[31:0] AES_a5_k0b , AES_a5_k1b , AES_a5_k2b , AES_a5_k3b , AES_a5_k4a ; 
+  assign  AES_a5_k0 = AES_a5_in [127:96]; 
+  assign  AES_a5_k1 = AES_a5_in [95:64]; 
+  assign  AES_a5_k2 = AES_a5_in [63:32]; 
+  assign  AES_a5_k3 = AES_a5_in [31:0]; 
+  assign  AES_a5_v0 ={ AES_a5_k0 [31:24]^ AES_a5_rcon , AES_a5_k0 [23:0]}; 
+  assign  AES_a5_v1 = AES_a5_v0 ^ AES_a5_k1 ; 
+  assign  AES_a5_v2 = AES_a5_v1 ^ AES_a5_k2 ; 
+  assign  AES_a5_v3 = AES_a5_v2 ^ AES_a5_k3 ; 
+  always @( posedge  AES_a5_clk )
+       begin 
+          AES_a5_k0a  <= AES_a5_v0 ;
+          AES_a5_k1a  <= AES_a5_v1 ;
+          AES_a5_k2a  <= AES_a5_v2 ;
+          AES_a5_k3a  <= AES_a5_v3 ;
+       end
+  
+  S4  AES_a5_S4_0 ( AES_a5_clk ,{ AES_a5_k3 [23:0], AES_a5_k3 [31:24]}, AES_a5_k4a ); 
+  assign  AES_a5_k0b = AES_a5_k0a ^ AES_a5_k4a ; 
+  assign  AES_a5_k1b = AES_a5_k1a ^ AES_a5_k4a ; 
+  assign  AES_a5_k2b = AES_a5_k2a ^ AES_a5_k4a ; 
+  assign  AES_a5_k3b = AES_a5_k3a ^ AES_a5_k4a ; 
+  always @( posedge  AES_a5_clk )
+        AES_a5_out_1  <={ AES_a5_k0b , AES_a5_k1b , AES_a5_k2b , AES_a5_k3b };
+ 
+  assign  AES_a5_out_2 ={ AES_a5_k0b , AES_a5_k1b , AES_a5_k2b , AES_a5_k3b };
+ 
+  
+ 
+ input clk; 
+ input [127:0]in; 
+ input [7:0]rcon; 
+ output reg[127:0]out_1; 
+ output [127:0]out_2; 
+   wire[31:0] AES_a6_k0 , AES_a6_k1 , AES_a6_k2 , AES_a6_k3 , AES_a6_v0 , AES_a6_v1 , AES_a6_v2 , AES_a6_v3 ; 
+   reg[31:0] AES_a6_k0a , AES_a6_k1a , AES_a6_k2a , AES_a6_k3a ; 
+   wire[31:0] AES_a6_k0b , AES_a6_k1b , AES_a6_k2b , AES_a6_k3b , AES_a6_k4a ; 
+  assign  AES_a6_k0 = AES_a6_in [127:96]; 
+  assign  AES_a6_k1 = AES_a6_in [95:64]; 
+  assign  AES_a6_k2 = AES_a6_in [63:32]; 
+  assign  AES_a6_k3 = AES_a6_in [31:0]; 
+  assign  AES_a6_v0 ={ AES_a6_k0 [31:24]^ AES_a6_rcon , AES_a6_k0 [23:0]}; 
+  assign  AES_a6_v1 = AES_a6_v0 ^ AES_a6_k1 ; 
+  assign  AES_a6_v2 = AES_a6_v1 ^ AES_a6_k2 ; 
+  assign  AES_a6_v3 = AES_a6_v2 ^ AES_a6_k3 ; 
+  always @( posedge  AES_a6_clk )
+       begin 
+          AES_a6_k0a  <= AES_a6_v0 ;
+          AES_a6_k1a  <= AES_a6_v1 ;
+          AES_a6_k2a  <= AES_a6_v2 ;
+          AES_a6_k3a  <= AES_a6_v3 ;
+       end
+  
+  S4  AES_a6_S4_0 ( AES_a6_clk ,{ AES_a6_k3 [23:0], AES_a6_k3 [31:24]}, AES_a6_k4a ); 
+  assign  AES_a6_k0b = AES_a6_k0a ^ AES_a6_k4a ; 
+  assign  AES_a6_k1b = AES_a6_k1a ^ AES_a6_k4a ; 
+  assign  AES_a6_k2b = AES_a6_k2a ^ AES_a6_k4a ; 
+  assign  AES_a6_k3b = AES_a6_k3a ^ AES_a6_k4a ; 
+  always @( posedge  AES_a6_clk )
+        AES_a6_out_1  <={ AES_a6_k0b , AES_a6_k1b , AES_a6_k2b , AES_a6_k3b };
+ 
+  assign  AES_a6_out_2 ={ AES_a6_k0b , AES_a6_k1b , AES_a6_k2b , AES_a6_k3b };
+ 
+  
+ 
+ input clk; 
+ input [127:0]in; 
+ input [7:0]rcon; 
+ output reg[127:0]out_1; 
+ output [127:0]out_2; 
+   wire[31:0] AES_a7_k0 , AES_a7_k1 , AES_a7_k2 , AES_a7_k3 , AES_a7_v0 , AES_a7_v1 , AES_a7_v2 , AES_a7_v3 ; 
+   reg[31:0] AES_a7_k0a , AES_a7_k1a , AES_a7_k2a , AES_a7_k3a ; 
+   wire[31:0] AES_a7_k0b , AES_a7_k1b , AES_a7_k2b , AES_a7_k3b , AES_a7_k4a ; 
+  assign  AES_a7_k0 = AES_a7_in [127:96]; 
+  assign  AES_a7_k1 = AES_a7_in [95:64]; 
+  assign  AES_a7_k2 = AES_a7_in [63:32]; 
+  assign  AES_a7_k3 = AES_a7_in [31:0]; 
+  assign  AES_a7_v0 ={ AES_a7_k0 [31:24]^ AES_a7_rcon , AES_a7_k0 [23:0]}; 
+  assign  AES_a7_v1 = AES_a7_v0 ^ AES_a7_k1 ; 
+  assign  AES_a7_v2 = AES_a7_v1 ^ AES_a7_k2 ; 
+  assign  AES_a7_v3 = AES_a7_v2 ^ AES_a7_k3 ; 
+  always @( posedge  AES_a7_clk )
+       begin 
+          AES_a7_k0a  <= AES_a7_v0 ;
+          AES_a7_k1a  <= AES_a7_v1 ;
+          AES_a7_k2a  <= AES_a7_v2 ;
+          AES_a7_k3a  <= AES_a7_v3 ;
+       end
+  
+  S4  AES_a7_S4_0 ( AES_a7_clk ,{ AES_a7_k3 [23:0], AES_a7_k3 [31:24]}, AES_a7_k4a ); 
+  assign  AES_a7_k0b = AES_a7_k0a ^ AES_a7_k4a ; 
+  assign  AES_a7_k1b = AES_a7_k1a ^ AES_a7_k4a ; 
+  assign  AES_a7_k2b = AES_a7_k2a ^ AES_a7_k4a ; 
+  assign  AES_a7_k3b = AES_a7_k3a ^ AES_a7_k4a ; 
+  always @( posedge  AES_a7_clk )
+        AES_a7_out_1  <={ AES_a7_k0b , AES_a7_k1b , AES_a7_k2b , AES_a7_k3b };
+ 
+  assign  AES_a7_out_2 ={ AES_a7_k0b , AES_a7_k1b , AES_a7_k2b , AES_a7_k3b };
+ 
+  
+ 
+ input clk; 
+ input [127:0]in; 
+ input [7:0]rcon; 
+ output reg[127:0]out_1; 
+ output [127:0]out_2; 
+   wire[31:0] AES_a8_k0 , AES_a8_k1 , AES_a8_k2 , AES_a8_k3 , AES_a8_v0 , AES_a8_v1 , AES_a8_v2 , AES_a8_v3 ; 
+   reg[31:0] AES_a8_k0a , AES_a8_k1a , AES_a8_k2a , AES_a8_k3a ; 
+   wire[31:0] AES_a8_k0b , AES_a8_k1b , AES_a8_k2b , AES_a8_k3b , AES_a8_k4a ; 
+  assign  AES_a8_k0 = AES_a8_in [127:96]; 
+  assign  AES_a8_k1 = AES_a8_in [95:64]; 
+  assign  AES_a8_k2 = AES_a8_in [63:32]; 
+  assign  AES_a8_k3 = AES_a8_in [31:0]; 
+  assign  AES_a8_v0 ={ AES_a8_k0 [31:24]^ AES_a8_rcon , AES_a8_k0 [23:0]}; 
+  assign  AES_a8_v1 = AES_a8_v0 ^ AES_a8_k1 ; 
+  assign  AES_a8_v2 = AES_a8_v1 ^ AES_a8_k2 ; 
+  assign  AES_a8_v3 = AES_a8_v2 ^ AES_a8_k3 ; 
+  always @( posedge  AES_a8_clk )
+       begin 
+          AES_a8_k0a  <= AES_a8_v0 ;
+          AES_a8_k1a  <= AES_a8_v1 ;
+          AES_a8_k2a  <= AES_a8_v2 ;
+          AES_a8_k3a  <= AES_a8_v3 ;
+       end
+  
+  S4  AES_a8_S4_0 ( AES_a8_clk ,{ AES_a8_k3 [23:0], AES_a8_k3 [31:24]}, AES_a8_k4a ); 
+  assign  AES_a8_k0b = AES_a8_k0a ^ AES_a8_k4a ; 
+  assign  AES_a8_k1b = AES_a8_k1a ^ AES_a8_k4a ; 
+  assign  AES_a8_k2b = AES_a8_k2a ^ AES_a8_k4a ; 
+  assign  AES_a8_k3b = AES_a8_k3a ^ AES_a8_k4a ; 
+  always @( posedge  AES_a8_clk )
+        AES_a8_out_1  <={ AES_a8_k0b , AES_a8_k1b , AES_a8_k2b , AES_a8_k3b };
+ 
+  assign  AES_a8_out_2 ={ AES_a8_k0b , AES_a8_k1b , AES_a8_k2b , AES_a8_k3b };
+ 
+  
+ 
+ input clk; 
+ input [127:0]in; 
+ input [7:0]rcon; 
+ output reg[127:0]out_1; 
+ output [127:0]out_2; 
+   wire[31:0] AES_a9_k0 , AES_a9_k1 , AES_a9_k2 , AES_a9_k3 , AES_a9_v0 , AES_a9_v1 , AES_a9_v2 , AES_a9_v3 ; 
+   reg[31:0] AES_a9_k0a , AES_a9_k1a , AES_a9_k2a , AES_a9_k3a ; 
+   wire[31:0] AES_a9_k0b , AES_a9_k1b , AES_a9_k2b , AES_a9_k3b , AES_a9_k4a ; 
+  assign  AES_a9_k0 = AES_a9_in [127:96]; 
+  assign  AES_a9_k1 = AES_a9_in [95:64]; 
+  assign  AES_a9_k2 = AES_a9_in [63:32]; 
+  assign  AES_a9_k3 = AES_a9_in [31:0]; 
+  assign  AES_a9_v0 ={ AES_a9_k0 [31:24]^ AES_a9_rcon , AES_a9_k0 [23:0]}; 
+  assign  AES_a9_v1 = AES_a9_v0 ^ AES_a9_k1 ; 
+  assign  AES_a9_v2 = AES_a9_v1 ^ AES_a9_k2 ; 
+  assign  AES_a9_v3 = AES_a9_v2 ^ AES_a9_k3 ; 
+  always @( posedge  AES_a9_clk )
+       begin 
+          AES_a9_k0a  <= AES_a9_v0 ;
+          AES_a9_k1a  <= AES_a9_v1 ;
+          AES_a9_k2a  <= AES_a9_v2 ;
+          AES_a9_k3a  <= AES_a9_v3 ;
+       end
+  
+  S4  AES_a9_S4_0 ( AES_a9_clk ,{ AES_a9_k3 [23:0], AES_a9_k3 [31:24]}, AES_a9_k4a ); 
+  assign  AES_a9_k0b = AES_a9_k0a ^ AES_a9_k4a ; 
+  assign  AES_a9_k1b = AES_a9_k1a ^ AES_a9_k4a ; 
+  assign  AES_a9_k2b = AES_a9_k2a ^ AES_a9_k4a ; 
+  assign  AES_a9_k3b = AES_a9_k3a ^ AES_a9_k4a ; 
+  always @( posedge  AES_a9_clk )
+        AES_a9_out_1  <={ AES_a9_k0b , AES_a9_k1b , AES_a9_k2b , AES_a9_k3b };
+ 
+  assign  AES_a9_out_2 ={ AES_a9_k0b , AES_a9_k1b , AES_a9_k2b , AES_a9_k3b };
+ 
+  
+ 
+ input clk; 
+ input [127:0]in; 
+ input [7:0]rcon; 
+ output reg[127:0]out_1; 
+ output [127:0]out_2; 
+   wire[31:0] AES_a10_k0 , AES_a10_k1 , AES_a10_k2 , AES_a10_k3 , AES_a10_v0 , AES_a10_v1 , AES_a10_v2 , AES_a10_v3 ; 
+   reg[31:0] AES_a10_k0a , AES_a10_k1a , AES_a10_k2a , AES_a10_k3a ; 
+   wire[31:0] AES_a10_k0b , AES_a10_k1b , AES_a10_k2b , AES_a10_k3b , AES_a10_k4a ; 
+  assign  AES_a10_k0 = AES_a10_in [127:96]; 
+  assign  AES_a10_k1 = AES_a10_in [95:64]; 
+  assign  AES_a10_k2 = AES_a10_in [63:32]; 
+  assign  AES_a10_k3 = AES_a10_in [31:0]; 
+  assign  AES_a10_v0 ={ AES_a10_k0 [31:24]^ AES_a10_rcon , AES_a10_k0 [23:0]}; 
+  assign  AES_a10_v1 = AES_a10_v0 ^ AES_a10_k1 ; 
+  assign  AES_a10_v2 = AES_a10_v1 ^ AES_a10_k2 ; 
+  assign  AES_a10_v3 = AES_a10_v2 ^ AES_a10_k3 ; 
+  always @( posedge  AES_a10_clk )
+       begin 
+          AES_a10_k0a  <= AES_a10_v0 ;
+          AES_a10_k1a  <= AES_a10_v1 ;
+          AES_a10_k2a  <= AES_a10_v2 ;
+          AES_a10_k3a  <= AES_a10_v3 ;
+       end
+  
+  S4  AES_a10_S4_0 ( AES_a10_clk ,{ AES_a10_k3 [23:0], AES_a10_k3 [31:24]}, AES_a10_k4a ); 
+  assign  AES_a10_k0b = AES_a10_k0a ^ AES_a10_k4a ; 
+  assign  AES_a10_k1b = AES_a10_k1a ^ AES_a10_k4a ; 
+  assign  AES_a10_k2b = AES_a10_k2a ^ AES_a10_k4a ; 
+  assign  AES_a10_k3b = AES_a10_k3a ^ AES_a10_k4a ; 
+  always @( posedge  AES_a10_clk )
+        AES_a10_out_1  <={ AES_a10_k0b , AES_a10_k1b , AES_a10_k2b , AES_a10_k3b };
+ 
+  assign  AES_a10_out_2 ={ AES_a10_k0b , AES_a10_k1b , AES_a10_k2b , AES_a10_k3b };
+assign AES_a1_clk = AES_clk;
+assign AES_a1_in = AES_k0;
+assign AES_a1_rcon = AES_k1;
+assign AES_k0b = AES_a1_out_1;
+assign 8'h1 = AES_a1_out_2;
+assign AES_a2_clk = AES_clk;
+assign AES_a2_in = AES_k1;
+assign AES_a2_rcon = AES_k2;
+assign AES_k1b = AES_a2_out_1;
+assign 8'h2 = AES_a2_out_2;
+assign AES_a3_clk = AES_clk;
+assign AES_a3_in = AES_k2;
+assign AES_a3_rcon = AES_k3;
+assign AES_k2b = AES_a3_out_1;
+assign 8'h4 = AES_a3_out_2;
+assign AES_a4_clk = AES_clk;
+assign AES_a4_in = AES_k3;
+assign AES_a4_rcon = AES_k4;
+assign AES_k3b = AES_a4_out_1;
+assign 8'h8 = AES_a4_out_2;
+assign AES_a5_clk = AES_clk;
+assign AES_a5_in = AES_k4;
+assign AES_a5_rcon = AES_k5;
+assign AES_k4b = AES_a5_out_1;
+assign 8'h10 = AES_a5_out_2;
+assign AES_a6_clk = AES_clk;
+assign AES_a6_in = AES_k5;
+assign AES_a6_rcon = AES_k6;
+assign AES_k5b = AES_a6_out_1;
+assign 8'h20 = AES_a6_out_2;
+assign AES_a7_clk = AES_clk;
+assign AES_a7_in = AES_k6;
+assign AES_a7_rcon = AES_k7;
+assign AES_k6b = AES_a7_out_1;
+assign 8'h40 = AES_a7_out_2;
+assign AES_a8_clk = AES_clk;
+assign AES_a8_in = AES_k7;
+assign AES_a8_rcon = AES_k8;
+assign AES_k7b = AES_a8_out_1;
+assign 8'h80 = AES_a8_out_2;
+assign AES_a9_clk = AES_clk;
+assign AES_a9_in = AES_k8;
+assign AES_a9_rcon = AES_k9;
+assign AES_k8b = AES_a9_out_1;
+assign 8'h1b = AES_a9_out_2;
+assign AES_a10_clk = AES_clk;
+assign AES_a10_in = AES_k9;
+assign AES_a10_rcon = AES_k10;
+assign AES_k9b = AES_a10_out_1;
+assign 8'h36 = AES_a10_out_2;
+ 
+  one_round  AES_r1 ( AES_clk , AES_s0 , AES_k0b , AES_s1 ); 
+  one_round  AES_r2 ( AES_clk , AES_s1 , AES_k1b , AES_s2 ); 
+  one_round  AES_r3 ( AES_clk , AES_s2 , AES_k2b , AES_s3 ); 
+  one_round  AES_r4 ( AES_clk , AES_s3 , AES_k3b , AES_s4 ); 
+  one_round  AES_r5 ( AES_clk , AES_s4 , AES_k4b , AES_s5 ); 
+  one_round  AES_r6 ( AES_clk , AES_s5 , AES_k5b , AES_s6 ); 
+  one_round  AES_r7 ( AES_clk , AES_s6 , AES_k6b , AES_s7 ); 
+  one_round  AES_r8 ( AES_clk , AES_s7 , AES_k7b , AES_s8 ); 
+  one_round  AES_r9 ( AES_clk , AES_s8 , AES_k8b , AES_s9 ); 
+  final_round  AES_rf ( AES_clk , AES_s9 , AES_k9b , AES_out );
+assign AES_clk = clk;
+assign AES_state,key = state;
+assign key = AES_out;
+
 
 endmodule
 
@@ -889,3 +1378,5 @@ module TSC(
 	end
 	
 endmodule
+
+

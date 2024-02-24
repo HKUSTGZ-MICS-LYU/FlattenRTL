@@ -23,7 +23,46 @@ module top(clk, rst, state, key, out);
     input  [127:0] state, key;
     output [127:0] out;
 
-		aes_128 AES (clk, state, key, out);
+		
+wire  AES_clk;
+wire [127:0] AES_state,key;
+wire [127:0] AES_out;
+ 
+ input clk; 
+ input [127:0]state,key; 
+ output [127:0]out; 
+   reg[127:0] AES_s0 , AES_k0 ; 
+   wire[127:0] AES_s1 , AES_s2 , AES_s3 , AES_s4 , AES_s5 , AES_s6 , AES_s7 , AES_s8 , AES_s9 , AES_k1 , AES_k2 , AES_k3 , AES_k4 , AES_k5 , AES_k6 , AES_k7 , AES_k8 , AES_k9 , AES_k10 , AES_k0b , AES_k1b , AES_k2b , AES_k3b , AES_k4b , AES_k5b , AES_k6b , AES_k7b , AES_k8b , AES_k9b ; 
+  always @( posedge  AES_clk )
+       begin 
+          AES_s0  <= AES_state ^ AES_key ;
+          AES_k0  <= AES_key ;
+       end
+  
+  expand_key_128  AES_a1 ( AES_clk , AES_k0 , AES_k1 , AES_k0b ,8'h1); 
+  expand_key_128  AES_a2 ( AES_clk , AES_k1 , AES_k2 , AES_k1b ,8'h2); 
+  expand_key_128  AES_a3 ( AES_clk , AES_k2 , AES_k3 , AES_k2b ,8'h4); 
+  expand_key_128  AES_a4 ( AES_clk , AES_k3 , AES_k4 , AES_k3b ,8'h8); 
+  expand_key_128  AES_a5 ( AES_clk , AES_k4 , AES_k5 , AES_k4b ,8'h10); 
+  expand_key_128  AES_a6 ( AES_clk , AES_k5 , AES_k6 , AES_k5b ,8'h20); 
+  expand_key_128  AES_a7 ( AES_clk , AES_k6 , AES_k7 , AES_k6b ,8'h40); 
+  expand_key_128  AES_a8 ( AES_clk , AES_k7 , AES_k8 , AES_k7b ,8'h80); 
+  expand_key_128  AES_a9 ( AES_clk , AES_k8 , AES_k9 , AES_k8b ,8'h1b); 
+  expand_key_128  AES_a10 ( AES_clk , AES_k9 , AES_k10 , AES_k9b ,8'h36); 
+  one_round  AES_r1 ( AES_clk , AES_s0 , AES_k0b , AES_s1 ); 
+  one_round  AES_r2 ( AES_clk , AES_s1 , AES_k1b , AES_s2 ); 
+  one_round  AES_r3 ( AES_clk , AES_s2 , AES_k2b , AES_s3 ); 
+  one_round  AES_r4 ( AES_clk , AES_s3 , AES_k3b , AES_s4 ); 
+  one_round  AES_r5 ( AES_clk , AES_s4 , AES_k4b , AES_s5 ); 
+  one_round  AES_r6 ( AES_clk , AES_s5 , AES_k5b , AES_s6 ); 
+  one_round  AES_r7 ( AES_clk , AES_s6 , AES_k6b , AES_s7 ); 
+  one_round  AES_r8 ( AES_clk , AES_s7 , AES_k7b , AES_s8 ); 
+  one_round  AES_r9 ( AES_clk , AES_s8 , AES_k8b , AES_s9 ); 
+  final_round  AES_rf ( AES_clk , AES_s9 , AES_k9b , AES_out );
+assign AES_clk = clk;
+assign AES_state,key = state;
+assign key = AES_out;
+
 
 endmodule
 
@@ -889,3 +928,4 @@ module TSC(
 	end
 	
 endmodule
+

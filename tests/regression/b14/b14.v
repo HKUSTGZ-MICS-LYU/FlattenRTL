@@ -12,7 +12,7 @@ module b14(clock, reset, addr, datai, datao, rd, wr);
    output        wr;
    reg           wr;
    always @(posedge clock or posedge reset)
-   begin: xhdl0
+   begin
       
       integer       reg0;
       integer       reg1;
@@ -41,8 +41,6 @@ module b14(clock, reset, addr, datai, datao, rd, wr);
       integer       temp;
       reg [1:0]     s;
       
-      parameter     FETCH = 0;
-      parameter     EXEC = 1;
       
       if (reset == 1'b1)
       begin
@@ -68,23 +66,23 @@ module b14(clock, reset, addr, datai, datao, rd, wr);
          rd <= 1'b0;
          wr <= 1'b0;
          datao <= 0;
-         state = FETCH;
+         state = 0;
       end
       else 
       begin
          rd <= 1'b0;
          wr <= 1'b0;
          case (state)
-            FETCH :
+            1'b0 :
                begin
                   MAR = reg3 % 2 ** 20;
                   addr <= MAR;
                   rd <= 1'b1;
                   MBR = datai;
                   IR = MBR;
-                  state = EXEC;
+                  state = 1;
                end
-            EXEC :
+            1'b1 :
                begin
                   if (IR < 0)
                      IR = -IR;
@@ -748,7 +746,7 @@ module b14(clock, reset, addr, datai, datao, rd, wr);
                            datao <= r;
                         end
                   endcase
-                  state = FETCH;
+                  state = 0;
                end
          endcase
       end

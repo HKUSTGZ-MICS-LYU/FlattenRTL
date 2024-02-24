@@ -9,10 +9,10 @@ start_time = time.time()
 start_memory = psutil.Process(os.getpid()).memory_info().rss / (1024 * 1024)
 # formatted part
 
-path = '/home/xiangchenmeng/work/pyflattenverilog/tests/regression/delimeter_dot'
-inputfile = '/delimeter_dot.v'
+path = 'tests/regression/AES/AES-T500'
+inputfile = '/top.v'
 outputfile = '/f_top.v'
-top_module = 'delimeter_dot'
+top_module = 'top'
 inputpath = path+inputfile
 formatpath = path+outputfile
 
@@ -22,8 +22,8 @@ with open(path+inputfile, 'r') as f:
     design = f.read()
     preprocess.formatter_file(design, formatpath)
     # copy the file to formatpath
-    with open(formatpath, 'w') as f:
-        f.write(design)
+    # with open(formatpath, 'w') as f:
+    #     f.write(design)
 
 # flatten part
 
@@ -53,10 +53,3 @@ with open(formatpath,"r") as file:
         else:
             break
 
-# 结束监测
-end_memory = psutil.Process(os.getpid()).memory_info().rss / (1024 * 1024)
-end_time = time.time()
-
-# 计算并打印结果
-print(f"执行时间：{end_time - start_time}秒")
-print(f"内存使用增加：{end_memory - start_memory} MB")

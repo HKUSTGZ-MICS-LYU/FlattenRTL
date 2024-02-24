@@ -5,33 +5,42 @@ import time
 import psutil
 import subprocess
 
+
 # 开始监测
 start_time = time.time()
 start_memory = psutil.Process(os.getpid()).memory_info().rss / (1024 * 1024)
+
+
 # formatted part
 name = "b14"
-
-path = r'/home/xiangchenmeng/work/pyflattenverilog/tests/regression/{name}'.format(name=name)   
-inputfile = r'/{name}.v'.format(name=name)   
-outputfile = '/f_top.v'
+path = r'/home/xiangchenmeng/work/pyflattenverilog/tests/regression/{name}/'.format(name=name)   
+inputfile = r'{name}.v'.format(name=name)   
+outputfile = r'f_{name}.v'.format(name=name)
 top_module = r'{name}'.format(name=name)
+
+# path = 'tests/regression/'
+# inputfile = '/usb_phy.v'
+# outputfile = '/f_top.v'
+# top_module = 'usb_phy'
+
 inputpath = path+inputfile
 formatpath = path+outputfile
 
 if os.path.exists(formatpath):
    os.remove(path=formatpath)
+
+# format the file
 with open(path+inputfile, 'r') as f:
     design = f.read()
     preprocess.formatter_file(design, formatpath)
     # copy the file to formatpath
-    with open(formatpath, 'w') as f:
-        f.write(design)
+    # with open(formatpath, 'w') as f:
+    #     f.write(design)
+
+
 
 # flatten part
-
-
 folder_path = os.path.dirname(formatpath)+'/tmp'
-
 if os.path.exists(folder_path):
     file_list = os.listdir(folder_path)
     for filename in file_list:
@@ -39,13 +48,8 @@ if os.path.exists(folder_path):
         os.remove(tmp_file_path)
 else:
     os.mkdir(folder_path)
-
-
 tmp_output_path = os.path.dirname(formatpath)+'/tmp/'+formatpath.split('/')[-1]
-
 debug_mode = True
-
-
 with open(formatpath,"r") as file:
     design = file.read()
     tmp_flatten_design = flatten.pyflattenverilog(design, top_module, tmp_output_path, debug_mode)
@@ -68,6 +72,7 @@ end_time = time.time()
 fms_file_path = 'tests/formality/verify.fms'
 
 
+compare_path = path+'flatten_{outputfile}'.format(outputfile=outputfile)
 # 读取.fms文件内容
 with open(fms_file_path, 'r') as file:
     lines = file.readlines()
@@ -75,13 +80,17 @@ with open(fms_file_path, 'r') as file:
 # 修改包含特定read_verilog行的路径
 with open(fms_file_path, 'w') as file:
     for line in lines:
-        if 'read_verilog -r' in line and 'b19.v' in line:
+        if 'read_verilog -r' in line:
             # 替换为新的inputpath
             new_line = f"read_verilog -r {inputpath}\n"
             file.write(new_line)
-        elif 'read_verilog -i' in line and 'flatten_f_b19.v' in line:
+        elif 'read_verilog -i' in line :
             # 替换为新的outputpath
-            new_line = f"read_verilog -i {formatpath}\n"
+            new_line = f"read_verilog -i {compare_path}\n"
+            file.write(new_line)
+        elif 'set_top' in line:
+            # 替换为新的top_module
+            new_line = f"set_top {top_module}\n"
             file.write(new_line)
         else:
             file.write(line)

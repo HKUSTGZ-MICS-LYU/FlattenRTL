@@ -1,10 +1,9 @@
 
 
 module simple_and_3 ( in1, in2, out1 );
-parameter N1 = 4;
-parameter N2 = N1 + 1;
-input [N2:0]in1, in2;
-output [0:N2]out1;
+
+input [5:0]in1, in2;
+output [0:5]out1;
 
 	mid inst1(in1[0], in2[0], out1[0]);
 	mid inst2(in1[1], in2[1], out1[1]);
@@ -20,8 +19,8 @@ module bottom2( i1, o1 );
 	reg [0:1]o1;
 
 	always@ (posedge i1)
-	begin : l1
-		#10 o1 = #20 i1;
+	begin 
+		o1 =  i1;
 	end
 endmodule
 

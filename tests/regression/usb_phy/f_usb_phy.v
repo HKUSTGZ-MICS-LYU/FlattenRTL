@@ -1,4 +1,4 @@
-module usb_phy (clk,rst,phy_tx_mode,regusb_rst,txdp,txdn,txoe,rxd,rxdp,rxdn,DataOut_i,TxValid_i,TxReady_o,DataIn_o,RxValid_o,RxActive_o,RxError_o,LineState_o) ; 
+module usb_phy (clk,rst,phy_tx_mode,reg usb_rst,txdp,txdn,txoe,rxd,rxdp,rxdn,DataOut_i,TxValid_i,TxReady_o,DataIn_o,RxValid_o,RxActive_o,RxError_o,LineState_o) ; 
    reg [4:0] rst_cnt ;  
    wire fs_ce ;  
    wire rst ;  

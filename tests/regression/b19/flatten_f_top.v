@@ -1,41 +1,57 @@
-module b19 (
-  input clock,
-  input reset,
-  input bs,
-  input na,
-  input hold,
-  input [10:0] in1,
-  input [10:0] in2,
-  input [19:0] in3,
-  output reg  [29:0] ris) ; 
-   reg sel1 ;  
-   reg sel2 ;  
-   wire [19:0] do1 ;  
-   wire [19:0] do2 ;  
-   integer di1 ;  
-   integer di2 ;  
-   wire [2:0] ax1 ;  
-   wire [2:0] ax2 ;  
-  
+module b19(clock, reset, bs, na, hold, in1, in2, in3, ris);
+   input         clock;
+   input         reset;
+   input         bs;
+   input         na;
+   input         hold;
+   input [10:0]  in1;
+   input [10:0]  in2;
+   input [19:0]  in3;
+   output [29:0] ris;
+   reg [29:0]    ris;
+   
+   
+   reg           sel1;
+   reg           sel2;
+   wire [19:0]   do1;
+   wire [19:0]   do2;
+   integer       di1;
+   integer       di2;
+   wire [2:0]    ax1;
+   wire [2:0]    ax2;
+   
+   
+   
 wire  P1_clock;
 wire  P1_reset;
 wire  P1_hold;
 wire  P1_na;
 wire  P1_bs;
 wire  P1_sel;
-reg [19:0] P1_dout;
+wire [19:0] P1_dout;
 wire [31:0] P1_din;
-reg [2:0] P1_aux;
+wire [2:0] P1_aux;
 wire  P2_clock;
 wire  P2_reset;
 wire  P2_hold;
 wire  P2_na;
 wire  P2_bs;
 wire  P2_sel;
-reg [19:0] P2_dout;
+wire [19:0] P2_dout;
 wire [31:0] P2_din;
-reg [2:0] P2_aux;
+wire [2:0] P2_aux;
  
+ input clock; 
+ input reset; 
+ input hold; 
+ input na; 
+ input bs; 
+ input sel; 
+ output [19:0]dout; 
+   reg[19:0] P1_dout ; 
+ input [31:0]din; 
+ output [2:0]aux; 
+   reg[2:0] P1_aux ; 
    integer P1_di1 ; 
    integer P1_di2 ; 
    wire[31:0] P1_do1 ; 
@@ -78,68 +94,92 @@ reg [2:0] P2_aux;
 wire  P1_P1_clock;
 wire  P1_P1_reset;
 wire [31:0] P1_P1_datai;
-integer P1_P1_datao;
+wire  P1_P1_datao;
 wire  P1_P1_hold;
 wire  P1_P1_na;
 wire  P1_P1_bs16;
-reg [29:0] P1_P1_address1;
-reg [29:0] P1_P1_address2;
-reg  P1_P1_wr;
-reg  P1_P1_dc;
-reg  P1_P1_mio;
-reg  P1_P1_ast1;
-reg  P1_P1_ast2;
+wire [29:0] P1_P1_address1;
+wire [29:0] P1_P1_address2;
+wire  P1_P1_wr;
+wire  P1_P1_dc;
+wire  P1_P1_mio;
+wire  P1_P1_ast1;
+wire  P1_P1_ast2;
 wire  P1_P1_ready1;
 wire  P1_P1_ready2;
 wire  P1_P2_clock;
 wire  P1_P2_reset;
 wire [31:0] P1_P2_datai;
-integer P1_P2_datao;
+wire  P1_P2_datao;
 wire  P1_P2_hold;
 wire  P1_P2_na;
 wire  P1_P2_bs16;
-reg [29:0] P1_P2_address1;
-reg [29:0] P1_P2_address2;
-reg  P1_P2_wr;
-reg  P1_P2_dc;
-reg  P1_P2_mio;
-reg  P1_P2_ast1;
-reg  P1_P2_ast2;
+wire [29:0] P1_P2_address1;
+wire [29:0] P1_P2_address2;
+wire  P1_P2_wr;
+wire  P1_P2_dc;
+wire  P1_P2_mio;
+wire  P1_P2_ast1;
+wire  P1_P2_ast2;
 wire  P1_P2_ready1;
 wire  P1_P2_ready2;
 wire  P2_P1_clock;
 wire  P2_P1_reset;
 wire [31:0] P2_P1_datai;
-integer P2_P1_datao;
+wire  P2_P1_datao;
 wire  P2_P1_hold;
 wire  P2_P1_na;
 wire  P2_P1_bs16;
-reg [29:0] P2_P1_address1;
-reg [29:0] P2_P1_address2;
-reg  P2_P1_wr;
-reg  P2_P1_dc;
-reg  P2_P1_mio;
-reg  P2_P1_ast1;
-reg  P2_P1_ast2;
+wire [29:0] P2_P1_address1;
+wire [29:0] P2_P1_address2;
+wire  P2_P1_wr;
+wire  P2_P1_dc;
+wire  P2_P1_mio;
+wire  P2_P1_ast1;
+wire  P2_P1_ast2;
 wire  P2_P1_ready1;
 wire  P2_P1_ready2;
 wire  P2_P2_clock;
 wire  P2_P2_reset;
 wire [31:0] P2_P2_datai;
-integer P2_P2_datao;
+wire  P2_P2_datao;
 wire  P2_P2_hold;
 wire  P2_P2_na;
 wire  P2_P2_bs16;
-reg [29:0] P2_P2_address1;
-reg [29:0] P2_P2_address2;
-reg  P2_P2_wr;
-reg  P2_P2_dc;
-reg  P2_P2_mio;
-reg  P2_P2_ast1;
-reg  P2_P2_ast2;
+wire [29:0] P2_P2_address1;
+wire [29:0] P2_P2_address2;
+wire  P2_P2_wr;
+wire  P2_P2_dc;
+wire  P2_P2_mio;
+wire  P2_P2_ast1;
+wire  P2_P2_ast2;
 wire  P2_P2_ready1;
 wire  P2_P2_ready2;
  
+ input clock; 
+ input reset; 
+ input [31:0]datai; 
+ output datao; 
+   integer P1_P1_datao ; 
+ input hold; 
+ input na; 
+ input bs16; 
+ output [29:0]address1; 
+   reg[29:0] P1_P1_address1 ; 
+ output [29:0]address2; 
+   reg[29:0] P1_P1_address2 ; 
+ output wr; 
+   reg P1_P1_wr ; 
+ output dc; 
+   reg P1_P1_dc ; 
+ output mio; 
+   reg P1_P1_mio ; 
+ output ast1; 
+   reg P1_P1_ast1 ; 
+ output ast2; 
+   reg P1_P1_ast2 ; 
+ input ready1; 
+ input ready2; 
    integer P1_P1_buf1 ; 
    integer P1_P1_buf2 ; 
    wire[3:0] P1_P1_be1 ; 
@@ -264,168 +304,168 @@ wire  P2_P2_ready2;
        end
   
   
-reg [3:0] P1_P1_P1_BE_n;
-reg [29:0] P1_P1_P1_Address;
-reg  P1_P1_P1_W_R_n;
-reg  P1_P1_P1_D_C_n;
-reg  P1_P1_P1_M_IO_n;
-reg  P1_P1_P1_ADS_n;
+wire [3:0] P1_P1_P1_BE_n;
+wire [29:0] P1_P1_P1_Address;
+wire  P1_P1_P1_W_R_n;
+wire  P1_P1_P1_D_C_n;
+wire  P1_P1_P1_M_IO_n;
+wire  P1_P1_P1_ADS_n;
 wire [31:0] P1_P1_P1_Datai;
-integer P1_P1_P1_Datao;
+wire  P1_P1_P1_Datao;
 wire  P1_P1_P1_CLOCK;
 wire  P1_P1_P1_NA_n;
 wire  P1_P1_P1_BS16_n;
 wire  P1_P1_P1_READY_n;
 wire  P1_P1_P1_HOLD;
 wire  P1_P1_P1_RESET;
-reg [3:0] P1_P1_P2_BE_n;
-reg [29:0] P1_P1_P2_Address;
-reg  P1_P1_P2_W_R_n;
-reg  P1_P1_P2_D_C_n;
-reg  P1_P1_P2_M_IO_n;
-reg  P1_P1_P2_ADS_n;
+wire [3:0] P1_P1_P2_BE_n;
+wire [29:0] P1_P1_P2_Address;
+wire  P1_P1_P2_W_R_n;
+wire  P1_P1_P2_D_C_n;
+wire  P1_P1_P2_M_IO_n;
+wire  P1_P1_P2_ADS_n;
 wire [31:0] P1_P1_P2_Datai;
-integer P1_P1_P2_Datao;
+wire  P1_P1_P2_Datao;
 wire  P1_P1_P2_CLOCK;
 wire  P1_P1_P2_NA_n;
 wire  P1_P1_P2_BS16_n;
 wire  P1_P1_P2_READY_n;
 wire  P1_P1_P2_HOLD;
 wire  P1_P1_P2_RESET;
-reg [3:0] P1_P1_P3_BE_n;
-reg [29:0] P1_P1_P3_Address;
-reg  P1_P1_P3_W_R_n;
-reg  P1_P1_P3_D_C_n;
-reg  P1_P1_P3_M_IO_n;
-reg  P1_P1_P3_ADS_n;
+wire [3:0] P1_P1_P3_BE_n;
+wire [29:0] P1_P1_P3_Address;
+wire  P1_P1_P3_W_R_n;
+wire  P1_P1_P3_D_C_n;
+wire  P1_P1_P3_M_IO_n;
+wire  P1_P1_P3_ADS_n;
 wire [31:0] P1_P1_P3_Datai;
-integer P1_P1_P3_Datao;
+wire  P1_P1_P3_Datao;
 wire  P1_P1_P3_CLOCK;
 wire  P1_P1_P3_NA_n;
 wire  P1_P1_P3_BS16_n;
 wire  P1_P1_P3_READY_n;
 wire  P1_P1_P3_HOLD;
 wire  P1_P1_P3_RESET;
-reg [3:0] P1_P2_P1_BE_n;
-reg [29:0] P1_P2_P1_Address;
-reg  P1_P2_P1_W_R_n;
-reg  P1_P2_P1_D_C_n;
-reg  P1_P2_P1_M_IO_n;
-reg  P1_P2_P1_ADS_n;
+wire [3:0] P1_P2_P1_BE_n;
+wire [29:0] P1_P2_P1_Address;
+wire  P1_P2_P1_W_R_n;
+wire  P1_P2_P1_D_C_n;
+wire  P1_P2_P1_M_IO_n;
+wire  P1_P2_P1_ADS_n;
 wire [31:0] P1_P2_P1_Datai;
-integer P1_P2_P1_Datao;
+wire  P1_P2_P1_Datao;
 wire  P1_P2_P1_CLOCK;
 wire  P1_P2_P1_NA_n;
 wire  P1_P2_P1_BS16_n;
 wire  P1_P2_P1_READY_n;
 wire  P1_P2_P1_HOLD;
 wire  P1_P2_P1_RESET;
-reg [3:0] P1_P2_P2_BE_n;
-reg [29:0] P1_P2_P2_Address;
-reg  P1_P2_P2_W_R_n;
-reg  P1_P2_P2_D_C_n;
-reg  P1_P2_P2_M_IO_n;
-reg  P1_P2_P2_ADS_n;
+wire [3:0] P1_P2_P2_BE_n;
+wire [29:0] P1_P2_P2_Address;
+wire  P1_P2_P2_W_R_n;
+wire  P1_P2_P2_D_C_n;
+wire  P1_P2_P2_M_IO_n;
+wire  P1_P2_P2_ADS_n;
 wire [31:0] P1_P2_P2_Datai;
-integer P1_P2_P2_Datao;
+wire  P1_P2_P2_Datao;
 wire  P1_P2_P2_CLOCK;
 wire  P1_P2_P2_NA_n;
 wire  P1_P2_P2_BS16_n;
 wire  P1_P2_P2_READY_n;
 wire  P1_P2_P2_HOLD;
 wire  P1_P2_P2_RESET;
-reg [3:0] P1_P2_P3_BE_n;
-reg [29:0] P1_P2_P3_Address;
-reg  P1_P2_P3_W_R_n;
-reg  P1_P2_P3_D_C_n;
-reg  P1_P2_P3_M_IO_n;
-reg  P1_P2_P3_ADS_n;
+wire [3:0] P1_P2_P3_BE_n;
+wire [29:0] P1_P2_P3_Address;
+wire  P1_P2_P3_W_R_n;
+wire  P1_P2_P3_D_C_n;
+wire  P1_P2_P3_M_IO_n;
+wire  P1_P2_P3_ADS_n;
 wire [31:0] P1_P2_P3_Datai;
-integer P1_P2_P3_Datao;
+wire  P1_P2_P3_Datao;
 wire  P1_P2_P3_CLOCK;
 wire  P1_P2_P3_NA_n;
 wire  P1_P2_P3_BS16_n;
 wire  P1_P2_P3_READY_n;
 wire  P1_P2_P3_HOLD;
 wire  P1_P2_P3_RESET;
-reg [3:0] P2_P1_P1_BE_n;
-reg [29:0] P2_P1_P1_Address;
-reg  P2_P1_P1_W_R_n;
-reg  P2_P1_P1_D_C_n;
-reg  P2_P1_P1_M_IO_n;
-reg  P2_P1_P1_ADS_n;
+wire [3:0] P2_P1_P1_BE_n;
+wire [29:0] P2_P1_P1_Address;
+wire  P2_P1_P1_W_R_n;
+wire  P2_P1_P1_D_C_n;
+wire  P2_P1_P1_M_IO_n;
+wire  P2_P1_P1_ADS_n;
 wire [31:0] P2_P1_P1_Datai;
-integer P2_P1_P1_Datao;
+wire  P2_P1_P1_Datao;
 wire  P2_P1_P1_CLOCK;
 wire  P2_P1_P1_NA_n;
 wire  P2_P1_P1_BS16_n;
 wire  P2_P1_P1_READY_n;
 wire  P2_P1_P1_HOLD;
 wire  P2_P1_P1_RESET;
-reg [3:0] P2_P1_P2_BE_n;
-reg [29:0] P2_P1_P2_Address;
-reg  P2_P1_P2_W_R_n;
-reg  P2_P1_P2_D_C_n;
-reg  P2_P1_P2_M_IO_n;
-reg  P2_P1_P2_ADS_n;
+wire [3:0] P2_P1_P2_BE_n;
+wire [29:0] P2_P1_P2_Address;
+wire  P2_P1_P2_W_R_n;
+wire  P2_P1_P2_D_C_n;
+wire  P2_P1_P2_M_IO_n;
+wire  P2_P1_P2_ADS_n;
 wire [31:0] P2_P1_P2_Datai;
-integer P2_P1_P2_Datao;
+wire  P2_P1_P2_Datao;
 wire  P2_P1_P2_CLOCK;
 wire  P2_P1_P2_NA_n;
 wire  P2_P1_P2_BS16_n;
 wire  P2_P1_P2_READY_n;
 wire  P2_P1_P2_HOLD;
 wire  P2_P1_P2_RESET;
-reg [3:0] P2_P1_P3_BE_n;
-reg [29:0] P2_P1_P3_Address;
-reg  P2_P1_P3_W_R_n;
-reg  P2_P1_P3_D_C_n;
-reg  P2_P1_P3_M_IO_n;
-reg  P2_P1_P3_ADS_n;
+wire [3:0] P2_P1_P3_BE_n;
+wire [29:0] P2_P1_P3_Address;
+wire  P2_P1_P3_W_R_n;
+wire  P2_P1_P3_D_C_n;
+wire  P2_P1_P3_M_IO_n;
+wire  P2_P1_P3_ADS_n;
 wire [31:0] P2_P1_P3_Datai;
-integer P2_P1_P3_Datao;
+wire  P2_P1_P3_Datao;
 wire  P2_P1_P3_CLOCK;
 wire  P2_P1_P3_NA_n;
 wire  P2_P1_P3_BS16_n;
 wire  P2_P1_P3_READY_n;
 wire  P2_P1_P3_HOLD;
 wire  P2_P1_P3_RESET;
-reg [3:0] P2_P2_P1_BE_n;
-reg [29:0] P2_P2_P1_Address;
-reg  P2_P2_P1_W_R_n;
-reg  P2_P2_P1_D_C_n;
-reg  P2_P2_P1_M_IO_n;
-reg  P2_P2_P1_ADS_n;
+wire [3:0] P2_P2_P1_BE_n;
+wire [29:0] P2_P2_P1_Address;
+wire  P2_P2_P1_W_R_n;
+wire  P2_P2_P1_D_C_n;
+wire  P2_P2_P1_M_IO_n;
+wire  P2_P2_P1_ADS_n;
 wire [31:0] P2_P2_P1_Datai;
-integer P2_P2_P1_Datao;
+wire  P2_P2_P1_Datao;
 wire  P2_P2_P1_CLOCK;
 wire  P2_P2_P1_NA_n;
 wire  P2_P2_P1_BS16_n;
 wire  P2_P2_P1_READY_n;
 wire  P2_P2_P1_HOLD;
 wire  P2_P2_P1_RESET;
-reg [3:0] P2_P2_P2_BE_n;
-reg [29:0] P2_P2_P2_Address;
-reg  P2_P2_P2_W_R_n;
-reg  P2_P2_P2_D_C_n;
-reg  P2_P2_P2_M_IO_n;
-reg  P2_P2_P2_ADS_n;
+wire [3:0] P2_P2_P2_BE_n;
+wire [29:0] P2_P2_P2_Address;
+wire  P2_P2_P2_W_R_n;
+wire  P2_P2_P2_D_C_n;
+wire  P2_P2_P2_M_IO_n;
+wire  P2_P2_P2_ADS_n;
 wire [31:0] P2_P2_P2_Datai;
-integer P2_P2_P2_Datao;
+wire  P2_P2_P2_Datao;
 wire  P2_P2_P2_CLOCK;
 wire  P2_P2_P2_NA_n;
 wire  P2_P2_P2_BS16_n;
 wire  P2_P2_P2_READY_n;
 wire  P2_P2_P2_HOLD;
 wire  P2_P2_P2_RESET;
-reg [3:0] P2_P2_P3_BE_n;
-reg [29:0] P2_P2_P3_Address;
-reg  P2_P2_P3_W_R_n;
-reg  P2_P2_P3_D_C_n;
-reg  P2_P2_P3_M_IO_n;
-reg  P2_P2_P3_ADS_n;
+wire [3:0] P2_P2_P3_BE_n;
+wire [29:0] P2_P2_P3_Address;
+wire  P2_P2_P3_W_R_n;
+wire  P2_P2_P3_D_C_n;
+wire  P2_P2_P3_M_IO_n;
+wire  P2_P2_P3_ADS_n;
 wire [31:0] P2_P2_P3_Datai;
-integer P2_P2_P3_Datao;
+wire  P2_P2_P3_Datao;
 wire  P2_P2_P3_CLOCK;
 wire  P2_P2_P3_NA_n;
 wire  P2_P2_P3_BS16_n;
@@ -433,6 +473,27 @@ wire  P2_P2_P3_READY_n;
 wire  P2_P2_P3_HOLD;
 wire  P2_P2_P3_RESET;
  
+ output [3:0]BE_n; 
+   reg[3:0] P1_P1_P1_BE_n ; 
+ output [29:0]Address; 
+   reg[29:0] P1_P1_P1_Address ; 
+ output W_R_n; 
+   reg P1_P1_P1_W_R_n ; 
+ output D_C_n; 
+   reg P1_P1_P1_D_C_n ; 
+ output M_IO_n; 
+   reg P1_P1_P1_M_IO_n ; 
+ output ADS_n; 
+   reg P1_P1_P1_ADS_n ; 
+ input [31:0]Datai; 
+ output Datao; 
+   integer P1_P1_P1_Datao ; 
+ input CLOCK; 
+ input NA_n; 
+ input BS16_n; 
+ input READY_n; 
+ input HOLD; 
+ input RESET; 
    reg P1_P1_P1_StateNA ; 
    reg P1_P1_P1_StateBS16 ; 
    reg P1_P1_P1_RequestPending ; 
@@ -1171,6 +1232,27 @@ wire  P2_P2_P3_RESET;
  
   
  
+ output [3:0]BE_n; 
+   reg[3:0] P1_P1_P2_BE_n ; 
+ output [29:0]Address; 
+   reg[29:0] P1_P1_P2_Address ; 
+ output W_R_n; 
+   reg P1_P1_P2_W_R_n ; 
+ output D_C_n; 
+   reg P1_P1_P2_D_C_n ; 
+ output M_IO_n; 
+   reg P1_P1_P2_M_IO_n ; 
+ output ADS_n; 
+   reg P1_P1_P2_ADS_n ; 
+ input [31:0]Datai; 
+ output Datao; 
+   integer P1_P1_P2_Datao ; 
+ input CLOCK; 
+ input NA_n; 
+ input BS16_n; 
+ input READY_n; 
+ input HOLD; 
+ input RESET; 
    reg P1_P1_P2_StateNA ; 
    reg P1_P1_P2_StateBS16 ; 
    reg P1_P1_P2_RequestPending ; 
@@ -1909,6 +1991,27 @@ wire  P2_P2_P3_RESET;
  
   
  
+ output [3:0]BE_n; 
+   reg[3:0] P1_P1_P3_BE_n ; 
+ output [29:0]Address; 
+   reg[29:0] P1_P1_P3_Address ; 
+ output W_R_n; 
+   reg P1_P1_P3_W_R_n ; 
+ output D_C_n; 
+   reg P1_P1_P3_D_C_n ; 
+ output M_IO_n; 
+   reg P1_P1_P3_M_IO_n ; 
+ output ADS_n; 
+   reg P1_P1_P3_ADS_n ; 
+ input [31:0]Datai; 
+ output Datao; 
+   integer P1_P1_P3_Datao ; 
+ input CLOCK; 
+ input NA_n; 
+ input BS16_n; 
+ input READY_n; 
+ input HOLD; 
+ input RESET; 
    reg P1_P1_P3_StateNA ; 
    reg P1_P1_P3_StateBS16 ; 
    reg P1_P1_P3_RequestPending ; 
@@ -2648,6 +2751,30 @@ wire  P2_P2_P3_RESET;
  
   
  
+ input clock; 
+ input reset; 
+ input [31:0]datai; 
+ output datao; 
+   integer P1_P2_datao ; 
+ input hold; 
+ input na; 
+ input bs16; 
+ output [29:0]address1; 
+   reg[29:0] P1_P2_address1 ; 
+ output [29:0]address2; 
+   reg[29:0] P1_P2_address2 ; 
+ output wr; 
+   reg P1_P2_wr ; 
+ output dc; 
+   reg P1_P2_dc ; 
+ output mio; 
+   reg P1_P2_mio ; 
+ output ast1; 
+   reg P1_P2_ast1 ; 
+ output ast2; 
+   reg P1_P2_ast2 ; 
+ input ready1; 
+ input ready2; 
    integer P1_P2_buf1 ; 
    integer P1_P2_buf2 ; 
    wire[3:0] P1_P2_be1 ; 
@@ -2773,6 +2900,27 @@ wire  P2_P2_P3_RESET;
   
   
  
+ output [3:0]BE_n; 
+   reg[3:0] P1_P2_P1_BE_n ; 
+ output [29:0]Address; 
+   reg[29:0] P1_P2_P1_Address ; 
+ output W_R_n; 
+   reg P1_P2_P1_W_R_n ; 
+ output D_C_n; 
+   reg P1_P2_P1_D_C_n ; 
+ output M_IO_n; 
+   reg P1_P2_P1_M_IO_n ; 
+ output ADS_n; 
+   reg P1_P2_P1_ADS_n ; 
+ input [31:0]Datai; 
+ output Datao; 
+   integer P1_P2_P1_Datao ; 
+ input CLOCK; 
+ input NA_n; 
+ input BS16_n; 
+ input READY_n; 
+ input HOLD; 
+ input RESET; 
    reg P1_P2_P1_StateNA ; 
    reg P1_P2_P1_StateBS16 ; 
    reg P1_P2_P1_RequestPending ; 
@@ -3511,6 +3659,27 @@ wire  P2_P2_P3_RESET;
  
   
  
+ output [3:0]BE_n; 
+   reg[3:0] P1_P2_P2_BE_n ; 
+ output [29:0]Address; 
+   reg[29:0] P1_P2_P2_Address ; 
+ output W_R_n; 
+   reg P1_P2_P2_W_R_n ; 
+ output D_C_n; 
+   reg P1_P2_P2_D_C_n ; 
+ output M_IO_n; 
+   reg P1_P2_P2_M_IO_n ; 
+ output ADS_n; 
+   reg P1_P2_P2_ADS_n ; 
+ input [31:0]Datai; 
+ output Datao; 
+   integer P1_P2_P2_Datao ; 
+ input CLOCK; 
+ input NA_n; 
+ input BS16_n; 
+ input READY_n; 
+ input HOLD; 
+ input RESET; 
    reg P1_P2_P2_StateNA ; 
    reg P1_P2_P2_StateBS16 ; 
    reg P1_P2_P2_RequestPending ; 
@@ -4249,6 +4418,27 @@ wire  P2_P2_P3_RESET;
  
   
  
+ output [3:0]BE_n; 
+   reg[3:0] P1_P2_P3_BE_n ; 
+ output [29:0]Address; 
+   reg[29:0] P1_P2_P3_Address ; 
+ output W_R_n; 
+   reg P1_P2_P3_W_R_n ; 
+ output D_C_n; 
+   reg P1_P2_P3_D_C_n ; 
+ output M_IO_n; 
+   reg P1_P2_P3_M_IO_n ; 
+ output ADS_n; 
+   reg P1_P2_P3_ADS_n ; 
+ input [31:0]Datai; 
+ output Datao; 
+   integer P1_P2_P3_Datao ; 
+ input CLOCK; 
+ input NA_n; 
+ input BS16_n; 
+ input READY_n; 
+ input HOLD; 
+ input RESET; 
    reg P1_P2_P3_StateNA ; 
    reg P1_P2_P3_StateBS16 ; 
    reg P1_P2_P3_RequestPending ; 
@@ -4989,33 +5179,44 @@ wire  P2_P2_P3_RESET;
   
 wire  P1_P3_clock;
 wire  P1_P3_reset;
-reg [19:0] P1_P3_addr;
+wire [19:0] P1_P3_addr;
 wire [31:0] P1_P3_datai;
-integer P1_P3_datao;
-reg  P1_P3_rd;
-reg  P1_P3_wr;
+wire  P1_P3_datao;
+wire  P1_P3_rd;
+wire  P1_P3_wr;
 wire  P1_P4_clock;
 wire  P1_P4_reset;
-reg [19:0] P1_P4_addr;
+wire [19:0] P1_P4_addr;
 wire [31:0] P1_P4_datai;
-integer P1_P4_datao;
-reg  P1_P4_rd;
-reg  P1_P4_wr;
+wire  P1_P4_datao;
+wire  P1_P4_rd;
+wire  P1_P4_wr;
 wire  P2_P3_clock;
 wire  P2_P3_reset;
-reg [19:0] P2_P3_addr;
+wire [19:0] P2_P3_addr;
 wire [31:0] P2_P3_datai;
-integer P2_P3_datao;
-reg  P2_P3_rd;
-reg  P2_P3_wr;
+wire  P2_P3_datao;
+wire  P2_P3_rd;
+wire  P2_P3_wr;
 wire  P2_P4_clock;
 wire  P2_P4_reset;
-reg [19:0] P2_P4_addr;
+wire [19:0] P2_P4_addr;
 wire [31:0] P2_P4_datai;
-integer P2_P4_datao;
-reg  P2_P4_rd;
-reg  P2_P4_wr;
+wire  P2_P4_datao;
+wire  P2_P4_rd;
+wire  P2_P4_wr;
  
+ input clock; 
+ input reset; 
+ output [19:0]addr; 
+   reg[19:0] P1_P3_addr ; 
+ input [31:0]datai; 
+ output datao; 
+   integer P1_P3_datao ; 
+ output rd; 
+   reg P1_P3_rd ; 
+ output wr; 
+   reg P1_P3_wr ; 
    integer P1_P3_reg0 ; 
    integer P1_P3_reg1 ; 
    integer P1_P3_reg2 ; 
@@ -5741,6 +5942,17 @@ reg  P2_P4_wr;
  
   
  
+ input clock; 
+ input reset; 
+ output [19:0]addr; 
+   reg[19:0] P1_P4_addr ; 
+ input [31:0]datai; 
+ output datao; 
+   integer P1_P4_datao ; 
+ output rd; 
+   reg P1_P4_rd ; 
+ output wr; 
+   reg P1_P4_wr ; 
    integer P1_P4_reg0 ; 
    integer P1_P4_reg1 ; 
    integer P1_P4_reg2 ; 
@@ -6504,9 +6716,21 @@ reg  P2_P4_wr;
           P1_aux  <=( P1_tad1 * P1_tad2 )%2**3;
        end
  
+
+   
+   
  
-  
- 
+ input clock; 
+ input reset; 
+ input hold; 
+ input na; 
+ input bs; 
+ input sel; 
+ output [19:0]dout; 
+   reg[19:0] P2_dout ; 
+ input [31:0]din; 
+ output [2:0]aux; 
+   reg[2:0] P2_aux ; 
    integer P2_di1 ; 
    integer P2_di2 ; 
    wire[31:0] P2_do1 ; 
@@ -6547,6 +6771,30 @@ reg  P2_P4_wr;
    wire P2_rd4 ; 
   
  
+ input clock; 
+ input reset; 
+ input [31:0]datai; 
+ output datao; 
+   integer P2_P1_datao ; 
+ input hold; 
+ input na; 
+ input bs16; 
+ output [29:0]address1; 
+   reg[29:0] P2_P1_address1 ; 
+ output [29:0]address2; 
+   reg[29:0] P2_P1_address2 ; 
+ output wr; 
+   reg P2_P1_wr ; 
+ output dc; 
+   reg P2_P1_dc ; 
+ output mio; 
+   reg P2_P1_mio ; 
+ output ast1; 
+   reg P2_P1_ast1 ; 
+ output ast2; 
+   reg P2_P1_ast2 ; 
+ input ready1; 
+ input ready2; 
    integer P2_P1_buf1 ; 
    integer P2_P1_buf2 ; 
    wire[3:0] P2_P1_be1 ; 
@@ -6672,6 +6920,27 @@ reg  P2_P4_wr;
   
   
  
+ output [3:0]BE_n; 
+   reg[3:0] P2_P1_P1_BE_n ; 
+ output [29:0]Address; 
+   reg[29:0] P2_P1_P1_Address ; 
+ output W_R_n; 
+   reg P2_P1_P1_W_R_n ; 
+ output D_C_n; 
+   reg P2_P1_P1_D_C_n ; 
+ output M_IO_n; 
+   reg P2_P1_P1_M_IO_n ; 
+ output ADS_n; 
+   reg P2_P1_P1_ADS_n ; 
+ input [31:0]Datai; 
+ output Datao; 
+   integer P2_P1_P1_Datao ; 
+ input CLOCK; 
+ input NA_n; 
+ input BS16_n; 
+ input READY_n; 
+ input HOLD; 
+ input RESET; 
    reg P2_P1_P1_StateNA ; 
    reg P2_P1_P1_StateBS16 ; 
    reg P2_P1_P1_RequestPending ; 
@@ -7410,6 +7679,27 @@ reg  P2_P4_wr;
  
   
  
+ output [3:0]BE_n; 
+   reg[3:0] P2_P1_P2_BE_n ; 
+ output [29:0]Address; 
+   reg[29:0] P2_P1_P2_Address ; 
+ output W_R_n; 
+   reg P2_P1_P2_W_R_n ; 
+ output D_C_n; 
+   reg P2_P1_P2_D_C_n ; 
+ output M_IO_n; 
+   reg P2_P1_P2_M_IO_n ; 
+ output ADS_n; 
+   reg P2_P1_P2_ADS_n ; 
+ input [31:0]Datai; 
+ output Datao; 
+   integer P2_P1_P2_Datao ; 
+ input CLOCK; 
+ input NA_n; 
+ input BS16_n; 
+ input READY_n; 
+ input HOLD; 
+ input RESET; 
    reg P2_P1_P2_StateNA ; 
    reg P2_P1_P2_StateBS16 ; 
    reg P2_P1_P2_RequestPending ; 
@@ -8148,6 +8438,27 @@ reg  P2_P4_wr;
  
   
  
+ output [3:0]BE_n; 
+   reg[3:0] P2_P1_P3_BE_n ; 
+ output [29:0]Address; 
+   reg[29:0] P2_P1_P3_Address ; 
+ output W_R_n; 
+   reg P2_P1_P3_W_R_n ; 
+ output D_C_n; 
+   reg P2_P1_P3_D_C_n ; 
+ output M_IO_n; 
+   reg P2_P1_P3_M_IO_n ; 
+ output ADS_n; 
+   reg P2_P1_P3_ADS_n ; 
+ input [31:0]Datai; 
+ output Datao; 
+   integer P2_P1_P3_Datao ; 
+ input CLOCK; 
+ input NA_n; 
+ input BS16_n; 
+ input READY_n; 
+ input HOLD; 
+ input RESET; 
    reg P2_P1_P3_StateNA ; 
    reg P2_P1_P3_StateBS16 ; 
    reg P2_P1_P3_RequestPending ; 
@@ -8887,6 +9198,30 @@ reg  P2_P4_wr;
  
   
  
+ input clock; 
+ input reset; 
+ input [31:0]datai; 
+ output datao; 
+   integer P2_P2_datao ; 
+ input hold; 
+ input na; 
+ input bs16; 
+ output [29:0]address1; 
+   reg[29:0] P2_P2_address1 ; 
+ output [29:0]address2; 
+   reg[29:0] P2_P2_address2 ; 
+ output wr; 
+   reg P2_P2_wr ; 
+ output dc; 
+   reg P2_P2_dc ; 
+ output mio; 
+   reg P2_P2_mio ; 
+ output ast1; 
+   reg P2_P2_ast1 ; 
+ output ast2; 
+   reg P2_P2_ast2 ; 
+ input ready1; 
+ input ready2; 
    integer P2_P2_buf1 ; 
    integer P2_P2_buf2 ; 
    wire[3:0] P2_P2_be1 ; 
@@ -9012,6 +9347,27 @@ reg  P2_P4_wr;
   
   
  
+ output [3:0]BE_n; 
+   reg[3:0] P2_P2_P1_BE_n ; 
+ output [29:0]Address; 
+   reg[29:0] P2_P2_P1_Address ; 
+ output W_R_n; 
+   reg P2_P2_P1_W_R_n ; 
+ output D_C_n; 
+   reg P2_P2_P1_D_C_n ; 
+ output M_IO_n; 
+   reg P2_P2_P1_M_IO_n ; 
+ output ADS_n; 
+   reg P2_P2_P1_ADS_n ; 
+ input [31:0]Datai; 
+ output Datao; 
+   integer P2_P2_P1_Datao ; 
+ input CLOCK; 
+ input NA_n; 
+ input BS16_n; 
+ input READY_n; 
+ input HOLD; 
+ input RESET; 
    reg P2_P2_P1_StateNA ; 
    reg P2_P2_P1_StateBS16 ; 
    reg P2_P2_P1_RequestPending ; 
@@ -9750,6 +10106,27 @@ reg  P2_P4_wr;
  
   
  
+ output [3:0]BE_n; 
+   reg[3:0] P2_P2_P2_BE_n ; 
+ output [29:0]Address; 
+   reg[29:0] P2_P2_P2_Address ; 
+ output W_R_n; 
+   reg P2_P2_P2_W_R_n ; 
+ output D_C_n; 
+   reg P2_P2_P2_D_C_n ; 
+ output M_IO_n; 
+   reg P2_P2_P2_M_IO_n ; 
+ output ADS_n; 
+   reg P2_P2_P2_ADS_n ; 
+ input [31:0]Datai; 
+ output Datao; 
+   integer P2_P2_P2_Datao ; 
+ input CLOCK; 
+ input NA_n; 
+ input BS16_n; 
+ input READY_n; 
+ input HOLD; 
+ input RESET; 
    reg P2_P2_P2_StateNA ; 
    reg P2_P2_P2_StateBS16 ; 
    reg P2_P2_P2_RequestPending ; 
@@ -10488,6 +10865,27 @@ reg  P2_P4_wr;
  
   
  
+ output [3:0]BE_n; 
+   reg[3:0] P2_P2_P3_BE_n ; 
+ output [29:0]Address; 
+   reg[29:0] P2_P2_P3_Address ; 
+ output W_R_n; 
+   reg P2_P2_P3_W_R_n ; 
+ output D_C_n; 
+   reg P2_P2_P3_D_C_n ; 
+ output M_IO_n; 
+   reg P2_P2_P3_M_IO_n ; 
+ output ADS_n; 
+   reg P2_P2_P3_ADS_n ; 
+ input [31:0]Datai; 
+ output Datao; 
+   integer P2_P2_P3_Datao ; 
+ input CLOCK; 
+ input NA_n; 
+ input BS16_n; 
+ input READY_n; 
+ input HOLD; 
+ input RESET; 
    reg P2_P2_P3_StateNA ; 
    reg P2_P2_P3_StateBS16 ; 
    reg P2_P2_P3_RequestPending ; 
@@ -11459,6 +11857,17 @@ assign P2_P2_ready2 = P2_r22;
  
   
  
+ input clock; 
+ input reset; 
+ output [19:0]addr; 
+   reg[19:0] P2_P3_addr ; 
+ input [31:0]datai; 
+ output datao; 
+   integer P2_P3_datao ; 
+ output rd; 
+   reg P2_P3_rd ; 
+ output wr; 
+   reg P2_P3_wr ; 
    integer P2_P3_reg0 ; 
    integer P2_P3_reg1 ; 
    integer P2_P3_reg2 ; 
@@ -12184,6 +12593,17 @@ assign P2_P2_ready2 = P2_r22;
  
   
  
+ input clock; 
+ input reset; 
+ output [19:0]addr; 
+   reg[19:0] P2_P4_addr ; 
+ input [31:0]datai; 
+ output datao; 
+   integer P2_P4_datao ; 
+ output rd; 
+   reg P2_P4_rd ; 
+ output wr; 
+   reg P2_P4_wr ; 
    integer P2_P4_reg0 ; 
    integer P2_P4_reg1 ; 
    integer P2_P4_reg2 ; 
@@ -12993,40 +13413,41 @@ assign P2_sel = sel2;
 assign do2 = P2_dout;
 assign P2_din = di2;
 assign ax2 = P2_aux;
- 
-  always @(  posedge clock or  posedge reset)
-       if (reset==1'b1)
-          begin 
-            sel1 <=1'b0;
-            sel2 <=1'b0;
-          end 
-        else 
-          begin 
-            if (do1==39)
-               sel2 <=1'b1;
-             else 
-               if (do1==1735)
-                  sel2 <=1'b0;
-            if (do2==398)
-               sel1 <=1'b1;
-             else 
-               if (do2==1013)
-                  sel1 <=1'b0;
-          end
-  
-  always @(         sel1 or  sel2 or  in1 or  in2 or  in3 or  do1 or  do2 or  ax1 or  ax2)
-       begin 
-         if (sel1==1'b0&sel2==1'b1)
-            begin 
-              di1 <=in1/2;
-              di2 <=in2/16;
-            end 
-          else 
-            begin 
-              di1 <=in1/2;
-              di2 <=in2/8;
-            end 
-         ris <=((ax1-ax2)*do1)-((ax1-ax2)*do2);
-       end
-  
+
+   
+   
+   always @(posedge clock or posedge reset)
+      if (reset == 1'b1)
+      begin
+         sel1 <= 1'b0;
+         sel2 <= 1'b0;
+      end
+      else 
+      begin
+         if (do1 == 39)
+            sel2 <= 1'b1;
+         else if (do1 == 1735)
+            sel2 <= 1'b0;
+         if (do2 == 398)
+            sel1 <= 1'b1;
+         else if (do2 == 1013)
+            sel1 <= 1'b0;
+      end
+   
+   
+   always @(sel1 or sel2 or in1 or in2 or in3 or do1 or do2 or ax1 or ax2)
+   begin
+      if (sel1 == 1'b0 & sel2 == 1'b1)
+      begin
+         di1 <= in1/2;
+         di2 <= in2/16;
+      end
+      else
+      begin
+         di1 <= in1/2;
+         di2 <= in2/8;
+      end
+      ris <= ((ax1 - ax2) * do1) - ((ax1 - ax2) * do2);
+   end
+   
 endmodule

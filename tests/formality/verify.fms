@@ -1,8 +1,8 @@
 set_mismatch_message_filter -warn FMR_ELAB-147
-read_verilog -r /home/xiangchenmeng/work/pyflattenverilog/tests/regression/delimeter_dot/delimeter_dot.v
-set_top delimeter_dot
-read_verilog -i /home/xiangchenmeng/work/pyflattenverilog/tests/regression/delimeter_dot/f_top.v
-set_top delimeter_dot
+read_verilog -r /home/xiangchenmeng/work/pyflattenverilog/tests/regression/b14/b14.v
+set_top b14
+read_verilog -i /home/xiangchenmeng/work/pyflattenverilog/tests/regression/b14/flatten_f_b14.v
+set_top b14
 verify
 report_unverified_points 
 exit
