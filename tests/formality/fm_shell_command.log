@@ -1,6 +1,6 @@
 #@ # 
 #@ # Running fm_shell Version T-2022.03-SP5 for linux64 -- Oct 18, 2022
-#@ # Date:   Sat Feb 24 08:05:34 2024
+#@ # Date:   Sun Feb 25 01:05:26 2024
 #@ # Run by: xiangchenmeng@mics-eda
 #@ 
 
@@ -52,10 +52,10 @@ source -echo -verbose verify.fms
 #@ # -- Starting source verify.fms
 
 #@ set_mismatch_message_filter -warn FMR_ELAB-147
-#@ read_verilog -r /home/xiangchenmeng/work/pyflattenverilog/tests/regression/b14/b14.v
-#@ set_top b14
-#@ read_verilog -i /home/xiangchenmeng/work/pyflattenverilog/tests/regression/b14/flatten_f_b14.v
-#@ set_top b14
+#@ read_verilog -r /home/xiangchenmeng/work/pyflattenverilog/tests/regression/AES/AES-T500/top.v
+#@ set_top top
+#@ read_verilog -i /home/xiangchenmeng/work/pyflattenverilog/tests/regression/AES/AES-T500/flatten_f_top.v
+#@ set_top top
 #@ verify
 #@ report_unverified_points 
 #@ exit

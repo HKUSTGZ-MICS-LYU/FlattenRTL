@@ -204,7 +204,7 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
   for k in range(0,len(cur_prefixs)):
     # In case of the dismatch of port and definition, we define the length of port as len(cur_list_of_ports_rhs)/len(cur_prefix)
     len_instance_port = int(len(cur_list_of_ports_rhs)/len(cur_prefixs))
-    for i in range(0,len_instance_port):
+    for i in range(0,len(cur_list_of_ports_lhs)):
       if cur_list_of_data_type[i] != '':
         cur_new_variable.append(cur_list_of_data_type[i]  + cur_list_of_ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
       elif cur_list_of_ports_type[i] == 'reg':
