@@ -1,3 +1,5 @@
+// instance_inj_ctrl: fix mismatch between module and instance
+// instance_registers: fix mismatch between module and instance
 
 module add_dec(a_bus, clock, rst, add_decoded, add_decoded_r, add_test_en, a_dig_in, a_dig_out, a_fault_dec, a_fault_dec_r);
    input [6-1:0]  a_bus;
@@ -1461,7 +1463,7 @@ module inj_ctrl(a_bus, clock, cs, digital_input, ds, fbk_pwm, inj_cmd, in_speed,
    
    merge_actuators instance_merge_actuators(t1_0, t1_1, t1_2, t1_3, t1_4, t1_5, t2_0, t2_1, t2_2, t2_3, t2_4, t2_5, t3_034, t3_125, t1, t2, t3);
    
-   registers instance_registers(a_bus, clock_internal, clock, digital_input, en_fbk_store_034, en_fbk_store_125, en_state_store_034, en_state_store_125, fbk_pwm, global_state_034, global_state_125, i_fbk_f, nssm_in, rd_en, rel_pot_en, rst, v_fbk_f, wr_en, digital_output, in_speed_lev, knock1u, knock2u, pickup_hall, relpot, r_t1, r_t2, r_t3_034, r_t3_125, r_t4_034, r_t4_125, r_tb_034, r_tb_125, r_th_034, r_th_125, r_tonh, r_tonl, r_tp, seg_speed_lev, smot_camme_en, status_reg_034, status_reg_125, test_en_034, test_en_125, trg_knock_en, turbo_speed_lev, d_bus);
+   registers instance_registers(a_bus, clock, digital_input, en_fbk_store_034, en_fbk_store_125, en_state_store_034, en_state_store_125, fbk_pwm, global_state_034, global_state_125, i_fbk_f, nssm_in, rd_en, rel_pot_en, rst, v_fbk_f, wr_en, digital_output, in_speed_lev, knock1u, knock2u, pickup_hall, relpot, r_t1, r_t2, r_t3_034, r_t3_125, r_t4_034, r_t4_125, r_tb_034, r_tb_125, r_th_034, r_th_125, r_tonh, r_tonl, r_tp, seg_speed_lev, smot_camme_en, status_reg_034, status_reg_125, test_en_034, test_en_125, trg_knock_en, turbo_speed_lev, d_bus);
    
    smot_knock_handle instance_smot_knock_handle(clock_internal, in_speed, pickup_hall, rst, seg_speed_hall, seg_speed_pickup, smot_camme_en, trg_knock1, trg_knock2, trg_knock_en, cam_smot, knock1, knock2, smot60);
    

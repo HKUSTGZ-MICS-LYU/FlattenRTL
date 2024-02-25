@@ -204,24 +204,27 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
   for k in range(0,len(cur_prefixs)):
     # In case of the dismatch of port and definition, we define the length of port as len(cur_list_of_ports_rhs)/len(cur_prefix)
     len_instance_port = int(len(cur_list_of_ports_rhs)/len(cur_prefixs))
-    for i in range(0,len_instance_port):
-      if cur_list_of_data_type[i] != '':
-        cur_new_variable.append(cur_list_of_data_type[i]  + cur_list_of_ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
-      elif cur_list_of_ports_type[i] == 'reg':
-        cur_new_variable.append('reg '  + cur_list_of_ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
-      else:
-        cur_new_variable.append('wire '  + cur_list_of_ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
-    
-      if cur_list_of_ports_direction[i] == 'input': 
-        # if cur_list_of_ports_type[i] == 'reg' :
-        #   cur_new_assign.append('always @(*)' + ' ' + cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ' = '+ cur_list_of_ports_rhs[i] + ';')
-        # else:
-        cur_new_assign.append('assign ' + cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ' = '+ cur_list_of_ports_rhs[k*len_instance_port+i] + ';')
-      else:
-        # if cur_list_of_ports_type[i] == 'reg' :
-        #   cur_new_assign.append('always @(*) ' + ' ' + cur_list_of_ports_rhs[i] + ' = '+ cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
-        # else:
-          cur_new_assign.append('assign ' +  cur_list_of_ports_rhs[k*len_instance_port+i] + ' = '+ cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
+    try:
+      for i in range(0,len_instance_port):
+        if cur_list_of_data_type[i] != '':
+          cur_new_variable.append(cur_list_of_data_type[i]  + cur_list_of_ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
+        elif cur_list_of_ports_type[i] == 'reg':
+          cur_new_variable.append('reg '  + cur_list_of_ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
+        else:
+          cur_new_variable.append('wire '  + cur_list_of_ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
+      
+        if cur_list_of_ports_direction[i] == 'input': 
+          # if cur_list_of_ports_type[i] == 'reg' :
+          #   cur_new_assign.append('always @(*)' + ' ' + cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ' = '+ cur_list_of_ports_rhs[i] + ';')
+          # else:
+          cur_new_assign.append('assign ' + cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ' = '+ cur_list_of_ports_rhs[k*len_instance_port+i] + ';')
+        else:
+          # if cur_list_of_ports_type[i] == 'reg' :
+          #   cur_new_assign.append('always @(*) ' + ' ' + cur_list_of_ports_rhs[i] + ' = '+ cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
+          # else:
+            cur_new_assign.append('assign ' +  cur_list_of_ports_rhs[k*len_instance_port+i] + ' = '+ cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
+    except:
+      print("Error: Potential the number of port and definition is not matched!")
 
 
   # 5. TODO: Get the start and stop index of the instance module

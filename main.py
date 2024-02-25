@@ -28,7 +28,7 @@ with open(path+inputfile, 'r') as f:
 # flatten part
 
 
-folder_path = os.path.dirname(formatpath)+'/tmp'
+folder_path = os.path.dirname(formatpath)+'/_tmp'
 
 if os.path.exists(folder_path):
     file_list = os.listdir(folder_path)
