@@ -1,10 +1,10 @@
-Directory = /home/xiangchenmeng/work/pyflattenverilog/tests/formality
-Total     = 1282 GB
-Available = 243 GB
-Used      = 1039 GB (82%)
+Directory = /hpc/home/connect.xmeng027/Work/pyflattenverilog1/pyflattenverilog/tests/formality
+Total     = 1.18076e+06 GB
+Available = 1.07142e+06 GB
+Used      = 109345 GB (10%)
 
 Directory = /tmp
-Total     = 500 GB
-Available = 28 GB
-Used      = 472 GB (95%)
+Total     = 1776 GB
+Available = 402 GB
+Used      = 1374 GB (78%)
 

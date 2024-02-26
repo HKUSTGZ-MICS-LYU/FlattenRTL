@@ -67,7 +67,7 @@ def formatter_file(design, outputpath):
                pass
             else:
                for child in ctx.getChildren():
-                  print(type(child))  # Debugging: Print out the type of each child
+                  # print(type(child))  # Debugging: Print out the type of each child
                   if isinstance(child, VerilogParser.Port_declarationContext):
                      if isinstance(child.getChild(0), VerilogParser.Input_declarationContext):
                         self._visit_input_declaration(child.getChild(0))

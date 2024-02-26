@@ -158,14 +158,6 @@ module dma_axi64_core0_channels(clk,reset,scan_en,pclk,clken,pclken,psel,penable
 
    
    
-   parameter              CH0 = 0;
-   parameter              CH1 = 1;
-   parameter              CH2 = 2;
-   parameter              CH3 = 3;
-   parameter              CH4 = 4;
-   parameter              CH5 = 5;
-   parameter              CH6 = 6;
-   parameter              CH7 = 7;
    
 
    //apb buses

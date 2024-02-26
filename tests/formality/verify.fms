@@ -1,8 +1,14 @@
 set_mismatch_message_filter -warn FMR_ELAB-147
-read_verilog -r tests/regression/b14/b14.v
-set_top b14
-read_verilog -i tests/regression/b14/flatten_f_b14.v
-set_top b14
+
+
+
+read_verilog -r /hpc/home/connect.xmeng027/Work/pyflattenverilog1/pyflattenverilog/tests/regression/AES/AES-T500/top.v
+set_top top
+
+read_verilog -i /hpc/home/connect.xmeng027/Work/pyflattenverilog1/pyflattenverilog/tests/designplayer/AES/AES.v
+set_top top
+
+
 verify
 report_unverified_points 
 exit

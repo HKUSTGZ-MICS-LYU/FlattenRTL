@@ -597,13 +597,13 @@ endmodule
 //
 //--------------------------------------------------------------------------------------------
 
-module dwand(i0, i1, i2, i3, i4, o);
+module dwand(i0, i1, i2, i3, i4);
    input   i0;
    input   i1;
    input   i2;
    input   i3;
    input   i4;
-   output  o;
+   wire      o;
    assign o = (i0 & i1 & i2 & i3 & i4);
    
 endmodule
@@ -723,7 +723,7 @@ module error_handle(a_fault_dec, a_fault_dec_r, clock, en_fbk_store_034, en_fbk_
    assign status_reg_125 = sr_125[10:0];
    assign relpot = rel_pot_en;
    
-   always @(posedge clock or negedge rst or a_fault_dec or posedge wr_en)
+   always @(posedge clock or negedge rst or posedge wr_en)
    begin: vhdl_st_reg_wr_034
       if ((rst == 1'b0) | (a_fault_dec[0] == 1'b1 & wr_en == 1'b1))
          sr_034 <= {11{1'b0}};
@@ -741,7 +741,7 @@ module error_handle(a_fault_dec, a_fault_dec_r, clock, en_fbk_store_034, en_fbk_
       end
    end
    
-   always @(posedge clock or negedge rst or a_fault_dec or posedge wr_en)
+   always @(posedge clock or negedge rst or posedge wr_en)
    begin: vhdl_st_reg_wr_125
       if ((rst == 1'b0) | (a_fault_dec[1] == 1'b1 & wr_en == 1'b1))
          sr_125 <= {11{1'b0}};
@@ -796,7 +796,7 @@ module filter(clock, new_value, rst, filtered_value);
    reg [2:0]        current_state;
    reg [2:0]        next_state;
    
-   always @(posedge clock or new_value or negedge rst)
+   always @(posedge clock  or negedge rst)
    begin: clocked
       if (rst == 1'b0)
          current_state <= filter_state_type_start_state;
@@ -1880,7 +1880,7 @@ module knock_fsm1(clock, impulse, long, rst, knock1);
    reg [1:0]                 current_state;
    reg [1:0]                 next_state;
    
-   always @(posedge clock or impulse or long or negedge rst)
+   always @(posedge clock or negedge rst)
    begin: clocked
       if (rst == 1'b0)
       begin
@@ -1964,7 +1964,7 @@ module knock_fsm2(clock, impulse, long, rst, knock2);
    reg [1:0]                 current_state;
    reg [1:0]                 next_state;
    
-   always @(posedge clock or impulse or long or negedge rst)
+   always @(posedge clock  or negedge rst)
    begin: clocked
       if (rst == 1'b0)
       begin
@@ -2355,7 +2355,7 @@ module ph1_handle(clock, cmd_stored, cur_state, end_t0, inj_cmd, rst, global1_st
    reg [1:0]                current_state;
    reg [1:0]                next_state;
    
-   always @(posedge clock or cmd_stored or cur_state or end_t0 or inj_cmd or negedge rst)
+   always @(posedge clock  or negedge rst)
    begin: clocked
       if (rst == 1'b0)
       begin
@@ -2461,7 +2461,7 @@ module ph2_handle(clock, cur_state, end_on, end_period, i_fbk, rst, sh_mode, glo
    reg [1:0]            current_state;
    reg [1:0]            next_state;
    
-   always @(posedge clock or cur_state or end_on or end_period or i_fbk or negedge rst or sh_mode)
+   always @(posedge clock or negedge rst )
    begin: clocked
       if (rst == 1'b0)
       begin
@@ -2581,7 +2581,7 @@ module ph4_handle(clock, cur_state, end_on, end_period, i_fbk, rst, sh_mode, glo
    reg [1:0]            current_state;
    reg [1:0]            next_state;
    
-   always @(posedge clock or cur_state or end_on or end_period or i_fbk or negedge rst or sh_mode)
+   always @(posedge clock  or negedge rst )
    begin: clocked
       if (rst == 1'b0)
       begin
@@ -3376,7 +3376,7 @@ module state_progression(clock, cmd_stored, comp, enable_check, end_t0, global_s
    reg [4:0]                   current_state;
    reg [4:0]                   next_state;
    
-   always @(posedge clock or cmd_stored or comp or enable_check or end_t0 or global_state or inj_cmd or i_fbk or negedge rst or sh_mode or status_reg or t4_0 or th_0 or v_fbk_cur or v_fbk_mask)
+   always @(posedge clock or  negedge rst )
    begin: clocked
       if (rst == 1'b0)
       begin

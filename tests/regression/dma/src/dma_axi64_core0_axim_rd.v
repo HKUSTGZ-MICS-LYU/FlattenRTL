@@ -157,6 +157,7 @@ module dma_axi64_core0_axim_rd(clk,reset,load_wr,load_wr_num,load_wr_cycle,load_
              .extra_bit(load_req_in_prog),
              .cmd_port(rd_cmd_port),
              .ch_num(rd_ch_num),
+             .joint_pending(),
              .joint_req(joint_req),
              .burst_start(rd_burst_start),
              .burst_addr(rd_burst_addr),

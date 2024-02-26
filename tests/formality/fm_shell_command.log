@@ -1,11 +1,11 @@
 #@ # 
-#@ # Running fm_shell Version T-2022.03-SP5 for linux64 -- Oct 18, 2022
-#@ # Date:   Sat Feb 24 08:05:34 2024
-#@ # Run by: xiangchenmeng@mics-eda
+#@ # Running fm_shell Version V-2023.12 for linux64 -- Nov 16, 2023
+#@ # Date:   Mon Feb 26 14:07:39 2024
+#@ # Run by: connect.xmeng027@manager01
 #@ 
 
-source /usr/synopysys/install/formality/T-2022.03-SP5/admin/setup/.synopsys_fm.setup
-#@ # -- Starting source /usr/synopysys/install/formality/T-2022.03-SP5/admin/setup/.synopsys_fm.setup
+source /hpc/Edatools/synopsys/formality/V-2023.12/admin/setup/.synopsys_fm.setup
+#@ # -- Starting source /hpc/Edatools/synopsys/formality/V-2023.12/admin/setup/.synopsys_fm.setup
 
 #@ #
 #@ # .synopsys_fm.setup: Initialization File for Formality
@@ -46,16 +46,22 @@ source /usr/synopysys/install/formality/T-2022.03-SP5/admin/setup/.synopsys_fm.s
 #@ # output but exits the tool.
 #@ #
 #@ #alias q quit
-#@ # -- End source /usr/synopysys/install/formality/T-2022.03-SP5/admin/setup/.synopsys_fm.setup
+#@ # -- End source /hpc/Edatools/synopsys/formality/V-2023.12/admin/setup/.synopsys_fm.setup
 
 source -echo -verbose verify.fms
 #@ # -- Starting source verify.fms
 
 #@ set_mismatch_message_filter -warn FMR_ELAB-147
-#@ read_verilog -r /home/xiangchenmeng/work/pyflattenverilog/tests/regression/b14/b14.v
-#@ set_top b14
-#@ read_verilog -i /home/xiangchenmeng/work/pyflattenverilog/tests/regression/b14/flatten_f_b14.v
-#@ set_top b14
+#@ 
+#@ 
+#@ 
+#@ read_verilog -r /hpc/home/connect.xmeng027/Work/pyflattenverilog1/pyflattenverilog/tests/regression/AES/AES-T500/top.v
+#@ set_top top
+#@ 
+#@ read_verilog -i /hpc/home/connect.xmeng027/Work/pyflattenverilog1/pyflattenverilog/tests/designplayer/AES/AES.v
+#@ set_top top
+#@ 
+#@ 
 #@ verify
 #@ report_unverified_points 
 #@ exit

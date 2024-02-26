@@ -136,7 +136,7 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
 `include "dma_axi64_ch_reg_params.v"
 
    
-  parameter     INT_NUM = 13; 
+  parameter     13 = 13; 
    
    
    wire [7:0]              gpaddr;
@@ -229,10 +229,10 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
    wire              ch_end_int;
    wire [2:0]              int_proc_num;              
    reg [2:0]              int_proc_num_reg;    
-   wire [INT_NUM-1:0]          int_bus;    
-   wire [INT_NUM-1:0]          int_rawstat;
-   reg [INT_NUM-1:0]          int_enable;         
-   wire [INT_NUM-1:0]          int_status;
+   wire [13-1:0]          int_bus;    
+   wire [13-1:0]          int_rawstat;
+   reg [13-1:0]          int_enable;         
+   wire [13-1:0]          int_status;
    wire [7:0]                    int_all_proc_bus;
    
    wire              wr_cmd_line0;
@@ -686,7 +686,7 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
    
    
    
-   assign int_bus        = {INT_NUM{clken}} & {
+   assign int_bus        = {13{clken}} & {
                            wdt_timeout,
                            timeout_aw,
                            timeout_w,
@@ -702,12 +702,12 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
                            ch_end_set
                            };
 
-   prgen_rawstat #(INT_NUM) rawstat(
+   prgen_rawstat #(13) rawstat(
                     .clk(clk),
                     .reset(reset),
                     .clear(wr_int_clear),
                     .write(wr_int_rawstat),
-                    .pwdata(pwdata[INT_NUM-1:0]),
+                    .pwdata(pwdata[13-1:0]),
                     .int_bus(int_bus),
                     .rawstat(int_rawstat)
                     );
@@ -715,9 +715,9 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
    
    always @(posedge clk or posedge reset)
      if (reset)
-       int_enable <= #1 {INT_NUM{1'b1}};
+       int_enable <= #1 {13{1'b1}};
      else if (wr_int_enable)
-       int_enable <= #1 pwdata[INT_NUM-1:0];
+       int_enable <= #1 pwdata[13-1:0];
 
    assign int_status = int_rawstat & int_enable;
 
@@ -844,11 +844,11 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
     rd_cmd_counter[12-1:0]     = cmd_counter;
     rd_cmd_counter[4-1+16:16] = int_counter;
         
-    rd_int_rawstat[INT_NUM-1:0]           = int_rawstat;
+    rd_int_rawstat[13-1:0]           = int_rawstat;
     
-    rd_int_enable[INT_NUM-1:0]            = int_enable;
+    rd_int_enable[13-1:0]            = int_enable;
     
-    rd_int_status[INT_NUM-1:0]            = int_status;
+    rd_int_status[13-1:0]            = int_status;
      end
    
                

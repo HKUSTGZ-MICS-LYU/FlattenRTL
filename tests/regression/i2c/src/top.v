@@ -17,31 +17,7 @@ module i2c_master_top(
         sda_pad_o,
         sda_padoen_o
     );
-    parameter ARST_LVL  = 1'b0;
-    parameter  byte_controller_ST_IDLE  = 5'b0_0000;
-    parameter  byte_controller_ST_START  = 5'b0_0001;
-    parameter  byte_controller_ST_READ  = 5'b0_0010;
-    parameter  byte_controller_ST_WRITE  = 5'b0_0100;
-    parameter  byte_controller_ST_ACK  = 5'b0_1000;
-    parameter  byte_controller_ST_STOP  = 5'b1_0000;
-    parameter  byte_controller_bit_controller_idle  = 18'b0_0000_0000_0000_0000;
-    parameter  byte_controller_bit_controller_start_a  = 18'b0_0000_0000_0000_0001;
-    parameter  byte_controller_bit_controller_start_b  = 18'b0_0000_0000_0000_0010;
-    parameter  byte_controller_bit_controller_start_c  = 18'b0_0000_0000_0000_0100;
-    parameter  byte_controller_bit_controller_start_d  = 18'b0_0000_0000_0000_1000;
-    parameter  byte_controller_bit_controller_start_e  = 18'b0_0000_0000_0001_0000;
-    parameter  byte_controller_bit_controller_stop_a  = 18'b0_0000_0000_0010_0000;
-    parameter  byte_controller_bit_controller_stop_b  = 18'b0_0000_0000_0100_0000;
-    parameter  byte_controller_bit_controller_stop_c  = 18'b0_0000_0000_1000_0000;
-    parameter  byte_controller_bit_controller_stop_d  = 18'b0_0000_0001_0000_0000;
-    parameter  byte_controller_bit_controller_rd_a  = 18'b0_0000_0010_0000_0000;
-    parameter  byte_controller_bit_controller_rd_b  = 18'b0_0000_0100_0000_0000;
-    parameter  byte_controller_bit_controller_rd_c  = 18'b0_0000_1000_0000_0000;
-    parameter  byte_controller_bit_controller_rd_d  = 18'b0_0001_0000_0000_0000;
-    parameter  byte_controller_bit_controller_wr_a  = 18'b0_0010_0000_0000_0000;
-    parameter  byte_controller_bit_controller_wr_b  = 18'b0_0100_0000_0000_0000;
-    parameter  byte_controller_bit_controller_wr_c  = 18'b0_1000_0000_0000_0000;
-    parameter  byte_controller_bit_controller_wr_d  = 18'b1_0000_0000_0000_0000;
+
     input wb_clk_i;
     input wb_rst_i;
     input arst_i;
@@ -75,7 +51,7 @@ module i2c_master_top(
     wire i2c_busy;
     wire i2c_al;
     reg  al;
-    wire rst_i = ( arst_i ^ ARST_LVL );
+    wire rst_i = ( arst_i ^ 1'b0 );
     wire wb_wacc = ( wb_we_i & wb_ack_o );
     wire sta = cr[7];
     wire sto = cr[6];
@@ -593,7 +569,7 @@ module i2c_master_top(
     begin
         if (  !( byte_controller_bit_controller_nReset) ) 
         begin
-            byte_controller_bit_controller_c_state <= byte_controller_bit_controller_idle;
+            byte_controller_bit_controller_c_state <= 18'b0_0000_0000_0000_0000;
             byte_controller_bit_controller_cmd_ack <= 1'b0;
             byte_controller_bit_controller_scl_oen <= 1'b1;
             byte_controller_bit_controller_sda_oen <= 1'b1;
@@ -603,7 +579,7 @@ module i2c_master_top(
         begin 
             if ( byte_controller_bit_controller_rst | byte_controller_bit_controller_al ) 
             begin
-                byte_controller_bit_controller_c_state <= byte_controller_bit_controller_idle;
+                byte_controller_bit_controller_c_state <= 18'b0_0000_0000_0000_0000;
                 byte_controller_bit_controller_cmd_ack <= 1'b0;
                 byte_controller_bit_controller_scl_oen <= 1'b1;
                 byte_controller_bit_controller_sda_oen <= 1'b1;
@@ -615,152 +591,152 @@ module i2c_master_top(
                 if ( byte_controller_bit_controller_clk_en ) 
                 begin
                     case ( byte_controller_bit_controller_c_state ) 
-                    byte_controller_bit_controller_idle:
+                    18'b0_0000_0000_0000_0000:
                     begin
                         case ( byte_controller_bit_controller_cmd ) 
                         4'b0001:
                         begin
-                            byte_controller_bit_controller_c_state <= byte_controller_bit_controller_start_a;
+                            byte_controller_bit_controller_c_state <= 18'b0_0000_0000_0000_0001;
                         end
                         4'b0010:
                         begin
-                            byte_controller_bit_controller_c_state <= byte_controller_bit_controller_stop_a;
+                            byte_controller_bit_controller_c_state <= 18'b0_0000_0000_0010_0000;
                         end
                         4'b0100:
                         begin
-                            byte_controller_bit_controller_c_state <= byte_controller_bit_controller_wr_a;
+                            byte_controller_bit_controller_c_state <= 18'b0_0010_0000_0000_0000;
                         end
                         4'b1000:
                         begin
-                            byte_controller_bit_controller_c_state <= byte_controller_bit_controller_rd_a;
+                            byte_controller_bit_controller_c_state <= 18'b0_0000_0010_0000_0000;
                         end
                         default :
                         begin
-                            byte_controller_bit_controller_c_state <= byte_controller_bit_controller_idle;
+                            byte_controller_bit_controller_c_state <= 18'b0_0000_0000_0000_0000;
                         end
                         endcase
                         byte_controller_bit_controller_scl_oen <= byte_controller_bit_controller_scl_oen;
                         byte_controller_bit_controller_sda_oen <= byte_controller_bit_controller_sda_oen;
                         byte_controller_bit_controller_sda_chk <= 1'b0;
                     end
-                    byte_controller_bit_controller_start_a:
+                    18'b0_0000_0000_0000_0001:
                     begin
-                        byte_controller_bit_controller_c_state <= byte_controller_bit_controller_start_b;
+                        byte_controller_bit_controller_c_state <= 18'b0_0000_0000_0000_0010;
                         byte_controller_bit_controller_scl_oen <= byte_controller_bit_controller_scl_oen;
                         byte_controller_bit_controller_sda_oen <= 1'b1;
                         byte_controller_bit_controller_sda_chk <= 1'b0;
                     end
-                    byte_controller_bit_controller_start_b:
+                    18'b0_0000_0000_0000_0010:
                     begin
-                        byte_controller_bit_controller_c_state <= byte_controller_bit_controller_start_c;
+                        byte_controller_bit_controller_c_state <= 18'b0_0000_0000_0000_0100;
                         byte_controller_bit_controller_scl_oen <= 1'b1;
                         byte_controller_bit_controller_sda_oen <= 1'b1;
                         byte_controller_bit_controller_sda_chk <= 1'b0;
                     end
-                    byte_controller_bit_controller_start_c:
+                    18'b0_0000_0000_0000_0100:
                     begin
-                        byte_controller_bit_controller_c_state <= byte_controller_bit_controller_start_d;
+                        byte_controller_bit_controller_c_state <= 18'b0_0000_0000_0000_1000;
                         byte_controller_bit_controller_scl_oen <= 1'b1;
                         byte_controller_bit_controller_sda_oen <= 1'b0;
                         byte_controller_bit_controller_sda_chk <= 1'b0;
                     end
-                    byte_controller_bit_controller_start_d:
+                    18'b0_0000_0000_0000_1000:
                     begin
-                        byte_controller_bit_controller_c_state <= byte_controller_bit_controller_start_e;
+                        byte_controller_bit_controller_c_state <= 18'b0_0000_0000_0001_0000;
                         byte_controller_bit_controller_scl_oen <= 1'b1;
                         byte_controller_bit_controller_sda_oen <= 1'b0;
                         byte_controller_bit_controller_sda_chk <= 1'b0;
                     end
-                    byte_controller_bit_controller_start_e:
+                    18'b0_0000_0000_0001_0000:
                     begin
-                        byte_controller_bit_controller_c_state <= byte_controller_bit_controller_idle;
+                        byte_controller_bit_controller_c_state <= 18'b0_0000_0000_0000_0000;
                         byte_controller_bit_controller_cmd_ack <= 1'b1;
                         byte_controller_bit_controller_scl_oen <= 1'b0;
                         byte_controller_bit_controller_sda_oen <= 1'b0;
                         byte_controller_bit_controller_sda_chk <= 1'b0;
                     end
-                    byte_controller_bit_controller_stop_a:
+                    18'b0_0000_0000_0010_0000:
                     begin
-                        byte_controller_bit_controller_c_state <= byte_controller_bit_controller_stop_b;
+                        byte_controller_bit_controller_c_state <= 18'b0_0000_0000_0100_0000;
                         byte_controller_bit_controller_scl_oen <= 1'b0;
                         byte_controller_bit_controller_sda_oen <= 1'b0;
                         byte_controller_bit_controller_sda_chk <= 1'b0;
                     end
-                    byte_controller_bit_controller_stop_b:
+                    18'b0_0000_0000_0100_0000:
                     begin
-                        byte_controller_bit_controller_c_state <= byte_controller_bit_controller_stop_c;
+                        byte_controller_bit_controller_c_state <= 18'b0_0000_0000_1000_0000;
                         byte_controller_bit_controller_scl_oen <= 1'b1;
                         byte_controller_bit_controller_sda_oen <= 1'b0;
                         byte_controller_bit_controller_sda_chk <= 1'b0;
                     end
-                    byte_controller_bit_controller_stop_c:
+                    18'b0_0000_0000_1000_0000:
                     begin
-                        byte_controller_bit_controller_c_state <= byte_controller_bit_controller_stop_d;
+                        byte_controller_bit_controller_c_state <= 18'b0_0000_0001_0000_0000;
                         byte_controller_bit_controller_scl_oen <= 1'b1;
                         byte_controller_bit_controller_sda_oen <= 1'b0;
                         byte_controller_bit_controller_sda_chk <= 1'b0;
                     end
-                    byte_controller_bit_controller_stop_d:
+                    18'b0_0000_0001_0000_0000:
                     begin
-                        byte_controller_bit_controller_c_state <= byte_controller_bit_controller_idle;
+                        byte_controller_bit_controller_c_state <= 18'b0_0000_0000_0000_0000;
                         byte_controller_bit_controller_cmd_ack <= 1'b1;
                         byte_controller_bit_controller_scl_oen <= 1'b1;
                         byte_controller_bit_controller_sda_oen <= 1'b1;
                         byte_controller_bit_controller_sda_chk <= 1'b0;
                     end
-                    byte_controller_bit_controller_rd_a:
+                    18'b0_0000_0010_0000_0000:
                     begin
-                        byte_controller_bit_controller_c_state <= byte_controller_bit_controller_rd_b;
+                        byte_controller_bit_controller_c_state <= 18'b0_0000_0100_0000_0000;
                         byte_controller_bit_controller_scl_oen <= 1'b0;
                         byte_controller_bit_controller_sda_oen <= 1'b1;
                         byte_controller_bit_controller_sda_chk <= 1'b0;
                     end
-                    byte_controller_bit_controller_rd_b:
+                    18'b0_0000_0100_0000_0000:
                     begin
-                        byte_controller_bit_controller_c_state <= byte_controller_bit_controller_rd_c;
+                        byte_controller_bit_controller_c_state <= 18'b0_0000_1000_0000_0000;
                         byte_controller_bit_controller_scl_oen <= 1'b1;
                         byte_controller_bit_controller_sda_oen <= 1'b1;
                         byte_controller_bit_controller_sda_chk <= 1'b0;
                     end
-                    byte_controller_bit_controller_rd_c:
+                    18'b0_0000_1000_0000_0000:
                     begin
-                        byte_controller_bit_controller_c_state <= byte_controller_bit_controller_rd_d;
+                        byte_controller_bit_controller_c_state <= 18'b0_0001_0000_0000_0000;
                         byte_controller_bit_controller_scl_oen <= 1'b1;
                         byte_controller_bit_controller_sda_oen <= 1'b1;
                         byte_controller_bit_controller_sda_chk <= 1'b0;
                     end
-                    byte_controller_bit_controller_rd_d:
+                    18'b0_0001_0000_0000_0000:
                     begin
-                        byte_controller_bit_controller_c_state <= byte_controller_bit_controller_idle;
+                        byte_controller_bit_controller_c_state <= 18'b0_0000_0000_0000_0000;
                         byte_controller_bit_controller_cmd_ack <= 1'b1;
                         byte_controller_bit_controller_scl_oen <= 1'b0;
                         byte_controller_bit_controller_sda_oen <= 1'b1;
                         byte_controller_bit_controller_sda_chk <= 1'b0;
                     end
-                    byte_controller_bit_controller_wr_a:
+                    18'b0_0010_0000_0000_0000:
                     begin
-                        byte_controller_bit_controller_c_state <= byte_controller_bit_controller_wr_b;
+                        byte_controller_bit_controller_c_state <= 18'b0_0100_0000_0000_0000;
                         byte_controller_bit_controller_scl_oen <= 1'b0;
                         byte_controller_bit_controller_sda_oen <= byte_controller_bit_controller_din;
                         byte_controller_bit_controller_sda_chk <= 1'b0;
                     end
-                    byte_controller_bit_controller_wr_b:
+                    18'b0_0100_0000_0000_0000:
                     begin
-                        byte_controller_bit_controller_c_state <= byte_controller_bit_controller_wr_c;
+                        byte_controller_bit_controller_c_state <= 18'b0_1000_0000_0000_0000;
                         byte_controller_bit_controller_scl_oen <= 1'b1;
                         byte_controller_bit_controller_sda_oen <= byte_controller_bit_controller_din;
                         byte_controller_bit_controller_sda_chk <= 1'b0;
                     end
-                    byte_controller_bit_controller_wr_c:
+                    18'b0_1000_0000_0000_0000:
                     begin
-                        byte_controller_bit_controller_c_state <= byte_controller_bit_controller_wr_d;
+                        byte_controller_bit_controller_c_state <= 18'b1_0000_0000_0000_0000;
                         byte_controller_bit_controller_scl_oen <= 1'b1;
                         byte_controller_bit_controller_sda_oen <= byte_controller_bit_controller_din;
                         byte_controller_bit_controller_sda_chk <= 1'b1;
                     end
-                    byte_controller_bit_controller_wr_d:
+                    18'b1_0000_0000_0000_0000:
                     begin
-                        byte_controller_bit_controller_c_state <= byte_controller_bit_controller_idle;
+                        byte_controller_bit_controller_c_state <= 18'b0_0000_0000_0000_0000;
                         byte_controller_bit_controller_cmd_ack <= 1'b1;
                         byte_controller_bit_controller_scl_oen <= 1'b0;
                         byte_controller_bit_controller_sda_oen <= byte_controller_bit_controller_din;
@@ -841,7 +817,7 @@ module i2c_master_top(
             byte_controller_shift <= 1'b0;
             byte_controller_ld <= 1'b0;
             byte_controller_cmd_ack <= 1'b0;
-            byte_controller_c_state <= byte_controller_ST_IDLE;
+            byte_controller_c_state <= 5'b0_0000;
             byte_controller_ack_out <= 1'b0;
         end
         else
@@ -853,7 +829,7 @@ module i2c_master_top(
                 byte_controller_shift <= 1'b0;
                 byte_controller_ld <= 1'b0;
                 byte_controller_cmd_ack <= 1'b0;
-                byte_controller_c_state <= byte_controller_ST_IDLE;
+                byte_controller_c_state <= 5'b0_0000;
                 byte_controller_ack_out <= 1'b0;
             end
             else
@@ -863,32 +839,32 @@ module i2c_master_top(
                 byte_controller_ld <= 1'b0;
                 byte_controller_cmd_ack <= 1'b0;
                 case ( byte_controller_c_state ) 
-                byte_controller_ST_IDLE:
+                5'b0_0000:
                 begin
                     if ( byte_controller_go ) 
                     begin
                         if ( byte_controller_start ) 
                         begin
-                            byte_controller_c_state <= byte_controller_ST_START;
+                            byte_controller_c_state <= 5'b0_0001;
                             byte_controller_core_cmd <= 4'b0001;
                         end
                         else
                         begin 
                             if ( byte_controller_read ) 
                             begin
-                                byte_controller_c_state <= byte_controller_ST_READ;
+                                byte_controller_c_state <= 5'b0_0010;
                                 byte_controller_core_cmd <= 4'b1000;
                             end
                             else
                             begin 
                                 if ( byte_controller_write ) 
                                 begin
-                                    byte_controller_c_state <= byte_controller_ST_WRITE;
+                                    byte_controller_c_state <= 5'b0_0100;
                                     byte_controller_core_cmd <= 4'b0100;
                                 end
                                 else
                                 begin
-                                    byte_controller_c_state <= byte_controller_ST_STOP;
+                                    byte_controller_c_state <= 5'b1_0000;
                                     byte_controller_core_cmd <= 4'b0010;
                                 end
                             end
@@ -896,70 +872,70 @@ module i2c_master_top(
                         byte_controller_ld <= 1'b1;
                     end
                 end
-                byte_controller_ST_START:
+                5'b0_0001:
                 begin
                     if ( byte_controller_core_ack ) 
                     begin
                         if ( byte_controller_read ) 
                         begin
-                            byte_controller_c_state <= byte_controller_ST_READ;
+                            byte_controller_c_state <= 5'b0_0010;
                             byte_controller_core_cmd <= 4'b1000;
                         end
                         else
                         begin
-                            byte_controller_c_state <= byte_controller_ST_WRITE;
+                            byte_controller_c_state <= 5'b0_0100;
                             byte_controller_core_cmd <= 4'b0100;
                         end
                         byte_controller_ld <= 1'b1;
                     end
                 end
-                byte_controller_ST_WRITE:
+                5'b0_0100:
                 begin
                     if ( byte_controller_core_ack ) 
                     begin
                         if ( byte_controller_cnt_done ) 
                         begin
-                            byte_controller_c_state <= byte_controller_ST_ACK;
+                            byte_controller_c_state <= 5'b0_1000;
                             byte_controller_core_cmd <= 4'b1000;
                         end
                         else
                         begin
-                            byte_controller_c_state <= byte_controller_ST_WRITE;
+                            byte_controller_c_state <= 5'b0_0100;
                             byte_controller_core_cmd <= 4'b0100;
                             byte_controller_shift <= 1'b1;
                         end
                     end
                 end
-                byte_controller_ST_READ:
+                5'b0_0010:
                 begin
                     if ( byte_controller_core_ack ) 
                     begin
                         if ( byte_controller_cnt_done ) 
                         begin
-                            byte_controller_c_state <= byte_controller_ST_ACK;
+                            byte_controller_c_state <= 5'b0_1000;
                             byte_controller_core_cmd <= 4'b0100;
                         end
                         else
                         begin
-                            byte_controller_c_state <= byte_controller_ST_READ;
+                            byte_controller_c_state <= 5'b0_0010;
                             byte_controller_core_cmd <= 4'b1000;
                         end
                         byte_controller_shift <= 1'b1;
                         byte_controller_core_txd <= byte_controller_ack_in;
                     end
                 end
-                byte_controller_ST_ACK:
+                5'b0_1000:
                 begin
                     if ( byte_controller_core_ack ) 
                     begin
                         if ( byte_controller_stop ) 
                         begin
-                            byte_controller_c_state <= byte_controller_ST_STOP;
+                            byte_controller_c_state <= 5'b1_0000;
                             byte_controller_core_cmd <= 4'b0010;
                         end
                         else
                         begin
-                            byte_controller_c_state <= byte_controller_ST_IDLE;
+                            byte_controller_c_state <= 5'b0_0000;
                             byte_controller_core_cmd <= 4'b0000;
                             byte_controller_cmd_ack <= 1'b1;
                         end
@@ -971,11 +947,11 @@ module i2c_master_top(
                         byte_controller_core_txd <= byte_controller_ack_in;
                     end
                 end
-                byte_controller_ST_STOP:
+                5'b1_0000:
                 begin
                     if ( byte_controller_core_ack ) 
                     begin
-                        byte_controller_c_state <= byte_controller_ST_IDLE;
+                        byte_controller_c_state <= 5'b0_0000;
                         byte_controller_core_cmd <= 4'b0000;
                         byte_controller_cmd_ack <= 1'b1;
                     end

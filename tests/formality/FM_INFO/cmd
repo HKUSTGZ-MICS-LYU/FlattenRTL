@@ -1,6 +1,6 @@
-/usr/synopysys/install/formality/T-2022.03-SP5/linux64/fm/bin/fm_shell_exec -r /usr/synopysys/install/formality/T-2022.03-SP5 -f verify.fms 
+/hpc/Edatools/synopsys/formality/V-2023.12/linux64/fm/bin/fm_shell_exec -r /hpc/Edatools/synopsys/formality/V-2023.12 -f verify.fms 
 
-Version    = T-2022.03-SP5
-Build      = T-2022.03-SP5-formality_t2022.03_sp5_rel-7850460
-Build date = Oct 18, 2022
-Run date   = Sat Feb 24 08:05:34 2024 CST
+Version    = V-2023.12
+Build      = V-2023.12-formality_v2023.12_rel-8560677
+Build date = Nov 16, 2023
+Run date   = Mon Feb 26 14:07:39 2024 CST

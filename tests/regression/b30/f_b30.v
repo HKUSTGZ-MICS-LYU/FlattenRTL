@@ -371,8 +371,8 @@ module dwand (
   input i1,
   input i2,
   input i3,
-  input i4,
-  output o) ; 
+  input i4) ; 
+   wire o ;  
   assign o=(i0&i1&i2&i3&i4); 
 endmodule
  
@@ -459,7 +459,7 @@ module error_handle (
   assign status_reg_034=sr_034[10:0]; 
   assign status_reg_125=sr_125[10:0]; 
   assign relpot=rel_pot_en; 
-  always @(    posedge clock or  negedge rst or  a_fault_dec or  posedge wr_en)
+  always @(   posedge clock or  negedge rst or  posedge wr_en)
        begin :vhdl_st_reg_wr_034
          if ((rst==1'b0)|(a_fault_dec[0]==1'b1&wr_en==1'b1))
             sr_034 <={11{1'b0}};
@@ -477,7 +477,7 @@ module error_handle (
             end 
        end
   
-  always @(    posedge clock or  negedge rst or  a_fault_dec or  posedge wr_en)
+  always @(   posedge clock or  negedge rst or  posedge wr_en)
        begin :vhdl_st_reg_wr_125
          if ((rst==1'b0)|(a_fault_dec[1]==1'b1&wr_en==1'b1))
             sr_125 <={11{1'b0}};
@@ -507,7 +507,7 @@ module filter (
  parameter[2:0] filter_state_type_start_state =0,filter_state_type_zero_1=1,filter_state_type_zero_2=2,filter_state_type_zero_3=3,filter_state_type_one_0=4,filter_state_type_one_1=5,filter_state_type_one_2=6,filter_state_type_one_3=7; 
    reg [2:0] current_state ;  
    reg [2:0] next_state ;  
-  always @(   posedge clock or  new_value or  negedge rst)
+  always @(  posedge clock or  negedge rst)
        begin :clocked
          if (rst==1'b0)
             current_state <=filter_state_type_start_state;
@@ -1269,7 +1269,7 @@ module knock_fsm1 (
  parameter[1:0] knock_fsm1_state_type_start_state =0,knock_fsm1_state_type_off1_state=1,knock_fsm1_state_type_sample_state=2,knock_fsm1_state_type_off2_state=3; 
    reg [1:0] current_state ;  
    reg [1:0] next_state ;  
-  always @(    posedge clock or  impulse or  long or  negedge rst)
+  always @(  posedge clock or  negedge rst)
        begin :clocked
          if (rst==1'b0)
             begin 
@@ -1336,7 +1336,7 @@ module knock_fsm2 (
  parameter[1:0] knock_fsm2_state_type_start_state =0,knock_fsm2_state_type_off1_state=1,knock_fsm2_state_type_sample_state=2,knock_fsm2_state_type_off2_state=3; 
    reg [1:0] current_state ;  
    reg [1:0] next_state ;  
-  always @(    posedge clock or  impulse or  long or  negedge rst)
+  always @(  posedge clock or  negedge rst)
        begin :clocked
          if (rst==1'b0)
             begin 
@@ -1578,7 +1578,7 @@ module ph1_handle (
  parameter[1:0] ph1_handle_state_type_ph1_1_state =0,ph1_handle_state_type_ph1_2_state=1; 
    reg [1:0] current_state ;  
    reg [1:0] next_state ;  
-  always @(      posedge clock or  cmd_stored or  cur_state or  end_t0 or  inj_cmd or  negedge rst)
+  always @(  posedge clock or  negedge rst)
        begin :clocked
          if (rst==1'b0)
             begin 
@@ -1647,7 +1647,7 @@ module ph2_handle (
  parameter[1:0] ph2_handle_state_type_ph2_1_state =0,ph2_handle_state_type_ph2_2_state=1,ph2_handle_state_type_ph2_3_state=2,ph2_handle_state_type_ph2_4_state=3; 
    reg [1:0] current_state ;  
    reg [1:0] next_state ;  
-  always @(       posedge clock or  cur_state or  end_on or  end_period or  i_fbk or  negedge rst or  sh_mode)
+  always @(  posedge clock or  negedge rst)
        begin :clocked
          if (rst==1'b0)
             begin 
@@ -1732,7 +1732,7 @@ module ph4_handle (
  parameter[1:0] ph4_handle_state_type_ph4_1_state =0,ph4_handle_state_type_ph4_2_state=1,ph4_handle_state_type_ph4_3_state=2,ph4_handle_state_type_ph4_4_state=3; 
    reg [1:0] current_state ;  
    reg [1:0] next_state ;  
-  always @(       posedge clock or  cur_state or  end_on or  end_period or  i_fbk or  negedge rst or  sh_mode)
+  always @(  posedge clock or  negedge rst)
        begin :clocked
          if (rst==1'b0)
             begin 
@@ -2283,7 +2283,7 @@ module state_progression (
  parameter[4:0] state_progression_state_type_start_state =0,state_progression_state_type_ph1bis_state=1,state_progression_state_type_ph2_state=2,state_progression_state_type_ph3_state=3,state_progression_state_type_ph4_state=4,state_progression_state_type_ph5_state=5,state_progression_state_type_ph1_state=6,state_progression_state_type_cc_vcc_state=7,state_progression_state_type_cc_gnd_state=8,state_progression_state_type_int1_state=9,state_progression_state_type_int_2_state=10,state_progression_state_type_int3_state=11,state_progression_state_type_int4_state=12,state_progression_state_type_int5_state=13,state_progression_state_type_int6_state=14,state_progression_state_type_ph6_state=15,state_progression_state_type_int7_state=16,state_progression_state_type_ph7_state=17,state_progression_state_type_int8_state=18,state_progression_state_type_ph8_state=19,state_progression_state_type_int9_state=20,state_progression_state_type_ph9_state=21; 
    reg [4:0] current_state ;  
    reg [4:0] next_state ;  
-  always @(               posedge clock or  cmd_stored or  comp or  enable_check or  end_t0 or  global_state or  inj_cmd or  i_fbk or  negedge rst or  sh_mode or  status_reg or  t4_0 or  th_0 or  v_fbk_cur or  v_fbk_mask)
+  always @(  posedge clock or  negedge rst)
        begin :clocked
          if (rst==1'b0)
             begin 
