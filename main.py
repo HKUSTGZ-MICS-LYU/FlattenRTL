@@ -9,7 +9,7 @@ start_time = time.time()
 start_memory = psutil.Process(os.getpid()).memory_info().rss / (1024 * 1024)
 # formatted part
 
-path = 'tests/regression/AES/AES-T1000'
+path = 'tests/regression/AES'
 inputfile = '/top.v'
 outputfile = '/f_top.v'
 top_module = 'top'
