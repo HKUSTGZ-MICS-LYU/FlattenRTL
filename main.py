@@ -9,10 +9,10 @@ start_time = time.time()
 start_memory = psutil.Process(os.getpid()).memory_info().rss / (1024 * 1024)
 # formatted part
 
-path = 'tests/regression/b30'
-inputfile = '/b30.v'
-outputfile = '/f_b30.v'
-top_module = 'b30'
+path = 'tests/regression/AES/AES-T1000'
+inputfile = '/top.v'
+outputfile = '/f_top.v'
+top_module = 'top'
 inputpath = path+inputfile
 formatpath = path+outputfile
 
@@ -28,7 +28,7 @@ with open(path+inputfile, 'r') as f:
 # flatten part
 
 
-folder_path = os.path.dirname(formatpath)+'/_tmp'
+folder_path = os.path.dirname(formatpath)+'/tmp'
 
 if os.path.exists(folder_path):
     file_list = os.listdir(folder_path)
