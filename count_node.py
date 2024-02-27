@@ -37,7 +37,7 @@ def count_module_instances(modules, module_name):
     return count
 
 # Read the Verilog code and parse it
-input_stream = FileStream('/home/ziyue/researchlib/Micro_Eletronic/pyflattenverilog/tests/regression/AES/AES-T1000/top.v')
+input_stream = FileStream('tests/regression/b20/b20.v')
 lexer = VerilogLexer(input_stream)
 stream = CommonTokenStream(lexer)
 parser = VerilogParser(stream)
@@ -49,6 +49,6 @@ visitor.visit(tree)
 
 # Now we have the module counts in visitor.modules
 # Start counting from the top module 'adder_32bit'
-total_instances = count_module_instances(visitor.modules, 'top') - 1  # Subtract 1 to exclude the top module itself from the count
+total_instances = count_module_instances(visitor.modules, 'b20') - 1  # Subtract 1 to exclude the top module itself from the count
 
-print(f"Total number of adder instances: {total_instances}")
+print(f"Total number of instances: {total_instances}")
