@@ -38,10 +38,6 @@ module adder_16bit(a, b, sum);
    );
 endmodule 
 
-
-
-endmodule 
-
 // 32 bit adder
 module adder_32bit(a, b, sum);
    input  [31:0] a;
