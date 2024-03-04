@@ -1,6 +1,6 @@
 #@ # 
 #@ # Running fm_shell Version V-2023.12 for linux64 -- Nov 16, 2023
-#@ # Date:   Mon Feb 26 14:07:39 2024
+#@ # Date:   Tue Feb 27 00:16:43 2024
 #@ # Run by: connect.xmeng027@manager01
 #@ 
 
@@ -52,13 +52,13 @@ source -echo -verbose verify.fms
 #@ # -- Starting source verify.fms
 
 #@ set_mismatch_message_filter -warn FMR_ELAB-147
+#@ set_mismatch_message_filter -warn FMR_VLOG-038
 #@ 
 #@ 
-#@ 
-#@ read_verilog -r /hpc/home/connect.xmeng027/Work/pyflattenverilog1/pyflattenverilog/tests/regression/AES/AES-T500/top.v
+#@ read_verilog -r /hpc/home/connect.xmeng027/Work/pyflattenverilog1/pyflattenverilog/tests/regression/AES/AES-T1000/top.v
 #@ set_top top
 #@ 
-#@ read_verilog -i /hpc/home/connect.xmeng027/Work/pyflattenverilog1/pyflattenverilog/tests/designplayer/AES/AES.v
+#@ read_verilog -i /hpc/home/connect.xmeng027/Work/pyflattenverilog1/pyflattenverilog/tests/regression/AES/AES-T1000/flatten_f_top.v
 #@ set_top top
 #@ 
 #@ 
