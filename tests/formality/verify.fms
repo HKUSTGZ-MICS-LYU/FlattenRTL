@@ -1,11 +1,11 @@
 set_mismatch_message_filter -warn FMR_ELAB-147
+set_mismatch_message_filter -warn FMR_VLOG-038
 
 
-
-read_verilog -r /hpc/home/connect.xmeng027/Work/pyflattenverilog1/pyflattenverilog/tests/regression/AES/AES-T500/top.v
+read_verilog -r tests/regression/AES/AES-T1000/top.v
 set_top top
 
-read_verilog -i /hpc/home/connect.xmeng027/Work/pyflattenverilog1/pyflattenverilog/tests/designplayer/AES/AES.v
+read_verilog -i tests/regression/AES/AES-T1000/flatten_f_top.v
 set_top top
 
 

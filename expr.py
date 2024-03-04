@@ -12,16 +12,16 @@ start_memory = psutil.Process(os.getpid()).memory_info().rss / (1024 * 1024)
 
 
 # formatted part
-name = "b19"
-path = r'tests/regression/{name}/'.format(name=name)   
-inputfile = r'{name}.v'.format(name=name)   
-outputfile = r'f_{name}.v'.format(name=name)
-top_module = r'{name}'.format(name=name)
+# name = "b19"
+# path = r'tests/regression/{name}/'.format(name=name)   
+# inputfile = r'{name}.v'.format(name=name)   
+# outputfile = r'f_{name}.v'.format(name=name)
+# top_module = r'{name}'.format(name=name)
 
-# path = 'tests/regression/dma/'
-# inputfile = 'top.v'
-# outputfile = 'f_top.v'
-# top_module = 'dma_axi64'
+path = 'tests/regression/AES/AES-T1000/'
+inputfile = 'top.v'
+outputfile = 'f_top.v'
+top_module = 'top'
 
 inputpath = path+inputfile
 formatpath = path+outputfile
