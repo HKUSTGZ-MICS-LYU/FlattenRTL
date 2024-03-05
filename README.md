@@ -167,55 +167,6 @@ endmodule
 
 ```
 
-## Support Feature and Limitation
-
-# FlattenRTL
-
-## Intro
-
-FlattenRTL is a tool for flattening verilog design.
-
-## Directory Struture
-```
-├── antlr4_verilog  ->  ANTLR4 Library
-└── tests
-    ├── EDAUtils  ->  The flatten result of EDAUtils
-    └── regression
-        ├── adder  ->  Folder of design
-        │   ├── adder.v  -> Design that we want to test
-        │   ├── f_adder.v  -> Format design that we want to test
-        │   ├── flatten_f_adder.v  -> Final flatten design
-        │   └── tmp  -> temp file
-        │       ├── adder_0.v
-        │       ├── adder_1.v
-        │       ├── adder_2.v
-        │       ├── adder_3.v
-        │       ├── adder_4.v
-        │       └── adder_5.v
-```
-
-## How to use?
-
-### Install
-```
-python3 -m pip install antlr4-python3-runtime==4.7.2
-```
-
-### Step 1
-Open file main.py, set the path and file that you want process.
-```python
-path = 'tests/regression/AES' # Folder
-inputfile = '/top.v' # The file that you want to process
-outputfile = '/f_top.v' # Output file
-top_module = 'top' # Top module
-```
-
-### Step 2
-Run the main.py at the root of this directory
-```shell
-python3 main.py
-```
-
 ## Limitations
 ### Module Declaration
 
