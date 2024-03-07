@@ -3,6 +3,7 @@ from antlr4_verilog.verilog import VerilogLexer, VerilogParser, VerilogParserLis
 import antlr4
 from io import StringIO
 import os
+import re
 
 res_index = 0
 
@@ -64,9 +65,11 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
     def __init__(self):
       self.is_first_instantiation_module = False
       self.module_identifier = ""
+      self.module_param = []
       self.name_of_module_instances = []
       self.list_of_ports_rhs = []
       self.list_of_ports_rhs_width = []
+      self.dict_of_parameters = {}
 
     def visitModule_instantiation(self, ctx: VerilogParser.Module_instantiationContext):
       if self.is_first_instantiation_module == False or self.module_identifier==ctx.module_identifier().getText():
@@ -82,6 +85,18 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
               else:
                 self.list_of_ports_rhs.append(child.expression().getText())
 
+          if ctx.parameter_value_assignment() is not None:
+            list_of_parameter_assignments = ctx.parameter_value_assignment().list_of_parameter_assignments()
+
+            for child in list_of_parameter_assignments.getChildren():
+              if isinstance(child, antlr4.tree.Tree.TerminalNodeImpl):
+                pass
+              else:
+                if self.dict_of_parameters.get(self.name_of_module_instances[-1]) is None:
+                   self.dict_of_parameters[self.name_of_module_instances[-1]] = {}
+                self.dict_of_parameters[self.name_of_module_instances[-1]][child.parameter_identifier().getText()] = child.mintypmax_expression().getText()
+              
+
               
   visitor = MyModuleInstantiationVisitor()
   visitor.visit(top_node_tree)
@@ -89,6 +104,9 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
   cur_name_of_module_instances = visitor.name_of_module_instances
   cur_prefixs = cur_name_of_module_instances
   cur_list_of_ports_rhs = visitor.list_of_ports_rhs
+  cur_dict_of_parameters = visitor.dict_of_parameters
+
+  
 
   if cur_module_identifier == '':
      of_handler.close()
@@ -204,27 +222,35 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
   for k in range(0,len(cur_prefixs)):
     # In case of the dismatch of port and definition, we define the length of port as len(cur_list_of_ports_rhs)/len(cur_prefix)
     len_instance_port = int(len(cur_list_of_ports_rhs)/len(cur_prefixs))
-    try:
-      for i in range(0,len_instance_port):
-        if cur_list_of_data_type[i] != '':
-          cur_new_variable.append(cur_list_of_data_type[i]  + cur_list_of_ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
-        elif cur_list_of_ports_type[i] == 'reg':
-          cur_new_variable.append('reg '  + cur_list_of_ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
-        else:
-          cur_new_variable.append('wire '  + cur_list_of_ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
-      
-        if cur_list_of_ports_direction[i] == 'input': 
-          # if cur_list_of_ports_type[i] == 'reg' :
-          #   cur_new_assign.append('always @(*)' + ' ' + cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ' = '+ cur_list_of_ports_rhs[i] + ';')
-          # else:
-          cur_new_assign.append('assign ' + cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ' = '+ cur_list_of_ports_rhs[k*len_instance_port+i] + ';')
-        else:
-          # if cur_list_of_ports_type[i] == 'reg' :
-          #   cur_new_assign.append('always @(*) ' + ' ' + cur_list_of_ports_rhs[i] + ' = '+ cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
-          # else:
-            cur_new_assign.append('assign ' +  cur_list_of_ports_rhs[k*len_instance_port+i] + ' = '+ cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
-    except:
-      print("Error: Potential the number of port and definition is not matched!")
+    # try:
+    # do the whole word match and replacement based on cur_dict_of_parameters
+    ports_lhs_width = cur_list_of_ports_lhs_width
+    for i in range(0,len(ports_lhs_width)):
+      for key in cur_dict_of_parameters[cur_prefixs[k]]:
+        pattern = r'\b{}\b'.format(key)
+        ports_lhs_width[i] = re.sub(pattern,cur_dict_of_parameters[cur_prefixs[k]][key],ports_lhs_width[i])
+        # ports_lhs_width[i] = ports_lhs_width[i].replace(key,cur_dict_of_parameters[cur_prefixs[k]][key])
+       
+    for i in range(0,len_instance_port):
+      if cur_list_of_data_type[i] != '':
+        cur_new_variable.append(cur_list_of_data_type[i]  + cur_list_of_ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
+      elif cur_list_of_ports_type[i] == 'reg':
+        cur_new_variable.append('reg '  + cur_list_of_ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
+      else:
+        cur_new_variable.append('wire '  + cur_list_of_ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
+    
+      if cur_list_of_ports_direction[i] == 'input': 
+        # if cur_list_of_ports_type[i] == 'reg' :
+        #   cur_new_assign.append('always @(*)' + ' ' + cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ' = '+ cur_list_of_ports_rhs[i] + ';')
+        # else:
+        cur_new_assign.append('assign ' + cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ' = '+ cur_list_of_ports_rhs[k*len_instance_port+i] + ';')
+      else:
+        # if cur_list_of_ports_type[i] == 'reg' :
+        #   cur_new_assign.append('always @(*) ' + ' ' + cur_list_of_ports_rhs[i] + ' = '+ cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
+        # else:
+          cur_new_assign.append('assign ' +  cur_list_of_ports_rhs[k*len_instance_port+i] + ' = '+ cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
+    # except:
+      # print("Error: Potential the number of port and definition is not matched!")
 
 
   # 5. TODO: Get the start and stop index of the instance module
@@ -260,9 +286,26 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
         self.stop = None
         self.indent = 2
         self.cur_prefixs_index = cur_prefixs_index
+    
+    def parents_is_parameter_port_list(self,ctx):
+      if ctx is None:
+        return False
+
+      if not isinstance(ctx, VerilogParser.Module_parameter_port_listContext):
+        return self.parents_is_parameter_port_list(ctx.parentCtx)
+      else:
+        return True
+      
 
     "This function is used to traverse the tree and change the name of the instance"
     def _traverse_children(self,ctx):  
+      if self.parents_is_parameter_port_list(ctx):
+        try:
+          ctx.start.text = ''
+          ctx.stop.text = ''
+        except:
+          ctx.symbol.text = ''
+          pass
       if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
         pass
       else:
@@ -274,6 +317,9 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
               elif isinstance(child.parentCtx.parentCtx, VerilogParser.Port_identifierContext):
                   pass
               else:
+                  if cur_dict_of_parameters[cur_prefixs[self.cur_prefixs_index]].get(child.getText()) is not None:
+                     child.start.text = cur_dict_of_parameters[cur_prefixs[self.cur_prefixs_index]][child.start.text]
+                     continue
                   child.start.text = ' ' + cur_prefixs[self.cur_prefixs_index] + '_' + child.start.text + ' '
           self._traverse_children(child)
 
