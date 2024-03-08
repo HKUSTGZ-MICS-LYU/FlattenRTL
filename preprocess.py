@@ -318,14 +318,14 @@ def formatter_file(design, outputpath):
             builder.close()
             for line in temp.splitlines():
                for char in line: 
-                  if char == '#':
+                  if char == chr(31):
                      self.text += '\n'
                   else:
                      self.text += char
                   
          def _traverse_children(self,ctx,indent = 0):  
             if isinstance(ctx, VerilogParser.Module_declarationContext):
-               ctx.stop.text = '#' + ctx.stop.text + '#'
+               ctx.stop.text = chr(31) + ctx.stop.text + chr(31)
             if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
                pass
             else:
@@ -335,7 +335,7 @@ def formatter_file(design, outputpath):
                   if isinstance(child, VerilogParser.Input_declarationContext) or isinstance(child, VerilogParser.Output_declarationContext) or isinstance(child, VerilogParser.Inout_declarationContext):
                      for i, item in enumerate(child.getChildren()):
                         if i == 0:
-                           item.symbol.text = '#' + ' ' * indent + item.symbol.text
+                           item.symbol.text = chr(31) + ' ' * indent + item.symbol.text
                         else:
                            if isinstance(item, antlr4.tree.Tree.TerminalNodeImpl):
                               item.symbol.text = ' ' + item.symbol.text + ' '
@@ -344,15 +344,15 @@ def formatter_file(design, outputpath):
 
                   #Parameter defination
                   if isinstance(child, VerilogParser.Parameter_declarationContext):
-                     child.start.text = '#' + ' ' * indent + child.start.text 
+                     child.start.text = chr(31) + ' ' * indent + child.start.text 
                   #Reg defination
                   if isinstance(child, VerilogParser.Reg_declarationContext):
                      for i, item in enumerate(child.getChildren()):
                         if i == 0:
                            if isinstance(item, antlr4.tree.Tree.TerminalNodeImpl):
-                              item.symbol.text = '#' + ' ' * indent + item.symbol.text
+                              item.symbol.text = chr(31) + ' ' * indent + item.symbol.text
                            else: 
-                              item.start.text = '#' + ' ' * indent + item.start.text
+                              item.start.text = chr(31) + ' ' * indent + item.start.text
                         else:
                            if isinstance(item, antlr4.tree.Tree.TerminalNodeImpl):
                               item.symbol.text = ' ' + item.symbol.text + ' '
@@ -364,9 +364,9 @@ def formatter_file(design, outputpath):
                      for i, item in enumerate(child.getChildren()):
                         if i == 0:
                            if isinstance(item, antlr4.tree.Tree.TerminalNodeImpl):
-                              item.symbol.text = '#' + ' ' * indent + item.symbol.text
+                              item.symbol.text = chr(31) + ' ' * indent + item.symbol.text
                            else: 
-                              item.start.text = '#' + ' ' * indent + item.start.text
+                              item.start.text = chr(31) + ' ' * indent + item.start.text
                         else:
                            if isinstance(item, antlr4.tree.Tree.TerminalNodeImpl):
                               item.symbol.text = ' ' + item.symbol.text + ' '
@@ -378,9 +378,9 @@ def formatter_file(design, outputpath):
                      for i, item in enumerate(child.getChildren()):
                         if i == 0:
                            if isinstance(item, antlr4.tree.Tree.TerminalNodeImpl):
-                              item.symbol.text = '#' + ' ' * indent + item.symbol.text
+                              item.symbol.text = chr(31) + ' ' * indent + item.symbol.text
                            else: 
-                              item.start.text = '#' + ' ' * indent + item.start.text
+                              item.start.text = chr(31) + ' ' * indent + item.start.text
                         else:
                            if isinstance(item, antlr4.tree.Tree.TerminalNodeImpl):
                               item.symbol.text = ' ' + item.symbol.text + ' '
@@ -393,11 +393,11 @@ def formatter_file(design, outputpath):
 
                   # Assign block
                   if isinstance(child, VerilogParser.Continuous_assignContext):
-                     child.start.text = '#' + ' ' * indent + child.start.text + ' '
+                     child.start.text = chr(31) + ' ' * indent + child.start.text + ' '
                   # Always block
                   if isinstance(child, VerilogParser.Always_constructContext):
-                     child.start.text = '#' + ' ' * indent + child.start.text + ' '
-                     child.stop.text = child.stop.text + '#'
+                     child.start.text = chr(31) + ' ' * indent + child.start.text + ' '
+                     child.stop.text = child.stop.text + chr(31)
                   if isinstance(child, VerilogParser.Event_expressionContext):
                      for i, item in enumerate(child.getChildren()):
                         if i == 0:
@@ -412,37 +412,37 @@ def formatter_file(design, outputpath):
                               item.start.text = ' ' + item.start.text
                   # Case block
                   if isinstance(child, VerilogParser.Case_statementContext):
-                     child.start.text = '#' + ' ' * indent + child.start.text + ' '
-                     child.stop.text = '#' + ' ' * indent + child.stop.text + ' '
+                     child.start.text = chr(31) + ' ' * indent + child.start.text + ' '
+                     child.stop.text = chr(31) + ' ' * indent + child.stop.text + ' '
 
                   if isinstance(child, VerilogParser.Case_itemContext):
-                     child.start.text = '#' + ' ' * indent + child.start.text + ' '
+                     child.start.text = chr(31) + ' ' * indent + child.start.text + ' '
 
                   # If block
                   if isinstance(child, VerilogParser.Conditional_statementContext):
-                     child.start.text = '#' + ' ' * indent + child.start.text + ' '
+                     child.start.text = chr(31) + ' ' * indent + child.start.text + ' '
                   if isinstance(child, antlr4.tree.Tree.TerminalNodeImpl) and child.symbol.text == 'else':
-                     child.symbol.text = '#' + ' ' * indent + child.symbol.text + ' '
+                     child.symbol.text = chr(31) + ' ' * indent + child.symbol.text + ' '
 
                   # Nonblocking assignment
                   if isinstance(child, VerilogParser.Nonblocking_assignmentContext):
-                     child.start.text = '#' + ' ' * indent + child.start.text + ' '
+                     child.start.text = chr(31) + ' ' * indent + child.start.text + ' '
 
                   # Seqblocking assignment
                   if isinstance(child, VerilogParser.Seq_blockContext):
-                     child.start.text = '#' + ' ' * indent + child.start.text + ' '
-                     child.stop.text = '#' + ' ' * indent + child.stop.text + ' '
+                     child.start.text = chr(31) + ' ' * indent + child.start.text + ' '
+                     child.stop.text = chr(31) + ' ' * indent + child.stop.text + ' '
 
                   # Blocking assignment
                   if isinstance(child, VerilogParser.Blocking_assignmentContext):
-                     child.start.text = '#' + ' ' * indent + child.start.text + ' '
+                     child.start.text = chr(31) + ' ' * indent + child.start.text + ' '
                   if isinstance(child, VerilogParser.Block_item_declarationContext):
                      for i, item in enumerate(child.getChildren()):
                         if i == 0:
                            if isinstance(item, antlr4.tree.Tree.TerminalNodeImpl):
-                              item.symbol.text = '#' + ' ' * indent + item.symbol.text 
+                              item.symbol.text = chr(31) + ' ' * indent + item.symbol.text 
                            else:
-                              item.start.text = '#' + ' ' * indent + item.start.text
+                              item.start.text = chr(31) + ' ' * indent + item.start.text
                         else:
                            if isinstance(item, antlr4.tree.Tree.TerminalNodeImpl):
                               item.symbol.text = ' ' + item.symbol.text 
@@ -452,10 +452,10 @@ def formatter_file(design, outputpath):
                      child.start.text = ' '  + child.start.text + ' '
                   # Instance block
                   if isinstance(child, VerilogParser.Module_instantiationContext):
-                     child.start.text = '#' + ' ' * indent + child.start.text + ' '
+                     child.start.text = chr(31) + ' ' * indent + child.start.text + ' '
                   # Module declaration
                   if isinstance(child, VerilogParser.Module_declarationContext):
-                     child.start.text = '#' + ' ' * indent + child.start.text 
+                     child.start.text = chr(31) + ' ' * indent + child.start.text 
          
 
                   self._traverse_children(child,indent+1)

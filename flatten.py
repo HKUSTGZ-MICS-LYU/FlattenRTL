@@ -4,6 +4,7 @@ import antlr4
 from io import StringIO
 import os
 import re
+import copy
 
 res_index = 0
 
@@ -224,21 +225,22 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
     len_instance_port = int(len(cur_list_of_ports_rhs)/len(cur_prefixs))
     # try:
     # do the whole word match and replacement based on cur_dict_of_parameters
-    ports_lhs_width = cur_list_of_ports_lhs_width
-    for i in range(0,len(ports_lhs_width)):
-      for key in cur_dict_of_parameters[cur_prefixs[k]]:
-        pattern = r'\b{}\b'.format(key)
-        ports_lhs_width[i] = re.sub(pattern,cur_dict_of_parameters[cur_prefixs[k]][key],ports_lhs_width[i])
-        # ports_lhs_width[i] = ports_lhs_width[i].replace(key,cur_dict_of_parameters[cur_prefixs[k]][key])
+    ports_lhs_width = copy.deepcopy(cur_list_of_ports_lhs_width)
+    if cur_dict_of_parameters.get(cur_prefixs[k]) is not None:
+      for i in range(0,len(ports_lhs_width)):
+        for key in cur_dict_of_parameters[cur_prefixs[k]]:
+          pattern = r'\b{}\b'.format(key)
+          ports_lhs_width[i] = re.sub(pattern,cur_dict_of_parameters[cur_prefixs[k]][key],ports_lhs_width[i])
+          # ports_lhs_width[i] = ports_lhs_width[i].replace(key,cur_dict_of_parameters[cur_prefixs[k]][key])
+    # cur_list_of_ports_lhs_width = ports_lhs_width
        
     for i in range(0,len_instance_port):
       if cur_list_of_data_type[i] != '':
-        cur_new_variable.append(cur_list_of_data_type[i]  + cur_list_of_ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
+        cur_new_variable.append(cur_list_of_data_type[i]  + ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
       elif cur_list_of_ports_type[i] == 'reg':
-        cur_new_variable.append('reg '  + cur_list_of_ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
+        cur_new_variable.append('reg '  + ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
       else:
-        cur_new_variable.append('wire '  + cur_list_of_ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
-    
+        cur_new_variable.append('wire '  + ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
       if cur_list_of_ports_direction[i] == 'input': 
         # if cur_list_of_ports_type[i] == 'reg' :
         #   cur_new_assign.append('always @(*)' + ' ' + cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ' = '+ cur_list_of_ports_rhs[i] + ';')
@@ -317,10 +319,11 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
               elif isinstance(child.parentCtx.parentCtx, VerilogParser.Port_identifierContext):
                   pass
               else:
-                  if cur_dict_of_parameters[cur_prefixs[self.cur_prefixs_index]].get(child.getText()) is not None:
-                     child.start.text = cur_dict_of_parameters[cur_prefixs[self.cur_prefixs_index]][child.start.text]
-                     continue
-                  child.start.text = ' ' + cur_prefixs[self.cur_prefixs_index] + '_' + child.start.text + ' '
+                  if len(cur_dict_of_parameters) != 0:
+                    if cur_dict_of_parameters[cur_prefixs[self.cur_prefixs_index]].get(child.getText()) is not None:
+                      child.start.text = cur_dict_of_parameters[cur_prefixs[self.cur_prefixs_index]][child.start.text]
+                      continue
+                    child.start.text = ' ' + cur_prefixs[self.cur_prefixs_index] + '_' + child.start.text + ' '
           self._traverse_children(child)
 
     def visitModule_declaration(self, ctx: VerilogParser.Module_declarationContext):
@@ -404,7 +407,7 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
         temp = builder.getvalue()
       for line in temp.splitlines():
           for char in line: 
-            if char == '#':
+            if char == chr(31):
                self.text += '\n'
             else:
               self.text += char
@@ -417,60 +420,60 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
           # Adjust the indent
           #Port defination
           if isinstance(child, VerilogParser.Port_declarationContext):
-             child.start.text = '#' + ' ' * indent + child.start.text + ' '
+             child.start.text = chr(31) + ' ' * indent + child.start.text + ' '
           #Parameter defination
           if isinstance(child, VerilogParser.Parameter_declarationContext):
-            child.start.text = '#' + ' ' * indent + child.start.text 
+            child.start.text = chr(31) + ' ' * indent + child.start.text 
           #Reg defination
           if isinstance(child, VerilogParser.Reg_declarationContext):
-            child.start.text = '#' + ' ' * indent + child.start.text
+            child.start.text = chr(31) + ' ' * indent + child.start.text
           #Wire defination
           if isinstance(child, VerilogParser.Net_declarationContext):
-            child.start.text = '#' + ' ' * indent + child.start.text
+            child.start.text = chr(31) + ' ' * indent + child.start.text
           #Integer defination
           if isinstance(child, VerilogParser.Integer_declarationContext):
-            child.start.text = '#' + ' ' * indent + child.start.text
+            child.start.text = chr(31) + ' ' * indent + child.start.text
           # Assign block
           if isinstance(child, VerilogParser.Continuous_assignContext):
-            child.start.text = '#' + ' ' * indent + child.start.text + ' '
+            child.start.text = chr(31) + ' ' * indent + child.start.text + ' '
           # Always block
           if isinstance(child, VerilogParser.Always_constructContext):
-            child.start.text = '#' + ' ' * indent + child.start.text + ' '
-            child.stop.text = child.stop.text + '#'
+            child.start.text = chr(31) + ' ' * indent + child.start.text + ' '
+            child.stop.text = child.stop.text + chr(31)
           if isinstance(child, VerilogParser.Event_expressionContext):
             child.start.text = ' ' + child.start.text + ' '
           # if isinstance(child, VerilogParser.Event_expressionContext) and child.getText() == 'negedge':
           #   child.symbol.text = ' ' + child.symbol.text + ' '
           # Case block
           if isinstance(child, VerilogParser.Case_statementContext):
-            child.start.text = '#' + ' ' * indent + child.start.text + ' '
-            child.stop.text = '#' + ' ' * indent + child.stop.text + ' '
+            child.start.text = chr(31) + ' ' * indent + child.start.text + ' '
+            child.stop.text = chr(31) + ' ' * indent + child.stop.text + ' '
 
           if isinstance(child, VerilogParser.Case_itemContext):
-            child.start.text = '#' + ' ' * indent + child.start.text + ' '
+            child.start.text = chr(31) + ' ' * indent + child.start.text + ' '
 
           # If block
           if isinstance(child, VerilogParser.Conditional_statementContext):
-            child.start.text = '#' + ' ' * indent + child.start.text + ' '
-            # child.stop.text = '#' + ' ' * indent + child.stop.text + ' '
+            child.start.text = chr(31) + ' ' * indent + child.start.text + ' '
+            # child.stop.text = chr(31) + ' ' * indent + child.stop.text + ' '
           if isinstance(child, antlr4.tree.Tree.TerminalNodeImpl) and child.symbol.text == 'else':
-            child.symbol.text = '#' + ' ' * indent + child.symbol.text + ' '
+            child.symbol.text = chr(31) + ' ' * indent + child.symbol.text + ' '
 
           # Nonblocking assignment
           if isinstance(child, VerilogParser.Nonblocking_assignmentContext):
-            child.start.text = '#' + ' ' * indent + child.start.text + ' '
+            child.start.text = chr(31) + ' ' * indent + child.start.text + ' '
   
           # Seqblocking assignment
           if isinstance(child, VerilogParser.Seq_blockContext):
-            child.start.text = '#' + ' ' * indent + child.start.text + ' '
-            child.stop.text = '#' + ' ' * indent + child.stop.text + ' '
+            child.start.text = chr(31) + ' ' * indent + child.start.text + ' '
+            child.stop.text = chr(31) + ' ' * indent + child.stop.text + ' '
 
           # Blocking assignment
           if isinstance(child, VerilogParser.Blocking_assignmentContext):
-            child.start.text = '#' + ' ' * indent + child.start.text + ' '
+            child.start.text = chr(31) + ' ' * indent + child.start.text + ' '
           # Instance block
           if isinstance(child, VerilogParser.Module_instantiationContext):
-            child.start.text = '#' + ' ' * indent + child.start.text + ' '
+            child.start.text = chr(31) + ' ' * indent + child.start.text + ' '
           self._traverse_children(child,indent+1)
     def visitModule_declaration(self, ctx: VerilogParser.Module_declarationContext):
       self.inst_module_node = ctx
@@ -496,7 +499,6 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
       self.stop = ctx.ENDMODULE().getSymbol().start-1
       for child in ctx.getChildren():
          if isinstance(child, antlr4.tree.Tree.TerminalNodeImpl):
-            if self.firstTerminal == False:
               self.start = child.symbol.stop+1
               self.firstTerminal = True
            

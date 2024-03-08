@@ -16,11 +16,11 @@ top_module = 'TopModule'
 inputpath = path+inputfile
 formatpath = path+outputfile
 
-# if os.path.exists(formatpath):
-#    os.remove(path=formatpath)
+if os.path.exists(formatpath):
+   os.remove(path=formatpath)
 with open(path+inputfile, 'r') as f:
     design = f.read()
-    # preprocess.formatter_file(design, formatpath)
+    preprocess.formatter_file(design, formatpath)
     # copy the file to formatpath
     # with open(formatpath, 'w') as f:
     #     f.write(design)
