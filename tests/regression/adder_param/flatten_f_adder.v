@@ -13,9 +13,11 @@ module TopModule (
     wire [16-1:0] adder2_b;
     wire [16-1+1:0] adder2_sum;
 
+    assign  adder1_sum =( adder1_a + adder1_b )<<0;
 
 
 
+    assign  adder2_sum =( adder2_a + adder2_b )<<1;
     assign adder1_a = a1;
     assign adder1_b = b1;
     assign sum1 = adder1_sum;

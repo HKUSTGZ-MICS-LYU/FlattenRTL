@@ -499,6 +499,7 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
       self.stop = ctx.ENDMODULE().getSymbol().start-1
       for child in ctx.getChildren():
          if isinstance(child, antlr4.tree.Tree.TerminalNodeImpl):
+            if self.firstTerminal == False:
               self.start = child.symbol.stop+1
               self.firstTerminal = True
            
