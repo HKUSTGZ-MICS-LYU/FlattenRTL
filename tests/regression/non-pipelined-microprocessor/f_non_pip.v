@@ -1,5 +1,5 @@
-module main (
-  input clk) ; 
+module main (clk) ; 
+  input clk; 
    wire [0:4] aluOut ;  
    wire [0:4] memOut1 ;  
    wire [0:4] memOut2 ;  
@@ -19,15 +19,15 @@ module main (
   pc PC(clk,opcode,memOut1,memOut2,progCntr); 
 endmodule
  
-module memory (
-  input clk,
-  input [0:2] opcode,
-  input [0:2] readLoc1,
-  input [0:2] readLoc2,
-  input [0:2] writeLoc,
-  input [0:4] data,
-  output [0:4] memOut1,
-  output [0:4] memOut2) ; 
+module memory (clk,opcode,readLoc1,readLoc2,writeLoc,data,memOut1,memOut2) ; 
+  input clk; 
+  input [0:2] opcode; 
+  input [0:2] readLoc1; 
+  input [0:2] readLoc2; 
+  input [0:2] writeLoc; 
+  input [0:4] data; 
+  output [0:4] memOut1; 
+  output [0:4] memOut2; 
    wire [0:4] memOut1 ;  
    wire [0:4] memOut2 ;  
    reg [0:4] m0 ;  
@@ -105,10 +105,10 @@ module memory (
   
 endmodule
  
-module program (
-  input clk,
-  input [0:2] progCntr,
-  output [0:11] instruction) ; 
+module program (clk,progCntr,instruction) ; 
+  input clk; 
+  input [0:2] progCntr; 
+  output [0:11] instruction; 
    wire [0:11] instr0 ;  
    wire [0:11] instr1 ;  
    wire [0:11] instr2 ;  
@@ -128,49 +128,50 @@ module program (
   assign instruction=(progCntr==0)?instr0:(progCntr==1)?instr1:(progCntr==2)?instr2:(progCntr==3)?instr3:(progCntr==4)?instr4:(progCntr==5)?instr5:(progCntr==6)?instr6:instr7; 
 endmodule
  
-module decodeOpcd (
-  input clk,
-  input [0:11] instruction,
-  output [0:2] opcode) ; 
+module decodeOpcd (clk,instruction,opcode) ; 
+  input clk; 
+  input [0:11] instruction; 
+  output [0:2] opcode; 
   assign opcode=instruction[0:2]; 
 endmodule
  
-module decodeLoc1 (
-  input clk,
-  input [0:11] instruction,
-  output [0:2] readLoc1) ; 
+module decodeLoc1 (clk,instruction,readLoc1) ; 
+  input clk; 
+  input [0:11] instruction; 
+  output [0:2] readLoc1; 
   assign readLoc1=instruction[3:5]; 
 endmodule
  
-module decodeLoc2 (
-  input clk,
-  input [0:11] instruction,
-  output [0:2] readLoc2) ; 
+module decodeLoc2 (clk,instruction,readLoc2) ; 
+  input clk; 
+  input [0:11] instruction; 
+  output [0:2] readLoc2; 
   assign readLoc2=instruction[6:8]; 
 endmodule
  
-module decodeLoc3 (
-  input clk,
-  input [0:11] instruction,
-  output [0:2] writeLoc) ; 
+module decodeLoc3 (clk,instruction,writeLoc) ; 
+  input clk; 
+  input [0:11] instruction; 
+  output [0:2] writeLoc; 
   assign writeLoc=instruction[9:11]; 
 endmodule
  
-module alu (
-  input clk,
-  input [0:2] opcode,
-  input [0:4] operand1,
-  input [0:4] operand2,
-  output [0:4] aluOut) ; 
-  assign aluOut=(opcode==0)?(operand1+operand2):(opcode==3)?(operand1^operand2):(opcode==1)?(operand1&operand2):0; 
+module alu (clk,opcode,operand1,operand2,aluOut) ; 
+  input clk; 
+  input [0:2] opcode; 
+  input [0:4] operand1; 
+  input [0:4] operand2; 
+  output [0:4] aluOut; 
+  assign aluOut=(opcode==0)?(operand1+operand2):(opcode==3)?(operand1^operand2):(opcode==2)?(operand1&operand2):0; 
 endmodule
  
-module pc (
-  input clk,
-  input [0:2] opcode,
-  input [0:4] operand1,
-  input [0:4] operand2,
-  output reg  [0:2] progCntr) ; initial
+module pc (clk,opcode,operand1,operand2,progCntr) ; 
+  input clk; 
+  input [0:2] opcode; 
+  input [0:4] operand1; 
+  input [0:4] operand2; 
+  output [0:2] progCntr; 
+   reg [0:2] progCntr ;  initial
     begin 
       progCntr =0;
     end  

@@ -36,7 +36,7 @@
 
 
   
-   parameter              CMD_LINE0      = 8'h00;
+                 CMD_LINE0      = 8'h00;
    parameter              CMD_LINE1      = 8'h04;
    parameter              CMD_LINE2      = 8'h08;
    parameter              CMD_LINE3      = 8'h0C;

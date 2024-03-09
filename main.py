@@ -9,18 +9,18 @@ start_time = time.time()
 start_memory = psutil.Process(os.getpid()).memory_info().rss / (1024 * 1024)
 # formatted part
 
-path = 'tests/regression/mips'
-inputfile = '/mips_16_core_top.v'
-outputfile = '/f_mips.v'
-top_module = 'mips_16_core_top'
+path = 'tests/regression/or1200-master'
+inputfile = '/or1200_top.v'
+outputfile = '/f_or1200_top.v'
+top_module = 'or1200_top'
 inputpath = path+inputfile
 formatpath = path+outputfile
 
-if os.path.exists(formatpath):
-   os.remove(path=formatpath)
-with open(path+inputfile, 'r') as f:
-    design = f.read()
-    preprocess.formatter_file(design, formatpath)
+# if os.path.exists(formatpath):
+#    os.remove(path=formatpath)
+# with open(path+inputfile, 'r') as f:
+#     design = f.read()
+#     preprocess.formatter_file(design, formatpath)
     # copy the file to formatpath
     # with open(formatpath, 'w') as f:
     #     f.write(design)

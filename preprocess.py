@@ -189,7 +189,7 @@ def formatter_file(design, outputpath):
             self.module = None
          
          def is_implicit_port_definition(self, ctx:VerilogParser.Module_declarationContext):
-            return ctx.list_of_port_declarations().port_declaration() == None
+            return ctx.list_of_port_declarations().port_declaration() == []
 
          def modifyModule_declaration(self, ctx:VerilogParser.Module_declarationContext):
             if self.is_implicit_port_definition(ctx):
@@ -459,6 +459,8 @@ def formatter_file(design, outputpath):
                   # Module declaration
                   if isinstance(child, VerilogParser.Module_declarationContext):
                      child.start.text = chr(31) + ' ' * indent + child.start.text 
+                  if child.getText()=='?':
+                     child.symbol.text = ' '+ child.symbol.text + ' '
          
 
                   self._traverse_children(child,indent+1)

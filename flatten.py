@@ -288,20 +288,24 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
         self.stop = None
         self.indent = 2
         self.cur_prefixs_index = cur_prefixs_index
+        self.is_no_port_parameter = False
+        self.port_parameter_flag = False
+        
     
-    def parents_is_parameter_port_list(self,ctx):
+    def is_parents_parameter_port_list(self,ctx):
       if ctx is None:
         return False
 
       if not isinstance(ctx, VerilogParser.Module_parameter_port_listContext):
-        return self.parents_is_parameter_port_list(ctx.parentCtx)
+        return self.is_parents_parameter_port_list(ctx.parentCtx)
       else:
         return True
       
 
     "This function is used to traverse the tree and change the name of the instance"
     def _traverse_children(self,ctx):  
-      if self.parents_is_parameter_port_list(ctx):
+      if self.is_parents_parameter_port_list(ctx):
+        self.port_parameter_flag = True
         try:
           ctx.start.text = ''
           ctx.stop.text = ''
@@ -319,12 +323,17 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
               elif isinstance(child.parentCtx.parentCtx, VerilogParser.Port_identifierContext):
                   pass
               else:
+                  # 
                   if len(cur_dict_of_parameters) != 0:
-                    if cur_dict_of_parameters[cur_prefixs[self.cur_prefixs_index]].get(child.getText()) is not None:
-                      child.start.text = cur_dict_of_parameters[cur_prefixs[self.cur_prefixs_index]][child.start.text]
+                    if self.port_parameter_flag:
+                      if cur_dict_of_parameters[cur_prefixs[self.cur_prefixs_index]].get(child.getText()) is not None:
+                        child.start.text = cur_dict_of_parameters[cur_prefixs[self.cur_prefixs_index]][child.start.text]
+                    else:
+                      self.is_no_port_parameter = True
                       continue
-                    child.start.text = ' ' + cur_prefixs[self.cur_prefixs_index] + '_' + child.start.text + ' '
+                  child.start.text = ' ' + cur_prefixs[self.cur_prefixs_index] + '_' + child.start.text + ' '
           self._traverse_children(child)
+    
 
     def visitModule_declaration(self, ctx: VerilogParser.Module_declarationContext):
         module_name = ctx.module_identifier().getText()
@@ -334,12 +343,19 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
           self.inst_module_node = ctx        
           self._traverse_children(self.inst_module_node)
 
+          # This is used to handle special case that the parameter is not in the port list
+          # For example, Adder adder #(.E(1)) 
+          # module Adder(input a, input b, output c);
+          # parameter E = 0;
+
   inst_module_design_trees = []
   inst_module_nodes = []
+  is_no_port_parameter = False
   for k in range(0,len(cur_prefixs)):
      tmp_inst_module_design = Design2Tree(inst_module_design)
      visitor = InstModuleVisitor(k)
      visitor.visit(tmp_inst_module_design)
+     is_no_port_parameter = visitor.is_no_port_parameter
      inst_module_design_trees.append(tmp_inst_module_design)
      inst_module_nodes.append(visitor.inst_module_node)
 
