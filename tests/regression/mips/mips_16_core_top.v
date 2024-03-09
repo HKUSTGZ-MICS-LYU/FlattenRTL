@@ -8,9 +8,62 @@
  * Revise history:
  *     
  ***************************************************/
-
-
-module alu
+`timescale 1ns/1ps
+/***************************************************
+ * Module: 
+ * Project: mips_16
+ * Author: 
+ * Description: 
+ *     
+ *
+ * Revise history:
+ *     
+ ***************************************************/
+ 
+ 
+ 	
+	//`define CODE_FOR_SYNTHESIS				// uncomment this macro will remove all non-systhesis code
+	
+	
+	
+	
+	
+ 
+	/************** Operation Code in instructions ****************/
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/************** ALU operation command ****************/
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/************** Branch condition code ****************/
+	
+	//`define BRANCH_GT		3'b001
+	//`define BRANCH_LE		3'b010
+	
+ 
+ 
+ 
+ module alu
 (
 	input		[15:0]	a,		//src1
 	input		[15:0]	b,		//src2
@@ -41,13 +94,15 @@ module alu
 			default	:
 				begin
 					r = 0;
+
+					$display("ERROR: Unknown alu cmd: %b \n", cmd);
+					//$stop;
+
 				end
 		endcase
 	end
 	
-endmodule 
-
-/***************************************************
+endmodule /***************************************************
  * Module: EX_stage
  * Project: mips_16
  * Author: fzy
@@ -57,9 +112,62 @@ endmodule
  * Revise history:
  *     
  ***************************************************/
+`timescale 1ns/1ps
+/***************************************************
+ * Module: 
+ * Project: mips_16
+ * Author: 
+ * Description: 
+ *     
+ *
+ * Revise history:
+ *     
+ ***************************************************/
+ 
 
 
-module EX_stage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ module EX_stage
 (
 	input					clk,
 	input					rst,
@@ -106,8 +214,6 @@ module EX_stage
 	/********************** to hazard detection unit *********************/
 	assign ex_op_dest = pipeline_reg_in[3:1];
 endmodule 
-
-
 /***************************************************
  * Module: instruction_mem
  * Project: mips_16
@@ -118,53 +224,195 @@ endmodule
  * Revise history:
  *     
  ***************************************************/
+`timescale 1ns/1ps
+/***************************************************
+ * Module: 
+ * Project: mips_16
+ * Author: 
+ * Description: 
+ *     
+ *
+ * Revise history:
+ *     
+ ***************************************************/
+ 
 
-	
-module instruction_mem		// a synthesisable rom implementation
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+module instruction_mem		// a rtl simulation rom, rom initial code can be found in the testbench
 (
 	input					clk,		// asynchronized!!
 	input	[8-1:0]	pc,
 	
-	output reg	[15:0]		instruction
+	output	[15:0]			instruction
 );
+	
+	reg	[15:0] rom [2**8-1 : 0];
 	
 	wire [8-1 : 0] rom_addr = pc[8-1 : 0];
 	
-	// ASM code in rom:
-	// L1:	ADDI		R1,R0,8
-	// 		ADDI		R2,R1,8
-	// 		ADDI		R3,R2,8
-	// 		ADD			R4,R2,R3
-	// 		ST			R4,R1,2
-	// 		LD			R5,R1,2
-	// 		SUB			R6,R4,R5
-	// 		BZ			R6,L1
-	// 		ADDI		R7,R7,1
-	always @(*)
-		case (rom_addr)
-			4'b0000: instruction = 16'b1001001000001000;
-			4'b0001: instruction = 16'b1001010001001000;
-			4'b0010: instruction = 16'b1001011010001000;
-			4'b0011: instruction = 16'b0001100010011000;
-			4'b0100: instruction = 16'b1011100001000010;
-			4'b0101: instruction = 16'b1010101001000010;
-			4'b0110: instruction = 16'b0010110100101000;
-			4'b0111: instruction = 16'b1100000110111000;
-			4'b1000: instruction = 16'b1001111111000001;
-			4'b1001: instruction = 16'b0000000000000000;
-			4'b1010: instruction = 16'b0000000000000000;
-			4'b1011: instruction = 16'b0000000000000000;
-			4'b1100: instruction = 16'b0000000000000000;
-			4'b1101: instruction = 16'b0000000000000000;
-			4'b1110: instruction = 16'b0000000000000000;
-			4'b1111: instruction = 16'b0000000000000000;
-			default: instruction = 16'b0000000000000000;
-	 endcase
+	// always @ (posedge clk) begin
+	// always @ (*) begin
+	    // instruction = rom[rom_addr];
+	// end
+	
+	assign instruction = rom[rom_addr];
+	
 	
 endmodule 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/***************************************************
+ * Module: MEM_stage
+ * Project: mips_16
+ * Author: fzy
+ * Description: 
+ *     a ram
+ *
+ * Revise history:
+ *     
+ ***************************************************/
+`timescale 1ns/1ps
+/***************************************************
+ * Module: 
+ * Project: mips_16
+ * Author: 
+ * Description: 
+ *     
+ *
+ * Revise history:
+ *     
+ ***************************************************/
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 module MEM_stage
 (
 	input					clk,
@@ -214,17 +462,126 @@ module MEM_stage
 	/********************** to hazard detection unit *********************/
 	assign mem_op_dest = pipeline_reg_in[3:1];
 
-endmodule 
-
- 	
-
-	
-
-
+endmodule /***************************************************
+ * Module: 
+ * Project: mips_16
+ * Author: 
+ * Description: 
+ *     
+ *
+ * Revise history:
+ *     
+ ***************************************************/
  
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ /***************************************************
+ * Module: ID_stage
+ * Project: mips_16
+ * Author: fzy
+ * Description: 
+ *     IR, and instruction decoding
+ *
+ * Revise history:
+ *     
+ ***************************************************/
+`timescale 1ns/1ps
+/***************************************************
+ * Module: 
+ * Project: mips_16
+ * Author: 
+ * Description: 
+ *     
+ *
+ * Revise history:
+ *     
+ ***************************************************/
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 module ID_stage
 (
 	input					clk,
@@ -319,7 +676,7 @@ module ID_stage
 		end
 		else begin
 			case( ir_op_code_with_bubble )
-				8	:
+				4'b0000	:
 					begin
 						write_back_en			= 0;		// S3
 						write_back_result_mux	= 1'bx;		// S1
@@ -417,6 +774,9 @@ module ID_stage
 						ex_alu_cmd				= 3'bxxx;	// S2
 						alu_src2_mux			= 1'bx;		// S4
 
+						$display("ERROR: Unknown Instruction: %b", ir_op_code_with_bubble);
+						//$stop;
+
 					end
 			endcase
 		end
@@ -474,7 +834,11 @@ module ID_stage
 					
 				default:
 					begin
-						branch_taken = 0;				
+						branch_taken = 0;
+
+						$display("ERROR: Unknown branch condition %b, in branch instruction %b \n", ir_dest_with_bubble, ir_op_code_with_bubble);
+						//$stop;
+					
 					end
 			endcase
 		end
@@ -488,17 +852,79 @@ module ID_stage
 	/********************** to hazard detection unit *********************/
 	assign decoding_op_src1 = ir_src1;
 	assign decoding_op_src2 = (
-					ir_op_code == 8 	||
+					ir_op_code == 4'b0000 	||
 					ir_op_code == 4'b1001 	||
 					ir_op_code == 4'b1010 	||
 					ir_op_code == 4'b1100 	
 					)?
 					3'b000 : ir_src2;
 	
-endmodule 
+endmodule /***************************************************
+ * Module: IF_stage
+ * Project: mips_16
+ * Author: fzy
+ * Description: 
+ *     PC, IMEM, 
+ *
+ * Revise history:
+ *     
+ ***************************************************/
+`timescale 1ns/1ps
+/***************************************************
+ * Module: 
+ * Project: mips_16
+ * Author: 
+ * Description: 
+ *     
+ *
+ * Revise history:
+ *     
+ ***************************************************/
+ 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 
 module IF_stage
 (
@@ -542,9 +968,72 @@ endmodule
 
 
 
+/***************************************************
+ * Module: WB_stage
+ * Project: mips_16
+ * Author: fzy
+ * Description: 
+ *     Write back stage
+ *
+ * Revise history:
+ *     
+ ***************************************************/
+`timescale 1ns/1ps
+/***************************************************
+ * Module: 
+ * Project: mips_16
+ * Author: 
+ * Description: 
+ *     
+ *
+ * Revise history:
+ *     
+ ***************************************************/
+ 
 
 
-module WB_stage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ module WB_stage
 (
 	//input					clk,
 	
@@ -576,9 +1065,7 @@ module WB_stage
 	assign wb_op_dest = pipeline_reg_in[3:1];
 	
 	
-endmodule 
-
-/***************************************************
+endmodule /***************************************************
  * Module: hazard_detection_unit
  * Project: mips_16
  * Author: fzy
@@ -635,10 +1122,77 @@ module hazard_detection_unit
 	
 	
 	
-endmodule 
+endmodule /***************************************************
+ * Module: mips_16_core_top
+ * Project: mips_16
+ * Author: fzy
+ * Description: 
+ *     top module of mips_16 cpu core. Technical details:
+ *			1.	16-bit data width
+ *			2.	classic 5-stage static pipeline, 1 branch delay slot, theoretical CPI is 1.0
+ *			3.	pipeline is able to detect and prevent RAW hazards, no forwarding logic
+ *			4.	8 general purpose register (reg 0 is special, according to mips architecture)
+ *			5.	up to now supports 13 instrcutions, see ./doc/instruction_set.txt for details
+ *
+ * Revise history:
+ *     
+ ***************************************************/
+`timescale 1ns/1ps
+/***************************************************
+ * Module: 
+ * Project: mips_16
+ * Author: 
+ * Description: 
+ *     
+ *
+ * Revise history:
+ *     
+ ***************************************************/
+ 
 
 
-module mips_16_core_top
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ module mips_16_core_top
 (
 	input						clk,
 	input						rst,
@@ -746,7 +1300,74 @@ endmodule
 
 
 
-module data_mem
+
+/***************************************************
+ * Module: data_mem
+ * Project: mips_16
+ * Author: fzy
+ * Description: 
+ *     a ram implementation, 16bit word width, address width can be configured be user
+ *		further will be able to read external memory
+ *
+ * Revise history:
+ *     
+ ***************************************************/
+`timescale 1ns/1ps
+/***************************************************
+ * Module: 
+ * Project: mips_16
+ * Author: 
+ * Description: 
+ *     
+ *
+ * Revise history:
+ *     
+ ***************************************************/
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ module data_mem
 (
 	input					clk,
 	
@@ -772,8 +1393,76 @@ module data_mem
 
 	assign mem_read_data = ram[ram_addr]; 
    
-endmodule 
+endmodule /***************************************************
+ * Module: register_file
+ * Project: mips_16
+ * Author: fzy
+ * Description: 
+ * 	a 8-entry 16-bit register file, 
+ *	with 1 synchronized write port and 2 asynchonized read port
+  *
+ *	NOTE: for Register 0, read data from it will always be 0, 
+ *		and write operatioins will also be discarded.
+ *	
+ * Revise history:
+ *     
+ ***************************************************/
+`timescale 1ns/1ps
+/***************************************************
+ * Module: 
+ * Project: mips_16
+ * Author: 
+ * Description: 
+ *     
+ *
+ * Revise history:
+ *     
+ ***************************************************/
+ 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 module register_file
 (
 	input				clk,
@@ -839,4 +1528,3 @@ module register_file
 	assign reg_read_data_2 = ( reg_read_addr_2 == 0)? 15'b0 : reg_array[reg_read_addr_2];
 
 endmodule 
-

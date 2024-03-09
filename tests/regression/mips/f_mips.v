@@ -1,4 +1,8 @@
-module alu (a,b,cmd,r) ; 
+module alu (
+  input [15:0] a,
+  input [15:0] b,
+  input [2:0] cmd,
+  output reg  [15:0] r) ; 
   always @(*)
        begin 
          case (cmd)
@@ -22,14 +26,19 @@ module alu (a,b,cmd,r) ;
              r ={16'b0,a}>>b;
           default :
              begin 
-               r =0;
+               r =0;$display("ERROR: Unknown alu cmd: %b \n",cmd);
              end 
          endcase 
        end
   
 endmodule
  
-module EX_stage (clk,rst,pipeline_reg_in,pipeline_reg_out,ex_op_dest) ; 
+module EX_stage (
+  input clk,
+  input rst,
+  input [56:0] pipeline_reg_in,
+  output reg  [37:0] pipeline_reg_out,
+  output [2:0] ex_op_dest) ; 
    wire [2:0] alu_cmd=pipeline_reg_in[56:54] ;  
    wire [15:0] alu_src1=pipeline_reg_in[53:38] ;  
    wire [15:0] alu_src2=pipeline_reg_in[37:22] ;  
@@ -51,49 +60,21 @@ module EX_stage (clk,rst,pipeline_reg_in,pipeline_reg_out,ex_op_dest) ;
   assign ex_op_dest=pipeline_reg_in[3:1]; 
 endmodule
  
-module instruction_mem (clk,pc,instruction) ; 
+module instruction_mem (
+  input clk,
+  input [8-1:0] pc,
+  output [15:0] instruction) ; 
+   reg [15:0] rom[2**8-1:0] ;  
    wire [8-1:0] rom_addr=pc[8-1:0] ;  
-  always @(*)
-       case (rom_addr)
-        4 'b0000:
-           instruction =16'b1001001000001000;
-        4 'b0001:
-           instruction =16'b1001010001001000;
-        4 'b0010:
-           instruction =16'b1001011010001000;
-        4 'b0011:
-           instruction =16'b0001100010011000;
-        4 'b0100:
-           instruction =16'b1011100001000010;
-        4 'b0101:
-           instruction =16'b1010101001000010;
-        4 'b0110:
-           instruction =16'b0010110100101000;
-        4 'b0111:
-           instruction =16'b1100000110111000;
-        4 'b1000:
-           instruction =16'b1001111111000001;
-        4 'b1001:
-           instruction =16'b0000000000000000;
-        4 'b1010:
-           instruction =16'b0000000000000000;
-        4 'b1011:
-           instruction =16'b0000000000000000;
-        4 'b1100:
-           instruction =16'b0000000000000000;
-        4 'b1101:
-           instruction =16'b0000000000000000;
-        4 'b1110:
-           instruction =16'b0000000000000000;
-        4 'b1111:
-           instruction =16'b0000000000000000;
-        default :
-           instruction =16'b0000000000000000;
-       endcase
-  
+  assign instruction=rom[rom_addr]; 
 endmodule
  
-module MEM_stage (clk,rst,pipeline_reg_in,pipeline_reg_out,mem_op_dest) ; 
+module MEM_stage (
+  input clk,
+  input rst,
+  input [37:0] pipeline_reg_in,
+  output reg  [36:0] pipeline_reg_out,
+  output [2:0] mem_op_dest) ; 
    wire [15:0] ex_alu_result=pipeline_reg_in[37:22] ;  
    wire mem_write_en=pipeline_reg_in[21] ;  
    wire [15:0] mem_write_data=pipeline_reg_in[20:5] ;  
@@ -116,7 +97,20 @@ module MEM_stage (clk,rst,pipeline_reg_in,pipeline_reg_out,mem_op_dest) ;
   assign mem_op_dest=pipeline_reg_in[3:1]; 
 endmodule
  
-module ID_stage (clk,rst,instruction_decode_en,pipeline_reg_out,instruction,branch_offset_imm,branch_taken,reg_read_addr_1,reg_read_addr_2,reg_read_data_1,reg_read_data_2,decoding_op_src1,decoding_op_src2) ; 
+module ID_stage (
+  input clk,
+  input rst,
+  input instruction_decode_en,
+  output reg  [56:0] pipeline_reg_out,
+  input [15:0] instruction,
+  output [5:0] branch_offset_imm,
+  output reg  branch_taken,
+  output [2:0] reg_read_addr_1,
+  output [2:0] reg_read_addr_2,
+  input [15:0] reg_read_data_1,
+  input [15:0] reg_read_data_2,
+  output [2:0] decoding_op_src1,
+  output [2:0] decoding_op_src2) ; 
    reg [15:0] instruction_reg ;  
    wire [3:0] ir_op_code ;  
    wire [2:0] ir_dest ;  
@@ -170,7 +164,7 @@ module ID_stage (clk,rst,instruction_decode_en,pipeline_reg_out,instruction,bran
           else 
             begin 
               case (ir_op_code_with_bubble)
-               8 :
+               4 'b0000:
                   begin 
                     write_back_en =0;
                     write_back_result_mux =1'bx;
@@ -266,7 +260,7 @@ module ID_stage (clk,rst,instruction_decode_en,pipeline_reg_out,instruction,bran
                     write_back_en =0;
                     write_back_result_mux =1'bx;
                     ex_alu_cmd =3'bxxx;
-                    alu_src2_mux =1'bx;
+                    alu_src2_mux =1'bx;$display("ERROR: Unknown Instruction: %b",ir_op_code_with_bubble);
                   end 
               endcase 
             end 
@@ -307,7 +301,7 @@ module ID_stage (clk,rst,instruction_decode_en,pipeline_reg_out,instruction,bran
                   end 
                default :
                   begin 
-                    branch_taken =0;
+                    branch_taken =0;$display("ERROR: Unknown branch condition %b, in branch instruction %b \n",ir_dest_with_bubble,ir_op_code_with_bubble);
                   end 
               endcase 
             end 
@@ -319,10 +313,17 @@ module ID_stage (clk,rst,instruction_decode_en,pipeline_reg_out,instruction,bran
   
   assign branch_offset_imm=ir_imm; 
   assign decoding_op_src1=ir_src1; 
-  assign decoding_op_src2=(ir_op_code==8||ir_op_code==4'b1001||ir_op_code==4'b1010||ir_op_code==4'b1100)?3'b000:ir_src2; 
+  assign decoding_op_src2=(ir_op_code==4'b0000||ir_op_code==4'b1001||ir_op_code==4'b1010||ir_op_code==4'b1100)?3'b000:ir_src2; 
 endmodule
  
-module IF_stage (clk,rst,instruction_fetch_en,branch_offset_imm,branch_taken,pc,instruction) ; 
+module IF_stage (
+  input clk,
+  input rst,
+  input instruction_fetch_en,
+  input [5:0] branch_offset_imm,
+  input branch_taken,
+  output reg  [8-1:0] pc,
+  output [15:0] instruction) ; 
   always @(  posedge clk or  posedge rst)
        begin 
          if (rst)
@@ -344,7 +345,12 @@ module IF_stage (clk,rst,instruction_fetch_en,branch_offset_imm,branch_taken,pc,
   instruction_mem imem(.clk(clk),.pc(pc),.instruction(instruction)); 
 endmodule
  
-module WB_stage (pipeline_reg_in,reg_write_en,reg_write_dest,reg_write_data,wb_op_dest) ; 
+module WB_stage (
+  input [36:0] pipeline_reg_in,
+  output reg_write_en,
+  output [2:0] reg_write_dest,
+  output [15:0] reg_write_data,
+  output [2:0] wb_op_dest) ; 
    wire [15:0] ex_alu_result=pipeline_reg_in[36:21] ;  
    wire [15:0] mem_read_data=pipeline_reg_in[20:5] ;  
    wire write_back_en=pipeline_reg_in[4] ;  
@@ -356,7 +362,13 @@ module WB_stage (pipeline_reg_in,reg_write_en,reg_write_dest,reg_write_data,wb_o
   assign wb_op_dest=pipeline_reg_in[3:1]; 
 endmodule
  
-module hazard_detection_unit (decoding_op_src1,decoding_op_src2,ex_op_dest,mem_op_dest,wb_op_dest,pipeline_stall_n) ; 
+module hazard_detection_unit (
+  input [2:0] decoding_op_src1,
+  input [2:0] decoding_op_src2,
+  input [2:0] ex_op_dest,
+  input [2:0] mem_op_dest,
+  input [2:0] wb_op_dest,
+  output reg  pipeline_stall_n) ; 
   always @(*)
        begin 
          pipeline_stall_n =1;
@@ -368,7 +380,10 @@ module hazard_detection_unit (decoding_op_src1,decoding_op_src2,ex_op_dest,mem_o
   
 endmodule
  
-module mips_16_core_top (clk,rst,pc) ; 
+module mips_16_core_top (
+  input clk,
+  input rst,
+  output [8-1:0] pc) ; 
    wire pipeline_stall_n ;  
    wire [5:0] branch_offset_imm ;  
    wire branch_taken ;  
@@ -397,7 +412,12 @@ module mips_16_core_top (clk,rst,pc) ;
   hazard_detection_unit hazard_detection_unit_inst(.decoding_op_src1(decoding_op_src1),.decoding_op_src2(decoding_op_src2),.ex_op_dest(ex_op_dest),.mem_op_dest(mem_op_dest),.wb_op_dest(wb_op_dest),.pipeline_stall_n(pipeline_stall_n)); 
 endmodule
  
-module data_mem (clk,mem_access_addr,mem_write_data,mem_write_en,mem_read_data) ; 
+module data_mem (
+  input clk,
+  input [15:0] mem_access_addr,
+  input [15:0] mem_write_data,
+  input mem_write_en,
+  output [15:0] mem_read_data) ; 
    reg [15:0] ram[(2**8)-1:0] ;  
    wire [8-1:0] ram_addr=mem_access_addr[8-1:0] ;  
   always @( posedge clk)
@@ -407,7 +427,16 @@ module data_mem (clk,mem_access_addr,mem_write_data,mem_write_en,mem_read_data) 
   assign mem_read_data=ram[ram_addr]; 
 endmodule
  
-module register_file (clk,rst,reg_write_en,reg_write_dest,reg_write_data,reg_read_addr_1,reg_read_data_1,reg_read_addr_2,reg_read_data_2) ; 
+module register_file (
+  input clk,
+  input rst,
+  input reg_write_en,
+  input [2:0] reg_write_dest,
+  input [15:0] reg_write_data,
+  input [2:0] reg_read_addr_1,
+  output [15:0] reg_read_data_1,
+  input [2:0] reg_read_addr_2,
+  output [15:0] reg_read_data_2) ; 
    reg [15:0] reg_array[7:0] ;  
   always @(  posedge clk or  posedge rst)
        begin 

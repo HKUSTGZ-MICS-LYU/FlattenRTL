@@ -9,7 +9,7 @@
  *     
  ***************************************************/
 `timescale 1ns/1ps
-`include "mips_16_defs.v"
+`include "./src/mips_16_defs.v"
 module alu
 (
 	input		[15:0]	a,		//src1

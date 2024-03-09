@@ -14,7 +14,7 @@
  *     
  ***************************************************/
 `timescale 1ns/1ps
-`include "mips_16_defs.v"
+`include "./src/mips_16_defs.v"
 module mips_16_core_top
 (
 	input						clk,

@@ -9,7 +9,7 @@
  *     
  ***************************************************/
 `timescale 1ns/1ps
-`include "mips_16_defs.v"
+`include "./src/mips_16_defs.v"
  
 `ifdef USE_SIMULATION_CODE
 module instruction_mem		// a rtl simulation rom, rom initial code can be found in the testbench

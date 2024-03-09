@@ -9,10 +9,10 @@ start_time = time.time()
 start_memory = psutil.Process(os.getpid()).memory_info().rss / (1024 * 1024)
 # formatted part
 
-path = 'tests/regression/adder_param'
-inputfile = '/adder.v'
-outputfile = '/f_adder.v'
-top_module = 'TopModule'
+path = 'tests/regression/mips'
+inputfile = '/mips_16_core_top.v'
+outputfile = '/f_mips.v'
+top_module = 'mips_16_core_top'
 inputpath = path+inputfile
 formatpath = path+outputfile
 

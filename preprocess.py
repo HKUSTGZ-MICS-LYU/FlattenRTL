@@ -188,12 +188,15 @@ def formatter_file(design, outputpath):
          def __init__(self):
             self.module = None
          
+         def is_implicit_port_definition(self, ctx:VerilogParser.Module_declarationContext):
+            return ctx.list_of_port_declarations().port_declaration() == None
 
          def modifyModule_declaration(self, ctx:VerilogParser.Module_declarationContext):
-            self._modify_module_declaration(ctx)
-            self._remove_signal_declaration(ctx)
-            self._add_block_content(ctx)
-            self._remove_block_content(ctx)
+            if self.is_implicit_port_definition(ctx):
+               self._modify_module_declaration(ctx)
+               self._remove_signal_declaration(ctx)
+               self._add_block_content(ctx)
+               self._remove_block_content(ctx)
             self.module = ctx
          
          def _modify_module_declaration(self,ctx:VerilogParser.Module_declarationContext):  

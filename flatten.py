@@ -412,7 +412,7 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
             else:
               self.text += char
               
-    def _traverse_children(self,ctx,indent = 0):  
+    def _traverse_children(self,ctx,indent = 1):  
       if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
         pass
       else:
@@ -444,6 +444,8 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
             child.start.text = ' ' + child.start.text + ' '
           # if isinstance(child, VerilogParser.Event_expressionContext) and child.getText() == 'negedge':
           #   child.symbol.text = ' ' + child.symbol.text + ' '
+          # if isinstance(child, VerilogParser.Event_expressionContext) and child.getText() == 'posedge':
+          #   child.symbol.text = ' ' + child.symbol.text + ' '
           # Case block
           if isinstance(child, VerilogParser.Case_statementContext):
             child.start.text = chr(31) + ' ' * indent + child.start.text + ' '
@@ -456,9 +458,15 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
           if isinstance(child, VerilogParser.Conditional_statementContext):
             child.start.text = chr(31) + ' ' * indent + child.start.text + ' '
             # child.stop.text = chr(31) + ' ' * indent + child.stop.text + ' '
-          if isinstance(child, antlr4.tree.Tree.TerminalNodeImpl) and child.symbol.text == 'else':
+          if isinstance(child, antlr4.tree.Tree.TerminalNodeImpl) and (child.symbol.text == 'else' or child.symbol.text == 'or'):
             child.symbol.text = chr(31) + ' ' * indent + child.symbol.text + ' '
-
+          # if isinstance(child, VerilogParser.List_of_variable_identifiersContext) \
+          #   or isinstance(child, VerilogParser.List_of_net_identifiersContext)\
+          #     or isinstance(child, VerilogParser.net_identifiersContext):
+          #   child.start.text = ' '+ child.start.text + ' '
+          # Simple identifier
+          if isinstance(child, VerilogParser.Simple_identifierContext):
+            child.start.text = ' ' + child.start.text + ' '
           # Nonblocking assignment
           if isinstance(child, VerilogParser.Nonblocking_assignmentContext):
             child.start.text = chr(31) + ' ' * indent + child.start.text + ' '
