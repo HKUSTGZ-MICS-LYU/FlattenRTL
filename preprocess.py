@@ -20,11 +20,11 @@ def Port2Tree(Design):
    tree = parser.list_of_port_declarations()
    return tree
 
-def Paramter2Tree(Design):
+def Parameter2Tree(Design):
    lexer = VerilogLexer(InputStream(Design))
    stream = CommonTokenStream(lexer)
    parser = VerilogParser(stream)
-   tree = parser.module_item()
+   tree = parser.module_parameter_port_list()
    return tree
 
 def Module2Tree(Design):
@@ -38,15 +38,47 @@ def Module2Tree(Design):
 def formatter_file(design, outputpath):
    def formatter_design(tree):  
 
+      
       "This function is used to get the port list of the module"
       class MyModuleVisitor(VerilogParserVisitor):
+         class myParameterVisitor(VerilogParserVisitor):
+            def __init__(self):
+               self.parameter = []
+
+            def empty_all_text(self,ctx):
+               if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
+                  try:
+                     ctx.start.text = ''
+                     ctx.stop.text = ''
+                  except:
+                     ctx.symbol.text = ''
+                     pass
+               else:
+                  for child in ctx.getChildren():
+                     self.empty_all_text(child)
+
+               
+            def visitParameter_declaration(self, ctx: VerilogParser.Parameter_declarationContext):
+               if isinstance(ctx.parentCtx, VerilogParser.Module_declarationContext):
+                  pass
+               else:
+                  param_assign = ctx.list_of_param_assignments().param_assignment()[0]
+                  self.parameter.append([param_assign.getChild(0).getText(), param_assign.getChild(2).getText()])
+                  self.empty_all_text(ctx.parentCtx)
+
          def __init__(self):
             self.module_port = {}
             self.block_port = {}
             self.block_parameter = []
             self.module = None
+            self.non_port_parameter = []
 
          def visitModule_declaration(self, ctx:VerilogParser.Module_declarationContext):
+            # 1. Get the all parameter assignment, we assume the parameter assignment is all port definition or block definition
+            parameter_visitor = self.myParameterVisitor()
+            parameter_visitor.visit(ctx)
+            self.non_port_parameter = parameter_visitor.parameter
+
             self._visit_module_declaration(ctx)
             self.module = ctx
                
@@ -176,12 +208,15 @@ def formatter_file(design, outputpath):
                   self.block_port[ctx.list_of_block_variable_identifiers().getText()]['data_type'] = ctx.SIGNED().getText()
 
 
+      # Module Declaration Visitor
       visitor = MyModuleVisitor()
       visitor.visitModule_declaration(tree)
       module_port = visitor.module_port
       remove_port_list = module_port.copy()
       block_parameter = visitor.block_parameter
       block_port = visitor.block_port
+      non_port_parameter = visitor.non_port_parameter
+
 
       "This function is used to remove the port and define the port in the list"
       class PortModifyVisitor(VerilogParserVisitor):
@@ -190,13 +225,26 @@ def formatter_file(design, outputpath):
          
          def is_implicit_port_definition(self, ctx:VerilogParser.Module_declarationContext):
             return ctx.list_of_port_declarations().port_declaration() == []
-
+         
+         def _insert_parameter(self, ctx:VerilogParser.Module_declarationContext):
+            parameter = '#(\n'
+            if non_port_parameter != []:
+               for i , item in enumerate(non_port_parameter):
+                  parameter += "parameter  "+item[0] + '=' + item[1]
+                  if i == len(non_port_parameter) - 1:
+                     parameter += '\n'
+                  else:
+                     parameter += ',\n'
+               parameter += ');\n'
+               ctx.children.insert(2, Parameter2Tree(parameter))
          def modifyModule_declaration(self, ctx:VerilogParser.Module_declarationContext):
             if self.is_implicit_port_definition(ctx):
+               self._insert_parameter(ctx)
                self._modify_module_declaration(ctx)
                self._remove_signal_declaration(ctx)
                self._add_block_content(ctx)
                self._remove_block_content(ctx)
+
             self.module = ctx
          
          def _modify_module_declaration(self,ctx:VerilogParser.Module_declarationContext):  
@@ -281,8 +329,8 @@ def formatter_file(design, outputpath):
                if isinstance(child, antlr4.tree.Tree.TerminalNodeImpl) and child.symbol.text == ';':
                   index = ctx.children.index(child)
                   for i , item in enumerate(block_parameter):
-                     paramter = item
-                     ctx.children.insert(index + i + 1, Paramter2Tree(paramter))
+                     parameter = item
+                     ctx.children.insert(index + i + 1, Parameter2Tree(parameter))
                   for key, value in block_port.items():
                      defination = value['port_type'] + ' ' + value['data_type'] + ' ' + value['port_width'] + ' ' + key + ';'
                      ctx.children.insert(index + len(block_parameter) + 1, Module2Tree(defination))
@@ -297,6 +345,7 @@ def formatter_file(design, outputpath):
                      del child.parentCtx.children[index_of_child]
                   else:
                      self._remove_block_content(child)
+
 
       visitor = PortModifyVisitor()
       visitor.modifyModule_declaration(tree)
