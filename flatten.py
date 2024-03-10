@@ -95,7 +95,7 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
               else:
                 if self.dict_of_parameters.get(self.name_of_module_instances[-1]) is None:
                    self.dict_of_parameters[self.name_of_module_instances[-1]] = {}
-                self.dict_of_parameters[self.name_of_module_instances[-1]][child.parameter_identifier().getText()] = child.mintypmax_expression().getText()
+                self.dict_of_parameters[self.name_of_module_instances[-1]][self.name_of_module_instances[-1]+'_'+child.parameter_identifier().getText()] = child.mintypmax_expression().getText()
               
 
               
@@ -122,6 +122,149 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
      return -1
   else:
     print("[Processing] MODULE: %s\tNAME:%s"%(cur_module_identifier,cur_name_of_module_instances))
+
+
+  # 5. TODO: Get the start and stop index of the instance module
+  class InstModuleVisitor(VerilogParserVisitor):
+    def __init__(self):
+        super().__init__()
+        self.inst_module_node = None
+        self.inst_module_design = None
+        self.start = None
+        self.stop = None
+        self.indent = 2
+
+    def visitModule_declaration(self, ctx: VerilogParser.Module_declarationContext):
+        module_name = ctx.module_identifier().getText()
+        if module_name == cur_module_identifier:
+          self.start = ctx.start.start
+          self.stop = ctx.stop.stop
+          self.inst_module_node = ctx        
+        
+
+  visitor = InstModuleVisitor()
+  visitor.visit(tree)
+  inst_module_design = design[visitor.start:visitor.stop+1]
+
+  # 6. TODO: Rename all variable in the instance module
+  # replace the corresponding variables with `cur_prefixs`
+  class InstModuleVisitor(VerilogParserVisitor):
+    def __init__(self, cur_prefixs_index):
+        super().__init__()
+        self.inst_module_node = None
+        self.inst_module_design = None
+        self.start = None
+        self.stop = None
+        self.indent = 2
+        self.cur_prefixs_index = cur_prefixs_index
+        self.is_no_port_parameter = False
+        self.port_parameter_flag = False
+        
+    
+    def is_parents_parameter_port_list(self,ctx):
+      if ctx is None:
+        return False
+
+      if not isinstance(ctx, VerilogParser.Module_parameter_port_listContext):
+        return self.is_parents_parameter_port_list(ctx.parentCtx)
+      else:
+        return True
+      
+    # remove all text in the context and its children
+    def empty_all_text(self,ctx):
+      if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
+        try:
+          ctx.start.text = ''
+          ctx.stop.text = ''
+        except:
+          ctx.symbol.text = ''
+          pass
+      else:
+        for child in ctx.getChildren():
+          self.empty_all_text(child)
+
+    "This function is used to traverse the tree and change the name of the instance"
+    def _traverse_children(self,ctx):  
+      if self.is_parents_parameter_port_list(ctx):
+        self.port_parameter_flag = True
+        try:
+          ctx.start.text = ''
+          ctx.stop.text = ''
+        except:
+          ctx.symbol.text = ''
+          pass
+      if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
+        pass
+      else:
+        for child in ctx.getChildren():
+          # Rename the variables
+          if isinstance(child, VerilogParser.Simple_identifierContext):
+              if isinstance(child.parentCtx.parentCtx, VerilogParser.Module_identifierContext):
+                  pass
+              elif isinstance(child.parentCtx.parentCtx, VerilogParser.Port_identifierContext):
+                  pass
+              elif isinstance(child.parentCtx.parentCtx, VerilogParser.Param_assignmentContext):
+                  pass
+              elif isinstance(child.parentCtx.parentCtx, VerilogParser.Parameter_identifierContext):
+                 if len(cur_dict_of_parameters) != 0:
+                    if self.port_parameter_flag:
+                      if cur_dict_of_parameters[cur_prefixs[self.cur_prefixs_index]].get(cur_prefixs[self.cur_prefixs_index]+'_'+child.start.text) is not None:
+                        child.start.text = cur_dict_of_parameters[cur_prefixs[self.cur_prefixs_index]][cur_prefixs[self.cur_prefixs_index]+'_'+child.start.text]
+                        continue
+                    else:
+                      self.is_no_port_parameter = True
+              else:
+                  child.start.text = ' ' + cur_prefixs[self.cur_prefixs_index] + '_' + child.start.text + ' '
+                  # If the parameter is define in the code block(not in the port), we will not do the replacement
+                  if self.is_no_port_parameter:
+                    pass
+                  else:
+                    if child.getText().replace(" ","") in cur_dict_of_parameters[cur_prefixs[self.cur_prefixs_index]]:
+                      child.start.text = ' ' + cur_dict_of_parameters[cur_prefixs[self.cur_prefixs_index]][child.getText().replace(" ","")] + ' '
+          self._traverse_children(child)
+    
+    def _traverse_param_assignment(self,ctx):
+      if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
+        pass
+      else:
+        for child in ctx.getChildren():
+          if isinstance(child, VerilogParser.Param_assignmentContext):
+            if child.getChildCount() == 3:
+              param_name = child.getChild(0).getText().replace(" ","")
+              param_value = child.getChild(2).getText().replace(" ","")
+              # if the self.cur_prefixs_index+'_'+ para_name is in the cur_dict_of_parameters
+              if cur_dict_of_parameters[cur_prefixs[self.cur_prefixs_index]].get(cur_prefixs[self.cur_prefixs_index]+'_'+param_name) is not None:
+                self.empty_all_text(child.getChild(2))
+                child.getChild(2).start.text = cur_dict_of_parameters[cur_prefixs[self.cur_prefixs_index]][cur_prefixs[self.cur_prefixs_index]+'_'+param_name]
+              child.getChild(0).start.text = ' ' + cur_prefixs[self.cur_prefixs_index] + '_' + param_name + ' '
+          self._traverse_param_assignment(child)
+              
+              
+
+    def visitModule_declaration(self, ctx: VerilogParser.Module_declarationContext):
+        module_name = ctx.module_identifier().getText()
+        if module_name == cur_module_identifier:
+          self.start = ctx.start.start
+          self.stop = ctx.stop.stop
+          self.inst_module_node = ctx        
+          self._traverse_children(self.inst_module_node)
+          if self.is_no_port_parameter:
+            self._traverse_param_assignment(self.inst_module_node)
+          # This is used to handle special case that the parameter is not in the port list
+          # For example, Adder adder #(.E(1)) 
+          # module Adder(input a, input b, output c);
+          # parameter E = 0;
+
+  inst_module_design_trees = []
+  inst_module_nodes = []
+  no_port_parameter = False
+  for k in range(0,len(cur_prefixs)):
+     tmp_inst_module_design = Design2Tree(inst_module_design)
+     visitor = InstModuleVisitor(k)
+     visitor.visit(tmp_inst_module_design)
+     inst_module_design_trees.append(tmp_inst_module_design)
+     inst_module_nodes.append(visitor.inst_module_node)
+     no_port_parameter = visitor.is_no_port_parameter
 
 
   class InstModulePortVisitor(VerilogParserVisitor):
@@ -192,7 +335,18 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
               else:
                 self.list_of_data_type.append('')
 
-              
+            # Get parameter default value from the InstModule
+            if isinstance(child, VerilogParser.Param_assignmentContext):
+              if child.getChildCount() == 3:
+                param_name = child.getChild(0).getText().replace(" ","")
+                param_value = child.getChild(2).getText().replace(" ","")
+              # Append param_name and param_value to cur_dict_of_parameters
+                for i in range(0,len(cur_prefixs)):
+                  if cur_dict_of_parameters.get(cur_prefixs[i]) is None:
+                    cur_dict_of_parameters[cur_prefixs[i]] = {}
+                  if cur_dict_of_parameters[cur_prefixs[i]].get(param_name) is None and param_name.startswith(cur_prefixs[i]):
+                    cur_dict_of_parameters[cur_prefixs[i]][param_name] = param_value
+                  
             self._traverse_children(child)
 
     def visitModule_declaration(self, ctx: VerilogParser.Module_declarationContext):
@@ -203,13 +357,23 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
             self.inst_module_node = ctx
             self._traverse_children(self.inst_module_node)
 
-  visitor = InstModulePortVisitor()
-  visitor.visit(tree)
-  cur_list_of_ports_lhs = visitor.list_of_ports_lhs
-  cur_list_of_ports_lhs_width = visitor.list_of_ports_width
-  cur_list_of_ports_direction = visitor.list_of_ports_direction
-  cur_list_of_ports_type = visitor.list_of_ports_type
-  cur_list_of_data_type = visitor.list_of_data_type
+  cur_list_of_ports_lhs = []
+  cur_list_of_ports_lhs_width = []
+  cur_list_of_ports_width = []
+  cur_list_of_ports_direction = []
+  cur_list_of_ports_type = []
+  cur_list_of_data_type = []
+
+  for i in range(0,len(inst_module_design_trees)):
+    visitor = InstModulePortVisitor()
+    visitor.visit(inst_module_design_trees[i])
+    # append the list of ports to the list
+    cur_list_of_ports_lhs = cur_list_of_ports_lhs + visitor.list_of_ports_lhs
+    cur_list_of_ports_lhs_width = cur_list_of_ports_lhs_width + visitor.list_of_ports_width
+    cur_list_of_ports_width = cur_list_of_ports_width + visitor.list_of_ports_width
+    cur_list_of_ports_direction = cur_list_of_ports_direction + visitor.list_of_ports_direction
+    cur_list_of_ports_type = cur_list_of_ports_type + visitor.list_of_ports_type
+    cur_list_of_data_type = cur_list_of_data_type + visitor.list_of_data_type
 
 
   # 4. Obtain new assignment with 'prefix', lhs and rhs and define the port as wire type
@@ -226,7 +390,7 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
     # try:
     # do the whole word match and replacement based on cur_dict_of_parameters
     ports_lhs_width = copy.deepcopy(cur_list_of_ports_lhs_width)
-    if cur_dict_of_parameters.get(cur_prefixs[k]) is not None:
+    if cur_dict_of_parameters.get(cur_prefixs[k]) is not None and not no_port_parameter:
       for i in range(0,len(ports_lhs_width)):
         for key in cur_dict_of_parameters[cur_prefixs[k]]:
           pattern = r'\b{}\b'.format(key)
@@ -235,129 +399,22 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
     # cur_list_of_ports_lhs_width = ports_lhs_width
        
     for i in range(0,len_instance_port):
-      if cur_list_of_data_type[i] != '':
-        cur_new_variable.append(cur_list_of_data_type[i]  + ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
-      elif cur_list_of_ports_type[i] == 'reg':
-        cur_new_variable.append('reg '  + ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
+      if cur_list_of_data_type[k*len_instance_port+i] != '':
+        cur_new_variable.append(cur_list_of_data_type[k*len_instance_port+i]  + ports_lhs_width[k*len_instance_port+i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[k*len_instance_port+i] + ';')
+      elif cur_list_of_ports_type[k*len_instance_port+i] == 'reg':
+        cur_new_variable.append('reg '  + ports_lhs_width[k*len_instance_port+i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[k*len_instance_port+i] + ';')
       else:
-        cur_new_variable.append('wire '  + ports_lhs_width[i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
-      if cur_list_of_ports_direction[i] == 'input': 
+        cur_new_variable.append('wire '  + ports_lhs_width[k*len_instance_port+i] + ' '+cur_prefixs[k] + '_' + cur_list_of_ports_lhs[k*len_instance_port+i] + ';')
+      if cur_list_of_ports_direction[k*len_instance_port+i] == 'input': 
         # if cur_list_of_ports_type[i] == 'reg' :
         #   cur_new_assign.append('always @(*)' + ' ' + cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ' = '+ cur_list_of_ports_rhs[i] + ';')
         # else:
-        cur_new_assign.append('assign ' + cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ' = '+ cur_list_of_ports_rhs[k*len_instance_port+i] + ';')
+        cur_new_assign.append('assign ' + cur_prefixs[k] + '_' + cur_list_of_ports_lhs[k*len_instance_port+i] + ' = '+ cur_list_of_ports_rhs[k*len_instance_port+i] + ';')
       else:
         # if cur_list_of_ports_type[i] == 'reg' :
         #   cur_new_assign.append('always @(*) ' + ' ' + cur_list_of_ports_rhs[i] + ' = '+ cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
         # else:
-          cur_new_assign.append('assign ' +  cur_list_of_ports_rhs[k*len_instance_port+i] + ' = '+ cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
-    # except:
-      # print("Error: Potential the number of port and definition is not matched!")
-
-
-  # 5. TODO: Get the start and stop index of the instance module
-  class InstModuleVisitor(VerilogParserVisitor):
-    def __init__(self):
-        super().__init__()
-        self.inst_module_node = None
-        self.inst_module_design = None
-        self.start = None
-        self.stop = None
-        self.indent = 2
-
-    def visitModule_declaration(self, ctx: VerilogParser.Module_declarationContext):
-        module_name = ctx.module_identifier().getText()
-        if module_name == cur_module_identifier:
-          self.start = ctx.start.start
-          self.stop = ctx.stop.stop
-          self.inst_module_node = ctx        
-        
-
-  visitor = InstModuleVisitor()
-  visitor.visit(tree)
-  inst_module_design = design[visitor.start:visitor.stop+1]
-
-  # 6. TODO: Rename all variable in the instance module
-  # replace the corresponding variables with `cur_prefixs`
-  class InstModuleVisitor(VerilogParserVisitor):
-    def __init__(self, cur_prefixs_index):
-        super().__init__()
-        self.inst_module_node = None
-        self.inst_module_design = None
-        self.start = None
-        self.stop = None
-        self.indent = 2
-        self.cur_prefixs_index = cur_prefixs_index
-        self.is_no_port_parameter = False
-        self.port_parameter_flag = False
-        
-    
-    def is_parents_parameter_port_list(self,ctx):
-      if ctx is None:
-        return False
-
-      if not isinstance(ctx, VerilogParser.Module_parameter_port_listContext):
-        return self.is_parents_parameter_port_list(ctx.parentCtx)
-      else:
-        return True
-      
-
-    "This function is used to traverse the tree and change the name of the instance"
-    def _traverse_children(self,ctx):  
-      if self.is_parents_parameter_port_list(ctx):
-        self.port_parameter_flag = True
-        try:
-          ctx.start.text = ''
-          ctx.stop.text = ''
-        except:
-          ctx.symbol.text = ''
-          pass
-      if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
-        pass
-      else:
-        for child in ctx.getChildren():
-          # Rename the variables
-          if isinstance(child, VerilogParser.Simple_identifierContext):
-              if isinstance(child.parentCtx.parentCtx, VerilogParser.Module_identifierContext):
-                  pass
-              elif isinstance(child.parentCtx.parentCtx, VerilogParser.Port_identifierContext):
-                  pass
-              else:
-                  # 
-                  if len(cur_dict_of_parameters) != 0:
-                    if self.port_parameter_flag:
-                      if cur_dict_of_parameters[cur_prefixs[self.cur_prefixs_index]].get(child.getText()) is not None:
-                        child.start.text = cur_dict_of_parameters[cur_prefixs[self.cur_prefixs_index]][child.start.text]
-                    else:
-                      self.is_no_port_parameter = True
-                      continue
-                  child.start.text = ' ' + cur_prefixs[self.cur_prefixs_index] + '_' + child.start.text + ' '
-          self._traverse_children(child)
-    
-
-    def visitModule_declaration(self, ctx: VerilogParser.Module_declarationContext):
-        module_name = ctx.module_identifier().getText()
-        if module_name == cur_module_identifier:
-          self.start = ctx.start.start
-          self.stop = ctx.stop.stop
-          self.inst_module_node = ctx        
-          self._traverse_children(self.inst_module_node)
-
-          # This is used to handle special case that the parameter is not in the port list
-          # For example, Adder adder #(.E(1)) 
-          # module Adder(input a, input b, output c);
-          # parameter E = 0;
-
-  inst_module_design_trees = []
-  inst_module_nodes = []
-  is_no_port_parameter = False
-  for k in range(0,len(cur_prefixs)):
-     tmp_inst_module_design = Design2Tree(inst_module_design)
-     visitor = InstModuleVisitor(k)
-     visitor.visit(tmp_inst_module_design)
-     is_no_port_parameter = visitor.is_no_port_parameter
-     inst_module_design_trees.append(tmp_inst_module_design)
-     inst_module_nodes.append(visitor.inst_module_node)
+          cur_new_assign.append('assign ' +  cur_list_of_ports_rhs[k*len_instance_port+i] + ' = '+ cur_prefixs[k] + '_' + cur_list_of_ports_lhs[k*len_instance_port+i] + ';')
 
 
   # 5. TODO: Get the instance body

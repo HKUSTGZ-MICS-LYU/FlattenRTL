@@ -36428,13 +36428,13 @@ endmodule
 // Boot from 0x100
  
 
-module or1200_iwb_biu();
+// module or1200_iwb_biu();
 
-	// THIS MODULE IS OBSOLETE !!! 
-	// COMPLETELY REWRITTEN or1200_wb_biu.v IS USED INSTEAD !!!
+// 	// THIS MODULE IS OBSOLETE !!! 
+// 	// COMPLETELY REWRITTEN or1200_wb_biu.v IS USED INSTEAD !!!
 
 
-endmodule
+// endmodule
 //////////////////////////////////////////////////////////////////////
 ////                                                              ////
 ////  OR1200's Instruction Cache top level                        ////

@@ -1,10 +1,9 @@
-module or1200_mem2reg (addr,lsu_op,memdata,regdata) ; 
+module or1200_mem2reg (
+  input [1:0] addr,
+  input [4-1:0] lsu_op,
+  input [width-1:0] memdata,
+  output reg  [width-1:0] regdata) ; 
  parameter width =32; 
-  input [1:0] addr; 
-  input [4-1:0] lsu_op; 
-  input [width-1:0] memdata; 
-  output [width-1:0] regdata; 
-   reg [width-1:0] regdata ;  
    reg [width-1:0] aligned ;  
   always @(  addr or  memdata)
        begin 
@@ -50,26 +49,26 @@ module or1200_mem2reg (addr,lsu_op,memdata,regdata) ;
   
 endmodule
  
-module or1200_if (clk,rst,icpu_dat_i,icpu_ack_i,icpu_err_i,icpu_adr_i,icpu_tag_i,if_freeze,if_insn,if_pc,if_flushpipe,saving_if_insn,if_stall,no_more_dslot,genpc_refetch,rfe,except_itlbmiss,except_immufault,except_ibuserr) ; 
-  input clk; 
-  input rst; 
-  input [31:0] icpu_dat_i; 
-  input icpu_ack_i; 
-  input icpu_err_i; 
-  input [31:0] icpu_adr_i; 
-  input [3:0] icpu_tag_i; 
-  input if_freeze; 
-  output [31:0] if_insn; 
-  output [31:0] if_pc; 
-  input if_flushpipe; 
-  output saving_if_insn; 
-  output if_stall; 
-  input no_more_dslot; 
-  output genpc_refetch; 
-  input rfe; 
-  output except_itlbmiss; 
-  output except_immufault; 
-  output except_ibuserr; 
+module or1200_if (
+  input clk,
+  input rst,
+  input [31:0] icpu_dat_i,
+  input icpu_ack_i,
+  input icpu_err_i,
+  input [31:0] icpu_adr_i,
+  input [3:0] icpu_tag_i,
+  input if_freeze,
+  output [31:0] if_insn,
+  output [31:0] if_pc,
+  input if_flushpipe,
+  output saving_if_insn,
+  output if_stall,
+  input no_more_dslot,
+  output genpc_refetch,
+  input rfe,
+  output except_itlbmiss,
+  output except_immufault,
+  output except_ibuserr) ; 
    wire save_insn ;  
    wire if_bypass ;  
    reg if_bypass_reg ;  
@@ -151,17 +150,17 @@ module or1200_if (clk,rst,icpu_dat_i,icpu_ack_i,icpu_err_i,icpu_adr_i,icpu_tag_i
  
 endmodule
  
-module or1200_spram_1024x8 (clk,rst,ce,we,oe,addr,di,doq) ; 
+module or1200_spram_1024x8 (
+  input clk,
+  input rst,
+  input ce,
+  input we,
+  input oe,
+  input [aw-1:0] addr,
+  input [dw-1:0] di,
+  output [dw-1:0] doq) ; 
  parameter aw =10; 
  parameter dw =8; 
-  input clk; 
-  input rst; 
-  input ce; 
-  input we; 
-  input oe; 
-  input [aw-1:0] addr; 
-  input [dw-1:0] di; 
-  output [dw-1:0] doq; 
    reg [dw-1:0] mem[(1<<aw)-1:0] ;  
    reg [aw-1:0] addr_reg ;  
   assign doq=(oe) ? mem[addr_reg]:{dw{1'b0}}; 
@@ -178,40 +177,40 @@ module or1200_spram_1024x8 (clk,rst,ce,we,oe,addr,di,doq) ;
  
 endmodule
  
-module or1200_dc_fsm (clk,rst,dc_en,dcqmem_cycstb_i,dcqmem_ci_i,dcqmem_we_i,dcqmem_sel_i,tagcomp_miss,biudata_valid,biudata_error,lsu_addr,dcram_we,biu_read,biu_write,biu_do_sel,dcram_di_sel,first_hit_ack,first_miss_ack,first_miss_err,burst,tag_we,tag_valid,dc_addr,dc_no_writethrough,tag_dirty,dirty,tag,tag_v,dc_block_flush,dc_block_writeback,spr_dat_i,mtspr_dc_done,spr_cswe) ; 
-  input clk; 
-  input rst; 
-  input dc_en; 
-  input dcqmem_cycstb_i; 
-  input dcqmem_ci_i; 
-  input dcqmem_we_i; 
-  input [3:0] dcqmem_sel_i; 
-  input tagcomp_miss; 
-  input biudata_valid; 
-  input biudata_error; 
-  input [31:0] lsu_addr; 
-  output [3:0] dcram_we; 
-  output biu_read; 
-  output biu_write; 
-  output dcram_di_sel; 
-  output biu_do_sel; 
-  output first_hit_ack; 
-  output first_miss_ack; 
-  output first_miss_err; 
-  output burst; 
-  output tag_we; 
-  output tag_valid; 
-  output [31:0] dc_addr; 
-  input dc_no_writethrough; 
-  output tag_dirty; 
-  input dirty; 
-  input [20-2:0] tag; 
-  input tag_v; 
-  input dc_block_flush; 
-  input dc_block_writeback; 
-  input [31:0] spr_dat_i; 
-  output mtspr_dc_done; 
-  input spr_cswe; 
+module or1200_dc_fsm (
+  input clk,
+  input rst,
+  input dc_en,
+  input dcqmem_cycstb_i,
+  input dcqmem_ci_i,
+  input dcqmem_we_i,
+  input [3:0] dcqmem_sel_i,
+  input tagcomp_miss,
+  input biudata_valid,
+  input biudata_error,
+  input [31:0] lsu_addr,
+  output [3:0] dcram_we,
+  output biu_read,
+  output biu_write,
+  output biu_do_sel,
+  output dcram_di_sel,
+  output first_hit_ack,
+  output first_miss_ack,
+  output first_miss_err,
+  output burst,
+  output tag_we,
+  output tag_valid,
+  output [31:0] dc_addr,
+  input dc_no_writethrough,
+  output tag_dirty,
+  input dirty,
+  input [20-2:0] tag,
+  input tag_v,
+  input dc_block_flush,
+  input dc_block_writeback,
+  input [31:0] spr_dat_i,
+  output mtspr_dc_done,
+  input spr_cswe) ; 
    reg [31:0] addr_r ;  
    reg [2:0] state ;  
    reg [4-1:0] cnt ;  
@@ -445,21 +444,21 @@ module or1200_dc_fsm (clk,rst,dc_en,dcqmem_cycstb_i,dcqmem_ci_i,dcqmem_we_i,dcqm
   
 endmodule
  
-module or1200_dpram_256x32 (clk_a,rst_a,ce_a,oe_a,addr_a,do_a,clk_b,rst_b,ce_b,we_b,addr_b,di_b) ; 
+module or1200_dpram_256x32 (
+  input clk_a,
+  input rst_a,
+  input ce_a,
+  input oe_a,
+  input [aw-1:0] addr_a,
+  output [dw-1:0] do_a,
+  input clk_b,
+  input rst_b,
+  input ce_b,
+  input we_b,
+  input [aw-1:0] addr_b,
+  input [dw-1:0] di_b) ; 
  parameter aw =8; 
  parameter dw =32; 
-  input clk_a; 
-  input rst_a; 
-  input ce_a; 
-  input oe_a; 
-  input [aw-1:0] addr_a; 
-  output [dw-1:0] do_a; 
-  input clk_b; 
-  input rst_b; 
-  input ce_b; 
-  input we_b; 
-  input [aw-1:0] addr_b; 
-  input [dw-1:0] di_b; 
    reg [dw-1:0] mem[(1<<aw)-1:0] ;  
    reg [aw-1:0] addr_a_reg ;  
   assign do_a=(oe_a) ? mem[addr_a_reg]:{dw{1'b0}}; 
@@ -476,67 +475,65 @@ module or1200_dpram_256x32 (clk_a,rst_a,ce_a,oe_a,addr_a,do_a,clk_b,rst_b,ce_b,w
  
 endmodule
  
-module or1200_sprs (clk,rst,flagforw,flag_we,flag,cyforw,cy_we,carry,ovforw,ov_we,dsx,addrbase,addrofs,dat_i,branch_op,ex_spr_read,ex_spr_write,epcr,eear,esr,except_started,to_wbmux,epcr_we,eear_we,esr_we,pc_we,sr_we,to_sr,sr,spr_dat_cfgr,spr_dat_rf,spr_dat_npc,spr_dat_ppc,spr_dat_mac,boot_adr_sel_i,fpcsr,fpcsr_we,spr_dat_fpu,spr_dat_pic,spr_dat_tt,spr_dat_pm,spr_dat_dmmu,spr_dat_immu,spr_dat_du,spr_addr,spr_dat_o,spr_cs,spr_we,du_addr,du_dat_du,du_read,du_write,du_dat_cpu) ; 
+module or1200_sprs (
+  input clk,
+  input rst,
+  input flagforw,
+  input flag_we,
+  output flag,
+  input cyforw,
+  input cy_we,
+  output carry,
+  input ovforw,
+  input ov_we,
+  input dsx,
+  input [width-1:0] addrbase,
+  input [15:0] addrofs,
+  input [width-1:0] dat_i,
+  input [3-1:0] branch_op,
+  input ex_spr_read,
+  input ex_spr_write,
+  input [width-1:0] epcr,
+  input [width-1:0] eear,
+  input [17-1:0] esr,
+  input except_started,
+  output reg  [width-1:0] to_wbmux,
+  output epcr_we,
+  output eear_we,
+  output esr_we,
+  output pc_we,
+  output sr_we,
+  output [17-1:0] to_sr,
+  output reg  [17-1:0] sr,
+  input [31:0] spr_dat_cfgr,
+  input [31:0] spr_dat_rf,
+  input [31:0] spr_dat_npc,
+  input [31:0] spr_dat_ppc,
+  input [31:0] spr_dat_mac,
+  input boot_adr_sel_i,
+  input [12-1:0] fpcsr,
+  output fpcsr_we,
+  input [31:0] spr_dat_fpu,
+  input [31:0] spr_dat_pic,
+  input [31:0] spr_dat_tt,
+  input [31:0] spr_dat_pm,
+  input [31:0] spr_dat_dmmu,
+  input [31:0] spr_dat_immu,
+  input [31:0] spr_dat_du,
+  output [31:0] spr_addr,
+  output [31:0] spr_dat_o,
+  output [31:0] spr_cs,
+  output spr_we,
+  input [width-1:0] du_addr,
+  input [width-1:0] du_dat_du,
+  input du_read,
+  input du_write,
+  output [width-1:0] du_dat_cpu) ; 
  parameter width =32; 
-  input clk; 
-  input rst; 
-  input flagforw; 
-  input flag_we; 
-  output flag; 
-  input cyforw; 
-  input cy_we; 
-  output carry; 
-  input ovforw; 
-  input ov_we; 
-  input dsx; 
-  input [width-1:0] addrbase; 
-  input [15:0] addrofs; 
-  input [width-1:0] dat_i; 
-  input ex_spr_read; 
-  input ex_spr_write; 
-  input [3-1:0] branch_op; 
-  input [width-1:0] epcr; 
-  input [width-1:0] eear; 
-  input [17-1:0] esr; 
-  input except_started; 
-  output [width-1:0] to_wbmux; 
-  output epcr_we; 
-  output eear_we; 
-  output esr_we; 
-  output pc_we; 
-  output sr_we; 
-  output [17-1:0] to_sr; 
-  output [17-1:0] sr; 
-  input [31:0] spr_dat_cfgr; 
-  input [31:0] spr_dat_rf; 
-  input [31:0] spr_dat_npc; 
-  input [31:0] spr_dat_ppc; 
-  input [31:0] spr_dat_mac; 
-  input boot_adr_sel_i; 
-  input [12-1:0] fpcsr; 
-  output fpcsr_we; 
-  input [31:0] spr_dat_fpu; 
-  input [31:0] spr_dat_pic; 
-  input [31:0] spr_dat_tt; 
-  input [31:0] spr_dat_pm; 
-  input [31:0] spr_dat_dmmu; 
-  input [31:0] spr_dat_immu; 
-  input [31:0] spr_dat_du; 
-  output [31:0] spr_addr; 
-  output [31:0] spr_dat_o; 
-  output [31:0] spr_cs; 
-  output spr_we; 
-  input [width-1:0] du_addr; 
-  input [width-1:0] du_dat_du; 
-  input du_read; 
-  input du_write; 
-  output [width-1:0] du_dat_cpu; 
    reg [17-1:0] sr_reg ;  
    reg sr_reg_bit_eph ;  
    reg sr_reg_bit_eph_select ;  
    wire sr_reg_bit_eph_muxed ;  
-   reg [17-1:0] sr ;  
-   reg [width-1:0] to_wbmux ;  
    wire cfgr_sel ;  
    wire rf_sel ;  
    wire npc_sel ;  
@@ -706,18 +703,18 @@ module or1200_sprs (clk,rst,flagforw,flag_we,flag,cyforw,cy_we,carry,ovforw,ov_w
   
 endmodule
  
-module or1200_dpram (clk_a,ce_a,addr_a,do_a,clk_b,ce_b,we_b,addr_b,di_b) ; 
+module or1200_dpram (
+  input clk_a,
+  input ce_a,
+  input [aw-1:0] addr_a,
+  output [dw-1:0] do_a,
+  input clk_b,
+  input ce_b,
+  input we_b,
+  input [aw-1:0] addr_b,
+  input [dw-1:0] di_b) ; 
  parameter aw =5; 
  parameter dw =32; 
-  input clk_a; 
-  input ce_a; 
-  input [aw-1:0] addr_a; 
-  output [dw-1:0] do_a; 
-  input clk_b; 
-  input ce_b; 
-  input we_b; 
-  input [aw-1:0] addr_b; 
-  input [dw-1:0] di_b; 
    reg [dw-1:0] mem[(1<<aw)-1:0] ;  
    reg [aw-1:0] addr_a_reg ;  function[31:0]get_gpr;input[aw-1:0]gpr_no;
       get_gpr =mem[gpr_no];endfunction function[31:0]set_gpr;input[aw-1:0]gpr_no;input[dw-1:0]value;
@@ -736,25 +733,25 @@ module or1200_dpram (clk_a,ce_a,addr_a,do_a,clk_b,ce_b,we_b,addr_b,di_b) ;
  
 endmodule
  
-module or1200_dmmu_tlb (clk,rst,tlb_en,vaddr,hit,ppn,uwe,ure,swe,sre,ci,spr_cs,spr_write,spr_addr,spr_dat_i,spr_dat_o) ; 
+module or1200_dmmu_tlb (
+  input clk,
+  input rst,
+  input tlb_en,
+  input [aw-1:0] vaddr,
+  output hit,
+  output [31:13] ppn,
+  output uwe,
+  output ure,
+  output swe,
+  output sre,
+  output ci,
+  input spr_cs,
+  input spr_write,
+  input [31:0] spr_addr,
+  input [31:0] spr_dat_i,
+  output [31:0] spr_dat_o) ; 
  parameter dw =32; 
  parameter aw =32; 
-  input clk; 
-  input rst; 
-  input tlb_en; 
-  input [aw-1:0] vaddr; 
-  output hit; 
-  output [31:13] ppn; 
-  output uwe; 
-  output ure; 
-  output swe; 
-  output sre; 
-  output ci; 
-  input spr_cs; 
-  input spr_write; 
-  input [31:0] spr_addr; 
-  input [31:0] spr_dat_i; 
-  output [31:0] spr_dat_o; 
    wire [31:13+6-1+1] vpn ;  
    wire v ;  
    wire [6-1:0] tlb_index ;  
@@ -781,15 +778,15 @@ module or1200_dmmu_tlb (clk,rst,tlb_en,vaddr,hit,ppn,uwe,ure,swe,sre,ci,spr_cs,s
   or1200_spram #(.aw(6),.dw(24))dtlb_tr_ram(.clk(clk),.ce(tlb_tr_en),.we(tlb_tr_we),.addr(tlb_index),.di(tlb_tr_ram_in),.doq(tlb_tr_ram_out)); 
 endmodule
  
-module or1200_spram_1024x32_bw (clk,rst,ce,we,oe,addr,di,doq) ; 
-  input clk; 
-  input rst; 
-  input ce; 
-  input [3:0] we; 
-  input oe; 
-  input [9:0] addr; 
-  input [31:0] di; 
-  output [31:0] doq; 
+module or1200_spram_1024x32_bw (
+  input clk,
+  input rst,
+  input ce,
+  input [3:0] we,
+  input oe,
+  input [9:0] addr,
+  input [31:0] di,
+  output [31:0] doq) ; 
    reg [7:0] mem_0[1023:0] ;  
    reg [7:0] mem_1[1023:0] ;  
    reg [7:0] mem_2[1023:0] ;  
@@ -821,26 +818,26 @@ module or1200_spram_1024x32_bw (clk,rst,ce,we,oe,addr,di,doq) ;
  
 endmodule
  
-module or1200_mult_mac (clk,rst,ex_freeze,id_macrc_op,macrc_op,a,b,mac_op,alu_op,result,mult_mac_stall,ovforw,ov_we,spr_cs,spr_write,spr_addr,spr_dat_i,spr_dat_o) ; 
+module or1200_mult_mac (
+  input clk,
+  input rst,
+  input ex_freeze,
+  input id_macrc_op,
+  input macrc_op,
+  input [width-1:0] a,
+  input [width-1:0] b,
+  input [3-1:0] mac_op,
+  input [5-1:0] alu_op,
+  output reg  [width-1:0] result,
+  output mult_mac_stall,
+  output reg  ovforw,
+  output reg  ov_we,
+  input spr_cs,
+  input spr_write,
+  input [31:0] spr_addr,
+  input [31:0] spr_dat_i,
+  output [31:0] spr_dat_o) ; 
  parameter width =32; 
-  input clk; 
-  input rst; 
-  input ex_freeze; 
-  input id_macrc_op; 
-  input macrc_op; 
-  input [width-1:0] a; 
-  input [width-1:0] b; 
-  input [3-1:0] mac_op; 
-  input [5-1:0] alu_op; 
-  output [width-1:0] result; 
-  output mult_mac_stall; 
-  output ovforw,ov_we; 
-  input spr_cs; 
-  input spr_write; 
-  input [31:0] spr_addr; 
-  input [31:0] spr_dat_i; 
-  output [31:0] spr_dat_o; 
-   reg [width-1:0] result ;  
    reg ex_freeze_r ;  
    wire alu_op_mul ;  
    wire alu_op_smul ;  
@@ -868,7 +865,6 @@ module or1200_mult_mac (clk,rst,ex_freeze,id_macrc_op,macrc_op,a,b,mac_op,alu_op
    wire [width-1:0] div_tmp ;  
    reg [5:0] div_cntr ;  
    wire div_by_zero ;  
-   reg ovforw,ov_we ;  
   assign alu_op_smul=(alu_op==5'b0_0110); 
   assign alu_op_umul=(alu_op==5'b0_1011); 
   assign alu_op_mul=alu_op_smul|alu_op_umul; 
@@ -1000,7 +996,13 @@ module or1200_mult_mac (clk,rst,ex_freeze,id_macrc_op,macrc_op,a,b,mac_op,alu_op
   assign mult_mac_stall=mac_stall_r|div_stall|mul_stall; 
 endmodule
  
-module or1200_fpu_pre_norm_div (clk_i,opa_i,opb_i,exp_10_o,dvdnd_50_o,dvsor_27_o) ; 
+module or1200_fpu_pre_norm_div (
+  input clk_i,
+  input [FP_WIDTH-1:0] opa_i,
+  input [FP_WIDTH-1:0] opb_i,
+  output reg  [EXP_WIDTH+1:0] exp_10_o,
+  output [2*(FRAC_WIDTH+2)-1:0] dvdnd_50_o,
+  output [FRAC_WIDTH+3:0] dvsor_27_o) ; 
  parameter FP_WIDTH =32; 
  parameter MUL_SERIAL =0; 
  parameter MUL_COUNT =11; 
@@ -1010,12 +1012,6 @@ module or1200_fpu_pre_norm_div (clk_i,opa_i,opb_i,exp_10_o,dvdnd_50_o,dvsor_27_o
  parameter INF =31'b1111111100000000000000000000000; 
  parameter QNAN =31'b1111111110000000000000000000000; 
  parameter SNAN =31'b1111111100000000000000000000001; 
-  input clk_i; 
-  input [FP_WIDTH-1:0] opa_i; 
-  input [FP_WIDTH-1:0] opb_i; 
-  output reg  [EXP_WIDTH+1:0] exp_10_o; 
-  output [2*(FRAC_WIDTH+2)-1:0] dvdnd_50_o; 
-  output [FRAC_WIDTH+3:0] dvsor_27_o; 
    wire [EXP_WIDTH-1:0] s_expa ;  
    wire [EXP_WIDTH-1:0] s_expb ;  
    wire [FRAC_WIDTH-1:0] s_fracta ;  
@@ -1166,44 +1162,42 @@ module or1200_fpu_pre_norm_div (clk_i,opa_i,opb_i,exp_10_o,dvdnd_50_o,dvsor_27_o
   
 endmodule
  
-module or1200_lsu (clk,rst,id_addrbase,ex_addrbase,id_addrofs,ex_addrofs,id_lsu_op,lsu_datain,lsu_dataout,lsu_stall,lsu_unstall,du_stall,except_align,except_dtlbmiss,except_dmmufault,except_dbuserr,id_freeze,ex_freeze,flushpipe,dcpu_adr_o,dcpu_cycstb_o,dcpu_we_o,dcpu_sel_o,dcpu_tag_o,dcpu_dat_o,dcpu_dat_i,dcpu_ack_i,dcpu_rty_i,dcpu_err_i,dcpu_tag_i) ; 
+module or1200_lsu (
+  input clk,
+  input rst,
+  input [31:0] id_addrbase,
+  input [31:0] ex_addrbase,
+  input [31:0] id_addrofs,
+  input [31:0] ex_addrofs,
+  input [4-1:0] id_lsu_op,
+  input [dw-1:0] lsu_datain,
+  output [dw-1:0] lsu_dataout,
+  output lsu_stall,
+  output lsu_unstall,
+  input du_stall,
+  output reg  except_align,
+  output except_dtlbmiss,
+  output except_dmmufault,
+  output except_dbuserr,
+  input id_freeze,
+  input ex_freeze,
+  input flushpipe,
+  output [31:0] dcpu_adr_o,
+  output dcpu_cycstb_o,
+  output dcpu_we_o,
+  output reg  [3:0] dcpu_sel_o,
+  output [3:0] dcpu_tag_o,
+  output [31:0] dcpu_dat_o,
+  input [31:0] dcpu_dat_i,
+  input dcpu_ack_i,
+  input dcpu_rty_i,
+  input dcpu_err_i,
+  input [3:0] dcpu_tag_i) ; 
  parameter dw =32; 
  parameter aw =5; 
-  input clk; 
-  input rst; 
-  input [31:0] id_addrbase; 
-  input [31:0] ex_addrbase; 
-  input [31:0] id_addrofs; 
-  input [31:0] ex_addrofs; 
-  input [4-1:0] id_lsu_op; 
-  input [dw-1:0] lsu_datain; 
-  output [dw-1:0] lsu_dataout; 
-  output lsu_stall; 
-  output lsu_unstall; 
-  input du_stall; 
-  output except_align; 
-  output except_dtlbmiss; 
-  output except_dmmufault; 
-  output except_dbuserr; 
-  input id_freeze; 
-  input ex_freeze; 
-  input flushpipe; 
-  output [31:0] dcpu_adr_o; 
-  output dcpu_cycstb_o; 
-  output dcpu_we_o; 
-  output [3:0] dcpu_sel_o; 
-  output [3:0] dcpu_tag_o; 
-  output [31:0] dcpu_dat_o; 
-  input [31:0] dcpu_dat_i; 
-  input dcpu_ack_i; 
-  input dcpu_rty_i; 
-  input dcpu_err_i; 
-  input [3:0] dcpu_tag_i; 
-   reg [3:0] dcpu_sel_o ;  
    reg [4-1:0] ex_lsu_op ;  
    wire [2:0] id_precalc_sum ;  
    reg [2:0] dcpu_adr_r ;  
-   reg except_align ;  
   always @(  posedge clk or  posedge rst)
        begin 
          if (rst==(1'b1))
@@ -1286,10 +1280,9 @@ module or1200_lsu (clk,rst,id_addrbase,ex_addrbase,id_addrofs,ex_addrofs,id_lsu_
   or1200_reg2mem or1200_reg2mem(.addr(dcpu_adr_o[1:0]),.lsu_op(ex_lsu_op),.regdata(lsu_datain),.memdata(dcpu_dat_o)); 
 endmodule
  
-module or1200_cfgr (spr_addr,spr_dat_o) ; 
-  input [31:0] spr_addr; 
-  output [31:0] spr_dat_o; 
-   reg [31:0] spr_dat_o ;  
+module or1200_cfgr (
+  input [31:0] spr_addr,
+  output reg  [31:0] spr_dat_o) ; 
   always @( spr_addr)
        if (~|spr_addr[31:4])
           case (spr_addr[3:0])
@@ -1392,17 +1385,17 @@ module or1200_cfgr (spr_addr,spr_dat_o) ;
  
 endmodule
  
-module or1200_spram_128x32 (clk,rst,ce,we,oe,addr,di,doq) ; 
+module or1200_spram_128x32 (
+  input clk,
+  input rst,
+  input ce,
+  input we,
+  input oe,
+  input [aw-1:0] addr,
+  input [dw-1:0] di,
+  output [dw-1:0] doq) ; 
  parameter aw =7; 
  parameter dw =32; 
-  input clk; 
-  input rst; 
-  input ce; 
-  input we; 
-  input oe; 
-  input [aw-1:0] addr; 
-  input [dw-1:0] di; 
-  output [dw-1:0] doq; 
    reg [dw-1:0] mem[(1<<aw)-1:0] ;  
    reg [aw-1:0] addr_reg ;  
   assign doq=(oe) ? mem[addr_reg]:{dw{1'b0}}; 
@@ -1419,37 +1412,34 @@ module or1200_spram_128x32 (clk,rst,ce,we,oe,addr,di,doq) ;
  
 endmodule
  
-module or1200_iwb_biu () ; 
-endmodule
- 
-module or1200_ic_top (clk,rst,icbiu_dat_o,icbiu_adr_o,icbiu_cyc_o,icbiu_stb_o,icbiu_we_o,icbiu_sel_o,icbiu_cab_o,icbiu_dat_i,icbiu_ack_i,icbiu_err_i,ic_en,icqmem_adr_i,icqmem_cycstb_i,icqmem_ci_i,icqmem_sel_i,icqmem_tag_i,icqmem_dat_o,icqmem_ack_o,icqmem_rty_o,icqmem_err_o,icqmem_tag_o,spr_cs,spr_write,spr_dat_i) ; 
+module or1200_ic_top (
+  input clk,
+  input rst,
+  output [dw-1:0] icbiu_dat_o,
+  output [31:0] icbiu_adr_o,
+  output icbiu_cyc_o,
+  output icbiu_stb_o,
+  output icbiu_we_o,
+  output [3:0] icbiu_sel_o,
+  output icbiu_cab_o,
+  input [dw-1:0] icbiu_dat_i,
+  input icbiu_ack_i,
+  input icbiu_err_i,
+  input ic_en,
+  input [31:0] icqmem_adr_i,
+  input icqmem_cycstb_i,
+  input icqmem_ci_i,
+  input [3:0] icqmem_sel_i,
+  input [3:0] icqmem_tag_i,
+  output [dw-1:0] icqmem_dat_o,
+  output icqmem_ack_o,
+  output icqmem_rty_o,
+  output icqmem_err_o,
+  output [3:0] icqmem_tag_o,
+  input spr_cs,
+  input spr_write,
+  input [31:0] spr_dat_i) ; 
  parameter dw =32; 
-  input clk; 
-  input rst; 
-  output [dw-1:0] icbiu_dat_o; 
-  output [31:0] icbiu_adr_o; 
-  output icbiu_cyc_o; 
-  output icbiu_stb_o; 
-  output icbiu_we_o; 
-  output [3:0] icbiu_sel_o; 
-  output icbiu_cab_o; 
-  input [dw-1:0] icbiu_dat_i; 
-  input icbiu_ack_i; 
-  input icbiu_err_i; 
-  input ic_en; 
-  input [31:0] icqmem_adr_i; 
-  input icqmem_cycstb_i; 
-  input icqmem_ci_i; 
-  input [3:0] icqmem_sel_i; 
-  input [3:0] icqmem_tag_i; 
-  output [dw-1:0] icqmem_dat_o; 
-  output icqmem_ack_o; 
-  output icqmem_rty_o; 
-  output icqmem_err_o; 
-  output [3:0] icqmem_tag_o; 
-  input spr_cs; 
-  input spr_write; 
-  input [31:0] spr_dat_i; 
    wire tag_v ;  
    wire [20-2:0] tag ;  
    wire [dw-1:0] to_icram ;  
@@ -1508,35 +1498,28 @@ module or1200_ic_top (clk,rst,icbiu_dat_o,icbiu_adr_o,icbiu_cyc_o,icbiu_stb_o,ic
   or1200_ic_tag or1200_ic_tag(.clk(clk),.rst(rst),.addr(ictag_addr),.en(ictag_en),.we(ictag_we),.datain({ic_addr[31:13-1+1],ictag_v}),.tag_v(tag_v),.tag(tag)); 
 endmodule
  
-module or1200_alu (a,b,mult_mac_result,macrc_op,alu_op,alu_op2,comp_op,cust5_op,cust5_limm,result,flagforw,flag_we,ovforw,ov_we,cyforw,cy_we,carry,flag) ; 
-  input [32-1:0] a; 
-  input [32-1:0] b; 
-  input [32-1:0] mult_mac_result; 
-  input macrc_op; 
-  input [5-1:0] alu_op; 
-  input [4-1:0] alu_op2; 
-  input [4-1:0] comp_op; 
-  input [4:0] cust5_op; 
-  input [5:0] cust5_limm; 
-  output [32-1:0] result; 
-  output flagforw; 
-  output flag_we; 
-  output cyforw; 
-  output cy_we; 
-  output ovforw; 
-  output ov_we; 
-  input carry; 
-  input flag; 
-   reg [32-1:0] result ;  
+module or1200_alu (
+  input [32-1:0] a,
+  input [32-1:0] b,
+  input [32-1:0] mult_mac_result,
+  input macrc_op,
+  input [5-1:0] alu_op,
+  input [4-1:0] alu_op2,
+  input [4-1:0] comp_op,
+  input [4:0] cust5_op,
+  input [5:0] cust5_limm,
+  output reg  [32-1:0] result,
+  output reg  flagforw,
+  output reg  flag_we,
+  output reg  ovforw,
+  output reg  ov_we,
+  output reg  cyforw,
+  output reg  cy_we,
+  input carry,
+  input flag) ; 
    reg [32-1:0] shifted_rotated ;  
    reg [32-1:0] extended ;  
-   reg flagforw ;  
    reg flagcomp ;  
-   reg flag_we ;  
-   reg cyforw ;  
-   reg cy_we ;  
-   reg ovforw ;  
-   reg ov_we ;  
    wire [32-1:0] comp_a ;  
    wire [32-1:0] comp_b ;  
    wire a_eq_b ;  
@@ -1727,17 +1710,17 @@ module or1200_alu (a,b,mult_mac_result,macrc_op,alu_op,alu_op2,comp_op,cust5_op,
   
 endmodule
  
-module or1200_spram_2048x32 (clk,rst,ce,we,oe,addr,di,doq) ; 
+module or1200_spram_2048x32 (
+  input clk,
+  input rst,
+  input ce,
+  input we,
+  input oe,
+  input [aw-1:0] addr,
+  input [dw-1:0] di,
+  output [dw-1:0] doq) ; 
  parameter aw =11; 
  parameter dw =32; 
-  input clk; 
-  input rst; 
-  input ce; 
-  input we; 
-  input oe; 
-  input [aw-1:0] addr; 
-  input [dw-1:0] di; 
-  output [dw-1:0] doq; 
    reg [dw-1:0] mem[(1<<aw)-1:0] ;  
    reg [aw-1:0] addr_reg ;  
   assign doq=(oe) ? mem[addr_reg]:{dw{1'b0}}; 
@@ -1754,7 +1737,16 @@ module or1200_spram_2048x32 (clk,rst,ce,we,oe,addr,di,doq) ;
  
 endmodule
  
-module or1200_fpu_mul (clk_i,fracta_i,fractb_i,signa_i,signb_i,start_i,fract_o,sign_o,ready_o) ; 
+module or1200_fpu_mul (
+  input clk_i,
+  input [FRAC_WIDTH:0] fracta_i,
+  input [FRAC_WIDTH:0] fractb_i,
+  input signa_i,
+  input signb_i,
+  input start_i,
+  output reg  [2*FRAC_WIDTH+1:0] fract_o,
+  output reg  sign_o,
+  output reg  ready_o) ; 
  parameter FP_WIDTH =32; 
  parameter MUL_SERIAL =0; 
  parameter MUL_COUNT =11; 
@@ -1764,15 +1756,6 @@ module or1200_fpu_mul (clk_i,fracta_i,fractb_i,signa_i,signb_i,start_i,fract_o,s
  parameter INF =31'b1111111100000000000000000000000; 
  parameter QNAN =31'b1111111110000000000000000000000; 
  parameter SNAN =31'b1111111100000000000000000000001; 
-  input clk_i; 
-  input [FRAC_WIDTH:0] fracta_i; 
-  input [FRAC_WIDTH:0] fractb_i; 
-  input signa_i; 
-  input signb_i; 
-  input start_i; 
-  output reg  [2*FRAC_WIDTH+1:0] fract_o; 
-  output reg  sign_o; 
-  output reg  ready_o; 
  parameter t_state_waiting =1'b0,t_state_busy=1'b1; 
    reg [47:0] s_fract_o ;  
    reg [23:0] s_fracta_i ;  
@@ -1860,25 +1843,25 @@ module or1200_fpu_mul (clk_i,fracta_i,fractb_i,signa_i,signb_i,start_i,fract_o,s
   
 endmodule
  
-module or1200_tpram_32x32 (clk_a,rst_a,ce_a,we_a,oe_a,addr_a,di_a,do_a,clk_b,rst_b,ce_b,we_b,oe_b,addr_b,di_b,do_b) ; 
+module or1200_tpram_32x32 (
+  input clk_a,
+  input rst_a,
+  input ce_a,
+  input we_a,
+  input oe_a,
+  input [aw-1:0] addr_a,
+  input [dw-1:0] di_a,
+  output [dw-1:0] do_a,
+  input clk_b,
+  input rst_b,
+  input ce_b,
+  input we_b,
+  input oe_b,
+  input [aw-1:0] addr_b,
+  input [dw-1:0] di_b,
+  output [dw-1:0] do_b) ; 
  parameter aw =5; 
  parameter dw =32; 
-  input clk_a; 
-  input rst_a; 
-  input ce_a; 
-  input we_a; 
-  input oe_a; 
-  input [aw-1:0] addr_a; 
-  input [dw-1:0] di_a; 
-  output [dw-1:0] do_a; 
-  input clk_b; 
-  input rst_b; 
-  input ce_b; 
-  input we_b; 
-  input oe_b; 
-  input [aw-1:0] addr_b; 
-  input [dw-1:0] di_b; 
-  output [dw-1:0] do_b; 
    reg [dw-1:0] mem[(1<<aw)-1:0] ;  
    reg [aw-1:0] addr_a_reg ;  
    reg [aw-1:0] addr_b_reg ;  
@@ -1908,30 +1891,30 @@ module or1200_tpram_32x32 (clk_a,rst_a,ce_a,we_a,oe_a,addr_a,di_a,do_a,clk_b,rst
  
 endmodule
  
-module or1200_ic_ram (clk,rst,addr,en,we,datain,dataout) ; 
+module or1200_ic_ram (
+  input clk,
+  input rst,
+  input [aw-1:0] addr,
+  input en,
+  input [3:0] we,
+  input [dw-1:0] datain,
+  output [dw-1:0] dataout) ; 
  parameter dw =32; 
  parameter aw =13-2; 
-  input clk; 
-  input rst; 
-  input [aw-1:0] addr; 
-  input en; 
-  input [3:0] we; 
-  input [dw-1:0] datain; 
-  output [dw-1:0] dataout; 
   or1200_spram #(.aw(13-2),.dw(32))ic_ram0(.clk(clk),.ce(en),.we(we[0]),.addr(addr),.di(datain),.doq(dataout)); 
 endmodule
  
-module or1200_spram_512x20 (clk,rst,ce,we,oe,addr,di,doq) ; 
+module or1200_spram_512x20 (
+  input clk,
+  input rst,
+  input ce,
+  input we,
+  input oe,
+  input [aw-1:0] addr,
+  input [dw-1:0] di,
+  output [dw-1:0] doq) ; 
  parameter aw =9; 
  parameter dw =20; 
-  input clk; 
-  input rst; 
-  input ce; 
-  input we; 
-  input oe; 
-  input [aw-1:0] addr; 
-  input [dw-1:0] di; 
-  output [dw-1:0] doq; 
    reg [dw-1:0] mem[(1<<aw)-1:0] ;  
    reg [aw-1:0] addr_reg ;  
   assign doq=(oe) ? mem[addr_reg]:{dw{1'b0}}; 
@@ -1948,22 +1931,20 @@ module or1200_spram_512x20 (clk,rst,ce,we,oe,addr,di,doq) ;
  
 endmodule
  
-module or1200_fpu_intfloat_conv (clk,rmode,fpu_op,opa,out,snan,ine,inv,overflow,underflow,zero) ; 
-  input clk; 
-  input [1:0] rmode; 
-  input [2:0] fpu_op; 
-  input [31:0] opa; 
-  output [31:0] out; 
-  output snan; 
-  output ine; 
-  output inv; 
-  output overflow; 
-  output underflow; 
-  output zero; 
+module or1200_fpu_intfloat_conv (
+  input clk,
+  input [1:0] rmode,
+  input [2:0] fpu_op,
+  input [31:0] opa,
+  output reg  [31:0] out,
+  output reg  snan,
+  output reg  ine,
+  output inv,
+  output overflow,
+  output underflow,
+  output reg  zero) ; 
  parameter INF =31'h7f800000,QNAN=31'h7fc00001,SNAN=31'h7f800001; 
-   reg zero ;  
    reg [31:0] opa_r ;  
-   reg [31:0] out ;  
    reg div_by_zero ;  
    wire [7:0] exp_fasu ;  
    reg [7:0] exp_r ;  
@@ -1971,7 +1952,6 @@ module or1200_fpu_intfloat_conv (clk,rmode,fpu_op,opa,out,snan,ine,inv,overflow,
    wire [30:0] out_d ;  
    wire overflow_d,underflow_d ;  
    reg inf,snan,qnan ;  
-   reg ine ;  
    reg [1:0] rmode_r1,rmode_r2,rmode_r3 ;  
    reg [2:0] fpu_op_r1,fpu_op_r2,fpu_op_r3 ;  
   always @( posedge clk)
@@ -2079,7 +2059,18 @@ module or1200_fpu_intfloat_conv (clk,rmode,fpu_op,opa,out,snan,ine,inv,overflow,
   assign inv=inv_d&!f2i_special_case_no_inv; 
 endmodule
  
-module or1200_fpu_div (clk_i,dvdnd_i,dvsor_i,sign_dvd_i,sign_div_i,start_i,ready_o,qutnt_o,rmndr_o,sign_o,div_zero_o) ; 
+module or1200_fpu_div (
+  input clk_i,
+  input [2*(FRAC_WIDTH+2)-1:0] dvdnd_i,
+  input [FRAC_WIDTH+3:0] dvsor_i,
+  input sign_dvd_i,
+  input sign_div_i,
+  input start_i,
+  output ready_o,
+  output [FRAC_WIDTH+3:0] qutnt_o,
+  output [FRAC_WIDTH+3:0] rmndr_o,
+  output sign_o,
+  output div_zero_o) ; 
  parameter FP_WIDTH =32; 
  parameter MUL_SERIAL =0; 
  parameter MUL_COUNT =11; 
@@ -2089,17 +2080,6 @@ module or1200_fpu_div (clk_i,dvdnd_i,dvsor_i,sign_dvd_i,sign_div_i,start_i,ready
  parameter INF =31'b1111111100000000000000000000000; 
  parameter QNAN =31'b1111111110000000000000000000000; 
  parameter SNAN =31'b1111111100000000000000000000001; 
-  input clk_i; 
-  input [2*(FRAC_WIDTH+2)-1:0] dvdnd_i; 
-  input [FRAC_WIDTH+3:0] dvsor_i; 
-  input sign_dvd_i; 
-  input sign_div_i; 
-  input start_i; 
-  output ready_o; 
-  output [FRAC_WIDTH+3:0] qutnt_o; 
-  output [FRAC_WIDTH+3:0] rmndr_o; 
-  output sign_o; 
-  output div_zero_o; 
  parameter t_state_waiting =1'b0,t_state_busy=1'b1; 
    reg [FRAC_WIDTH+3:0] s_qutnt_o ;  
    reg [FRAC_WIDTH+3:0] s_rmndr_o ;  
@@ -2181,44 +2161,44 @@ module or1200_fpu_div (clk_i,dvdnd_i,dvsor_i,sign_dvd_i,sign_div_i,start_i,ready
   
 endmodule
  
-module or1200_dc_tag (clk,rst,addr,en,we,datain,tag_v,tag,dirty) ; 
+module or1200_dc_tag (
+  input clk,
+  input rst,
+  input [aw-1:0] addr,
+  input en,
+  input we,
+  input [dw-1:0] datain,
+  output tag_v,
+  output [dw-3:0] tag,
+  output dirty) ; 
  parameter dw =20+1; 
  parameter aw =13-4; 
-  input clk; 
-  input rst; 
-  input [aw-1:0] addr; 
-  input en; 
-  input we; 
-  input [dw-1:0] datain; 
-  output tag_v; 
-  output [dw-3:0] tag; 
-  output dirty; 
   or1200_spram #(.aw(13-4),.dw(20+1))dc_tag0(.clk(clk),.ce(en),.we(we),.addr(addr),.di(datain),.doq({tag,tag_v,dirty})); 
 endmodule
  
-module or1200_dmmu_top (clk,rst,dc_en,dmmu_en,supv,dcpu_adr_i,dcpu_cycstb_i,dcpu_we_i,dcpu_tag_o,dcpu_err_o,spr_cs,spr_write,spr_addr,spr_dat_i,spr_dat_o,qmemdmmu_err_i,qmemdmmu_tag_i,qmemdmmu_adr_o,qmemdmmu_cycstb_o,qmemdmmu_ci_o) ; 
+module or1200_dmmu_top (
+  input clk,
+  input rst,
+  input dc_en,
+  input dmmu_en,
+  input supv,
+  input [aw-1:0] dcpu_adr_i,
+  input dcpu_cycstb_i,
+  input dcpu_we_i,
+  output [3:0] dcpu_tag_o,
+  output dcpu_err_o,
+  input spr_cs,
+  input spr_write,
+  input [aw-1:0] spr_addr,
+  input [31:0] spr_dat_i,
+  output [31:0] spr_dat_o,
+  input qmemdmmu_err_i,
+  input [3:0] qmemdmmu_tag_i,
+  output [aw-1:0] qmemdmmu_adr_o,
+  output qmemdmmu_cycstb_o,
+  output qmemdmmu_ci_o) ; 
  parameter dw =32; 
  parameter aw =32; 
-  input clk; 
-  input rst; 
-  input dc_en; 
-  input dmmu_en; 
-  input supv; 
-  input [aw-1:0] dcpu_adr_i; 
-  input dcpu_cycstb_i; 
-  input dcpu_we_i; 
-  output [3:0] dcpu_tag_o; 
-  output dcpu_err_o; 
-  input spr_cs; 
-  input spr_write; 
-  input [aw-1:0] spr_addr; 
-  input [31:0] spr_dat_i; 
-  output [31:0] spr_dat_o; 
-  input qmemdmmu_err_i; 
-  input [3:0] qmemdmmu_tag_i; 
-  output [aw-1:0] qmemdmmu_adr_o; 
-  output qmemdmmu_cycstb_o; 
-  output qmemdmmu_ci_o; 
    wire dtlb_spr_access ;  
    wire [31:13] dtlb_ppn ;  
    wire dtlb_hit ;  
@@ -2261,7 +2241,16 @@ module or1200_dmmu_top (clk,rst,dc_en,dmmu_en,supv,dcpu_adr_i,dcpu_cycstb_i,dcpu
   or1200_dmmu_tlb or1200_dmmu_tlb(.clk(clk),.rst(rst),.tlb_en(dtlb_en),.vaddr(dcpu_adr_i),.hit(dtlb_hit),.ppn(dtlb_ppn),.uwe(dtlb_uwe),.ure(dtlb_ure),.swe(dtlb_swe),.sre(dtlb_sre),.ci(dtlb_ci),.spr_cs(dtlb_spr_access),.spr_write(spr_write),.spr_addr(spr_addr),.spr_dat_i(spr_dat_i),.spr_dat_o(dtlb_dat_o)); 
 endmodule
  
-module or1200_fpu_post_norm_mul (clk_i,opa_i,opb_i,exp_10_i,fract_48_i,sign_i,rmode_i,output_o,ine_o) ; 
+module or1200_fpu_post_norm_mul (
+  input clk_i,
+  input [FP_WIDTH-1:0] opa_i,
+  input [FP_WIDTH-1:0] opb_i,
+  input [EXP_WIDTH+1:0] exp_10_i,
+  input [2*FRAC_WIDTH+1:0] fract_48_i,
+  input sign_i,
+  input [1:0] rmode_i,
+  output reg  [FP_WIDTH-1:0] output_o,
+  output reg  ine_o) ; 
  parameter FP_WIDTH =32; 
  parameter MUL_SERIAL =0; 
  parameter MUL_COUNT =11; 
@@ -2271,15 +2260,6 @@ module or1200_fpu_post_norm_mul (clk_i,opa_i,opb_i,exp_10_i,fract_48_i,sign_i,rm
  parameter INF =31'b1111111100000000000000000000000; 
  parameter QNAN =31'b1111111110000000000000000000000; 
  parameter SNAN =31'b1111111100000000000000000000001; 
-  input clk_i; 
-  input [FP_WIDTH-1:0] opa_i; 
-  input [FP_WIDTH-1:0] opb_i; 
-  input [EXP_WIDTH+1:0] exp_10_i; 
-  input [2*FRAC_WIDTH+1:0] fract_48_i; 
-  input sign_i; 
-  input [1:0] rmode_i; 
-  output reg  [FP_WIDTH-1:0] output_o; 
-  output reg  ine_o; 
    reg [EXP_WIDTH-1:0] s_expa ;  
    reg [EXP_WIDTH-1:0] s_expb ;  
    reg [EXP_WIDTH+1:0] s_exp_10_i ;  
@@ -2591,15 +2571,15 @@ module or1200_fpu_post_norm_mul (clk_i,opa_i,opb_i,exp_10_i,fract_48_i,sign_i,rm
   assign s_output_o=(s_nan_in|s_nan_op) ? {s_sign_i,QNAN}:(s_infa|s_infb)|s_overflow ? {s_sign_i,INF}:s_r_zeros==48 ? {s_sign_i,ZERO_VECTOR}:{s_sign_i,s_expo3[7:0],s_frac3[22:0]}; 
 endmodule
  
-module or1200_spram_2048x32_bw (clk,rst,ce,we,oe,addr,di,doq) ; 
-  input clk; 
-  input rst; 
-  input ce; 
-  input [3:0] we; 
-  input oe; 
-  input [10:0] addr; 
-  input [31:0] di; 
-  output [31:0] doq; 
+module or1200_spram_2048x32_bw (
+  input clk,
+  input rst,
+  input ce,
+  input [3:0] we,
+  input oe,
+  input [10:0] addr,
+  input [31:0] di,
+  output [31:0] doq) ; 
    reg [7:0] mem_0[2047:0] ;  
    reg [7:0] mem_1[2047:0] ;  
    reg [7:0] mem_2[2047:0] ;  
@@ -2631,17 +2611,17 @@ module or1200_spram_2048x32_bw (clk,rst,ce,we,oe,addr,di,doq) ;
  
 endmodule
  
-module or1200_spram_256x21 (clk,rst,ce,we,oe,addr,di,doq) ; 
+module or1200_spram_256x21 (
+  input clk,
+  input rst,
+  input ce,
+  input we,
+  input oe,
+  input [aw-1:0] addr,
+  input [dw-1:0] di,
+  output [dw-1:0] doq) ; 
  parameter aw =8; 
  parameter dw =21; 
-  input clk; 
-  input rst; 
-  input ce; 
-  input we; 
-  input oe; 
-  input [aw-1:0] addr; 
-  input [dw-1:0] di; 
-  output [dw-1:0] doq; 
    reg [dw-1:0] mem[(1<<aw)-1:0] ;  
    reg [aw-1:0] addr_reg ;  
   assign doq=(oe) ? mem[addr_reg]:{dw{1'b0}}; 
@@ -2658,84 +2638,76 @@ module or1200_spram_256x21 (clk,rst,ce,we,oe,addr,di,doq) ;
  
 endmodule
  
-module or1200_except (clk,rst,sig_ibuserr,sig_dbuserr,sig_illegal,sig_align,sig_range,sig_dtlbmiss,sig_dmmufault,sig_int,sig_syscall,sig_trap,sig_itlbmiss,sig_immufault,sig_tick,ex_branch_taken,genpc_freeze,id_freeze,ex_freeze,wb_freeze,if_stall,if_pc,id_pc,ex_pc,wb_pc,id_flushpipe,ex_flushpipe,extend_flush,except_flushpipe,except_type,except_start,except_started,except_stop,except_trig,ex_void,abort_mvspr,branch_op,spr_dat_ppc,spr_dat_npc,datain,du_dsr,epcr_we,eear_we,esr_we,pc_we,epcr,eear,du_dmr1,du_hwbkpt,du_hwbkpt_ls_r,esr,sr_we,to_sr,sr,lsu_addr,abort_ex,icpu_ack_i,icpu_err_i,dcpu_ack_i,dcpu_err_i,sig_fp,fpcsr_fpee,dsx) ; 
-  input clk; 
-  input rst; 
-  input sig_ibuserr; 
-  input sig_dbuserr; 
-  input sig_illegal; 
-  input sig_align; 
-  input sig_range; 
-  input sig_dtlbmiss; 
-  input sig_dmmufault; 
-  input sig_int; 
-  input sig_syscall; 
-  input sig_trap; 
-  input sig_itlbmiss; 
-  input sig_immufault; 
-  input sig_tick; 
-  input sig_fp; 
-  input fpcsr_fpee; 
-  input ex_branch_taken; 
-  input genpc_freeze; 
-  input id_freeze; 
-  input ex_freeze; 
-  input wb_freeze; 
-  input if_stall; 
-  input [31:0] if_pc; 
-  output [31:0] id_pc; 
-  output [31:0] ex_pc; 
-  output [31:0] wb_pc; 
-  input [31:0] datain; 
-  input [14-1:0] du_dsr; 
-  input [24:0] du_dmr1; 
-  input du_hwbkpt; 
-  input du_hwbkpt_ls_r; 
-  input epcr_we; 
-  input eear_we; 
-  input esr_we; 
-  input pc_we; 
-  output [31:0] epcr; 
-  output [31:0] eear; 
-  output [17-1:0] esr; 
-  input [17-1:0] to_sr; 
-  input sr_we; 
-  input [17-1:0] sr; 
-  input [31:0] lsu_addr; 
-  input id_flushpipe; 
-  input ex_flushpipe; 
-  output except_flushpipe; 
-  output extend_flush; 
-  output [4-1:0] except_type; 
-  output except_start; 
-  output except_started; 
-  output [13:0] except_stop; 
-  output [13:0] except_trig; 
-  input ex_void; 
-  input [3-1:0] branch_op; 
-  output [31:0] spr_dat_ppc; 
-  output [31:0] spr_dat_npc; 
-  output abort_ex; 
-  output abort_mvspr; 
-  input icpu_ack_i; 
-  input icpu_err_i; 
-  input dcpu_ack_i; 
-  input dcpu_err_i; 
-  output dsx; 
-   reg [4-1:0] except_type ;  
-   reg [31:0] id_pc ;  
+module or1200_except (
+  input clk,
+  input rst,
+  input sig_ibuserr,
+  input sig_dbuserr,
+  input sig_illegal,
+  input sig_align,
+  input sig_range,
+  input sig_dtlbmiss,
+  input sig_dmmufault,
+  input sig_int,
+  input sig_syscall,
+  input sig_trap,
+  input sig_itlbmiss,
+  input sig_immufault,
+  input sig_tick,
+  input ex_branch_taken,
+  input genpc_freeze,
+  input id_freeze,
+  input ex_freeze,
+  input wb_freeze,
+  input if_stall,
+  input [31:0] if_pc,
+  output reg  [31:0] id_pc,
+  output reg  [31:0] ex_pc,
+  output reg  [31:0] wb_pc,
+  input id_flushpipe,
+  input ex_flushpipe,
+  output reg  extend_flush,
+  output except_flushpipe,
+  output reg  [4-1:0] except_type,
+  output except_start,
+  output except_started,
+  output [13:0] except_stop,
+  output [13:0] except_trig,
+  input ex_void,
+  output abort_mvspr,
+  input [3-1:0] branch_op,
+  output [31:0] spr_dat_ppc,
+  output [31:0] spr_dat_npc,
+  input [31:0] datain,
+  input [14-1:0] du_dsr,
+  input epcr_we,
+  input eear_we,
+  input esr_we,
+  input pc_we,
+  output reg  [31:0] epcr,
+  output reg  [31:0] eear,
+  input [24:0] du_dmr1,
+  input du_hwbkpt,
+  input du_hwbkpt_ls_r,
+  output reg  [17-1:0] esr,
+  input sr_we,
+  input [17-1:0] to_sr,
+  input [17-1:0] sr,
+  input [31:0] lsu_addr,
+  output abort_ex,
+  input icpu_ack_i,
+  input icpu_err_i,
+  input dcpu_ack_i,
+  input dcpu_err_i,
+  input sig_fp,
+  input fpcsr_fpee,
+  output reg  dsx) ; 
    reg id_pc_val ;  
-   reg [31:0] ex_pc ;  
    reg ex_pc_val ;  
-   reg [31:0] wb_pc ;  
    reg [31:0] dl_pc ;  
-   reg [31:0] epcr ;  
-   reg [31:0] eear ;  
-   reg [17-1:0] esr ;  
    reg [2:0] id_exceptflags ;  
    reg [2:0] ex_exceptflags ;  
    reg [3-1:0] state ;  
-   reg extend_flush ;  
    reg extend_flush_last ;  
    reg ex_dslot ;  
    reg delayed1_ex_dslot ;  
@@ -2748,7 +2720,6 @@ module or1200_except (clk,rst,sig_ibuserr,sig_dbuserr,sig_illegal,sig_align,sig_
    wire tick_pending ;  
    wire fp_pending ;  
    wire range_pending ;  
-   reg dsx ;  
    reg trace_trap ;  
    reg ex_freeze_prev ;  
    reg sr_ted_prev ;  
@@ -3079,12 +3050,12 @@ module or1200_except (clk,rst,sig_ibuserr,sig_dbuserr,sig_illegal,sig_align,sig_
   
 endmodule
  
-module or1200_gmultp2_32x32 (X,Y,CLK,RST,P) ; 
-  input [32-1:0] X; 
-  input [32-1:0] Y; 
-  input CLK; 
-  input RST; 
-  output [64-1:0] P; 
+module or1200_gmultp2_32x32 (
+  input [32-1:0] X,
+  input [32-1:0] Y,
+  input CLK,
+  input RST,
+  output [64-1:0] P) ; 
    reg [32-1:0] X_saved ;  
    reg [32-1:0] Y_saved ;  
    reg [64-1:0] p1 ;  
@@ -3117,93 +3088,73 @@ module or1200_gmultp2_32x32 (X,Y,CLK,RST,P) ;
   assign P=p1; 
 endmodule
  
-module or1200_ctrl (clk,rst,except_flushpipe,extend_flush,if_flushpipe,id_flushpipe,ex_flushpipe,wb_flushpipe,id_freeze,ex_freeze,wb_freeze,if_insn,id_insn,ex_insn,abort_mvspr,id_branch_op,ex_branch_op,ex_branch_taken,pc_we,rf_addra,rf_addrb,rf_rda,rf_rdb,alu_op,alu_op2,mac_op,comp_op,rf_addrw,rfwb_op,fpu_op,wb_insn,id_simm,ex_simm,id_branch_addrtarget,ex_branch_addrtarget,sel_a,sel_b,id_lsu_op,cust5_op,cust5_limm,id_pc,ex_pc,du_hwbkpt,multicycle,wait_on,wbforw_valid,sig_syscall,sig_trap,force_dslot_fetch,no_more_dslot,id_void,ex_void,ex_spr_read,ex_spr_write,du_flush_pipe,id_mac_op,id_macrc_op,ex_macrc_op,rfe,except_illegal,dc_no_writethrough) ; 
-  input clk; 
-  input rst; 
-  input id_freeze; 
-  input ex_freeze; 
-  input wb_freeze; 
-  output if_flushpipe; 
-  output id_flushpipe; 
-  output ex_flushpipe; 
-  output wb_flushpipe; 
-  input extend_flush; 
-  input except_flushpipe; 
-  input abort_mvspr; 
-  input [31:0] if_insn; 
-  output [31:0] id_insn; 
-  output [31:0] ex_insn; 
-  output [3-1:0] ex_branch_op; 
-  output [3-1:0] id_branch_op; 
-  input ex_branch_taken; 
-  output [5-1:0] rf_addrw; 
-  output [5-1:0] rf_addra; 
-  output [5-1:0] rf_addrb; 
-  output rf_rda; 
-  output rf_rdb; 
-  output [5-1:0] alu_op; 
-  output [4-1:0] alu_op2; 
-  output [3-1:0] mac_op; 
-  output [4-1:0] rfwb_op; 
-  output [8-1:0] fpu_op; 
-  input pc_we; 
-  output [31:0] wb_insn; 
-  output [31:2] id_branch_addrtarget; 
-  output [31:2] ex_branch_addrtarget; 
-  output [2-1:0] sel_a; 
-  output [2-1:0] sel_b; 
-  output [4-1:0] id_lsu_op; 
-  output [4-1:0] comp_op; 
-  output [3-1:0] multicycle; 
-  output [2-1:0] wait_on; 
-  output [4:0] cust5_op; 
-  output [5:0] cust5_limm; 
-  input [31:0] id_pc; 
-  input [31:0] ex_pc; 
-  output [31:0] id_simm; 
-  output [31:0] ex_simm; 
-  input wbforw_valid; 
-  input du_hwbkpt; 
-  output sig_syscall; 
-  output sig_trap; 
-  output force_dslot_fetch; 
-  output no_more_dslot; 
-  output id_void; 
-  output ex_void; 
-  output ex_spr_read; 
-  output ex_spr_write; 
-  output [3-1:0] id_mac_op; 
-  output id_macrc_op; 
-  output ex_macrc_op; 
-  output rfe; 
-  output except_illegal; 
-  output dc_no_writethrough; 
-  input du_flush_pipe; 
-   reg [3-1:0] id_branch_op ;  
-   reg [3-1:0] ex_branch_op ;  
-   reg [5-1:0] alu_op ;  
-   reg [4-1:0] alu_op2 ;  
+module or1200_ctrl (
+  input clk,
+  input rst,
+  input except_flushpipe,
+  input extend_flush,
+  output if_flushpipe,
+  output id_flushpipe,
+  output ex_flushpipe,
+  output wb_flushpipe,
+  input id_freeze,
+  input ex_freeze,
+  input wb_freeze,
+  input [31:0] if_insn,
+  output reg  [31:0] id_insn,
+  output reg  [31:0] ex_insn,
+  input abort_mvspr,
+  output reg  [3-1:0] id_branch_op,
+  output reg  [3-1:0] ex_branch_op,
+  input ex_branch_taken,
+  input pc_we,
+  output [5-1:0] rf_addra,
+  output [5-1:0] rf_addrb,
+  output rf_rda,
+  output rf_rdb,
+  output reg  [5-1:0] alu_op,
+  output reg  [4-1:0] alu_op2,
+  output [3-1:0] mac_op,
+  output reg  [4-1:0] comp_op,
+  output reg  [5-1:0] rf_addrw,
+  output reg  [4-1:0] rfwb_op,
+  output [8-1:0] fpu_op,
+  output reg  [31:0] wb_insn,
+  output reg  [31:0] id_simm,
+  output reg  [31:0] ex_simm,
+  output [31:2] id_branch_addrtarget,
+  output reg  [31:2] ex_branch_addrtarget,
+  output reg  [2-1:0] sel_a,
+  output reg  [2-1:0] sel_b,
+  output reg  [4-1:0] id_lsu_op,
+  output [4:0] cust5_op,
+  output [5:0] cust5_limm,
+  input [31:0] id_pc,
+  input [31:0] ex_pc,
+  input du_hwbkpt,
+  output reg  [3-1:0] multicycle,
+  output reg  [2-1:0] wait_on,
+  input wbforw_valid,
+  output reg  sig_syscall,
+  output reg  sig_trap,
+  output force_dslot_fetch,
+  output no_more_dslot,
+  output id_void,
+  output ex_void,
+  output ex_spr_read,
+  output ex_spr_write,
+  input du_flush_pipe,
+  output [3-1:0] id_mac_op,
+  output id_macrc_op,
+  output ex_macrc_op,
+  output rfe,
+  output reg  except_illegal,
+  output dc_no_writethrough) ; 
    wire if_maci_op ;  
    wire [3-1:0] mac_op ;  
    wire ex_macrc_op ;  
-   reg [31:0] id_insn ;  
-   reg [31:0] ex_insn ;  
-   reg [31:0] wb_insn ;  
-   reg [5-1:0] rf_addrw ;  
    reg [5-1:0] wb_rfaddrw ;  
-   reg [4-1:0] rfwb_op ;  
-   reg [2-1:0] sel_a ;  
-   reg [2-1:0] sel_b ;  
    reg sel_imm ;  
-   reg [4-1:0] id_lsu_op ;  
-   reg [4-1:0] comp_op ;  
-   reg [3-1:0] multicycle ;  
-   reg [2-1:0] wait_on ;  
-   reg [31:0] id_simm ;  
-   reg [31:0] ex_simm ;  
-   reg sig_syscall ;  
-   reg sig_trap ;  
-   reg except_illegal ;  
    wire id_void ;  
    wire ex_void ;  
    wire wb_void ;  
@@ -3211,7 +3162,6 @@ module or1200_ctrl (clk,rst,except_flushpipe,extend_flush,if_flushpipe,id_flushp
    reg ex_delayslot_nop ;  
    reg spr_read ;  
    reg spr_write ;  
-   reg [31:2] ex_branch_addrtarget ;  
   assign rf_addra=if_insn[20:16]; 
   assign rf_addrb=if_insn[15:11]; 
   assign rf_rda=if_insn[31]||if_maci_op; 
@@ -3737,30 +3687,30 @@ module or1200_ctrl (clk,rst,except_flushpipe,extend_flush,if_flushpipe,id_flushp
   assign dc_no_writethrough=0; 
 endmodule
  
-module or1200_dc_ram (clk,rst,addr,en,we,datain,dataout) ; 
+module or1200_dc_ram (
+  input clk,
+  input rst,
+  input [aw-1:0] addr,
+  input en,
+  input [3:0] we,
+  input [dw-1:0] datain,
+  output [dw-1:0] dataout) ; 
  parameter dw =32; 
  parameter aw =13-2; 
-  input clk; 
-  input rst; 
-  input [aw-1:0] addr; 
-  input en; 
-  input [3:0] we; 
-  input [dw-1:0] datain; 
-  output [dw-1:0] dataout; 
   or1200_spram_32_bw #(.aw(13-2),.dw(dw))dc_ram(.clk(clk),.ce(en),.we(we),.addr(addr),.di(datain),.doq(dataout)); 
 endmodule
  
-module or1200_spram_64x24 (clk,rst,ce,we,oe,addr,di,doq) ; 
+module or1200_spram_64x24 (
+  input clk,
+  input rst,
+  input ce,
+  input we,
+  input oe,
+  input [aw-1:0] addr,
+  input [dw-1:0] di,
+  output [dw-1:0] doq) ; 
  parameter aw =6; 
  parameter dw =24; 
-  input clk; 
-  input rst; 
-  input ce; 
-  input we; 
-  input oe; 
-  input [aw-1:0] addr; 
-  input [dw-1:0] di; 
-  output [dw-1:0] doq; 
    reg [dw-1:0] mem[(1<<aw)-1:0] ;  
    reg [aw-1:0] addr_reg ;  
   assign doq=(oe) ? mem[addr_reg]:{dw{1'b0}}; 
@@ -3777,26 +3727,24 @@ module or1200_spram_64x24 (clk,rst,ce,we,oe,addr,di,doq) ;
  
 endmodule
  
-module or1200_rfram_generic (clk,rst,ce_a,addr_a,do_a,ce_b,addr_b,do_b,ce_w,we_w,addr_w,di_w) ; 
+module or1200_rfram_generic (
+  input clk,
+  input rst,
+  input ce_a,
+  input [aw-1:0] addr_a,
+  output reg  [dw-1:0] do_a,
+  input ce_b,
+  input [aw-1:0] addr_b,
+  output reg  [dw-1:0] do_b,
+  input ce_w,
+  input we_w,
+  input [aw-1:0] addr_w,
+  input [dw-1:0] di_w) ; 
  parameter dw =32; 
  parameter aw =5; 
-  input clk; 
-  input rst; 
-  input ce_a; 
-  input [aw-1:0] addr_a; 
-  output [dw-1:0] do_a; 
-  input ce_b; 
-  input [aw-1:0] addr_b; 
-  output [dw-1:0] do_b; 
-  input ce_w; 
-  input we_w; 
-  input [aw-1:0] addr_w; 
-  input [dw-1:0] di_w; 
    reg [aw-1:0] intaddr_a ;  
    reg [aw-1:0] intaddr_b ;  
    reg [32*dw-1:0] mem ;  
-   reg [dw-1:0] do_a ;  
-   reg [dw-1:0] do_b ;  
   always @(  posedge clk or  posedge rst)
        if (rst==(1'b1))
           begin 
@@ -4027,24 +3975,24 @@ module or1200_rfram_generic (clk,rst,ce_a,addr_a,do_a,ce_b,addr_b,do_b,ce_w,we_w
   
 endmodule
  
-module or1200_pm (clk,rst,pic_wakeup,spr_write,spr_addr,spr_dat_i,spr_dat_o,pm_clksd,pm_cpustall,pm_dc_gate,pm_ic_gate,pm_dmmu_gate,pm_immu_gate,pm_tt_gate,pm_cpu_gate,pm_wakeup,pm_lvolt) ; 
-  input clk; 
-  input rst; 
-  input pic_wakeup; 
-  input spr_write; 
-  input [31:0] spr_addr; 
-  input [31:0] spr_dat_i; 
-  output [31:0] spr_dat_o; 
-  input pm_cpustall; 
-  output [3:0] pm_clksd; 
-  output pm_dc_gate; 
-  output pm_ic_gate; 
-  output pm_dmmu_gate; 
-  output pm_immu_gate; 
-  output pm_tt_gate; 
-  output pm_cpu_gate; 
-  output pm_wakeup; 
-  output pm_lvolt; 
+module or1200_pm (
+  input clk,
+  input rst,
+  input pic_wakeup,
+  input spr_write,
+  input [31:0] spr_addr,
+  input [31:0] spr_dat_i,
+  output [31:0] spr_dat_o,
+  output [3:0] pm_clksd,
+  input pm_cpustall,
+  output pm_dc_gate,
+  output pm_ic_gate,
+  output pm_dmmu_gate,
+  output pm_immu_gate,
+  output pm_tt_gate,
+  output pm_cpu_gate,
+  output pm_wakeup,
+  output pm_lvolt) ; 
   assign pm_clksd=4'b0; 
   assign pm_cpu_gate=1'b0; 
   assign pm_dc_gate=1'b0; 
@@ -4061,12 +4009,12 @@ module or1200_pm (clk,rst,pic_wakeup,spr_write,spr_addr,spr_dat_i,spr_dat_o,pm_c
   assign spr_dat_o[31:7]=25'b0; 
 endmodule
  
-module or1200_reg2mem (addr,lsu_op,regdata,memdata) ; 
+module or1200_reg2mem (
+  input [1:0] addr,
+  input [4-1:0] lsu_op,
+  input [width-1:0] regdata,
+  output [width-1:0] memdata) ; 
  parameter width =32; 
-  input [1:0] addr; 
-  input [4-1:0] lsu_op; 
-  input [width-1:0] regdata; 
-  output [width-1:0] memdata; 
    reg [7:0] memdata_hh ;  
    reg [7:0] memdata_hl ;  
    reg [7:0] memdata_lh ;  
@@ -4109,85 +4057,85 @@ module or1200_reg2mem (addr,lsu_op,regdata,memdata) ;
  
 endmodule
  
-module or1200_cpu (clk,rst,ic_en,icpu_adr_o,icpu_cycstb_o,icpu_sel_o,icpu_tag_o,icpu_dat_i,icpu_ack_i,icpu_rty_i,icpu_err_i,icpu_adr_i,icpu_tag_i,immu_en,id_void,id_insn,ex_void,ex_insn,ex_freeze,wb_insn,wb_freeze,id_pc,ex_pc,wb_pc,branch_op,spr_dat_npc,rf_dataw,ex_flushpipe,du_stall,du_addr,du_dat_du,du_read,du_write,du_except_stop,du_flush_pipe,du_except_trig,du_dsr,du_dmr1,du_hwbkpt,du_hwbkpt_ls_r,du_dat_cpu,du_lsu_store_dat,du_lsu_load_dat,abort_mvspr,abort_ex,dc_en,dcpu_adr_o,dcpu_cycstb_o,dcpu_we_o,dcpu_sel_o,dcpu_tag_o,dcpu_dat_o,dcpu_dat_i,dcpu_ack_i,dcpu_rty_i,dcpu_err_i,dcpu_tag_i,sb_en,dmmu_en,dc_no_writethrough,boot_adr_sel_i,sig_int,sig_tick,supv,spr_addr,spr_dat_cpu,spr_dat_pic,spr_dat_tt,spr_dat_pm,spr_dat_dmmu,spr_dat_immu,spr_dat_du,spr_cs,spr_we,mtspr_dc_done) ; 
+module or1200_cpu (
+  input clk,
+  input rst,
+  output ic_en,
+  output [31:0] icpu_adr_o,
+  output icpu_cycstb_o,
+  output [3:0] icpu_sel_o,
+  output [3:0] icpu_tag_o,
+  input [31:0] icpu_dat_i,
+  input icpu_ack_i,
+  input icpu_rty_i,
+  input icpu_err_i,
+  input [31:0] icpu_adr_i,
+  input [3:0] icpu_tag_i,
+  output immu_en,
+  output id_void,
+  output [31:0] id_insn,
+  output ex_void,
+  output [31:0] ex_insn,
+  output ex_freeze,
+  output [31:0] wb_insn,
+  output wb_freeze,
+  output [31:0] id_pc,
+  output [31:0] ex_pc,
+  output [31:0] wb_pc,
+  output [3-1:0] branch_op,
+  output [dw-1:0] spr_dat_npc,
+  output [dw-1:0] rf_dataw,
+  output ex_flushpipe,
+  input du_stall,
+  input [dw-1:0] du_addr,
+  input [dw-1:0] du_dat_du,
+  input du_read,
+  input du_write,
+  output [13:0] du_except_stop,
+  input du_flush_pipe,
+  output [13:0] du_except_trig,
+  input [14-1:0] du_dsr,
+  input [24:0] du_dmr1,
+  input du_hwbkpt,
+  input du_hwbkpt_ls_r,
+  output [dw-1:0] du_dat_cpu,
+  output [dw-1:0] du_lsu_store_dat,
+  output [dw-1:0] du_lsu_load_dat,
+  output abort_mvspr,
+  output abort_ex,
+  output dc_en,
+  output [31:0] dcpu_adr_o,
+  output dcpu_cycstb_o,
+  output dcpu_we_o,
+  output [3:0] dcpu_sel_o,
+  output [3:0] dcpu_tag_o,
+  output [31:0] dcpu_dat_o,
+  input [31:0] dcpu_dat_i,
+  input dcpu_ack_i,
+  input dcpu_rty_i,
+  input dcpu_err_i,
+  input [3:0] dcpu_tag_i,
+  output sb_en,
+  output dmmu_en,
+  output dc_no_writethrough,
+  input boot_adr_sel_i,
+  input sig_int,
+  input sig_tick,
+  output supv,
+  output [dw-1:0] spr_addr,
+  output [dw-1:0] spr_dat_cpu,
+  input [dw-1:0] spr_dat_pic,
+  input [dw-1:0] spr_dat_tt,
+  input [dw-1:0] spr_dat_pm,
+  input [dw-1:0] spr_dat_dmmu,
+  input [dw-1:0] spr_dat_immu,
+  input [dw-1:0] spr_dat_du,
+  output [31:0] spr_cs,
+  output spr_we,
+  input mtspr_dc_done) ; 
  parameter dw =32; 
  parameter aw =5; 
  parameter boot_adr =32'h00000100; 
-  input clk; 
-  input rst; 
-  output ic_en; 
-  output [31:0] icpu_adr_o; 
-  output icpu_cycstb_o; 
-  output [3:0] icpu_sel_o; 
-  output [3:0] icpu_tag_o; 
-  input [31:0] icpu_dat_i; 
-  input icpu_ack_i; 
-  input icpu_rty_i; 
-  input icpu_err_i; 
-  input [31:0] icpu_adr_i; 
-  input [3:0] icpu_tag_i; 
-  output immu_en; 
-  output id_void; 
-  output [31:0] id_insn; 
-  output ex_void; 
-  output [31:0] ex_insn; 
-  output ex_freeze; 
-  output [31:0] wb_insn; 
-  output wb_freeze; 
-  output [31:0] id_pc; 
-  output [31:0] ex_pc; 
-  output [31:0] wb_pc; 
-  output ex_flushpipe; 
-  output [3-1:0] branch_op; 
-  input du_stall; 
-  input [dw-1:0] du_addr; 
-  input [dw-1:0] du_dat_du; 
-  input du_read; 
-  input du_write; 
-  input [14-1:0] du_dsr; 
-  input [24:0] du_dmr1; 
-  input du_hwbkpt; 
-  input du_hwbkpt_ls_r; 
-  output [13:0] du_except_trig; 
-  output [13:0] du_except_stop; 
-  output [dw-1:0] du_dat_cpu; 
-  output [dw-1:0] rf_dataw; 
-  output [dw-1:0] du_lsu_store_dat; 
-  output [dw-1:0] du_lsu_load_dat; 
-  input du_flush_pipe; 
-  output [31:0] dcpu_adr_o; 
-  output dcpu_cycstb_o; 
-  output dcpu_we_o; 
-  output [3:0] dcpu_sel_o; 
-  output [3:0] dcpu_tag_o; 
-  output [31:0] dcpu_dat_o; 
-  input [31:0] dcpu_dat_i; 
-  input dcpu_ack_i; 
-  input dcpu_rty_i; 
-  input dcpu_err_i; 
-  input [3:0] dcpu_tag_i; 
-  output dc_en; 
-  output dc_no_writethrough; 
-  output sb_en; 
-  output dmmu_en; 
-  output abort_ex; 
-  output abort_mvspr; 
-  input boot_adr_sel_i; 
-  output supv; 
-  input [dw-1:0] spr_dat_pic; 
-  input [dw-1:0] spr_dat_tt; 
-  input [dw-1:0] spr_dat_pm; 
-  input [dw-1:0] spr_dat_dmmu; 
-  input [dw-1:0] spr_dat_immu; 
-  input [dw-1:0] spr_dat_du; 
-  output [dw-1:0] spr_addr; 
-  output [dw-1:0] spr_dat_cpu; 
-  output [dw-1:0] spr_dat_npc; 
-  output [31:0] spr_cs; 
-  output spr_we; 
-  input mtspr_dc_done; 
-  input sig_int; 
-  input sig_tick; 
    wire [31:0] if_insn ;  
    wire saving_if_insn ;  
    wire [31:0] if_pc ;  
@@ -4343,17 +4291,17 @@ module or1200_cpu (clk,rst,ic_en,icpu_adr_o,icpu_cycstb_o,icpu_sel_o,icpu_tag_o,
   or1200_cfgr or1200_cfgr(.spr_addr(spr_addr),.spr_dat_o(spr_dat_cfgr)); 
 endmodule
  
-module or1200_spram_64x22 (clk,rst,ce,we,oe,addr,di,doq) ; 
+module or1200_spram_64x22 (
+  input clk,
+  input rst,
+  input ce,
+  input we,
+  input oe,
+  input [aw-1:0] addr,
+  input [dw-1:0] di,
+  output [dw-1:0] doq) ; 
  parameter aw =6; 
  parameter dw =22; 
-  input clk; 
-  input rst; 
-  input ce; 
-  input we; 
-  input oe; 
-  input [aw-1:0] addr; 
-  input [dw-1:0] di; 
-  output [dw-1:0] doq; 
    reg [dw-1:0] mem[(1<<aw)-1:0] ;  
    reg [aw-1:0] addr_reg ;  
   assign doq=(oe) ? mem[addr_reg]:{dw{1'b0}}; 
@@ -4370,24 +4318,24 @@ module or1200_spram_64x22 (clk,rst,ce,we,oe,addr,di,doq) ;
  
 endmodule
  
-module or1200_ic_fsm (clk,rst,ic_en,icqmem_cycstb_i,icqmem_ci_i,tagcomp_miss,biudata_valid,biudata_error,start_addr,saved_addr,icram_we,tag_we,biu_read,first_hit_ack,first_miss_ack,first_miss_err,burst) ; 
-  input clk; 
-  input rst; 
-  input ic_en; 
-  input icqmem_cycstb_i; 
-  input icqmem_ci_i; 
-  input tagcomp_miss; 
-  input biudata_valid; 
-  input biudata_error; 
-  input [31:0] start_addr; 
-  output [31:0] saved_addr; 
-  output [3:0] icram_we; 
-  output biu_read; 
-  output first_hit_ack; 
-  output first_miss_ack; 
-  output first_miss_err; 
-  output burst; 
-  output tag_we; 
+module or1200_ic_fsm (
+  input clk,
+  input rst,
+  input ic_en,
+  input icqmem_cycstb_i,
+  input icqmem_ci_i,
+  input tagcomp_miss,
+  input biudata_valid,
+  input biudata_error,
+  input [31:0] start_addr,
+  output [31:0] saved_addr,
+  output [3:0] icram_we,
+  output tag_we,
+  output biu_read,
+  output first_hit_ack,
+  output first_miss_ack,
+  output first_miss_err,
+  output burst) ; 
    reg [31:0] saved_addr_r ;  
    reg [1:0] state ;  
    reg [4-1:0] cnt ;  
@@ -4505,32 +4453,32 @@ module or1200_ic_fsm (clk,rst,ic_en,icqmem_cycstb_i,icqmem_ci_i,tagcomp_miss,biu
   
 endmodule
  
-module or1200_sb (clk,rst,sb_en,dcsb_dat_i,dcsb_adr_i,dcsb_cyc_i,dcsb_stb_i,dcsb_we_i,dcsb_sel_i,dcsb_cab_i,dcsb_dat_o,dcsb_ack_o,dcsb_err_o,sbbiu_dat_o,sbbiu_adr_o,sbbiu_cyc_o,sbbiu_stb_o,sbbiu_we_o,sbbiu_sel_o,sbbiu_cab_o,sbbiu_dat_i,sbbiu_ack_i,sbbiu_err_i) ; 
+module or1200_sb (
+  input clk,
+  input rst,
+  input sb_en,
+  input [dw-1:0] dcsb_dat_i,
+  input [aw-1:0] dcsb_adr_i,
+  input dcsb_cyc_i,
+  input dcsb_stb_i,
+  input dcsb_we_i,
+  input [3:0] dcsb_sel_i,
+  input dcsb_cab_i,
+  output [dw-1:0] dcsb_dat_o,
+  output dcsb_ack_o,
+  output dcsb_err_o,
+  output [dw-1:0] sbbiu_dat_o,
+  output [aw-1:0] sbbiu_adr_o,
+  output sbbiu_cyc_o,
+  output sbbiu_stb_o,
+  output sbbiu_we_o,
+  output [3:0] sbbiu_sel_o,
+  output sbbiu_cab_o,
+  input [dw-1:0] sbbiu_dat_i,
+  input sbbiu_ack_i,
+  input sbbiu_err_i) ; 
  parameter dw =32; 
  parameter aw =32; 
-  input clk; 
-  input rst; 
-  input sb_en; 
-  input [dw-1:0] dcsb_dat_i; 
-  input [aw-1:0] dcsb_adr_i; 
-  input dcsb_cyc_i; 
-  input dcsb_stb_i; 
-  input dcsb_we_i; 
-  input dcsb_cab_i; 
-  input [3:0] dcsb_sel_i; 
-  output [dw-1:0] dcsb_dat_o; 
-  output dcsb_ack_o; 
-  output dcsb_err_o; 
-  output [dw-1:0] sbbiu_dat_o; 
-  output [aw-1:0] sbbiu_adr_o; 
-  output sbbiu_cyc_o; 
-  output sbbiu_stb_o; 
-  output sbbiu_we_o; 
-  output sbbiu_cab_o; 
-  output [3:0] sbbiu_sel_o; 
-  input [dw-1:0] sbbiu_dat_i; 
-  input sbbiu_ack_i; 
-  input sbbiu_err_i; 
   assign sbbiu_dat_o=dcsb_dat_i; 
   assign sbbiu_adr_o=dcsb_adr_i; 
   assign sbbiu_cyc_o=dcsb_cyc_i; 
@@ -4543,7 +4491,13 @@ module or1200_sb (clk,rst,sb_en,dcsb_dat_i,dcsb_adr_i,dcsb_cyc_i,dcsb_stb_i,dcsb
   assign dcsb_err_o=sbbiu_err_i; 
 endmodule
  
-module or1200_fpu_pre_norm_mul (clk_i,opa_i,opb_i,exp_10_o,fracta_24_o,fractb_24_o) ; 
+module or1200_fpu_pre_norm_mul (
+  input clk_i,
+  input [FP_WIDTH-1:0] opa_i,
+  input [FP_WIDTH-1:0] opb_i,
+  output reg  [EXP_WIDTH+1:0] exp_10_o,
+  output [FRAC_WIDTH:0] fracta_24_o,
+  output [FRAC_WIDTH:0] fractb_24_o) ; 
  parameter FP_WIDTH =32; 
  parameter MUL_SERIAL =0; 
  parameter MUL_COUNT =11; 
@@ -4553,12 +4507,6 @@ module or1200_fpu_pre_norm_mul (clk_i,opa_i,opb_i,exp_10_o,fracta_24_o,fractb_24
  parameter INF =31'b1111111100000000000000000000000; 
  parameter QNAN =31'b1111111110000000000000000000000; 
  parameter SNAN =31'b1111111100000000000000000000001; 
-  input clk_i; 
-  input [FP_WIDTH-1:0] opa_i; 
-  input [FP_WIDTH-1:0] opb_i; 
-  output reg  [EXP_WIDTH+1:0] exp_10_o; 
-  output [FRAC_WIDTH:0] fracta_24_o; 
-  output [FRAC_WIDTH:0] fractb_24_o; 
    wire [EXP_WIDTH-1:0] s_expa ;  
    wire [EXP_WIDTH-1:0] s_expb ;  
    wire [FRAC_WIDTH-1:0] s_fracta ;  
@@ -4583,32 +4531,32 @@ module or1200_fpu_pre_norm_mul (clk_i,opa_i,opb_i,exp_10_o,fracta_24_o,fractb_24
   assign s_exp_10_o=s_expa_in+s_expb_in-10'b0001111111; 
 endmodule
  
-module or1200_rf (clk,rst,cy_we_i,cy_we_o,supv,wb_freeze,addrw,dataw,we,flushpipe,id_freeze,addra,addrb,dataa,datab,rda,rdb,spr_cs,spr_write,spr_addr,spr_dat_i,spr_dat_o,du_read) ; 
+module or1200_rf (
+  input clk,
+  input rst,
+  input cy_we_i,
+  output cy_we_o,
+  input supv,
+  input wb_freeze,
+  input [aw-1:0] addrw,
+  input [dw-1:0] dataw,
+  input we,
+  input flushpipe,
+  input id_freeze,
+  input [aw-1:0] addra,
+  input [aw-1:0] addrb,
+  output [dw-1:0] dataa,
+  output [dw-1:0] datab,
+  input rda,
+  input rdb,
+  input spr_cs,
+  input spr_write,
+  input [31:0] spr_addr,
+  input [31:0] spr_dat_i,
+  output [31:0] spr_dat_o,
+  input du_read) ; 
  parameter dw =32; 
  parameter aw =5; 
-  input clk; 
-  input rst; 
-  input cy_we_i; 
-  output cy_we_o; 
-  input supv; 
-  input wb_freeze; 
-  input [aw-1:0] addrw; 
-  input [dw-1:0] dataw; 
-  input we; 
-  input flushpipe; 
-  input id_freeze; 
-  input [aw-1:0] addra; 
-  input [aw-1:0] addrb; 
-  output [dw-1:0] dataa; 
-  output [dw-1:0] datab; 
-  input rda; 
-  input rdb; 
-  input spr_cs; 
-  input spr_write; 
-  input [31:0] spr_addr; 
-  input [31:0] spr_dat_i; 
-  output [31:0] spr_dat_o; 
-  input du_read; 
    wire [dw-1:0] from_rfa ;  
    wire [dw-1:0] from_rfb ;  
    wire [aw-1:0] rf_addra ;  
@@ -4652,7 +4600,17 @@ module or1200_rf (clk,rst,cy_we_i,cy_we_o,supv,wb_freeze,addrw,dataw,we,flushpip
   or1200_dpram #(.aw(5),.dw(32))rf_b(.clk_a(clk),.ce_a(rf_enb),.addr_a(addrb),.do_a(from_rfb),.clk_b(clk),.ce_b(rf_we),.we_b(rf_we),.addr_b(rf_addrw),.di_b(rf_dataw)); 
 endmodule
  
-module or1200_fpu_post_norm_addsub (clk_i,opa_i,opb_i,fract_28_i,exp_i,sign_i,fpu_op_i,rmode_i,output_o,ine_o) ; 
+module or1200_fpu_post_norm_addsub (
+  input clk_i,
+  input [FP_WIDTH-1:0] opa_i,
+  input [FP_WIDTH-1:0] opb_i,
+  input [FRAC_WIDTH+4:0] fract_28_i,
+  input [EXP_WIDTH-1:0] exp_i,
+  input sign_i,
+  input fpu_op_i,
+  input [1:0] rmode_i,
+  output reg  [FP_WIDTH-1:0] output_o,
+  output reg  ine_o) ; 
  parameter FP_WIDTH =32; 
  parameter MUL_SERIAL =0; 
  parameter MUL_COUNT =11; 
@@ -4662,16 +4620,6 @@ module or1200_fpu_post_norm_addsub (clk_i,opa_i,opb_i,fract_28_i,exp_i,sign_i,fp
  parameter INF =31'b1111111100000000000000000000000; 
  parameter QNAN =31'b1111111110000000000000000000000; 
  parameter SNAN =31'b1111111100000000000000000000001; 
-  input clk_i; 
-  input [FP_WIDTH-1:0] opa_i; 
-  input [FP_WIDTH-1:0] opb_i; 
-  input [FRAC_WIDTH+4:0] fract_28_i; 
-  input [EXP_WIDTH-1:0] exp_i; 
-  input sign_i; 
-  input fpu_op_i; 
-  input [1:0] rmode_i; 
-  output reg  [FP_WIDTH-1:0] output_o; 
-  output reg  ine_o; 
    wire [FP_WIDTH-1:0] s_opa_i ;  
    wire [FP_WIDTH-1:0] s_opb_i ;  
    wire [FRAC_WIDTH+4:0] s_fract_28_i ;  
@@ -4829,54 +4777,54 @@ module or1200_fpu_post_norm_addsub (clk_i,opa_i,opb_i,fract_28_i,exp_i,sign_i,fp
   assign s_output_o=(s_nan_in|s_nan_op) ? {s_nan_sign,QNAN}:(s_infa|s_infb)|s_overflow ? {s_sign_i,INF}:s_zero_fract ? {s_sign_i,ZERO_VECTOR}:{s_sign_i,s_expo9_3[7:0],s_fracto28_2[25:3]}; 
 endmodule
  
-module or1200_qmem_top (clk,rst,qmemimmu_adr_i,qmemimmu_cycstb_i,qmemimmu_ci_i,qmemicpu_sel_i,qmemicpu_tag_i,qmemicpu_dat_o,qmemicpu_ack_o,qmemimmu_rty_o,qmemimmu_err_o,qmemimmu_tag_o,icqmem_adr_o,icqmem_cycstb_o,icqmem_ci_o,icqmem_sel_o,icqmem_tag_o,icqmem_dat_i,icqmem_ack_i,icqmem_rty_i,icqmem_err_i,icqmem_tag_i,qmemdmmu_adr_i,qmemdmmu_cycstb_i,qmemdmmu_ci_i,qmemdcpu_we_i,qmemdcpu_sel_i,qmemdcpu_tag_i,qmemdcpu_dat_i,qmemdcpu_dat_o,qmemdcpu_ack_o,qmemdcpu_rty_o,qmemdmmu_err_o,qmemdmmu_tag_o,dcqmem_adr_o,dcqmem_cycstb_o,dcqmem_ci_o,dcqmem_we_o,dcqmem_sel_o,dcqmem_tag_o,dcqmem_dat_o,dcqmem_dat_i,dcqmem_ack_i,dcqmem_rty_i,dcqmem_err_i,dcqmem_tag_i) ; 
+module or1200_qmem_top (
+  input clk,
+  input rst,
+  input [31:0] qmemimmu_adr_i,
+  input qmemimmu_cycstb_i,
+  input qmemimmu_ci_i,
+  input [3:0] qmemicpu_sel_i,
+  input [3:0] qmemicpu_tag_i,
+  output [31:0] qmemicpu_dat_o,
+  output qmemicpu_ack_o,
+  output qmemimmu_rty_o,
+  output qmemimmu_err_o,
+  output [3:0] qmemimmu_tag_o,
+  output [31:0] icqmem_adr_o,
+  output icqmem_cycstb_o,
+  output icqmem_ci_o,
+  output [3:0] icqmem_sel_o,
+  output [3:0] icqmem_tag_o,
+  input [31:0] icqmem_dat_i,
+  input icqmem_ack_i,
+  input icqmem_rty_i,
+  input icqmem_err_i,
+  input [3:0] icqmem_tag_i,
+  input [31:0] qmemdmmu_adr_i,
+  input qmemdmmu_cycstb_i,
+  input qmemdmmu_ci_i,
+  input qmemdcpu_we_i,
+  input [3:0] qmemdcpu_sel_i,
+  input [3:0] qmemdcpu_tag_i,
+  input [31:0] qmemdcpu_dat_i,
+  output [31:0] qmemdcpu_dat_o,
+  output qmemdcpu_ack_o,
+  output qmemdcpu_rty_o,
+  output qmemdmmu_err_o,
+  output [3:0] qmemdmmu_tag_o,
+  output [31:0] dcqmem_adr_o,
+  output dcqmem_cycstb_o,
+  output dcqmem_ci_o,
+  output dcqmem_we_o,
+  output [3:0] dcqmem_sel_o,
+  output [3:0] dcqmem_tag_o,
+  output [dw-1:0] dcqmem_dat_o,
+  input [dw-1:0] dcqmem_dat_i,
+  input dcqmem_ack_i,
+  input dcqmem_rty_i,
+  input dcqmem_err_i,
+  input [3:0] dcqmem_tag_i) ; 
  parameter dw =32; 
-  input clk; 
-  input rst; 
-  input [31:0] qmemimmu_adr_i; 
-  input qmemimmu_cycstb_i; 
-  input qmemimmu_ci_i; 
-  input [3:0] qmemicpu_sel_i; 
-  input [3:0] qmemicpu_tag_i; 
-  output [31:0] qmemicpu_dat_o; 
-  output qmemicpu_ack_o; 
-  output qmemimmu_rty_o; 
-  output qmemimmu_err_o; 
-  output [3:0] qmemimmu_tag_o; 
-  output [31:0] icqmem_adr_o; 
-  output icqmem_cycstb_o; 
-  output icqmem_ci_o; 
-  output [3:0] icqmem_sel_o; 
-  output [3:0] icqmem_tag_o; 
-  input [31:0] icqmem_dat_i; 
-  input icqmem_ack_i; 
-  input icqmem_rty_i; 
-  input icqmem_err_i; 
-  input [3:0] icqmem_tag_i; 
-  input [31:0] qmemdmmu_adr_i; 
-  input qmemdmmu_cycstb_i; 
-  input qmemdmmu_ci_i; 
-  input qmemdcpu_we_i; 
-  input [3:0] qmemdcpu_sel_i; 
-  input [3:0] qmemdcpu_tag_i; 
-  input [31:0] qmemdcpu_dat_i; 
-  output [31:0] qmemdcpu_dat_o; 
-  output qmemdcpu_ack_o; 
-  output qmemdcpu_rty_o; 
-  output qmemdmmu_err_o; 
-  output [3:0] qmemdmmu_tag_o; 
-  output [31:0] dcqmem_adr_o; 
-  output dcqmem_cycstb_o; 
-  output dcqmem_ci_o; 
-  output dcqmem_we_o; 
-  output [3:0] dcqmem_sel_o; 
-  output [3:0] dcqmem_tag_o; 
-  output [dw-1:0] dcqmem_dat_o; 
-  input [dw-1:0] dcqmem_dat_i; 
-  input dcqmem_ack_i; 
-  input dcqmem_rty_i; 
-  input dcqmem_err_i; 
-  input [3:0] dcqmem_tag_i; 
   assign qmemicpu_dat_o=icqmem_dat_i; 
   assign qmemicpu_ack_o=icqmem_ack_i; 
   assign qmemimmu_rty_o=icqmem_rty_i; 
@@ -4901,55 +4849,52 @@ module or1200_qmem_top (clk,rst,qmemimmu_adr_i,qmemimmu_cycstb_i,qmemimmu_ci_i,q
   assign dcqmem_dat_o=qmemdcpu_dat_i; 
 endmodule
  
-module or1200_du (clk,rst,dcpu_cycstb_i,dcpu_we_i,dcpu_adr_i,dcpu_dat_lsu,dcpu_dat_dc,icpu_cycstb_i,ex_freeze,branch_op,ex_insn,id_pc,spr_dat_npc,rf_dataw,du_dsr,du_dmr1,du_stall,du_addr,du_dat_i,du_dat_o,du_read,du_write,du_except_stop,du_hwbkpt,du_flush_pipe,spr_cs,spr_write,spr_addr,spr_dat_i,spr_dat_o,dbg_stall_i,dbg_ewt_i,dbg_lss_o,dbg_is_o,dbg_wp_o,dbg_bp_o,dbg_stb_i,dbg_we_i,dbg_adr_i,dbg_dat_i,dbg_dat_o,dbg_ack_o) ; 
+module or1200_du (
+  input clk,
+  input rst,
+  input dcpu_cycstb_i,
+  input dcpu_we_i,
+  input [31:0] dcpu_adr_i,
+  input [31:0] dcpu_dat_lsu,
+  input [31:0] dcpu_dat_dc,
+  input [1-1:0] icpu_cycstb_i,
+  input ex_freeze,
+  input [3-1:0] branch_op,
+  input [dw-1:0] ex_insn,
+  input [31:0] id_pc,
+  input [31:0] spr_dat_npc,
+  input [31:0] rf_dataw,
+  output [14-1:0] du_dsr,
+  output [24:0] du_dmr1,
+  output du_stall,
+  output [aw-1:0] du_addr,
+  input [dw-1:0] du_dat_i,
+  output [dw-1:0] du_dat_o,
+  output du_read,
+  output du_write,
+  input [13:0] du_except_stop,
+  output du_hwbkpt,
+  output du_flush_pipe,
+  input spr_cs,
+  input spr_write,
+  input [aw-1:0] spr_addr,
+  input [dw-1:0] spr_dat_i,
+  output reg  [dw-1:0] spr_dat_o,
+  input dbg_stall_i,
+  input dbg_ewt_i,
+  output [3:0] dbg_lss_o,
+  output reg  [1:0] dbg_is_o,
+  output [10:0] dbg_wp_o,
+  output dbg_bp_o,
+  input dbg_stb_i,
+  input dbg_we_i,
+  input [aw-1:0] dbg_adr_i,
+  input [dw-1:0] dbg_dat_i,
+  output reg  [dw-1:0] dbg_dat_o,
+  output reg  dbg_ack_o) ; 
  parameter dw =32; 
  parameter aw =32; 
-  input clk; 
-  input rst; 
-  input dcpu_cycstb_i; 
-  input dcpu_we_i; 
-  input [31:0] dcpu_adr_i; 
-  input [31:0] dcpu_dat_lsu; 
-  input [31:0] dcpu_dat_dc; 
-  input [1-1:0] icpu_cycstb_i; 
-  input ex_freeze; 
-  input [3-1:0] branch_op; 
-  input [dw-1:0] ex_insn; 
-  input [31:0] id_pc; 
-  input [31:0] spr_dat_npc; 
-  input [31:0] rf_dataw; 
-  output [14-1:0] du_dsr; 
-  output [24:0] du_dmr1; 
-  output du_stall; 
-  output [aw-1:0] du_addr; 
-  input [dw-1:0] du_dat_i; 
-  output [dw-1:0] du_dat_o; 
-  output du_read; 
-  output du_write; 
-  input [13:0] du_except_stop; 
-  output du_hwbkpt; 
-  output du_flush_pipe; 
-  input spr_cs; 
-  input spr_write; 
-  input [aw-1:0] spr_addr; 
-  input [dw-1:0] spr_dat_i; 
-  output [dw-1:0] spr_dat_o; 
-  input dbg_stall_i; 
-  input dbg_ewt_i; 
-  output [3:0] dbg_lss_o; 
-  output [1:0] dbg_is_o; 
-  output [10:0] dbg_wp_o; 
-  output dbg_bp_o; 
-  input dbg_stb_i; 
-  input dbg_we_i; 
-  input [aw-1:0] dbg_adr_i; 
-  input [dw-1:0] dbg_dat_i; 
-  output [dw-1:0] dbg_dat_o; 
-  output dbg_ack_o; 
-   reg [dw-1:0] dbg_dat_o ;  
-   reg dbg_ack_o ;  
   assign dbg_lss_o=4'b0000; 
-   reg [1:0] dbg_is_o ;  
   always @(  posedge clk or  posedge rst)
        if (rst==(1'b1))
           dbg_is_o <=2'b00;
@@ -5042,7 +4987,6 @@ module or1200_du (clk,rst,dcpu_cycstb_i,dcpu_we_i,dcpu_adr_i,dcpu_dat_lsu,dcpu_d
    reg ex_freeze_q ;  
    wire du_hwbkpt ;  
    reg du_hwbkpt_hold ;  
-   reg [31:0] spr_dat_o ;  
    reg [13:0] except_stop ;  
    wire [31:0] tbia_dat_o ;  
    wire [31:0] tbim_dat_o ;  
@@ -5189,7 +5133,23 @@ module or1200_du (clk,rst,dcpu_cycstb_i,dcpu_we_i,dcpu_adr_i,dcpu_dat_lsu,dcpu_d
   assign tbts_dat_o=32'h0000_0000; 
 endmodule
  
-module or1200_fpu_arith (clk_i,opa_i,opb_i,fpu_op_i,rmode_i,output_o,start_i,ready_o,ine_o,overflow_o,underflow_o,div_zero_o,inf_o,zero_o,qnan_o,snan_o) ; 
+module or1200_fpu_arith (
+  input clk_i,
+  input [FP_WIDTH-1:0] opa_i,
+  input [FP_WIDTH-1:0] opb_i,
+  input [2:0] fpu_op_i,
+  input [1:0] rmode_i,
+  output reg  [FP_WIDTH-1:0] output_o,
+  input start_i,
+  output reg  ready_o,
+  output reg  ine_o,
+  output reg  overflow_o,
+  output reg  underflow_o,
+  output reg  div_zero_o,
+  output reg  inf_o,
+  output reg  zero_o,
+  output reg  qnan_o,
+  output reg  snan_o) ; 
  parameter FP_WIDTH =32; 
  parameter MUL_SERIAL =1; 
  parameter MUL_COUNT =34; 
@@ -5199,22 +5159,6 @@ module or1200_fpu_arith (clk_i,opa_i,opb_i,fpu_op_i,rmode_i,output_o,start_i,rea
  parameter INF =31'b1111111100000000000000000000000; 
  parameter QNAN =31'b11111111_10000000000000000000000; 
  parameter SNAN =31'b11111111_00000000000000000000001; 
-  input clk_i; 
-  input [FP_WIDTH-1:0] opa_i; 
-  input [FP_WIDTH-1:0] opb_i; 
-  input [2:0] fpu_op_i; 
-  input [1:0] rmode_i; 
-  input start_i; 
-  output reg  ready_o; 
-  output reg  [FP_WIDTH-1:0] output_o; 
-  output reg  ine_o; 
-  output reg  overflow_o; 
-  output reg  underflow_o; 
-  output reg  div_zero_o; 
-  output reg  inf_o; 
-  output reg  zero_o; 
-  output reg  qnan_o; 
-  output reg  snan_o; 
    reg [FP_WIDTH-1:0] s_opa_i ;  
    reg [FP_WIDTH-1:0] s_opb_i ;  
    reg [2:0] s_fpu_op_i ;  
@@ -5382,40 +5326,40 @@ module or1200_fpu_arith (clk_i,opa_i,opb_i,fpu_op_i,rmode_i,output_o,start_i,rea
   assign s_snan_o=s_output1[30:0]==SNAN; 
 endmodule
  
-module or1200_dc_top (clk,rst,dcsb_dat_o,dcsb_adr_o,dcsb_cyc_o,dcsb_stb_o,dcsb_we_o,dcsb_sel_o,dcsb_cab_o,dcsb_dat_i,dcsb_ack_i,dcsb_err_i,dc_en,dcqmem_adr_i,dcqmem_cycstb_i,dcqmem_ci_i,dcqmem_we_i,dcqmem_sel_i,dcqmem_tag_i,dcqmem_dat_i,dcqmem_dat_o,dcqmem_ack_o,dcqmem_rty_o,dcqmem_err_o,dcqmem_tag_o,dc_no_writethrough,spr_cs,spr_write,spr_dat_i,spr_addr,mtspr_dc_done) ; 
+module or1200_dc_top (
+  input clk,
+  input rst,
+  output [dw-1:0] dcsb_dat_o,
+  output [31:0] dcsb_adr_o,
+  output dcsb_cyc_o,
+  output dcsb_stb_o,
+  output dcsb_we_o,
+  output [3:0] dcsb_sel_o,
+  output dcsb_cab_o,
+  input [dw-1:0] dcsb_dat_i,
+  input dcsb_ack_i,
+  input dcsb_err_i,
+  input dc_en,
+  input [31:0] dcqmem_adr_i,
+  input dcqmem_cycstb_i,
+  input dcqmem_ci_i,
+  input dcqmem_we_i,
+  input [3:0] dcqmem_sel_i,
+  input [3:0] dcqmem_tag_i,
+  input [dw-1:0] dcqmem_dat_i,
+  output [dw-1:0] dcqmem_dat_o,
+  output dcqmem_ack_o,
+  output dcqmem_rty_o,
+  output dcqmem_err_o,
+  output [3:0] dcqmem_tag_o,
+  input dc_no_writethrough,
+  input spr_cs,
+  input spr_write,
+  input [31:0] spr_dat_i,
+  input [aw-1:0] spr_addr,
+  output mtspr_dc_done) ; 
  parameter dw =32; 
  parameter aw =32; 
-  input clk; 
-  input rst; 
-  output [dw-1:0] dcsb_dat_o; 
-  output [31:0] dcsb_adr_o; 
-  output dcsb_cyc_o; 
-  output dcsb_stb_o; 
-  output dcsb_we_o; 
-  output [3:0] dcsb_sel_o; 
-  output dcsb_cab_o; 
-  input [dw-1:0] dcsb_dat_i; 
-  input dcsb_ack_i; 
-  input dcsb_err_i; 
-  input dc_en; 
-  input [31:0] dcqmem_adr_i; 
-  input dcqmem_cycstb_i; 
-  input dcqmem_ci_i; 
-  input dcqmem_we_i; 
-  input [3:0] dcqmem_sel_i; 
-  input [3:0] dcqmem_tag_i; 
-  input [dw-1:0] dcqmem_dat_i; 
-  output [dw-1:0] dcqmem_dat_o; 
-  output dcqmem_ack_o; 
-  output dcqmem_rty_o; 
-  output dcqmem_err_o; 
-  output [3:0] dcqmem_tag_o; 
-  input dc_no_writethrough; 
-  input spr_cs; 
-  input spr_write; 
-  input [31:0] spr_dat_i; 
-  input [aw-1:0] spr_addr; 
-  output mtspr_dc_done; 
    wire tag_v ;  
    wire [20-2:0] tag ;  
    wire dirty ;  
@@ -5479,33 +5423,33 @@ module or1200_dc_top (clk,rst,dcsb_dat_o,dcsb_adr_o,dcsb_cyc_o,dcsb_stb_o,dcsb_w
   or1200_dc_tag or1200_dc_tag(.clk(clk),.rst(rst),.addr(dctag_addr),.en(dctag_en),.we(dctag_we),.datain({dc_addr[31:13-1+1],dctag_v,dctag_dirty}),.tag_v(tag_v),.tag(tag),.dirty(dirty)); 
 endmodule
  
-module or1200_immu_top (clk,rst,ic_en,immu_en,supv,icpu_adr_i,icpu_cycstb_i,icpu_adr_o,icpu_tag_o,icpu_rty_o,icpu_err_o,boot_adr_sel_i,spr_cs,spr_write,spr_addr,spr_dat_i,spr_dat_o,qmemimmu_rty_i,qmemimmu_err_i,qmemimmu_tag_i,qmemimmu_adr_o,qmemimmu_cycstb_o,qmemimmu_ci_o) ; 
+module or1200_immu_top (
+  input clk,
+  input rst,
+  input ic_en,
+  input immu_en,
+  input supv,
+  input [aw-1:0] icpu_adr_i,
+  input icpu_cycstb_i,
+  output reg  [aw-1:0] icpu_adr_o,
+  output [3:0] icpu_tag_o,
+  output icpu_rty_o,
+  output icpu_err_o,
+  input boot_adr_sel_i,
+  input spr_cs,
+  input spr_write,
+  input [aw-1:0] spr_addr,
+  input [31:0] spr_dat_i,
+  output [31:0] spr_dat_o,
+  input qmemimmu_rty_i,
+  input qmemimmu_err_i,
+  input [3:0] qmemimmu_tag_i,
+  output [aw-1:0] qmemimmu_adr_o,
+  output qmemimmu_cycstb_o,
+  output qmemimmu_ci_o) ; 
  parameter dw =32; 
  parameter aw =32; 
  parameter boot_adr =32'h00000100; 
-  input clk; 
-  input rst; 
-  input ic_en; 
-  input immu_en; 
-  input supv; 
-  input [aw-1:0] icpu_adr_i; 
-  input icpu_cycstb_i; 
-  output [aw-1:0] icpu_adr_o; 
-  output [3:0] icpu_tag_o; 
-  output icpu_rty_o; 
-  output icpu_err_o; 
-  input boot_adr_sel_i; 
-  input spr_cs; 
-  input spr_write; 
-  input [aw-1:0] spr_addr; 
-  input [31:0] spr_dat_i; 
-  output [31:0] spr_dat_o; 
-  input qmemimmu_rty_i; 
-  input qmemimmu_err_i; 
-  input [3:0] qmemimmu_tag_i; 
-  output [aw-1:0] qmemimmu_adr_o; 
-  output qmemimmu_cycstb_o; 
-  output qmemimmu_ci_o; 
    wire itlb_spr_access ;  
    wire [31:13] itlb_ppn ;  
    wire itlb_hit ;  
@@ -5520,7 +5464,6 @@ module or1200_immu_top (clk,rst,ic_en,immu_en,supv,icpu_adr_i,icpu_cycstb_i,icpu
    wire page_cross ;  
    reg [31:0] icpu_adr_default ;  
    reg icpu_adr_select ;  
-   reg [31:0] icpu_adr_o ;  
    reg [31:13] icpu_vpn_r ;  
    reg itlb_en_r ;  
    reg dis_spr_access_frst_clk ;  
@@ -5605,17 +5548,17 @@ module or1200_immu_top (clk,rst,ic_en,immu_en,supv,icpu_adr_i,icpu_cycstb_i,icpu
   or1200_immu_tlb or1200_immu_tlb(.clk(clk),.rst(rst),.tlb_en(itlb_en),.vaddr(icpu_adr_i),.hit(itlb_hit),.ppn(itlb_ppn),.uxe(itlb_uxe),.sxe(itlb_sxe),.ci(itlb_ci),.spr_cs(itlb_spr_access),.spr_write(spr_write),.spr_addr(spr_addr),.spr_dat_i(spr_dat_i),.spr_dat_o(itlb_dat_o)); 
 endmodule
  
-module or1200_spram_64x14 (clk,rst,ce,we,oe,addr,di,doq) ; 
+module or1200_spram_64x14 (
+  input clk,
+  input rst,
+  input ce,
+  input we,
+  input oe,
+  input [aw-1:0] addr,
+  input [dw-1:0] di,
+  output [dw-1:0] doq) ; 
  parameter aw =6; 
  parameter dw =14; 
-  input clk; 
-  input rst; 
-  input ce; 
-  input we; 
-  input oe; 
-  input [aw-1:0] addr; 
-  input [dw-1:0] di; 
-  output [dw-1:0] doq; 
    reg [dw-1:0] mem[(1<<aw)-1:0] ;  
    reg [aw-1:0] addr_reg ;  
   assign doq=(oe) ? mem[addr_reg]:{dw{1'b0}}; 
@@ -5632,30 +5575,30 @@ module or1200_spram_64x14 (clk,rst,ce,we,oe,addr,di,doq) ;
  
 endmodule
  
-module or1200_freeze (clk,rst,multicycle,wait_on,flushpipe,extend_flush,lsu_stall,if_stall,lsu_unstall,du_stall,mac_stall,force_dslot_fetch,abort_ex,genpc_freeze,if_freeze,id_freeze,ex_freeze,wb_freeze,saving_if_insn,fpu_done,mtspr_done,icpu_ack_i,icpu_err_i) ; 
-  input clk; 
-  input rst; 
-  input [3-1:0] multicycle; 
-  input [2-1:0] wait_on; 
-  input flushpipe; 
-  input extend_flush; 
-  input lsu_stall; 
-  input if_stall; 
-  input lsu_unstall; 
-  input force_dslot_fetch; 
-  input abort_ex; 
-  input du_stall; 
-  input mac_stall; 
-  output genpc_freeze; 
-  output if_freeze; 
-  output id_freeze; 
-  output ex_freeze; 
-  output wb_freeze; 
-  input saving_if_insn; 
-  input fpu_done; 
-  input mtspr_done; 
-  input icpu_ack_i; 
-  input icpu_err_i; 
+module or1200_freeze (
+  input clk,
+  input rst,
+  input [3-1:0] multicycle,
+  input [2-1:0] wait_on,
+  input flushpipe,
+  input extend_flush,
+  input lsu_stall,
+  input if_stall,
+  input lsu_unstall,
+  input du_stall,
+  input mac_stall,
+  input force_dslot_fetch,
+  input abort_ex,
+  output genpc_freeze,
+  output if_freeze,
+  output id_freeze,
+  output ex_freeze,
+  output wb_freeze,
+  input saving_if_insn,
+  input fpu_done,
+  input mtspr_done,
+  input icpu_ack_i,
+  input icpu_err_i) ; 
    wire multicycle_freeze ;  
    reg [3-1:0] multicycle_cnt ;  
    reg flushpipe_r ;  
@@ -5704,17 +5647,17 @@ module or1200_freeze (clk,rst,multicycle,wait_on,flushpipe,extend_flush,lsu_stal
  
 endmodule
  
-module or1200_spram_1024x32 (clk,rst,ce,we,oe,addr,di,doq) ; 
+module or1200_spram_1024x32 (
+  input clk,
+  input rst,
+  input ce,
+  input we,
+  input oe,
+  input [aw-1:0] addr,
+  input [dw-1:0] di,
+  output [dw-1:0] doq) ; 
  parameter aw =10; 
  parameter dw =32; 
-  input clk; 
-  input rst; 
-  input ce; 
-  input we; 
-  input oe; 
-  input [aw-1:0] addr; 
-  input [dw-1:0] di; 
-  output [dw-1:0] doq; 
    reg [dw-1:0] mem[(1<<aw)-1:0] ;  
    reg [aw-1:0] addr_reg ;  
   assign doq=(oe) ? mem[addr_reg]:{dw{1'b0}}; 
@@ -5731,42 +5674,41 @@ module or1200_spram_1024x32 (clk,rst,ce,we,oe,addr,di,doq) ;
  
 endmodule
  
-module or1200_genpc (clk,rst,icpu_adr_o,icpu_cycstb_o,icpu_sel_o,icpu_tag_o,icpu_rty_i,icpu_adr_i,pre_branch_op,branch_op,except_type,except_prefix,id_branch_addrtarget,ex_branch_addrtarget,muxed_b,operand_b,flag,flagforw,ex_branch_taken,except_start,epcr,spr_dat_i,spr_pc_we,genpc_refetch,genpc_freeze,no_more_dslot,lsu_stall,du_flush_pipe,spr_dat_npc) ; 
-  input clk; 
-  input rst; 
-  output [31:0] icpu_adr_o; 
-  output icpu_cycstb_o; 
-  output [3:0] icpu_sel_o; 
-  output [3:0] icpu_tag_o; 
-  input icpu_rty_i; 
-  input [31:0] icpu_adr_i; 
-  input [3-1:0] pre_branch_op; 
-  input [3-1:0] branch_op; 
-  input [4-1:0] except_type; 
-  input except_prefix; 
-  input [31:2] id_branch_addrtarget; 
-  input [31:2] ex_branch_addrtarget; 
-  input [31:0] muxed_b; 
-  input [31:0] operand_b; 
-  input flag; 
-  input flagforw; 
-  output ex_branch_taken; 
-  input except_start; 
-  input [31:0] epcr; 
-  input [31:0] spr_dat_i; 
-  input spr_pc_we; 
-  input [31:0] spr_dat_npc; 
-  input genpc_refetch; 
-  input genpc_freeze; 
-  input no_more_dslot; 
-  input lsu_stall; 
-  input du_flush_pipe; 
+module or1200_genpc (
+  input clk,
+  input rst,
+  output [31:0] icpu_adr_o,
+  output icpu_cycstb_o,
+  output [3:0] icpu_sel_o,
+  output [3:0] icpu_tag_o,
+  input icpu_rty_i,
+  input [31:0] icpu_adr_i,
+  input [3-1:0] pre_branch_op,
+  input [3-1:0] branch_op,
+  input [4-1:0] except_type,
+  input except_prefix,
+  input [31:2] id_branch_addrtarget,
+  input [31:2] ex_branch_addrtarget,
+  input [31:0] muxed_b,
+  input [31:0] operand_b,
+  input flag,
+  input flagforw,
+  output reg  ex_branch_taken,
+  input except_start,
+  input [31:0] epcr,
+  input [31:0] spr_dat_i,
+  input spr_pc_we,
+  input genpc_refetch,
+  input genpc_freeze,
+  input no_more_dslot,
+  input lsu_stall,
+  input du_flush_pipe,
+  input [31:0] spr_dat_npc) ; 
  parameter boot_adr =32'h00000100; 
    reg [31:2] pcreg_default ;  
    reg pcreg_select ;  
    reg [31:2] pcreg ;  
    reg [31:0] pc ;  
-   reg ex_branch_taken ;  
    reg genpc_refetch_r ;  
    reg wait_lsu ;  
   assign icpu_adr_o=!no_more_dslot&!except_start&!spr_pc_we&!du_flush_pipe&(icpu_rty_i|genpc_refetch) ? icpu_adr_i:{pc[31:2],1'b0,ex_branch_taken|spr_pc_we}; 
@@ -5887,17 +5829,17 @@ module or1200_genpc (clk,rst,icpu_adr_o,icpu_cycstb_o,icpu_sel_o,icpu_tag_o,icpu
  
 endmodule
  
-module or1200_spram_32x24 (clk,rst,ce,we,oe,addr,di,doq) ; 
+module or1200_spram_32x24 (
+  input clk,
+  input rst,
+  input ce,
+  input we,
+  input oe,
+  input [aw-1:0] addr,
+  input [dw-1:0] di,
+  output [dw-1:0] doq) ; 
  parameter aw =5; 
  parameter dw =24; 
-  input clk; 
-  input rst; 
-  input ce; 
-  input we; 
-  input oe; 
-  input [aw-1:0] addr; 
-  input [dw-1:0] di; 
-  output [dw-1:0] doq; 
    reg [dw-1:0] mem[(1<<aw)-1:0] ;  
    reg [aw-1:0] addr_reg ;  
   assign doq=(oe) ? mem[addr_reg]:{dw{1'b0}}; 
@@ -5914,17 +5856,17 @@ module or1200_spram_32x24 (clk,rst,ce,we,oe,addr,di,doq) ;
  
 endmodule
  
-module or1200_spram_2048x8 (clk,rst,ce,we,oe,addr,di,doq) ; 
+module or1200_spram_2048x8 (
+  input clk,
+  input rst,
+  input ce,
+  input we,
+  input oe,
+  input [aw-1:0] addr,
+  input [dw-1:0] di,
+  output [dw-1:0] doq) ; 
  parameter aw =11; 
  parameter dw =8; 
-  input clk; 
-  input rst; 
-  input ce; 
-  input we; 
-  input oe; 
-  input [aw-1:0] addr; 
-  input [dw-1:0] di; 
-  output [dw-1:0] doq; 
    reg [dw-1:0] mem[(1<<aw)-1:0] ;  
    reg [aw-1:0] addr_reg ;  
   assign doq=(oe) ? mem[addr_reg]:{dw{1'b0}}; 
@@ -5941,27 +5883,27 @@ module or1200_spram_2048x8 (clk,rst,ce,we,oe,addr,di,doq) ;
  
 endmodule
  
-module or1200_fpu (clk,rst,ex_freeze,a,b,fpu_op,result,done,flagforw,flag_we,sig_fp,except_started,fpcsr_we,fpcsr,spr_cs,spr_write,spr_addr,spr_dat_i,spr_dat_o) ; 
+module or1200_fpu (
+  input clk,
+  input rst,
+  input ex_freeze,
+  input [width-1:0] a,
+  input [width-1:0] b,
+  input [8-1:0] fpu_op,
+  output [width-1:0] result,
+  output done,
+  output flagforw,
+  output flag_we,
+  output sig_fp,
+  input except_started,
+  input fpcsr_we,
+  output [12-1:0] fpcsr,
+  input spr_cs,
+  input spr_write,
+  input [31:0] spr_addr,
+  input [31:0] spr_dat_i,
+  output [31:0] spr_dat_o) ; 
  parameter width =32; 
-  input clk; 
-  input rst; 
-  input ex_freeze; 
-  input [width-1:0] a; 
-  input [width-1:0] b; 
-  input [8-1:0] fpu_op; 
-  output [width-1:0] result; 
-  output done; 
-  output flagforw; 
-  output flag_we; 
-  input fpcsr_we; 
-  output [12-1:0] fpcsr; 
-  output sig_fp; 
-  input except_started; 
-  input spr_cs; 
-  input spr_write; 
-  input [31:0] spr_addr; 
-  input [31:0] spr_dat_i; 
-  output [31:0] spr_dat_o; 
   assign result=0; 
   assign flagforw=0; 
   assign flag_we=0; 
@@ -5971,15 +5913,15 @@ module or1200_fpu (clk,rst,ex_freeze,a,b,fpu_op,result,done,flagforw,flag_we,sig
   assign done=1; 
 endmodule
  
-module or1200_spram (clk,ce,we,addr,di,doq) ; 
+module or1200_spram (
+  input clk,
+  input ce,
+  input we,
+  input [aw-1:0] addr,
+  input [dw-1:0] di,
+  output [dw-1:0] doq) ; 
  parameter aw =10; 
  parameter dw =32; 
-  input clk; 
-  input ce; 
-  input we; 
-  input [aw-1:0] addr; 
-  input [dw-1:0] di; 
-  output [dw-1:0] doq; 
    reg [dw-1:0] mem[(1<<aw)-1:0] ;  
    reg [aw-1:0] addr_reg ;  
   assign doq=mem[addr_reg]; 
@@ -5993,35 +5935,35 @@ module or1200_spram (clk,ce,we,addr,di,doq) ;
  
 endmodule
  
-module or1200_ic_tag (clk,rst,addr,en,we,datain,tag_v,tag) ; 
+module or1200_ic_tag (
+  input clk,
+  input rst,
+  input [aw-1:0] addr,
+  input en,
+  input we,
+  input [dw-1:0] datain,
+  output tag_v,
+  output [dw-2:0] tag) ; 
  parameter dw =20; 
  parameter aw =13-4; 
-  input clk; 
-  input rst; 
-  input [aw-1:0] addr; 
-  input en; 
-  input we; 
-  input [dw-1:0] datain; 
-  output tag_v; 
-  output [dw-2:0] tag; 
   or1200_spram #(.aw(13-4),.dw(20))ic_tag0(.clk(clk),.ce(en),.we(we),.addr(addr),.di(datain),.doq({tag,tag_v})); 
 endmodule
  
-module or1200_dpram_32x32 (clk_a,rst_a,ce_a,oe_a,addr_a,do_a,clk_b,rst_b,ce_b,we_b,addr_b,di_b) ; 
+module or1200_dpram_32x32 (
+  input clk_a,
+  input rst_a,
+  input ce_a,
+  input oe_a,
+  input [aw-1:0] addr_a,
+  output [dw-1:0] do_a,
+  input clk_b,
+  input rst_b,
+  input ce_b,
+  input we_b,
+  input [aw-1:0] addr_b,
+  input [dw-1:0] di_b) ; 
  parameter aw =5; 
  parameter dw =32; 
-  input clk_a; 
-  input rst_a; 
-  input ce_a; 
-  input oe_a; 
-  input [aw-1:0] addr_a; 
-  output [dw-1:0] do_a; 
-  input clk_b; 
-  input rst_b; 
-  input ce_b; 
-  input we_b; 
-  input [aw-1:0] addr_b; 
-  input [dw-1:0] di_b; 
    reg [dw-1:0] mem[(1<<aw)-1:0] ;  
    reg [aw-1:0] addr_a_reg ;  
   assign do_a=(oe_a) ? mem[addr_a_reg]:{dw{1'b0}}; 
@@ -6038,23 +5980,22 @@ module or1200_dpram_32x32 (clk_a,rst_a,ce_a,oe_a,addr_a,do_a,clk_b,rst_b,ce_b,we
  
 endmodule
  
-module or1200_pic (clk,rst,spr_cs,spr_write,spr_addr,spr_dat_i,spr_dat_o,pic_wakeup,intr,pic_int) ; 
-  input clk; 
-  input rst; 
-  input spr_cs; 
-  input spr_write; 
-  input [31:0] spr_addr; 
-  input [31:0] spr_dat_i; 
-  output [31:0] spr_dat_o; 
-  output pic_wakeup; 
-  output intr; 
-  input [20-1:0] pic_int; 
+module or1200_pic (
+  input clk,
+  input rst,
+  input spr_cs,
+  input spr_write,
+  input [31:0] spr_addr,
+  input [31:0] spr_dat_i,
+  output reg  [31:0] spr_dat_o,
+  output pic_wakeup,
+  output intr,
+  input [20-1:0] pic_int) ; 
    reg [20-1:2] picmr ;  
    reg [20-1:0] picsr ;  
    wire picmr_sel ;  
    wire picsr_sel ;  
    wire [20-1:0] um_ints ;  
-   reg [31:0] spr_dat_o ;  
   assign picmr_sel=(spr_cs&&(spr_addr[1:0]==2'd0)) ? 1'b1:1'b0; 
   assign picsr_sel=(spr_cs&&(spr_addr[1:0]==2'd2)) ? 1'b1:1'b0; 
   always @(  posedge clk or  posedge rst)
@@ -6096,23 +6037,20 @@ module or1200_pic (clk,rst,spr_cs,spr_write,spr_addr,spr_dat_i,spr_dat_o,pic_wak
   assign pic_wakeup=intr; 
 endmodule
  
-module or1200_wbmux (clk,rst,wb_freeze,rfwb_op,muxin_a,muxin_b,muxin_c,muxin_d,muxin_e,muxout,muxreg,muxreg_valid) ; 
+module or1200_wbmux (
+  input clk,
+  input rst,
+  input wb_freeze,
+  input [4-1:0] rfwb_op,
+  input [width-1:0] muxin_a,
+  input [width-1:0] muxin_b,
+  input [width-1:0] muxin_c,
+  input [width-1:0] muxin_d,
+  input [width-1:0] muxin_e,
+  output reg  [width-1:0] muxout,
+  output reg  [width-1:0] muxreg,
+  output reg  muxreg_valid) ; 
  parameter width =32; 
-  input clk; 
-  input rst; 
-  input wb_freeze; 
-  input [4-1:0] rfwb_op; 
-  input [width-1:0] muxin_a; 
-  input [width-1:0] muxin_b; 
-  input [width-1:0] muxin_c; 
-  input [width-1:0] muxin_d; 
-  input [width-1:0] muxin_e; 
-  output [width-1:0] muxout; 
-  output [width-1:0] muxreg; 
-  output muxreg_valid; 
-   reg [width-1:0] muxout ;  
-   reg [width-1:0] muxreg ;  
-   reg muxreg_valid ;  
   always @(  posedge clk or  posedge rst)
        begin 
          if (rst==(1'b1))
@@ -6154,27 +6092,23 @@ module or1200_wbmux (clk,rst,wb_freeze,rfwb_op,muxin_a,muxin_b,muxin_c,muxin_d,m
   
 endmodule
  
-module or1200_operandmuxes (clk,rst,id_freeze,ex_freeze,rf_dataa,rf_datab,ex_forw,wb_forw,simm,sel_a,sel_b,operand_a,operand_b,muxed_a,muxed_b) ; 
+module or1200_operandmuxes (
+  input clk,
+  input rst,
+  input id_freeze,
+  input ex_freeze,
+  input [width-1:0] rf_dataa,
+  input [width-1:0] rf_datab,
+  input [width-1:0] ex_forw,
+  input [width-1:0] wb_forw,
+  input [width-1:0] simm,
+  input [2-1:0] sel_a,
+  input [2-1:0] sel_b,
+  output reg  [width-1:0] operand_a,
+  output reg  [width-1:0] operand_b,
+  output reg  [width-1:0] muxed_a,
+  output reg  [width-1:0] muxed_b) ; 
  parameter width =32; 
-  input clk; 
-  input rst; 
-  input id_freeze; 
-  input ex_freeze; 
-  input [width-1:0] rf_dataa; 
-  input [width-1:0] rf_datab; 
-  input [width-1:0] ex_forw; 
-  input [width-1:0] wb_forw; 
-  input [width-1:0] simm; 
-  input [2-1:0] sel_a; 
-  input [2-1:0] sel_b; 
-  output [width-1:0] operand_a; 
-  output [width-1:0] operand_b; 
-  output [width-1:0] muxed_a; 
-  output [width-1:0] muxed_b; 
-   reg [width-1:0] operand_a ;  
-   reg [width-1:0] operand_b ;  
-   reg [width-1:0] muxed_a ;  
-   reg [width-1:0] muxed_b ;  
    reg saved_a ;  
    reg saved_b ;  
   always @(  posedge clk or  posedge rst)
@@ -6251,16 +6185,16 @@ module or1200_operandmuxes (clk,rst,id_freeze,ex_freeze,rf_dataa,rf_datab,ex_for
   
 endmodule
  
-module or1200_tt (clk,rst,du_stall,spr_cs,spr_write,spr_addr,spr_dat_i,spr_dat_o,intr) ; 
-  input clk; 
-  input rst; 
-  input du_stall; 
-  input spr_cs; 
-  input spr_write; 
-  input [31:0] spr_addr; 
-  input [31:0] spr_dat_i; 
-  output [31:0] spr_dat_o; 
-  output intr; 
+module or1200_tt (
+  input clk,
+  input rst,
+  input du_stall,
+  input spr_cs,
+  input spr_write,
+  input [31:0] spr_addr,
+  input [31:0] spr_dat_i,
+  output reg  [31:0] spr_dat_o,
+  output intr) ; 
    reg [31:0] ttmr ;  
    reg [31:0] ttcr ;  
    wire ttmr_sel ;  
@@ -6268,7 +6202,6 @@ module or1200_tt (clk,rst,du_stall,spr_cs,spr_write,spr_addr,spr_dat_i,spr_dat_o
    wire match ;  
    wire restart ;  
    wire stop ;  
-   reg [31:0] spr_dat_o ;  
   assign ttmr_sel=(spr_cs&&(spr_addr[0]==1'd0)) ? 1'b1:1'b0; 
   assign ttcr_sel=(spr_cs&&(spr_addr[0]==1'd1)) ? 1'b1:1'b0; 
   always @(  posedge clk or  posedge rst)
@@ -6308,20 +6241,24 @@ module or1200_tt (clk,rst,du_stall,spr_cs,spr_write,spr_addr,spr_dat_i,spr_dat_o
   assign intr=ttmr[28]; 
 endmodule
  
-module or1200_fpu_post_norm_intfloat_conv (clk,fpu_op,opas,sign,rmode,fract_in,exp_in,opa_dn,opa_nan,opa_inf,opb_dn,out,ine,inv,overflow,underflow,f2i_out_sign) ; 
-  input clk; 
-  input [2:0] fpu_op; 
-  input opas; 
-  input sign; 
-  input [1:0] rmode; 
-  input [47:0] fract_in; 
-  input [7:0] exp_in; 
-  input opa_dn,opb_dn; 
-  input opa_nan,opa_inf; 
-  output [30:0] out; 
-  output ine,inv; 
-  output overflow,underflow; 
-  output f2i_out_sign; 
+module or1200_fpu_post_norm_intfloat_conv (
+  input clk,
+  input [2:0] fpu_op,
+  input opas,
+  input sign,
+  input [1:0] rmode,
+  input [47:0] fract_in,
+  input [7:0] exp_in,
+  input opa_dn,
+  input opa_nan,
+  input opa_inf,
+  input opb_dn,
+  output [30:0] out,
+  output ine,
+  output inv,
+  output overflow,
+  output underflow,
+  output f2i_out_sign) ; 
    reg [22:0] fract_out ;  
    reg [7:0] exp_out ;  
    wire [30:0] out ;  
@@ -6581,15 +6518,15 @@ module or1200_fpu_post_norm_intfloat_conv (clk,fpu_op,opas,sign,rmode,fract_in,e
   assign inv=op_f2i&(exp_in>f2i_emax); 
 endmodule
  
-module or1200_spram_32_bw (clk,ce,we,addr,di,doq) ; 
+module or1200_spram_32_bw (
+  input clk,
+  input ce,
+  input [3:0] we,
+  input [aw-1:0] addr,
+  input [dw-1:0] di,
+  output [dw-1:0] doq) ; 
  parameter aw =10; 
  parameter dw =32; 
-  input clk; 
-  input ce; 
-  input [3:0] we; 
-  input [aw-1:0] addr; 
-  input [dw-1:0] di; 
-  output [dw-1:0] doq; 
    reg [7:0] mem0[(1<<aw)-1:0] ;  
    reg [7:0] mem1[(1<<aw)-1:0] ;  
    reg [7:0] mem2[(1<<aw)-1:0] ;  
@@ -6615,24 +6552,27 @@ module or1200_spram_32_bw (clk,ce,we,addr,di,doq) ;
   
 endmodule
  
-module or1200_fpu_intfloat_conv_except (clk,opa,opb,inf,ind,qnan,snan,opa_nan,opb_nan,opa_00,opb_00,opa_inf,opb_inf,opa_dn,opb_dn) ; 
-  input clk; 
-  input [31:0] opa,opb; 
-  output inf,ind,qnan,snan,opa_nan,opb_nan; 
-  output opa_00,opb_00; 
-  output opa_inf,opb_inf; 
-  output opa_dn; 
-  output opb_dn; 
+module or1200_fpu_intfloat_conv_except (
+  input clk,
+  input [31:0] opa,
+  input [31:0] opb,
+  output reg  inf,
+  output reg  ind,
+  output reg  qnan,
+  output reg  snan,
+  output reg  opa_nan,
+  output reg  opb_nan,
+  output reg  opa_00,
+  output reg  opb_00,
+  output reg  opa_inf,
+  output reg  opb_inf,
+  output reg  opa_dn,
+  output reg  opb_dn) ; 
    wire [7:0] expa,expb ;  
    wire [22:0] fracta,fractb ;  
    reg expa_ff,infa_f_r,qnan_r_a,snan_r_a ;  
    reg expb_ff,infb_f_r,qnan_r_b,snan_r_b ;  
-   reg inf,ind,qnan,snan ;  
-   reg opa_nan,opb_nan ;  
    reg expa_00,expb_00,fracta_00,fractb_00 ;  
-   reg opa_00,opb_00 ;  
-   reg opa_inf,opb_inf ;  
-   reg opa_dn,opb_dn ;  
   assign expa=opa[30:23]; 
   assign expb=opb[30:23]; 
   assign fracta=opa[22:0]; 
@@ -6711,45 +6651,38 @@ module or1200_fpu_intfloat_conv_except (clk,opa,opb,inf,ind,qnan,snan,opa_nan,op
  
 endmodule
  
-module or1200_wb_biu (clk,rst,clmode,wb_clk_i,wb_rst_i,wb_ack_i,wb_err_i,wb_rty_i,wb_dat_i,wb_cyc_o,wb_adr_o,wb_stb_o,wb_we_o,wb_sel_o,wb_dat_o,wb_cti_o,wb_bte_o,biu_dat_i,biu_adr_i,biu_cyc_i,biu_stb_i,biu_we_i,biu_sel_i,biu_cab_i,biu_dat_o,biu_ack_o,biu_err_o) ; 
+module or1200_wb_biu (
+  input clk,
+  input rst,
+  input [1:0] clmode,
+  input wb_clk_i,
+  input wb_rst_i,
+  input wb_ack_i,
+  input wb_err_i,
+  input wb_rty_i,
+  input [dw-1:0] wb_dat_i,
+  output reg  wb_cyc_o,
+  output reg  [aw-1:0] wb_adr_o,
+  output reg  wb_stb_o,
+  output reg  wb_we_o,
+  output reg  [3:0] wb_sel_o,
+  output [dw-1:0] wb_dat_o,
+  output reg  [2:0] wb_cti_o,
+  output reg  [1:0] wb_bte_o,
+  input [dw-1:0] biu_dat_i,
+  input [aw-1:0] biu_adr_i,
+  input biu_cyc_i,
+  input biu_stb_i,
+  input biu_we_i,
+  input [3:0] biu_sel_i,
+  input biu_cab_i,
+  output [31:0] biu_dat_o,
+  output biu_ack_o,
+  output biu_err_o) ; 
  parameter dw =32; 
  parameter aw =32; 
  parameter bl =4; 
-  input clk; 
-  input rst; 
-  input [1:0] clmode; 
-  input wb_clk_i; 
-  input wb_rst_i; 
-  input wb_ack_i; 
-  input wb_err_i; 
-  input wb_rty_i; 
-  input [dw-1:0] wb_dat_i; 
-  output wb_cyc_o; 
-  output [aw-1:0] wb_adr_o; 
-  output wb_stb_o; 
-  output wb_we_o; 
-  output [3:0] wb_sel_o; 
-  output [dw-1:0] wb_dat_o; 
-  output [2:0] wb_cti_o; 
-  output [1:0] wb_bte_o; 
-  input [dw-1:0] biu_dat_i; 
-  input [aw-1:0] biu_adr_i; 
-  input biu_cyc_i; 
-  input biu_stb_i; 
-  input biu_we_i; 
-  input biu_cab_i; 
-  input [3:0] biu_sel_i; 
-  output [31:0] biu_dat_o; 
-  output biu_ack_o; 
-  output biu_err_o; 
    wire wb_ack ;  
-   reg [aw-1:0] wb_adr_o ;  
-   reg wb_cyc_o ;  
-   reg wb_stb_o ;  
-   reg wb_we_o ;  
-   reg [3:0] wb_sel_o ;  
-   reg [2:0] wb_cti_o ;  
-   reg [1:0] wb_bte_o ;  
   assign wb_dat_o=biu_dat_i; 
    wire retry_cnt ;  
   assign retry_cnt=1'b0; 
@@ -6959,65 +6892,66 @@ module or1200_wb_biu (clk,rst,clmode,wb_clk_i,wb_rst_i,wb_ack_i,wb_err_i,wb_rty_
   assign biu_err_o=(wb_fsm_state_cur==wb_fsm_trans)&wb_err_i&wb_stb_o&(wb_err_cnt~^biu_err_cnt); 
 endmodule
  
-module or1200_top (clk_i,rst_i,pic_ints_i,clmode_i,iwb_clk_i,iwb_rst_i,iwb_ack_i,iwb_err_i,iwb_rty_i,iwb_dat_i,iwb_cyc_o,iwb_adr_o,iwb_stb_o,iwb_we_o,iwb_sel_o,iwb_dat_o,iwb_cti_o,iwb_bte_o,dwb_clk_i,dwb_rst_i,dwb_ack_i,dwb_err_i,dwb_rty_i,dwb_dat_i,dwb_cyc_o,dwb_adr_o,dwb_stb_o,dwb_we_o,dwb_sel_o,dwb_dat_o,dwb_cti_o,dwb_bte_o,dbg_stall_i,dbg_ewt_i,dbg_lss_o,dbg_is_o,dbg_wp_o,dbg_bp_o,dbg_stb_i,dbg_we_i,dbg_adr_i,dbg_dat_i,dbg_dat_o,dbg_ack_o,pm_cpustall_i,pm_clksd_o,pm_dc_gate_o,pm_ic_gate_o,pm_dmmu_gate_o,pm_immu_gate_o,pm_tt_gate_o,pm_cpu_gate_o,pm_wakeup_o,pm_lvolt_o,sig_tick) ; 
+module or1200_top (
+  input clk_i,
+  input rst_i,
+  input [ppic_ints-1:0] pic_ints_i,
+  input [1:0] clmode_i,
+  input iwb_clk_i,
+  input iwb_rst_i,
+  input iwb_ack_i,
+  input iwb_err_i,
+  input iwb_rty_i,
+  input [dw-1:0] iwb_dat_i,
+  output iwb_cyc_o,
+  output [aw-1:0] iwb_adr_o,
+  output iwb_stb_o,
+  output iwb_we_o,
+  output [3:0] iwb_sel_o,
+  output [dw-1:0] iwb_dat_o,
+  output [2:0] iwb_cti_o,
+  output [1:0] iwb_bte_o,
+  input dwb_clk_i,
+  input dwb_rst_i,
+  input dwb_ack_i,
+  input dwb_err_i,
+  input dwb_rty_i,
+  input [dw-1:0] dwb_dat_i,
+  output dwb_cyc_o,
+  output [aw-1:0] dwb_adr_o,
+  output dwb_stb_o,
+  output dwb_we_o,
+  output [3:0] dwb_sel_o,
+  output [dw-1:0] dwb_dat_o,
+  output [2:0] dwb_cti_o,
+  output [1:0] dwb_bte_o,
+  input dbg_stall_i,
+  input dbg_ewt_i,
+  output [3:0] dbg_lss_o,
+  output [1:0] dbg_is_o,
+  output [10:0] dbg_wp_o,
+  output dbg_bp_o,
+  input dbg_stb_i,
+  input dbg_we_i,
+  input [aw-1:0] dbg_adr_i,
+  input [dw-1:0] dbg_dat_i,
+  output [dw-1:0] dbg_dat_o,
+  output dbg_ack_o,
+  input pm_cpustall_i,
+  output [3:0] pm_clksd_o,
+  output pm_dc_gate_o,
+  output pm_ic_gate_o,
+  output pm_dmmu_gate_o,
+  output pm_immu_gate_o,
+  output pm_tt_gate_o,
+  output pm_cpu_gate_o,
+  output pm_wakeup_o,
+  output pm_lvolt_o,
+  output sig_tick) ; 
  parameter dw =32; 
  parameter aw =32; 
  parameter ppic_ints =20; 
  parameter boot_adr =32'h00000100; 
-  input clk_i; 
-  input rst_i; 
-  input [1:0] clmode_i; 
-  input [ppic_ints-1:0] pic_ints_i; 
-  input iwb_clk_i; 
-  input iwb_rst_i; 
-  input iwb_ack_i; 
-  input iwb_err_i; 
-  input iwb_rty_i; 
-  input [dw-1:0] iwb_dat_i; 
-  output iwb_cyc_o; 
-  output [aw-1:0] iwb_adr_o; 
-  output iwb_stb_o; 
-  output iwb_we_o; 
-  output [3:0] iwb_sel_o; 
-  output [dw-1:0] iwb_dat_o; 
-  output [2:0] iwb_cti_o; 
-  output [1:0] iwb_bte_o; 
-  input dwb_clk_i; 
-  input dwb_rst_i; 
-  input dwb_ack_i; 
-  input dwb_err_i; 
-  input dwb_rty_i; 
-  input [dw-1:0] dwb_dat_i; 
-  output dwb_cyc_o; 
-  output [aw-1:0] dwb_adr_o; 
-  output dwb_stb_o; 
-  output dwb_we_o; 
-  output [3:0] dwb_sel_o; 
-  output [dw-1:0] dwb_dat_o; 
-  output [2:0] dwb_cti_o; 
-  output [1:0] dwb_bte_o; 
-  input dbg_stall_i; 
-  input dbg_ewt_i; 
-  output [3:0] dbg_lss_o; 
-  output [1:0] dbg_is_o; 
-  output [10:0] dbg_wp_o; 
-  output dbg_bp_o; 
-  input dbg_stb_i; 
-  input dbg_we_i; 
-  input [aw-1:0] dbg_adr_i; 
-  input [dw-1:0] dbg_dat_i; 
-  output [dw-1:0] dbg_dat_o; 
-  output dbg_ack_o; 
-  input pm_cpustall_i; 
-  output [3:0] pm_clksd_o; 
-  output pm_dc_gate_o; 
-  output pm_ic_gate_o; 
-  output pm_dmmu_gate_o; 
-  output pm_immu_gate_o; 
-  output pm_tt_gate_o; 
-  output pm_cpu_gate_o; 
-  output pm_wakeup_o; 
-  output pm_lvolt_o; 
    wire [dw-1:0] dcsb_dat_dc ;  
    wire [aw-1:0] dcsb_adr_dc ;  
    wire dcsb_cyc_dc ;  
@@ -7122,7 +7056,6 @@ module or1200_top (clk_i,rst_i,pic_ints_i,clmode_i,iwb_clk_i,iwb_rst_i,iwb_ack_i
    wire sig_int ;  
    wire [dw-1:0] spr_dat_pm ;  
    wire [dw-1:0] spr_dat_tt ;  
-  output wire sig_tick; 
    wire [dw-1:0] spr_dat_du ;  
    wire du_stall ;  
    wire [dw-1:0] du_addr ;  
@@ -7173,7 +7106,13 @@ module or1200_top (clk_i,rst_i,pic_ints_i,clmode_i,iwb_clk_i,iwb_rst_i,iwb_ack_i
   or1200_pm or1200_pm(.clk(clk_i),.rst(rst_i),.pic_wakeup(pic_wakeup),.spr_write(spr_we),.spr_addr(spr_addr),.spr_dat_i(spr_dat_cpu),.spr_dat_o(spr_dat_pm),.pm_cpustall(pm_cpustall_i),.pm_clksd(pm_clksd_o),.pm_dc_gate(pm_dc_gate_o),.pm_ic_gate(pm_ic_gate_o),.pm_dmmu_gate(pm_dmmu_gate_o),.pm_immu_gate(pm_immu_gate_o),.pm_tt_gate(pm_tt_gate_o),.pm_cpu_gate(pm_cpu_gate_o),.pm_wakeup(pm_wakeup_o),.pm_lvolt(pm_lvolt_o)); 
 endmodule
  
-module or1200_fpu_pre_norm_addsub (clk_i,opa_i,opb_i,fracta_28_o,fractb_28_o,exp_o) ; 
+module or1200_fpu_pre_norm_addsub (
+  input clk_i,
+  input [FP_WIDTH-1:0] opa_i,
+  input [FP_WIDTH-1:0] opb_i,
+  output reg  [FRAC_WIDTH+4:0] fracta_28_o,
+  output reg  [FRAC_WIDTH+4:0] fractb_28_o,
+  output reg  [EXP_WIDTH-1:0] exp_o) ; 
  parameter FP_WIDTH =32; 
  parameter MUL_SERIAL =0; 
  parameter MUL_COUNT =11; 
@@ -7183,12 +7122,6 @@ module or1200_fpu_pre_norm_addsub (clk_i,opa_i,opb_i,fracta_28_o,fractb_28_o,exp
  parameter INF =31'b1111111100000000000000000000000; 
  parameter QNAN =31'b1111111110000000000000000000000; 
  parameter SNAN =31'b1111111100000000000000000000001; 
-  input clk_i; 
-  input [FP_WIDTH-1:0] opa_i; 
-  input [FP_WIDTH-1:0] opb_i; 
-  output reg  [FRAC_WIDTH+4:0] fracta_28_o; 
-  output reg  [FRAC_WIDTH+4:0] fractb_28_o; 
-  output reg  [EXP_WIDTH-1:0] exp_o; 
    reg [EXP_WIDTH-1:0] s_exp_o ;  
    wire [FRAC_WIDTH+4:0] s_fracta_28_o,s_fractb_28_o ;  
    wire [EXP_WIDTH-1:0] s_expa ;  
@@ -7317,25 +7250,22 @@ module or1200_fpu_pre_norm_addsub (clk_i,opa_i,opb_i,fracta_28_o,fractb_28_o,exp
   assign s_fractb_28_o=s_expa_gt_expb ? {s_fract_shr_28[27:1],(s_sticky|s_fract_shr_28[0])}:s_fractb_28; 
 endmodule
  
-module or1200_sb_fifo (clk_i,rst_i,dat_i,wr_i,rd_i,dat_o,full_o,empty_o) ; 
+module or1200_sb_fifo (
+  input clk_i,
+  input rst_i,
+  input [dw-1:0] dat_i,
+  input wr_i,
+  input rd_i,
+  output reg  [dw-1:0] dat_o,
+  output reg  full_o,
+  output reg  empty_o) ; 
  parameter dw =68; 
  parameter fw =2; 
  parameter fl =4; 
-  input clk_i; 
-  input rst_i; 
-  input [dw-1:0] dat_i; 
-  input wr_i; 
-  input rd_i; 
-  output [dw-1:0] dat_o; 
-  output full_o; 
-  output empty_o; 
    reg [dw-1:0] mem[fl-1:0] ;  
-   reg [dw-1:0] dat_o ;  
    reg [fw+1:0] cntr ;  
    reg [fw-1:0] wr_pntr ;  
    reg [fw-1:0] rd_pntr ;  
-   reg empty_o ;  
-   reg full_o ;  
   always @(  posedge clk_i or  posedge rst_i)
        if (rst_i==(1'b1))
           begin 
@@ -7402,23 +7332,23 @@ module or1200_sb_fifo (clk_i,rst_i,dat_i,wr_i,rd_i,dat_o,full_o,empty_o) ;
   
 endmodule
  
-module or1200_immu_tlb (clk,rst,tlb_en,vaddr,hit,ppn,uxe,sxe,ci,spr_cs,spr_write,spr_addr,spr_dat_i,spr_dat_o) ; 
+module or1200_immu_tlb (
+  input clk,
+  input rst,
+  input tlb_en,
+  input [aw-1:0] vaddr,
+  output hit,
+  output [31:13] ppn,
+  output uxe,
+  output sxe,
+  output ci,
+  input spr_cs,
+  input spr_write,
+  input [31:0] spr_addr,
+  input [31:0] spr_dat_i,
+  output [31:0] spr_dat_o) ; 
  parameter dw =32; 
  parameter aw =32; 
-  input clk; 
-  input rst; 
-  input tlb_en; 
-  input [aw-1:0] vaddr; 
-  output hit; 
-  output [31:13] ppn; 
-  output uxe; 
-  output sxe; 
-  output ci; 
-  input spr_cs; 
-  input spr_write; 
-  input [31:0] spr_addr; 
-  input [31:0] spr_dat_i; 
-  output [31:0] spr_dat_o; 
    wire [31:13+6-1+1] vpn ;  
    wire v ;  
    wire [6-1:0] tlb_index ;  
@@ -7445,7 +7375,15 @@ module or1200_immu_tlb (clk,rst,tlb_en,vaddr,hit,ppn,uxe,sxe,ci,spr_cs,spr_write
   or1200_spram #(.aw(6),.dw(22))itlb_tr_ram(.clk(clk),.ce(tlb_tr_en),.we(tlb_tr_we),.addr(tlb_index),.di(tlb_tr_ram_in),.doq(tlb_tr_ram_out)); 
 endmodule
  
-module or1200_fpu_addsub (clk_i,fpu_op_i,fracta_i,fractb_i,signa_i,signb_i,fract_o,sign_o) ; 
+module or1200_fpu_addsub (
+  input clk_i,
+  input fpu_op_i,
+  input [FRAC_WIDTH+4:0] fracta_i,
+  input [FRAC_WIDTH+4:0] fractb_i,
+  input signa_i,
+  input signb_i,
+  output reg  [FRAC_WIDTH+4:0] fract_o,
+  output reg  sign_o) ; 
  parameter FP_WIDTH =32; 
  parameter MUL_SERIAL =0; 
  parameter MUL_COUNT =11; 
@@ -7455,14 +7393,6 @@ module or1200_fpu_addsub (clk_i,fpu_op_i,fracta_i,fractb_i,signa_i,signb_i,fract
  parameter INF =31'b1111111100000000000000000000000; 
  parameter QNAN =31'b1111111110000000000000000000000; 
  parameter SNAN =31'b1111111100000000000000000000001; 
-  input clk_i; 
-  input fpu_op_i; 
-  input [FRAC_WIDTH+4:0] fracta_i; 
-  input [FRAC_WIDTH+4:0] fractb_i; 
-  input signa_i; 
-  input signb_i; 
-  output reg  [FRAC_WIDTH+4:0] fract_o; 
-  output reg  sign_o; 
    wire [FRAC_WIDTH+4:0] s_fracta_i ;  
    wire [FRAC_WIDTH+4:0] s_fractb_i ;  
    wire [FRAC_WIDTH+4:0] s_fract_o ;  
@@ -7487,12 +7417,15 @@ module or1200_fpu_addsub (clk_i,fpu_op_i,fracta_i,fractb_i,signa_i,signb_i,fract
   assign s_fract_o=s_addop ? (fracta_gt_fractb ? s_fracta_i-s_fractb_i:s_fractb_i-s_fracta_i):s_fracta_i+s_fractb_i; 
 endmodule
  
-module or1200_fpu_fcmp (opa,opb,unordered,altb,blta,aeqb,inf,zero) ; 
-  input [31:0] opa,opb; 
-  output unordered; 
-  output altb,blta,aeqb; 
-  output inf,zero; 
-   reg altb,blta,aeqb ;  
+module or1200_fpu_fcmp (
+  input [31:0] opa,
+  input [31:0] opb,
+  output unordered,
+  output reg  altb,
+  output reg  blta,
+  output reg  aeqb,
+  output inf,
+  output zero) ; 
    wire signa,signb ;  
    wire [7:0] expa,expb ;  
    wire [22:0] fracta,fractb ;  
@@ -7594,7 +7527,17 @@ module or1200_fpu_fcmp (opa,opb,unordered,altb,blta,aeqb,inf,zero) ;
   
 endmodule
  
-module or1200_fpu_post_norm_div (clk_i,opa_i,opb_i,qutnt_i,rmndr_i,exp_10_i,sign_i,rmode_i,output_o,ine_o) ; 
+module or1200_fpu_post_norm_div (
+  input clk_i,
+  input [FP_WIDTH-1:0] opa_i,
+  input [FP_WIDTH-1:0] opb_i,
+  input [FRAC_WIDTH+3:0] qutnt_i,
+  input [FRAC_WIDTH+3:0] rmndr_i,
+  input [EXP_WIDTH+1:0] exp_10_i,
+  input sign_i,
+  input [1:0] rmode_i,
+  output reg  [FP_WIDTH-1:0] output_o,
+  output reg  ine_o) ; 
  parameter FP_WIDTH =32; 
  parameter MUL_SERIAL =0; 
  parameter MUL_COUNT =11; 
@@ -7604,16 +7547,6 @@ module or1200_fpu_post_norm_div (clk_i,opa_i,opb_i,qutnt_i,rmndr_i,exp_10_i,sign
  parameter INF =31'b1111111100000000000000000000000; 
  parameter QNAN =31'b1111111110000000000000000000000; 
  parameter SNAN =31'b1111111100000000000000000000001; 
-  input clk_i; 
-  input [FP_WIDTH-1:0] opa_i; 
-  input [FP_WIDTH-1:0] opb_i; 
-  input [FRAC_WIDTH+3:0] qutnt_i; 
-  input [FRAC_WIDTH+3:0] rmndr_i; 
-  input [EXP_WIDTH+1:0] exp_10_i; 
-  input sign_i; 
-  input [1:0] rmode_i; 
-  output reg  [FP_WIDTH-1:0] output_o; 
-  output reg  ine_o; 
    reg [FP_WIDTH-1:0] s_opa_i ;  
    reg [FP_WIDTH-1:0] s_opb_i ;  
    reg [EXP_WIDTH-1:0] s_expa ;  

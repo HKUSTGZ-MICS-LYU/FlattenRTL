@@ -6,18 +6,18 @@ module TopModule (
         output [7:0] sum1,
         output [15+1:0] sum2) ;
 
-    wire [8-1:0] adder1_a;
-    wire [8-1:0] adder1_b;
-    wire [8-1+0:0] adder1_sum;
-    wire [16-1:0] adder2_a;
-    wire [16-1:0] adder2_b;
-    wire [16-1+1:0] adder2_sum;
+    wire [ 8 -1:0] adder1_a;
+    wire [ 8 -1:0] adder1_b;
+    wire [ 8 -1+ 0 :0] adder1_sum;
+    wire [ 16 -1:0] adder2_a;
+    wire [ 16 -1:0] adder2_b;
+    wire [ 16 -1+ 1 :0] adder2_sum;
 
-    assign  adder1_sum =( adder1_a + adder1_b )<<0;
+    assign   adder1_sum  =(  adder1_a  +  adder1_b  )<<  0  ;
 
 
 
-    assign  adder2_sum =( adder2_a + adder2_b )<<1;
+    assign   adder2_sum  =(  adder2_a  +  adder2_b  )<<  1  ;
     assign adder1_a = a1;
     assign adder1_b = b1;
     assign sum1 = adder1_sum;
