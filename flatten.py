@@ -259,6 +259,14 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
         for child in ctx.getChildren():
           self.empty_all_text(child)
 
+    def is_parents_function_declaration(self,ctx):
+       if ctx is None:
+          return False
+       if not isinstance(ctx, VerilogParser.Function_declarationContext):
+          return self.is_parents_function_declaration(ctx.parentCtx)
+       else:
+          return True
+
     "This function is used to traverse the tree and change the name of the instance"
     def _traverse_children(self,ctx):  
       if self.is_parents_parameter_port_list(ctx):
@@ -272,12 +280,20 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
         pass
       else:
         for child in ctx.getChildren():
+          # Dont rename parameter identifier in the port
+          if isinstance(child, VerilogParser.Parameter_identifierContext):
+            if isinstance(child.parentCtx, VerilogParser.Named_parameter_assignmentContext):
+              continue
           # Rename the variables
           if isinstance(child, VerilogParser.Simple_identifierContext):
               if isinstance(child.parentCtx.parentCtx, VerilogParser.Module_identifierContext):
                   pass
               elif isinstance(child.parentCtx.parentCtx, VerilogParser.Port_identifierContext):
-                  pass
+                  # The port_identifier in function should be identified
+                  if self.is_parents_function_declaration(child):
+                     child.start.text = ' ' + cur_prefixs[self.cur_prefixs_index] + '_' + child.start.text + ' '
+                  else:
+                    pass
               elif isinstance(child.parentCtx.parentCtx, VerilogParser.Param_assignmentContext):
                   pass
               else:

@@ -230,4 +230,23 @@ module decl(a, b, c);
 
 Currently we don't support definitions and parameters.
 
+### Parameter Assignment
 
+The parameter assignment should follow:
+
+```verilog
+parameter A;
+parameter B;
+```
+
+The assignment below is unacceptable
+```verilog
+parameter A,B;
+```
+
+### Duplication Declration
+
+```verilog
+module A(output X)
+wire X;
+```

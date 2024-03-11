@@ -14,40 +14,27 @@ module or1200_top #(
         parameter or1200_immu_top_aw=32,
         parameter or1200_immu_top_or1200_immu_tlb_dw=32,
         parameter or1200_immu_top_or1200_immu_tlb_aw=32,
-        parameter or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_or1200_immu_top_or1200_immu_tlb_aw=6,
-        parameter or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_or1200_immu_top_or1200_immu_tlb_dw=14,
-        parameter or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_aw=10,
-        parameter or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_dw=32,
-        parameter or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_or1200_immu_top_or1200_immu_tlb_aw=6,
-        parameter or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_or1200_immu_top_or1200_immu_tlb_dw=22,
-        parameter or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_aw=10,
-        parameter or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_dw=32,
+        parameter or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_aw=6,
+        parameter or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_dw=14,
+        parameter or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_aw=6,
+        parameter or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_dw=22,
         parameter or1200_ic_top_dw=32,
         parameter or1200_ic_top_or1200_ic_ram_dw=32,
         parameter or1200_ic_top_or1200_ic_ram_aw=13-2,
-        parameter or1200_ic_top_or1200_ic_ram_ic_ram0_or1200_ic_top_or1200_ic_ram_aw=13-2,
-        parameter or1200_ic_top_or1200_ic_ram_ic_ram0_or1200_ic_top_or1200_ic_ram_dw=32,
-        parameter or1200_ic_top_or1200_ic_ram_ic_ram0_aw=10,
+        parameter or1200_ic_top_or1200_ic_ram_ic_ram0_aw=13-2,
         parameter or1200_ic_top_or1200_ic_ram_ic_ram0_dw=32,
         parameter or1200_ic_top_or1200_ic_tag_dw=20,
         parameter or1200_ic_top_or1200_ic_tag_aw=13-4,
-        parameter or1200_ic_top_or1200_ic_tag_ic_tag0_or1200_ic_top_or1200_ic_tag_aw=13-4,
-        parameter or1200_ic_top_or1200_ic_tag_ic_tag0_or1200_ic_top_or1200_ic_tag_dw=20,
-        parameter or1200_ic_top_or1200_ic_tag_ic_tag0_aw=10,
-        parameter or1200_ic_top_or1200_ic_tag_ic_tag0_dw=32,
+        parameter or1200_ic_top_or1200_ic_tag_ic_tag0_aw=13-4,
+        parameter or1200_ic_top_or1200_ic_tag_ic_tag0_dw=20,
         parameter or1200_cpu_boot_adr=boot_adr,
         parameter or1200_cpu_dw=32,
         parameter or1200_cpu_aw=5,
-        parameter or1200_cpu_or1200_genpc_or1200_cpu_boot_adr=or1200_cpu_boot_adr,
-        parameter or1200_cpu_or1200_genpc_boot_adr=32'h00000100,
+        parameter or1200_cpu_or1200_genpc_boot_adr=or1200_cpu_boot_adr,
         parameter or1200_cpu_or1200_rf_dw=32,
         parameter or1200_cpu_or1200_rf_aw=5,
-        parameter or1200_cpu_or1200_rf_rf_a_or1200_cpu_or1200_rf_aw=5,
-        parameter or1200_cpu_or1200_rf_rf_a_or1200_cpu_or1200_rf_dw=32,
         parameter or1200_cpu_or1200_rf_rf_a_aw=5,
         parameter or1200_cpu_or1200_rf_rf_a_dw=32,
-        parameter or1200_cpu_or1200_rf_rf_b_or1200_cpu_or1200_rf_aw=5,
-        parameter or1200_cpu_or1200_rf_rf_b_or1200_cpu_or1200_rf_dw=32,
         parameter or1200_cpu_or1200_rf_rf_b_aw=5,
         parameter or1200_cpu_or1200_rf_rf_b_dw=32,
         parameter or1200_cpu_or1200_operandmuxes_width=32,
@@ -63,28 +50,20 @@ module or1200_top #(
         parameter or1200_dmmu_top_aw=32,
         parameter or1200_dmmu_top_or1200_dmmu_tlb_dw=32,
         parameter or1200_dmmu_top_or1200_dmmu_tlb_aw=32,
-        parameter or1200_dmmu_top_or1200_dmmu_tlb_dtlb_ram_or1200_dmmu_top_or1200_dmmu_tlb_aw=6,
-        parameter or1200_dmmu_top_or1200_dmmu_tlb_dtlb_ram_or1200_dmmu_top_or1200_dmmu_tlb_dw=14,
-        parameter or1200_dmmu_top_or1200_dmmu_tlb_dtlb_ram_aw=10,
-        parameter or1200_dmmu_top_or1200_dmmu_tlb_dtlb_ram_dw=32,
-        parameter or1200_dmmu_top_or1200_dmmu_tlb_dtlb_tr_ram_or1200_dmmu_top_or1200_dmmu_tlb_aw=6,
-        parameter or1200_dmmu_top_or1200_dmmu_tlb_dtlb_tr_ram_or1200_dmmu_top_or1200_dmmu_tlb_dw=24,
-        parameter or1200_dmmu_top_or1200_dmmu_tlb_dtlb_tr_ram_aw=10,
-        parameter or1200_dmmu_top_or1200_dmmu_tlb_dtlb_tr_ram_dw=32,
+        parameter or1200_dmmu_top_or1200_dmmu_tlb_dtlb_ram_aw=6,
+        parameter or1200_dmmu_top_or1200_dmmu_tlb_dtlb_ram_dw=14,
+        parameter or1200_dmmu_top_or1200_dmmu_tlb_dtlb_tr_ram_aw=6,
+        parameter or1200_dmmu_top_or1200_dmmu_tlb_dtlb_tr_ram_dw=24,
         parameter or1200_dc_top_dw=32,
         parameter or1200_dc_top_aw=32,
         parameter or1200_dc_top_or1200_dc_ram_dw=32,
         parameter or1200_dc_top_or1200_dc_ram_aw=13-2,
-        parameter or1200_dc_top_or1200_dc_ram_dc_ram_or1200_dc_top_or1200_dc_ram_aw=13-2,
-        parameter or1200_dc_top_or1200_dc_ram_dc_ram_or1200_dc_top_or1200_dc_ram_dw=or1200_dc_top_or1200_dc_ram_dw,
-        parameter or1200_dc_top_or1200_dc_ram_dc_ram_aw=10,
-        parameter or1200_dc_top_or1200_dc_ram_dc_ram_dw=32,
+        parameter or1200_dc_top_or1200_dc_ram_dc_ram_aw=13-2,
+        parameter or1200_dc_top_or1200_dc_ram_dc_ram_dw=or1200_dc_top_or1200_dc_ram_dw,
         parameter or1200_dc_top_or1200_dc_tag_dw=20+1,
         parameter or1200_dc_top_or1200_dc_tag_aw=13-4,
-        parameter or1200_dc_top_or1200_dc_tag_dc_tag0_or1200_dc_top_or1200_dc_tag_aw=13-4,
-        parameter or1200_dc_top_or1200_dc_tag_dc_tag0_or1200_dc_top_or1200_dc_tag_dw=20+1,
-        parameter or1200_dc_top_or1200_dc_tag_dc_tag0_aw=10,
-        parameter or1200_dc_top_or1200_dc_tag_dc_tag0_dw=32,
+        parameter or1200_dc_top_or1200_dc_tag_dc_tag0_aw=13-4,
+        parameter or1200_dc_top_or1200_dc_tag_dc_tag0_dw=20+1,
         parameter or1200_qmem_top_dw=32,
         parameter or1200_sb_dw=32,
         parameter or1200_sb_aw=32,
@@ -1507,18 +1486,14 @@ module or1200_top #(
     wire[4-1:0]  or1200_cpu_alu_op2  ;
     wire[4-1:0]  or1200_cpu_comp_op  ;
     wire[3-1:0]  or1200_cpu_pre_branch_op  ;
-    wire[3-1:0]  or1200_cpu_branch_op  ;
     wire[4-1:0]  or1200_cpu_id_lsu_op  ;
     wire  or1200_cpu_genpc_freeze  ;
     wire  or1200_cpu_if_freeze  ;
     wire  or1200_cpu_id_freeze  ;
-    wire  or1200_cpu_ex_freeze  ;
-    wire  or1200_cpu_wb_freeze  ;
     wire[2-1:0]  or1200_cpu_sel_a  ;
     wire[2-1:0]  or1200_cpu_sel_b  ;
     wire[4-1:0]  or1200_cpu_rfwb_op  ;
     wire[8-1:0]  or1200_cpu_fpu_op  ;
-    wire[  or1200_cpu_dw  -1:0]  or1200_cpu_rf_dataw  ;
     wire[  or1200_cpu_dw  -1:0]  or1200_cpu_rf_dataa  ;
     wire[  or1200_cpu_dw  -1:0]  or1200_cpu_rf_datab  ;
     wire[  or1200_cpu_dw  -1:0]  or1200_cpu_muxed_a  ;
@@ -1540,7 +1515,6 @@ module or1200_top #(
     wire[5:0]  or1200_cpu_cust5_limm  ;
     wire  or1200_cpu_if_flushpipe  ;
     wire  or1200_cpu_id_flushpipe  ;
-    wire  or1200_cpu_ex_flushpipe  ;
     wire  or1200_cpu_wb_flushpipe  ;
     wire  or1200_cpu_extend_flush  ;
     wire  or1200_cpu_ex_branch_taken  ;
@@ -1577,21 +1551,18 @@ module or1200_top #(
     wire  or1200_cpu_except_start  ;
     wire  or1200_cpu_except_started  ;
     wire  or1200_cpu_fpu_except_started  ;
-    wire[31:0]  or1200_cpu_wb_insn  ;
     wire  or1200_cpu_sig_syscall  ;
     wire  or1200_cpu_sig_trap  ;
     wire  or1200_cpu_sig_range  ;
     wire  or1200_cpu_sig_fp  ;
     wire[31:0]  or1200_cpu_spr_dat_cfgr  ;
     wire[31:0]  or1200_cpu_spr_dat_rf  ;
-    wire[31:0]  or1200_cpu_spr_dat_npc  ;
     wire[31:0]  or1200_cpu_spr_dat_ppc  ;
     wire[31:0]  or1200_cpu_spr_dat_mac  ;
     wire[31:0]  or1200_cpu_spr_dat_fpu  ;
     wire  or1200_cpu_mtspr_done  ;
     wire  or1200_cpu_force_dslot_fetch  ;
     wire  or1200_cpu_no_more_dslot  ;
-    wire  or1200_cpu_ex_void  ;
     wire  or1200_cpu_ex_spr_read  ;
     wire  or1200_cpu_ex_spr_write  ;
     wire  or1200_cpu_if_stall  ;
@@ -1614,8 +1585,6 @@ module or1200_top #(
     wire  or1200_cpu_except_immufault  ;
     wire  or1200_cpu_except_ibuserr  ;
     wire  or1200_cpu_except_dbuserr  ;
-    wire  or1200_cpu_abort_ex  ;
-    wire  or1200_cpu_abort_mvspr  ;
     assign   or1200_cpu_du_except_trig  =  or1200_cpu_except_trig  ;
     assign   or1200_cpu_du_except_stop  =  or1200_cpu_except_stop  ;
     assign   or1200_cpu_du_lsu_store_dat  =  or1200_cpu_operand_b  ;
@@ -1997,12 +1966,8 @@ module or1200_top #(
     wire  or1200_cpu_or1200_ctrl_dc_no_writethrough;
 
     wire  or1200_cpu_or1200_ctrl_if_maci_op  ;
-    wire[3-1:0]  or1200_cpu_or1200_ctrl_mac_op  ;
-    wire  or1200_cpu_or1200_ctrl_ex_macrc_op  ;
     reg[5-1:0]  or1200_cpu_or1200_ctrl_wb_rfaddrw  ;
     reg  or1200_cpu_or1200_ctrl_sel_imm  ;
-    wire  or1200_cpu_or1200_ctrl_id_void  ;
-    wire  or1200_cpu_or1200_ctrl_ex_void  ;
     wire  or1200_cpu_or1200_ctrl_wb_void  ;
     reg  or1200_cpu_or1200_ctrl_ex_delayslot_dsi  ;
     reg  or1200_cpu_or1200_ctrl_ex_delayslot_nop  ;
@@ -2680,12 +2645,12 @@ module or1200_top #(
     reg[  or1200_cpu_or1200_rf_rf_a_dw  -1:0]  or1200_cpu_or1200_rf_rf_a_mem  [(1<<  or1200_cpu_or1200_rf_rf_a_aw  )-1:0];
     reg[  or1200_cpu_or1200_rf_rf_a_aw  -1:0]  or1200_cpu_or1200_rf_rf_a_addr_a_reg  ;
     function[31:0]  or1200_cpu_or1200_rf_rf_a_get_gpr  ;
-        input[  or1200_cpu_or1200_rf_rf_a_aw  -1:0] gpr_no ;
+        input[  or1200_cpu_or1200_rf_rf_a_aw  -1:0]  or1200_cpu_or1200_rf_rf_a_gpr_no  ;
         or1200_cpu_or1200_rf_rf_a_get_gpr   =  or1200_cpu_or1200_rf_rf_a_mem  [  or1200_cpu_or1200_rf_rf_a_gpr_no  ];
     endfunction
     function[31:0]  or1200_cpu_or1200_rf_rf_a_set_gpr  ;
-        input[  or1200_cpu_or1200_rf_rf_a_aw  -1:0] gpr_no ;
-        input[  or1200_cpu_or1200_rf_rf_a_dw  -1:0] value ;
+        input[  or1200_cpu_or1200_rf_rf_a_aw  -1:0]  or1200_cpu_or1200_rf_rf_a_gpr_no  ;
+        input[  or1200_cpu_or1200_rf_rf_a_dw  -1:0]  or1200_cpu_or1200_rf_rf_a_value  ;
         begin
             or1200_cpu_or1200_rf_rf_a_mem   [  or1200_cpu_or1200_rf_rf_a_gpr_no  ]=  or1200_cpu_or1200_rf_rf_a_value  ;
             or1200_cpu_or1200_rf_rf_a_set_gpr   =0;
@@ -2706,12 +2671,12 @@ module or1200_top #(
     reg[  or1200_cpu_or1200_rf_rf_b_dw  -1:0]  or1200_cpu_or1200_rf_rf_b_mem  [(1<<  or1200_cpu_or1200_rf_rf_b_aw  )-1:0];
     reg[  or1200_cpu_or1200_rf_rf_b_aw  -1:0]  or1200_cpu_or1200_rf_rf_b_addr_a_reg  ;
     function[31:0]  or1200_cpu_or1200_rf_rf_b_get_gpr  ;
-        input[  or1200_cpu_or1200_rf_rf_b_aw  -1:0] gpr_no ;
+        input[  or1200_cpu_or1200_rf_rf_b_aw  -1:0]  or1200_cpu_or1200_rf_rf_b_gpr_no  ;
         or1200_cpu_or1200_rf_rf_b_get_gpr   =  or1200_cpu_or1200_rf_rf_b_mem  [  or1200_cpu_or1200_rf_rf_b_gpr_no  ];
     endfunction
     function[31:0]  or1200_cpu_or1200_rf_rf_b_set_gpr  ;
-        input[  or1200_cpu_or1200_rf_rf_b_aw  -1:0] gpr_no ;
-        input[  or1200_cpu_or1200_rf_rf_b_dw  -1:0] value ;
+        input[  or1200_cpu_or1200_rf_rf_b_aw  -1:0]  or1200_cpu_or1200_rf_rf_b_gpr_no  ;
+        input[  or1200_cpu_or1200_rf_rf_b_dw  -1:0]  or1200_cpu_or1200_rf_rf_b_value  ;
         begin
             or1200_cpu_or1200_rf_rf_b_mem   [  or1200_cpu_or1200_rf_rf_b_gpr_no  ]=  or1200_cpu_or1200_rf_rf_b_value  ;
             or1200_cpu_or1200_rf_rf_b_set_gpr   =0;
@@ -3183,7 +3148,6 @@ module or1200_top #(
     wire[2*  or1200_cpu_or1200_mult_mac_width  -1:0]  or1200_cpu_or1200_mult_mac_mul_prod  ;
     wire  or1200_cpu_or1200_mult_mac_mul_stall  ;
     reg[1:0]  or1200_cpu_or1200_mult_mac_mul_stall_count  ;
-    wire[3-1:0]  or1200_cpu_or1200_mult_mac_mac_op  ;
     wire[3-1:0]  or1200_cpu_or1200_mult_mac_mac_op_r1  ;
     wire[3-1:0]  or1200_cpu_or1200_mult_mac_mac_op_r2  ;
     wire[3-1:0]  or1200_cpu_or1200_mult_mac_mac_op_r3  ;
@@ -3463,7 +3427,6 @@ module or1200_top #(
     wire[31:0]  or1200_cpu_or1200_sprs_sys_data  ;
     wire  or1200_cpu_or1200_sprs_du_access  ;
     reg[31:0]  or1200_cpu_or1200_sprs_unqualified_cs  ;
-    wire  or1200_cpu_or1200_sprs_ex_spr_write  ;
     assign   or1200_cpu_or1200_sprs_du_access  =  or1200_cpu_or1200_sprs_du_read  |  or1200_cpu_or1200_sprs_du_write  ;
     assign   or1200_cpu_or1200_sprs_spr_addr  =  or1200_cpu_or1200_sprs_du_access  ?  or1200_cpu_or1200_sprs_du_addr  :(  or1200_cpu_or1200_sprs_addrbase  |{16'h0000,  or1200_cpu_or1200_sprs_addrofs  });
     assign   or1200_cpu_or1200_sprs_spr_dat_o  =  or1200_cpu_or1200_sprs_du_write  ?  or1200_cpu_or1200_sprs_du_dat_du  :  or1200_cpu_or1200_sprs_dat_i  ;
@@ -4157,8 +4120,6 @@ module or1200_top #(
     reg  or1200_cpu_or1200_except_ex_dslot  ;
     reg  or1200_cpu_or1200_except_delayed1_ex_dslot  ;
     reg  or1200_cpu_or1200_except_delayed2_ex_dslot  ;
-    wire  or1200_cpu_or1200_except_except_started  ;
-    wire  or1200_cpu_or1200_except_except_flushpipe  ;
     reg[2:0]  or1200_cpu_or1200_except_delayed_iee  ;
     reg[2:0]  or1200_cpu_or1200_except_delayed_tee  ;
     wire  or1200_cpu_or1200_except_int_pending  ;
@@ -5767,7 +5728,6 @@ module or1200_top #(
     wire  or1200_du_dwcr0_sel  ,  or1200_du_dwcr1_sel  ;
     reg  or1200_du_dbg_bp_r  ;
     reg  or1200_du_ex_freeze_q  ;
-    wire  or1200_du_du_hwbkpt  ;
     reg  or1200_du_du_hwbkpt_hold  ;
     reg[13:0]  or1200_du_except_stop  ;
     wire[31:0]  or1200_du_tbia_dat_o  ;

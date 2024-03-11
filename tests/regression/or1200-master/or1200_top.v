@@ -12914,7 +12914,7 @@ module or1200_sprs(
    wire [31:0] 				sys_data;// Read data from system SPRs
    wire 				du_access;// Debug unit access
    reg [31:0] 				unqualified_cs;	// Unqualified selects
-   wire 				ex_spr_write; // jb
+//    wire 				ex_spr_write; // jb
    
    //
    // Decide if it is debug unit access
@@ -23444,7 +23444,7 @@ module or1200_mult_mac(
    wire [2*width-1:0] 			mul_prod;
    wire 				mul_stall;
    reg [1:0] 				mul_stall_count;   
-   wire [3-1:0] 	mac_op;
+//    wire [3-1:0] 	mac_op;
 
 
 
@@ -43381,8 +43381,8 @@ module or1200_fpu_mul
    output reg 		     sign_o;
    output reg 		     ready_o;
    
-   parameter t_state_waiting = 1'b0,
-	       t_state_busy = 1'b1;
+    parameter t_state_waiting = 1'b0;
+	parameter t_state_busy = 1'b1;
 
    reg [47:0] 		     s_fract_o;
    reg [23:0] 		     s_fracta_i;
@@ -50012,30 +50012,35 @@ module or1200_fpu_intfloat_conv
    output		zero;
 
 
-   parameter	INF  = 31'h7f800000,
-		  QNAN = 31'h7fc00001,
-		  SNAN = 31'h7f800001;
+   parameter INF  = 31'h7f800000;
+   parameter QNAN = 31'h7fc00001;
+   parameter SNAN = 31'h7f800001;
 
    ////////////////////////////////////////////////////////////////////////
    //
    // Local Wires
    //
-   reg 			zero;
-   reg [31:0] 		opa_r;	// Input operand registers
-   reg [31:0] 		out;		// Output register
-   reg 			div_by_zero;	// Divide by zero output register
-   wire [7:0] 		exp_fasu;	// Exponent output from EQU block
-   reg [7:0] 		exp_r;		// Exponent output (registerd)
-   wire 		co;		// carry output
-   wire [30:0] 		out_d;		// Intermediate final result output
-   wire 		overflow_d, underflow_d;// Overflow/Underflow
-   reg 			inf, snan, qnan;// Output Registers for INF, S/QNAN
-   reg 			ine;		// Output Registers for INE
-   reg [1:0] 		rmode_r1, rmode_r2,// Pipeline registers for round mode
-			rmode_r3;
-   reg [2:0] 		fpu_op_r1, fpu_op_r2,// Pipeline registers for fp 
-			                     // operation
-			fpu_op_r3;
+   reg zero;
+	reg [31:0] opa_r; // Input operand registers
+	reg [31:0] out; // Output register
+	reg div_by_zero; // Divide by zero output register
+	wire [7:0] exp_fasu; // Exponent output from EQU block
+	reg [7:0] exp_r; // Exponent output (registered)
+	wire co; // carry output
+	wire [30:0] out_d; // Intermediate final result output
+	wire overflow_d; // Overflow
+	wire underflow_d; // Underflow
+	reg inf; // Output Registers for INF
+	reg snan; // Output Registers for S/QNAN
+	reg qnan; // Output Registers for S/QNAN
+	reg ine; // Output Registers for INE
+	reg [1:0] rmode_r1; // Pipeline registers for round mode
+	reg [1:0] rmode_r2; // Pipeline registers for round mode
+	reg [1:0] rmode_r3; // Pipeline registers for round mode
+	reg [2:0] fpu_op_r1; // Pipeline registers for fp operation
+	reg [2:0] fpu_op_r2; // Pipeline registers for fp operation
+	reg [2:0] fpu_op_r3; // Pipeline registers for fp operation
+
 
    ////////////////////////////////////////////////////////////////////////
      //
@@ -50328,8 +50333,8 @@ module or1200_fpu_div
    output 			sign_o;
    output 			div_zero_o;
    
-   parameter t_state_waiting = 1'b0,
-	       t_state_busy = 1'b1;
+   parameter t_state_waiting = 1'b0;
+   parameter t_state_busy = 1'b1;
    
    reg [FRAC_WIDTH+3:0] 	s_qutnt_o;
    reg [FRAC_WIDTH+3:0] 	s_rmndr_o;   
@@ -61605,8 +61610,8 @@ reg				extend_flush_last;
 reg				ex_dslot /* verilator public */;
 reg				delayed1_ex_dslot;
 reg				delayed2_ex_dslot;
-wire				except_started;
-wire				except_flushpipe /* verilator public */;
+// wire				except_started;
+// wire				except_flushpipe /* verilator public */;
 reg	[2:0]			delayed_iee;
 reg	[2:0]			delayed_tee;
 wire				int_pending;
@@ -66011,8 +66016,8 @@ wire					if_maci_op;
 
 
 
-wire	[3-1:0]		mac_op;
-wire					ex_macrc_op;
+// wire	[3-1:0]		mac_op;
+// wire					ex_macrc_op;
 
 reg	[31:0]				id_insn /* verilator public */;
 reg	[31:0]				ex_insn /* verilator public */;
@@ -66032,8 +66037,8 @@ reg 	[31:0]				ex_simm;
 reg					sig_syscall;
 reg					sig_trap;
 reg					except_illegal;
-wire					id_void;
-wire					ex_void;
+// wire					id_void;
+// wire					ex_void;
 wire                                    wb_void;
 reg                                     ex_delayslot_dsi;
 reg                                     ex_delayslot_nop;
@@ -79480,18 +79485,18 @@ wire	[5-1:0]	alu_op;
 wire	[4-1:0]	alu_op2;
 wire	[4-1:0]	comp_op;
 wire	[3-1:0]	pre_branch_op;
-wire	[3-1:0]	branch_op;
+// wire	[3-1:0]	branch_op;
 wire	[4-1:0]	id_lsu_op;
 wire				genpc_freeze;
 wire				if_freeze;
 wire				id_freeze;
-wire				ex_freeze;
-wire				wb_freeze;
+// wire				ex_freeze;
+// wire				wb_freeze;
 wire	[2-1:0]	sel_a;
 wire	[2-1:0]	sel_b;
 wire	[4-1:0]	rfwb_op;
 wire    [8-1:0]       fpu_op;
-wire	[dw-1:0]		rf_dataw;
+// wire	[dw-1:0]		rf_dataw;
 wire	[dw-1:0]		rf_dataa;
 wire	[dw-1:0]		rf_datab;
 wire	[dw-1:0]		muxed_a;
@@ -79513,7 +79518,7 @@ wire	[4:0]			cust5_op;
 wire	[5:0]			cust5_limm;
 wire				if_flushpipe;
 wire				id_flushpipe;
-wire				ex_flushpipe;
+// wire				ex_flushpipe;
 wire				wb_flushpipe;
 wire				extend_flush;
 wire				ex_branch_taken;
@@ -79550,21 +79555,21 @@ wire				except_flushpipe;
 wire				except_start;
 wire				except_started;
 wire    			fpu_except_started;   
-wire	[31:0]			wb_insn;
+// wire	[31:0]			wb_insn;
 wire				sig_syscall;
 wire				sig_trap;
 wire    			sig_range;
 wire				sig_fp;
 wire	[31:0]			spr_dat_cfgr;
 wire	[31:0]			spr_dat_rf;
-wire    [31:0]                  spr_dat_npc;
+// wire    [31:0]                  spr_dat_npc;
 wire	[31:0]			spr_dat_ppc;
 wire	[31:0]			spr_dat_mac;
 wire [31:0] 			spr_dat_fpu;
 wire     			mtspr_done;
 wire				force_dslot_fetch;
 wire				no_more_dslot;
-wire				ex_void;
+// wire				ex_void;
 wire				ex_spr_read;
 wire				ex_spr_write;
 wire				if_stall;
@@ -79587,8 +79592,8 @@ wire				except_itlbmiss;
 wire				except_immufault;
 wire				except_ibuserr;
 wire				except_dbuserr;
-wire				abort_ex;
-wire				abort_mvspr;
+// wire				abort_ex;
+// wire				abort_mvspr;
 
 //
 // Send exceptions to Debug Unit
@@ -96091,7 +96096,7 @@ reg 				ex_freeze_q;
 
 
 
-wire				du_hwbkpt;
+// wire				du_hwbkpt;
 reg				du_hwbkpt_hold;
 
 reg	[31:0]			spr_dat_o;
@@ -97539,8 +97544,8 @@ module or1200_fpu_arith
 
    wire 		     s_infa, s_infb;
    
-   parameter t_state_waiting = 0,
-	       t_state_busy = 1;
+   parameter t_state_waiting = 0;
+   parameter t_state_busy = 1;
    
    reg 			     s_state;
    

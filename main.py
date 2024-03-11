@@ -4,7 +4,6 @@ import os
 import time
 import psutil
 
-# 开始监测
 start_time = time.time()
 start_memory = psutil.Process(os.getpid()).memory_info().rss / (1024 * 1024)
 # formatted part
@@ -16,11 +15,11 @@ top_module = 'or1200_top'
 inputpath = path+inputfile
 formatpath = path+outputfile
 
-# if os.path.exists(formatpath):
-#    os.remove(path=formatpath)
-# with open(path+inputfile, 'r') as f:
-#     design = f.read()
-#     preprocess.formatter_file(design, formatpath)
+if os.path.exists(formatpath):
+   os.remove(path=formatpath)
+with open(path+inputfile, 'r') as f:
+    design = f.read()
+    preprocess.formatter_file(design, formatpath)
     # copy the file to formatpath
     # with open(formatpath, 'w') as f:
     #     f.write(design)

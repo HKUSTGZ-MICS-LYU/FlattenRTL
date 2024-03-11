@@ -552,7 +552,6 @@ module or1200_sprs #(
    wire [31:0] sys_data ;  
    wire du_access ;  
    reg [31:0] unqualified_cs ;  
-   wire ex_spr_write ;  
   assign du_access=du_read|du_write; 
   assign spr_addr=du_access ? du_addr:(addrbase|{16'h0000,addrofs}); 
   assign spr_dat_o=du_write ? du_dat_du:dat_i; 
@@ -857,7 +856,6 @@ module or1200_mult_mac #(
    wire [2*width-1:0] mul_prod ;  
    wire mul_stall ;  
    reg [1:0] mul_stall_count ;  
-   wire [3-1:0] mac_op ;  
    wire [3-1:0] mac_op_r1 ;  
    wire [3-1:0] mac_op_r2 ;  
    wire [3-1:0] mac_op_r3 ;  
@@ -1774,7 +1772,8 @@ module or1200_fpu_mul #(
  parameter INF =31'b1111111100000000000000000000000,
  parameter QNAN =31'b1111111110000000000000000000000,
  parameter SNAN =31'b1111111100000000000000000000001,
- parameter t_state_waiting =1'b0) (
+ parameter t_state_waiting =1'b0,
+ parameter t_state_busy =1'b1) (
   input clk_i,
   input [FRAC_WIDTH:0] fracta_i,
   input [FRAC_WIDTH:0] fractb_i,
@@ -1784,6 +1783,7 @@ module or1200_fpu_mul #(
   output reg  [2*FRAC_WIDTH+1:0] fract_o,
   output reg  sign_o,
   output reg  ready_o) ; 
+    
     
     
     
@@ -1975,7 +1975,9 @@ module or1200_spram_512x20 #(
 endmodule
  
 module or1200_fpu_intfloat_conv #(
- parameter INF =31'h7f800000) (
+ parameter INF =31'h7f800000,
+ parameter QNAN =31'h7fc00001,
+ parameter SNAN =31'h7f800001) (
   input clk,
   input [1:0] rmode,
   input [2:0] fpu_op,
@@ -1988,16 +1990,24 @@ module or1200_fpu_intfloat_conv #(
   output underflow,
   output reg  zero) ; 
     
+    
+    
    reg [31:0] opa_r ;  
    reg div_by_zero ;  
    wire [7:0] exp_fasu ;  
    reg [7:0] exp_r ;  
    wire co ;  
    wire [30:0] out_d ;  
-   wire overflow_d,underflow_d ;  
-   reg inf,snan,qnan ;  
-   reg [1:0] rmode_r1,rmode_r2,rmode_r3 ;  
-   reg [2:0] fpu_op_r1,fpu_op_r2,fpu_op_r3 ;  
+   wire overflow_d ;  
+   wire underflow_d ;  
+   reg inf ;  
+   reg qnan ;  
+   reg [1:0] rmode_r1 ;  
+   reg [1:0] rmode_r2 ;  
+   reg [1:0] rmode_r3 ;  
+   reg [2:0] fpu_op_r1 ;  
+   reg [2:0] fpu_op_r2 ;  
+   reg [2:0] fpu_op_r3 ;  
   always @( posedge clk)
        opa_r <=opa;
  
@@ -2113,7 +2123,8 @@ module or1200_fpu_div #(
  parameter INF =31'b1111111100000000000000000000000,
  parameter QNAN =31'b1111111110000000000000000000000,
  parameter SNAN =31'b1111111100000000000000000000001,
- parameter t_state_waiting =1'b0) (
+ parameter t_state_waiting =1'b0,
+ parameter t_state_busy =1'b1) (
   input clk_i,
   input [2*(FRAC_WIDTH+2)-1:0] dvdnd_i,
   input [FRAC_WIDTH+3:0] dvsor_i,
@@ -2125,6 +2136,7 @@ module or1200_fpu_div #(
   output [FRAC_WIDTH+3:0] rmndr_o,
   output sign_o,
   output div_zero_o) ; 
+    
     
     
     
@@ -2781,8 +2793,6 @@ module or1200_except (
    reg ex_dslot ;  
    reg delayed1_ex_dslot ;  
    reg delayed2_ex_dslot ;  
-   wire except_started ;  
-   wire except_flushpipe ;  
    reg [2:0] delayed_iee ;  
    reg [2:0] delayed_tee ;  
    wire int_pending ;  
@@ -3220,12 +3230,8 @@ module or1200_ctrl (
   output reg  except_illegal,
   output dc_no_writethrough) ; 
    wire if_maci_op ;  
-   wire [3-1:0] mac_op ;  
-   wire ex_macrc_op ;  
    reg [5-1:0] wb_rfaddrw ;  
    reg sel_imm ;  
-   wire id_void ;  
-   wire ex_void ;  
    wire wb_void ;  
    reg ex_delayslot_dsi ;  
    reg ex_delayslot_nop ;  
@@ -4230,18 +4236,14 @@ module or1200_cpu #(
    wire [4-1:0] alu_op2 ;  
    wire [4-1:0] comp_op ;  
    wire [3-1:0] pre_branch_op ;  
-   wire [3-1:0] branch_op ;  
    wire [4-1:0] id_lsu_op ;  
    wire genpc_freeze ;  
    wire if_freeze ;  
    wire id_freeze ;  
-   wire ex_freeze ;  
-   wire wb_freeze ;  
    wire [2-1:0] sel_a ;  
    wire [2-1:0] sel_b ;  
    wire [4-1:0] rfwb_op ;  
    wire [8-1:0] fpu_op ;  
-   wire [dw-1:0] rf_dataw ;  
    wire [dw-1:0] rf_dataa ;  
    wire [dw-1:0] rf_datab ;  
    wire [dw-1:0] muxed_a ;  
@@ -4263,7 +4265,6 @@ module or1200_cpu #(
    wire [5:0] cust5_limm ;  
    wire if_flushpipe ;  
    wire id_flushpipe ;  
-   wire ex_flushpipe ;  
    wire wb_flushpipe ;  
    wire extend_flush ;  
    wire ex_branch_taken ;  
@@ -4300,21 +4301,18 @@ module or1200_cpu #(
    wire except_start ;  
    wire except_started ;  
    wire fpu_except_started ;  
-   wire [31:0] wb_insn ;  
    wire sig_syscall ;  
    wire sig_trap ;  
    wire sig_range ;  
    wire sig_fp ;  
    wire [31:0] spr_dat_cfgr ;  
    wire [31:0] spr_dat_rf ;  
-   wire [31:0] spr_dat_npc ;  
    wire [31:0] spr_dat_ppc ;  
    wire [31:0] spr_dat_mac ;  
    wire [31:0] spr_dat_fpu ;  
    wire mtspr_done ;  
    wire force_dslot_fetch ;  
    wire no_more_dslot ;  
-   wire ex_void ;  
    wire ex_spr_read ;  
    wire ex_spr_write ;  
    wire if_stall ;  
@@ -4337,8 +4335,6 @@ module or1200_cpu #(
    wire except_immufault ;  
    wire except_ibuserr ;  
    wire except_dbuserr ;  
-   wire abort_ex ;  
-   wire abort_mvspr ;  
   assign du_except_trig=except_trig; 
   assign du_except_stop=except_stop; 
   assign du_lsu_store_dat=operand_b; 
@@ -5091,7 +5087,6 @@ module or1200_du #(
    wire dwcr0_sel,dwcr1_sel ;  
    reg dbg_bp_r ;  
    reg ex_freeze_q ;  
-   wire du_hwbkpt ;  
    reg du_hwbkpt_hold ;  
    reg [13:0] except_stop ;  
    wire [31:0] tbia_dat_o ;  
@@ -5249,7 +5244,8 @@ module or1200_fpu_arith #(
  parameter INF =31'b1111111100000000000000000000000,
  parameter QNAN =31'b11111111_10000000000000000000000,
  parameter SNAN =31'b11111111_00000000000000000000001,
- parameter t_state_waiting =0) (
+ parameter t_state_waiting =0,
+ parameter t_state_busy =1) (
   input clk_i,
   input [FP_WIDTH-1:0] opa_i,
   input [FP_WIDTH-1:0] opb_i,
@@ -5286,6 +5282,7 @@ module or1200_fpu_arith #(
    reg s_ine_o ;  
    wire s_overflow_o,s_underflow_o,s_div_zero_o,s_inf_o,s_zero_o,s_qnan_o,s_snan_o ;  
    wire s_infa,s_infb ;  
+    
     
    reg s_state ;  
    wire [27:0] prenorm_addsub_fracta_28_o ;  
