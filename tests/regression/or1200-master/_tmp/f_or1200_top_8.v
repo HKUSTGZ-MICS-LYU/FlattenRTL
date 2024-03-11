@@ -7038,7 +7038,29 @@ module or1200_top #(
  parameter dw =32,
  parameter aw =32,
  parameter ppic_ints =20,
- parameter boot_adr =32'h00000100) (
+ parameter boot_adr =32'h00000100,
+parameter iwb_biu_bl=(1<<(4-2)),
+parameter iwb_biu_dw=32,
+parameter iwb_biu_aw=32,
+parameter dwb_biu_bl=(1<<(4-2)),
+parameter dwb_biu_dw=32,
+parameter dwb_biu_aw=32,
+parameter or1200_immu_top_boot_adr=boot_adr,
+parameter or1200_immu_top_dw=32,
+parameter or1200_immu_top_aw=32,
+parameter or1200_immu_top_or1200_immu_tlb_dw=32,
+parameter or1200_immu_top_or1200_immu_tlb_aw=32,
+parameter or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_aw=6,
+parameter or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_dw=14,
+parameter or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_aw=6,
+parameter or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_dw=22,
+parameter or1200_ic_top_dw=32,
+parameter or1200_ic_top_or1200_ic_ram_dw=32,
+parameter or1200_ic_top_or1200_ic_ram_aw=13-2,
+parameter or1200_ic_top_or1200_ic_ram_ic_ram0_aw=13-2,
+parameter or1200_ic_top_or1200_ic_ram_ic_ram0_dw=32,
+parameter or1200_ic_top_or1200_ic_tag_dw=20,
+parameter or1200_ic_top_or1200_ic_tag_aw=13-4) (
   input clk_i,
   input rst_i,
   input [ppic_ints-1:0] pic_ints_i,
@@ -7237,11 +7259,1109 @@ module or1200_top #(
    wire [3:0] icqmem_sel_qmem ;  
    wire [3:0] icqmem_tag_qmem ;  
    wire [3:0] dcqmem_tag_qmem ;  
-  or1200_wb_biu #(.bl((1<<(4-2))))iwb_biu(.clk(clk_i),.rst(rst_i),.clmode(clmode_i),.wb_clk_i(iwb_clk_i),.wb_rst_i(iwb_rst_i),.wb_ack_i(iwb_ack_i),.wb_err_i(iwb_err_i),.wb_rty_i(iwb_rty_i),.wb_dat_i(iwb_dat_i),.wb_cyc_o(iwb_cyc_o),.wb_adr_o(iwb_adr_o),.wb_stb_o(iwb_stb_o),.wb_we_o(iwb_we_o),.wb_sel_o(iwb_sel_o),.wb_dat_o(iwb_dat_o),.wb_cti_o(iwb_cti_o),.wb_bte_o(iwb_bte_o),.biu_dat_i(icbiu_dat_ic),.biu_adr_i(icbiu_adr_ic_word),.biu_cyc_i(icbiu_cyc_ic),.biu_stb_i(icbiu_stb_ic),.biu_we_i(icbiu_we_ic),.biu_sel_i(icbiu_sel_ic),.biu_cab_i(icbiu_cab_ic),.biu_dat_o(icbiu_dat_biu),.biu_ack_o(icbiu_ack_biu),.biu_err_o(icbiu_err_biu)); 
+  
+wire  iwb_biu_clk;
+wire  iwb_biu_rst;
+wire [1:0] iwb_biu_clmode;
+wire  iwb_biu_wb_clk_i;
+wire  iwb_biu_wb_rst_i;
+wire  iwb_biu_wb_ack_i;
+wire  iwb_biu_wb_err_i;
+wire  iwb_biu_wb_rty_i;
+wire [ iwb_biu_dw -1:0] iwb_biu_wb_dat_i;
+reg  iwb_biu_wb_cyc_o;
+reg [ iwb_biu_aw -1:0] iwb_biu_wb_adr_o;
+reg  iwb_biu_wb_stb_o;
+reg  iwb_biu_wb_we_o;
+reg [3:0] iwb_biu_wb_sel_o;
+wire [ iwb_biu_dw -1:0] iwb_biu_wb_dat_o;
+reg [2:0] iwb_biu_wb_cti_o;
+reg [1:0] iwb_biu_wb_bte_o;
+wire [ iwb_biu_dw -1:0] iwb_biu_biu_dat_i;
+wire [ iwb_biu_aw -1:0] iwb_biu_biu_adr_i;
+wire  iwb_biu_biu_cyc_i;
+wire  iwb_biu_biu_stb_i;
+wire  iwb_biu_biu_we_i;
+wire [3:0] iwb_biu_biu_sel_i;
+wire  iwb_biu_biu_cab_i;
+wire [31:0] iwb_biu_biu_dat_o;
+wire  iwb_biu_biu_ack_o;
+wire  iwb_biu_biu_err_o;
+wire  dwb_biu_clk;
+wire  dwb_biu_rst;
+wire [1:0] dwb_biu_clmode;
+wire  dwb_biu_wb_clk_i;
+wire  dwb_biu_wb_rst_i;
+wire  dwb_biu_wb_ack_i;
+wire  dwb_biu_wb_err_i;
+wire  dwb_biu_wb_rty_i;
+wire [ dwb_biu_dw -1:0] dwb_biu_wb_dat_i;
+reg  dwb_biu_wb_cyc_o;
+reg [ dwb_biu_aw -1:0] dwb_biu_wb_adr_o;
+reg  dwb_biu_wb_stb_o;
+reg  dwb_biu_wb_we_o;
+reg [3:0] dwb_biu_wb_sel_o;
+wire [ dwb_biu_dw -1:0] dwb_biu_wb_dat_o;
+reg [2:0] dwb_biu_wb_cti_o;
+reg [1:0] dwb_biu_wb_bte_o;
+wire [ dwb_biu_dw -1:0] dwb_biu_biu_dat_i;
+wire [ dwb_biu_aw -1:0] dwb_biu_biu_adr_i;
+wire  dwb_biu_biu_cyc_i;
+wire  dwb_biu_biu_stb_i;
+wire  dwb_biu_biu_we_i;
+wire [3:0] dwb_biu_biu_sel_i;
+wire  dwb_biu_biu_cab_i;
+wire [31:0] dwb_biu_biu_dat_o;
+wire  dwb_biu_biu_ack_o;
+wire  dwb_biu_biu_err_o;
+ 
+   wire  iwb_biu_wb_ack  ; 
+  assign   iwb_biu_wb_dat_o  =  iwb_biu_biu_dat_i  ; 
+   wire  iwb_biu_retry_cnt  ; 
+  assign   iwb_biu_retry_cnt  =1'b0; 
+   reg[3:0]  iwb_biu_burst_len  ; 
+   reg  iwb_biu_biu_stb_reg  ; 
+   wire  iwb_biu_biu_stb  ; 
+   reg  iwb_biu_wb_cyc_nxt  ; 
+   reg  iwb_biu_wb_stb_nxt  ; 
+   reg[2:0]  iwb_biu_wb_cti_nxt  ; 
+   reg  iwb_biu_wb_ack_cnt  ; 
+   reg  iwb_biu_wb_err_cnt  ; 
+   reg  iwb_biu_wb_rty_cnt  ; 
+   reg  iwb_biu_biu_ack_cnt  ; 
+   reg  iwb_biu_biu_err_cnt  ; 
+   reg  iwb_biu_biu_rty_cnt  ; 
+   wire  iwb_biu_biu_rty  ; 
+   reg[1:0]  iwb_biu_wb_fsm_state_cur  ; 
+   reg[1:0]  iwb_biu_wb_fsm_state_nxt  ; 
+   wire[1:0]  iwb_biu_wb_fsm_idle  =2'h0; 
+   wire[1:0]  iwb_biu_wb_fsm_trans  =2'h1; 
+   wire[1:0]  iwb_biu_wb_fsm_last  =2'h2; 
+  assign   iwb_biu_wb_ack  =  iwb_biu_wb_ack_i  &!  iwb_biu_wb_err_i  &!  iwb_biu_wb_rty_i  ; 
+  always @(  posedge    iwb_biu_wb_clk_i          or  posedge   iwb_biu_wb_rst_i  )
+       begin 
+         if (  iwb_biu_wb_rst_i  ==(1'b1)) 
+             iwb_biu_wb_fsm_state_cur   <=  iwb_biu_wb_fsm_idle  ;
+          else  
+             iwb_biu_wb_fsm_state_cur   <=  iwb_biu_wb_fsm_state_nxt  ;
+       end
+  
+  always @(  posedge    iwb_biu_wb_clk_i          or  posedge   iwb_biu_wb_rst_i  )
+       begin 
+         if (  iwb_biu_wb_rst_i  ==(1'b1))
+            begin  
+               iwb_biu_burst_len   <=0;
+            end 
+          else 
+            begin 
+              if (  iwb_biu_wb_fsm_state_cur  ==  iwb_biu_wb_fsm_idle  ) 
+                  iwb_biu_burst_len   <=  iwb_biu_bl  [3:0]-2;
+               else 
+                 if (  iwb_biu_wb_stb_o  &  iwb_biu_wb_ack  ) 
+                     iwb_biu_burst_len   <=  iwb_biu_burst_len  -1;
+            end 
+       end
+  
+  always @(                iwb_biu_wb_fsm_state_cur                                    or    iwb_biu_burst_len                      or    iwb_biu_wb_err_i                     or    iwb_biu_wb_rty_i                    or    iwb_biu_wb_ack                   or    iwb_biu_wb_cti_o                  or    iwb_biu_wb_sel_o                 or    iwb_biu_wb_stb_o                or    iwb_biu_wb_we_o               or    iwb_biu_biu_cyc_i              or    iwb_biu_biu_stb             or    iwb_biu_biu_cab_i            or    iwb_biu_biu_sel_i           or    iwb_biu_biu_we_i   )
+       begin 
+         case (  iwb_biu_wb_fsm_state_cur  ) 
+           iwb_biu_wb_fsm_idle   :
+             begin  
+                iwb_biu_wb_cyc_nxt   =  iwb_biu_biu_cyc_i  &  iwb_biu_biu_stb  ; 
+                iwb_biu_wb_stb_nxt   =  iwb_biu_biu_cyc_i  &  iwb_biu_biu_stb  ; 
+                iwb_biu_wb_cti_nxt   ={!  iwb_biu_biu_cab_i  ,1'b1,!  iwb_biu_biu_cab_i  };
+               if (  iwb_biu_biu_cyc_i  &  iwb_biu_biu_stb  ) 
+                   iwb_biu_wb_fsm_state_nxt   =  iwb_biu_wb_fsm_trans  ;
+                else  
+                   iwb_biu_wb_fsm_state_nxt   =  iwb_biu_wb_fsm_idle  ;
+             end  
+           iwb_biu_wb_fsm_trans   :
+             begin  
+                iwb_biu_wb_cyc_nxt   =!  iwb_biu_wb_stb_o  |!  iwb_biu_wb_err_i  &!  iwb_biu_wb_rty_i  &!(  iwb_biu_wb_ack  &  iwb_biu_wb_cti_o  ==3'b111); 
+                iwb_biu_wb_stb_nxt   =!  iwb_biu_wb_stb_o  |!  iwb_biu_wb_err_i  &!  iwb_biu_wb_rty_i  &!  iwb_biu_wb_ack  |!  iwb_biu_wb_err_i  &!  iwb_biu_wb_rty_i  &  iwb_biu_wb_cti_o  ==3'b010; 
+                iwb_biu_wb_cti_nxt   [2]=  iwb_biu_wb_stb_o  &  iwb_biu_wb_ack  &  iwb_biu_burst_len  =='h0|  iwb_biu_wb_cti_o  [2]; 
+                iwb_biu_wb_cti_nxt   [1]=1'b1; 
+                iwb_biu_wb_cti_nxt   [0]=  iwb_biu_wb_stb_o  &  iwb_biu_wb_ack  &  iwb_biu_burst_len  =='h0|  iwb_biu_wb_cti_o  [0];
+               if ((!  iwb_biu_biu_cyc_i  |!  iwb_biu_biu_stb  |!  iwb_biu_biu_cab_i  |  iwb_biu_biu_sel_i  !=  iwb_biu_wb_sel_o  |  iwb_biu_biu_we_i  !=  iwb_biu_wb_we_o  )&  iwb_biu_wb_cti_o  ==3'b010) 
+                   iwb_biu_wb_fsm_state_nxt   =  iwb_biu_wb_fsm_last  ;
+                else 
+                  if ((  iwb_biu_wb_err_i  |  iwb_biu_wb_rty_i  |  iwb_biu_wb_ack  &  iwb_biu_wb_cti_o  ==3'b111)&  iwb_biu_wb_stb_o  ) 
+                      iwb_biu_wb_fsm_state_nxt   =  iwb_biu_wb_fsm_idle  ;
+                   else  
+                      iwb_biu_wb_fsm_state_nxt   =  iwb_biu_wb_fsm_trans  ;
+             end  
+           iwb_biu_wb_fsm_last   :
+             begin  
+                iwb_biu_wb_cyc_nxt   =!  iwb_biu_wb_stb_o  |!  iwb_biu_wb_err_i  &!  iwb_biu_wb_rty_i  &!(  iwb_biu_wb_ack  &  iwb_biu_wb_cti_o  ==3'b111); 
+                iwb_biu_wb_stb_nxt   =!  iwb_biu_wb_stb_o  |!  iwb_biu_wb_err_i  &!  iwb_biu_wb_rty_i  &!(  iwb_biu_wb_ack  &  iwb_biu_wb_cti_o  ==3'b111); 
+                iwb_biu_wb_cti_nxt   [2]=  iwb_biu_wb_ack  &  iwb_biu_wb_stb_o  |  iwb_biu_wb_cti_o  [2]; 
+                iwb_biu_wb_cti_nxt   [1]=1'b1; 
+                iwb_biu_wb_cti_nxt   [0]=  iwb_biu_wb_ack  &  iwb_biu_wb_stb_o  |  iwb_biu_wb_cti_o  [0];
+               if ((  iwb_biu_wb_err_i  |  iwb_biu_wb_rty_i  |  iwb_biu_wb_ack  &  iwb_biu_wb_cti_o  ==3'b111)&  iwb_biu_wb_stb_o  ) 
+                   iwb_biu_wb_fsm_state_nxt   =  iwb_biu_wb_fsm_idle  ;
+                else  
+                   iwb_biu_wb_fsm_state_nxt   =  iwb_biu_wb_fsm_last  ;
+             end 
+          default :
+             begin  
+                iwb_biu_wb_cyc_nxt   =1'bx; 
+                iwb_biu_wb_stb_nxt   =1'bx; 
+                iwb_biu_wb_cti_nxt   =3'bxxx; 
+                iwb_biu_wb_fsm_state_nxt   =2'bxx;
+             end 
+         endcase 
+       end
+  
+  always @(  posedge    iwb_biu_wb_clk_i          or  posedge   iwb_biu_wb_rst_i  )
+       begin 
+         if (  iwb_biu_wb_rst_i  ==(1'b1))
+            begin  
+               iwb_biu_wb_cyc_o   <=1'b0; 
+               iwb_biu_wb_stb_o   <=1'b0; 
+               iwb_biu_wb_cti_o   <=3'b111; 
+               iwb_biu_wb_bte_o   <=(  iwb_biu_bl  ==8)?2'b10:(  iwb_biu_bl  ==4)?2'b01:2'b00; 
+               iwb_biu_wb_we_o   <=1'b0; 
+               iwb_biu_wb_sel_o   <=4'hf; 
+               iwb_biu_wb_adr_o   <={  iwb_biu_aw  {1'b0}};
+            end 
+          else 
+            begin  
+               iwb_biu_wb_cyc_o   <=  iwb_biu_wb_cyc_nxt  ;
+              if (  iwb_biu_wb_ack  &  iwb_biu_wb_cti_o  ==3'b111) 
+                  iwb_biu_wb_stb_o   <=1'b0;
+               else  
+                  iwb_biu_wb_stb_o   <=  iwb_biu_wb_stb_nxt  ; 
+               iwb_biu_wb_cti_o   <=  iwb_biu_wb_cti_nxt  ; 
+               iwb_biu_wb_bte_o   <=(  iwb_biu_bl  ==8)?2'b10:(  iwb_biu_bl  ==4)?2'b01:2'b00;
+              if (  iwb_biu_wb_fsm_state_cur  ==  iwb_biu_wb_fsm_idle  )
+                 begin  
+                    iwb_biu_wb_we_o   <=  iwb_biu_biu_we_i  ; 
+                    iwb_biu_wb_sel_o   <=  iwb_biu_biu_sel_i  ;
+                 end 
+              if (  iwb_biu_wb_fsm_state_cur  ==  iwb_biu_wb_fsm_idle  )
+                 begin  
+                    iwb_biu_wb_adr_o   <=  iwb_biu_biu_adr_i  ;
+                 end 
+               else 
+                 if (  iwb_biu_wb_stb_o  &  iwb_biu_wb_ack  )
+                    begin 
+                      if (  iwb_biu_bl  ==4)
+                         begin  
+                            iwb_biu_wb_adr_o   [3:2]<=  iwb_biu_wb_adr_o  [3:2]+1;
+                         end 
+                      if (  iwb_biu_bl  ==8)
+                         begin  
+                            iwb_biu_wb_adr_o   [4:2]<=  iwb_biu_wb_adr_o  [4:2]+1;
+                         end 
+                    end 
+            end 
+       end
+  
+  always @(  posedge    iwb_biu_wb_clk_i          or  posedge   iwb_biu_wb_rst_i  )
+       begin 
+         if (  iwb_biu_wb_rst_i  ==(1'b1))
+            begin  
+               iwb_biu_wb_ack_cnt   <=1'b0; 
+               iwb_biu_wb_err_cnt   <=1'b0; 
+               iwb_biu_wb_rty_cnt   <=1'b0;
+            end 
+          else 
+            begin 
+              if (  iwb_biu_wb_fsm_state_cur  ==  iwb_biu_wb_fsm_idle  |!(|  iwb_biu_clmode  )) 
+                  iwb_biu_wb_ack_cnt   <=1'b0;
+               else 
+                 if (  iwb_biu_wb_stb_o  &  iwb_biu_wb_ack  ) 
+                     iwb_biu_wb_ack_cnt   <=!  iwb_biu_wb_ack_cnt  ;
+              if (  iwb_biu_wb_fsm_state_cur  ==  iwb_biu_wb_fsm_idle  |!(|  iwb_biu_clmode  )) 
+                  iwb_biu_wb_err_cnt   <=1'b0;
+               else 
+                 if (  iwb_biu_wb_stb_o  &  iwb_biu_wb_err_i  ) 
+                     iwb_biu_wb_err_cnt   <=!  iwb_biu_wb_err_cnt  ;
+              if (  iwb_biu_wb_fsm_state_cur  ==  iwb_biu_wb_fsm_idle  |!(|  iwb_biu_clmode  )) 
+                  iwb_biu_wb_rty_cnt   <=1'b0;
+               else 
+                 if (  iwb_biu_wb_stb_o  &  iwb_biu_wb_rty_i  ) 
+                     iwb_biu_wb_rty_cnt   <=!  iwb_biu_wb_rty_cnt  ;
+            end 
+       end
+  
+  always @(  posedge    iwb_biu_clk          or  posedge   iwb_biu_rst  )
+       begin 
+         if (  iwb_biu_rst  ==(1'b1))
+            begin  
+               iwb_biu_biu_stb_reg   <=1'b0; 
+               iwb_biu_biu_ack_cnt   <=1'b0; 
+               iwb_biu_biu_err_cnt   <=1'b0; 
+               iwb_biu_biu_rty_cnt   <=1'b0;
+            end 
+          else 
+            begin 
+              if (  iwb_biu_biu_stb_i  &!  iwb_biu_biu_cab_i  &  iwb_biu_biu_ack_o  ) 
+                  iwb_biu_biu_stb_reg   <=1'b0;
+               else  
+                  iwb_biu_biu_stb_reg   <=  iwb_biu_biu_stb_i  ;
+              if (  iwb_biu_wb_fsm_state_cur  ==  iwb_biu_wb_fsm_idle  |!(|  iwb_biu_clmode  )) 
+                  iwb_biu_biu_ack_cnt   <=1'b0;
+               else 
+                 if (  iwb_biu_biu_ack_o  ) 
+                     iwb_biu_biu_ack_cnt   <=!  iwb_biu_biu_ack_cnt  ;
+              if (  iwb_biu_wb_fsm_state_cur  ==  iwb_biu_wb_fsm_idle  |!(|  iwb_biu_clmode  )) 
+                  iwb_biu_biu_err_cnt   <=1'b0;
+               else 
+                 if (  iwb_biu_wb_err_i  &  iwb_biu_biu_err_o  ) 
+                     iwb_biu_biu_err_cnt   <=!  iwb_biu_biu_err_cnt  ;
+              if (  iwb_biu_wb_fsm_state_cur  ==  iwb_biu_wb_fsm_idle  |!(|  iwb_biu_clmode  )) 
+                  iwb_biu_biu_rty_cnt   <=1'b0;
+               else 
+                 if (  iwb_biu_biu_rty  ) 
+                     iwb_biu_biu_rty_cnt   <=!  iwb_biu_biu_rty_cnt  ;
+            end 
+       end
+  
+  assign   iwb_biu_biu_stb  =  iwb_biu_biu_stb_i  &  iwb_biu_biu_stb_reg  ; 
+  assign   iwb_biu_biu_dat_o  =  iwb_biu_wb_dat_i  ; 
+  assign   iwb_biu_biu_rty  =(  iwb_biu_wb_fsm_state_cur  ==  iwb_biu_wb_fsm_trans  )&  iwb_biu_wb_rty_i  &  iwb_biu_wb_stb_o  &(  iwb_biu_wb_rty_cnt  ~^  iwb_biu_biu_rty_cnt  ); 
+  assign   iwb_biu_biu_ack_o  =(  iwb_biu_wb_fsm_state_cur  ==  iwb_biu_wb_fsm_trans  )&  iwb_biu_wb_ack  &  iwb_biu_wb_stb_o  &(  iwb_biu_wb_ack_cnt  ~^  iwb_biu_biu_ack_cnt  ); 
+  assign   iwb_biu_biu_err_o  =(  iwb_biu_wb_fsm_state_cur  ==  iwb_biu_wb_fsm_trans  )&  iwb_biu_wb_err_i  &  iwb_biu_wb_stb_o  &(  iwb_biu_wb_err_cnt  ~^  iwb_biu_biu_err_cnt  );
+ 
   assign icbiu_adr_ic_word={icbiu_adr_ic[31:2],2'h0}; 
-  or1200_wb_biu #(.bl((1<<(4-2))))dwb_biu(.clk(clk_i),.rst(rst_i),.clmode(clmode_i),.wb_clk_i(dwb_clk_i),.wb_rst_i(dwb_rst_i),.wb_ack_i(dwb_ack_i),.wb_err_i(dwb_err_i),.wb_rty_i(dwb_rty_i),.wb_dat_i(dwb_dat_i),.wb_cyc_o(dwb_cyc_o),.wb_adr_o(dwb_adr_o),.wb_stb_o(dwb_stb_o),.wb_we_o(dwb_we_o),.wb_sel_o(dwb_sel_o),.wb_dat_o(dwb_dat_o),.wb_cti_o(dwb_cti_o),.wb_bte_o(dwb_bte_o),.biu_dat_i(sbbiu_dat_sb),.biu_adr_i(sbbiu_adr_sb),.biu_cyc_i(sbbiu_cyc_sb),.biu_stb_i(sbbiu_stb_sb),.biu_we_i(sbbiu_we_sb),.biu_sel_i(sbbiu_sel_sb),.biu_cab_i(sbbiu_cab_sb),.biu_dat_o(sbbiu_dat_biu),.biu_ack_o(sbbiu_ack_biu),.biu_err_o(sbbiu_err_biu)); 
-  or1200_immu_top #(.boot_adr(boot_adr))or1200_immu_top(.clk(clk_i),.rst(rst_i),.ic_en(ic_en),.immu_en(immu_en),.supv(supv),.icpu_adr_i(icpu_adr_cpu),.icpu_cycstb_i(icpu_cycstb_cpu),.icpu_adr_o(icpu_adr_immu),.icpu_tag_o(icpu_tag_immu),.icpu_rty_o(icpu_rty_immu),.icpu_err_o(icpu_err_immu),.boot_adr_sel_i(boot_adr_sel),.spr_cs(spr_cs[5'd02]),.spr_write(spr_we),.spr_addr(spr_addr),.spr_dat_i(spr_dat_cpu),.spr_dat_o(spr_dat_immu),.qmemimmu_rty_i(qmemimmu_rty_qmem),.qmemimmu_err_i(qmemimmu_err_qmem),.qmemimmu_tag_i(qmemimmu_tag_qmem),.qmemimmu_adr_o(qmemimmu_adr_immu),.qmemimmu_cycstb_o(qmemimmu_cycstb_immu),.qmemimmu_ci_o(qmemimmu_ci_immu)); 
-  or1200_ic_top or1200_ic_top(.clk(clk_i),.rst(rst_i),.ic_en(ic_en),.icqmem_adr_i(icqmem_adr_qmem),.icqmem_cycstb_i(icqmem_cycstb_qmem),.icqmem_ci_i(icqmem_ci_qmem),.icqmem_sel_i(icqmem_sel_qmem),.icqmem_tag_i(icqmem_tag_qmem),.icqmem_dat_o(icqmem_dat_ic),.icqmem_ack_o(icqmem_ack_ic),.icqmem_rty_o(icqmem_rty_ic),.icqmem_err_o(icqmem_err_ic),.icqmem_tag_o(icqmem_tag_ic),.spr_cs(spr_cs[5'd04]),.spr_write(spr_we),.spr_dat_i(spr_dat_cpu),.icbiu_dat_o(icbiu_dat_ic),.icbiu_adr_o(icbiu_adr_ic),.icbiu_cyc_o(icbiu_cyc_ic),.icbiu_stb_o(icbiu_stb_ic),.icbiu_we_o(icbiu_we_ic),.icbiu_sel_o(icbiu_sel_ic),.icbiu_cab_o(icbiu_cab_ic),.icbiu_dat_i(icbiu_dat_biu),.icbiu_ack_i(icbiu_ack_biu),.icbiu_err_i(icbiu_err_biu)); 
+  
+ 
+   wire  dwb_biu_wb_ack  ; 
+  assign   dwb_biu_wb_dat_o  =  dwb_biu_biu_dat_i  ; 
+   wire  dwb_biu_retry_cnt  ; 
+  assign   dwb_biu_retry_cnt  =1'b0; 
+   reg[3:0]  dwb_biu_burst_len  ; 
+   reg  dwb_biu_biu_stb_reg  ; 
+   wire  dwb_biu_biu_stb  ; 
+   reg  dwb_biu_wb_cyc_nxt  ; 
+   reg  dwb_biu_wb_stb_nxt  ; 
+   reg[2:0]  dwb_biu_wb_cti_nxt  ; 
+   reg  dwb_biu_wb_ack_cnt  ; 
+   reg  dwb_biu_wb_err_cnt  ; 
+   reg  dwb_biu_wb_rty_cnt  ; 
+   reg  dwb_biu_biu_ack_cnt  ; 
+   reg  dwb_biu_biu_err_cnt  ; 
+   reg  dwb_biu_biu_rty_cnt  ; 
+   wire  dwb_biu_biu_rty  ; 
+   reg[1:0]  dwb_biu_wb_fsm_state_cur  ; 
+   reg[1:0]  dwb_biu_wb_fsm_state_nxt  ; 
+   wire[1:0]  dwb_biu_wb_fsm_idle  =2'h0; 
+   wire[1:0]  dwb_biu_wb_fsm_trans  =2'h1; 
+   wire[1:0]  dwb_biu_wb_fsm_last  =2'h2; 
+  assign   dwb_biu_wb_ack  =  dwb_biu_wb_ack_i  &!  dwb_biu_wb_err_i  &!  dwb_biu_wb_rty_i  ; 
+  always @(  posedge    dwb_biu_wb_clk_i          or  posedge   dwb_biu_wb_rst_i  )
+       begin 
+         if (  dwb_biu_wb_rst_i  ==(1'b1)) 
+             dwb_biu_wb_fsm_state_cur   <=  dwb_biu_wb_fsm_idle  ;
+          else  
+             dwb_biu_wb_fsm_state_cur   <=  dwb_biu_wb_fsm_state_nxt  ;
+       end
+  
+  always @(  posedge    dwb_biu_wb_clk_i          or  posedge   dwb_biu_wb_rst_i  )
+       begin 
+         if (  dwb_biu_wb_rst_i  ==(1'b1))
+            begin  
+               dwb_biu_burst_len   <=0;
+            end 
+          else 
+            begin 
+              if (  dwb_biu_wb_fsm_state_cur  ==  dwb_biu_wb_fsm_idle  ) 
+                  dwb_biu_burst_len   <=  dwb_biu_bl  [3:0]-2;
+               else 
+                 if (  dwb_biu_wb_stb_o  &  dwb_biu_wb_ack  ) 
+                     dwb_biu_burst_len   <=  dwb_biu_burst_len  -1;
+            end 
+       end
+  
+  always @(                dwb_biu_wb_fsm_state_cur                                    or    dwb_biu_burst_len                      or    dwb_biu_wb_err_i                     or    dwb_biu_wb_rty_i                    or    dwb_biu_wb_ack                   or    dwb_biu_wb_cti_o                  or    dwb_biu_wb_sel_o                 or    dwb_biu_wb_stb_o                or    dwb_biu_wb_we_o               or    dwb_biu_biu_cyc_i              or    dwb_biu_biu_stb             or    dwb_biu_biu_cab_i            or    dwb_biu_biu_sel_i           or    dwb_biu_biu_we_i   )
+       begin 
+         case (  dwb_biu_wb_fsm_state_cur  ) 
+           dwb_biu_wb_fsm_idle   :
+             begin  
+                dwb_biu_wb_cyc_nxt   =  dwb_biu_biu_cyc_i  &  dwb_biu_biu_stb  ; 
+                dwb_biu_wb_stb_nxt   =  dwb_biu_biu_cyc_i  &  dwb_biu_biu_stb  ; 
+                dwb_biu_wb_cti_nxt   ={!  dwb_biu_biu_cab_i  ,1'b1,!  dwb_biu_biu_cab_i  };
+               if (  dwb_biu_biu_cyc_i  &  dwb_biu_biu_stb  ) 
+                   dwb_biu_wb_fsm_state_nxt   =  dwb_biu_wb_fsm_trans  ;
+                else  
+                   dwb_biu_wb_fsm_state_nxt   =  dwb_biu_wb_fsm_idle  ;
+             end  
+           dwb_biu_wb_fsm_trans   :
+             begin  
+                dwb_biu_wb_cyc_nxt   =!  dwb_biu_wb_stb_o  |!  dwb_biu_wb_err_i  &!  dwb_biu_wb_rty_i  &!(  dwb_biu_wb_ack  &  dwb_biu_wb_cti_o  ==3'b111); 
+                dwb_biu_wb_stb_nxt   =!  dwb_biu_wb_stb_o  |!  dwb_biu_wb_err_i  &!  dwb_biu_wb_rty_i  &!  dwb_biu_wb_ack  |!  dwb_biu_wb_err_i  &!  dwb_biu_wb_rty_i  &  dwb_biu_wb_cti_o  ==3'b010; 
+                dwb_biu_wb_cti_nxt   [2]=  dwb_biu_wb_stb_o  &  dwb_biu_wb_ack  &  dwb_biu_burst_len  =='h0|  dwb_biu_wb_cti_o  [2]; 
+                dwb_biu_wb_cti_nxt   [1]=1'b1; 
+                dwb_biu_wb_cti_nxt   [0]=  dwb_biu_wb_stb_o  &  dwb_biu_wb_ack  &  dwb_biu_burst_len  =='h0|  dwb_biu_wb_cti_o  [0];
+               if ((!  dwb_biu_biu_cyc_i  |!  dwb_biu_biu_stb  |!  dwb_biu_biu_cab_i  |  dwb_biu_biu_sel_i  !=  dwb_biu_wb_sel_o  |  dwb_biu_biu_we_i  !=  dwb_biu_wb_we_o  )&  dwb_biu_wb_cti_o  ==3'b010) 
+                   dwb_biu_wb_fsm_state_nxt   =  dwb_biu_wb_fsm_last  ;
+                else 
+                  if ((  dwb_biu_wb_err_i  |  dwb_biu_wb_rty_i  |  dwb_biu_wb_ack  &  dwb_biu_wb_cti_o  ==3'b111)&  dwb_biu_wb_stb_o  ) 
+                      dwb_biu_wb_fsm_state_nxt   =  dwb_biu_wb_fsm_idle  ;
+                   else  
+                      dwb_biu_wb_fsm_state_nxt   =  dwb_biu_wb_fsm_trans  ;
+             end  
+           dwb_biu_wb_fsm_last   :
+             begin  
+                dwb_biu_wb_cyc_nxt   =!  dwb_biu_wb_stb_o  |!  dwb_biu_wb_err_i  &!  dwb_biu_wb_rty_i  &!(  dwb_biu_wb_ack  &  dwb_biu_wb_cti_o  ==3'b111); 
+                dwb_biu_wb_stb_nxt   =!  dwb_biu_wb_stb_o  |!  dwb_biu_wb_err_i  &!  dwb_biu_wb_rty_i  &!(  dwb_biu_wb_ack  &  dwb_biu_wb_cti_o  ==3'b111); 
+                dwb_biu_wb_cti_nxt   [2]=  dwb_biu_wb_ack  &  dwb_biu_wb_stb_o  |  dwb_biu_wb_cti_o  [2]; 
+                dwb_biu_wb_cti_nxt   [1]=1'b1; 
+                dwb_biu_wb_cti_nxt   [0]=  dwb_biu_wb_ack  &  dwb_biu_wb_stb_o  |  dwb_biu_wb_cti_o  [0];
+               if ((  dwb_biu_wb_err_i  |  dwb_biu_wb_rty_i  |  dwb_biu_wb_ack  &  dwb_biu_wb_cti_o  ==3'b111)&  dwb_biu_wb_stb_o  ) 
+                   dwb_biu_wb_fsm_state_nxt   =  dwb_biu_wb_fsm_idle  ;
+                else  
+                   dwb_biu_wb_fsm_state_nxt   =  dwb_biu_wb_fsm_last  ;
+             end 
+          default :
+             begin  
+                dwb_biu_wb_cyc_nxt   =1'bx; 
+                dwb_biu_wb_stb_nxt   =1'bx; 
+                dwb_biu_wb_cti_nxt   =3'bxxx; 
+                dwb_biu_wb_fsm_state_nxt   =2'bxx;
+             end 
+         endcase 
+       end
+  
+  always @(  posedge    dwb_biu_wb_clk_i          or  posedge   dwb_biu_wb_rst_i  )
+       begin 
+         if (  dwb_biu_wb_rst_i  ==(1'b1))
+            begin  
+               dwb_biu_wb_cyc_o   <=1'b0; 
+               dwb_biu_wb_stb_o   <=1'b0; 
+               dwb_biu_wb_cti_o   <=3'b111; 
+               dwb_biu_wb_bte_o   <=(  dwb_biu_bl  ==8)?2'b10:(  dwb_biu_bl  ==4)?2'b01:2'b00; 
+               dwb_biu_wb_we_o   <=1'b0; 
+               dwb_biu_wb_sel_o   <=4'hf; 
+               dwb_biu_wb_adr_o   <={  dwb_biu_aw  {1'b0}};
+            end 
+          else 
+            begin  
+               dwb_biu_wb_cyc_o   <=  dwb_biu_wb_cyc_nxt  ;
+              if (  dwb_biu_wb_ack  &  dwb_biu_wb_cti_o  ==3'b111) 
+                  dwb_biu_wb_stb_o   <=1'b0;
+               else  
+                  dwb_biu_wb_stb_o   <=  dwb_biu_wb_stb_nxt  ; 
+               dwb_biu_wb_cti_o   <=  dwb_biu_wb_cti_nxt  ; 
+               dwb_biu_wb_bte_o   <=(  dwb_biu_bl  ==8)?2'b10:(  dwb_biu_bl  ==4)?2'b01:2'b00;
+              if (  dwb_biu_wb_fsm_state_cur  ==  dwb_biu_wb_fsm_idle  )
+                 begin  
+                    dwb_biu_wb_we_o   <=  dwb_biu_biu_we_i  ; 
+                    dwb_biu_wb_sel_o   <=  dwb_biu_biu_sel_i  ;
+                 end 
+              if (  dwb_biu_wb_fsm_state_cur  ==  dwb_biu_wb_fsm_idle  )
+                 begin  
+                    dwb_biu_wb_adr_o   <=  dwb_biu_biu_adr_i  ;
+                 end 
+               else 
+                 if (  dwb_biu_wb_stb_o  &  dwb_biu_wb_ack  )
+                    begin 
+                      if (  dwb_biu_bl  ==4)
+                         begin  
+                            dwb_biu_wb_adr_o   [3:2]<=  dwb_biu_wb_adr_o  [3:2]+1;
+                         end 
+                      if (  dwb_biu_bl  ==8)
+                         begin  
+                            dwb_biu_wb_adr_o   [4:2]<=  dwb_biu_wb_adr_o  [4:2]+1;
+                         end 
+                    end 
+            end 
+       end
+  
+  always @(  posedge    dwb_biu_wb_clk_i          or  posedge   dwb_biu_wb_rst_i  )
+       begin 
+         if (  dwb_biu_wb_rst_i  ==(1'b1))
+            begin  
+               dwb_biu_wb_ack_cnt   <=1'b0; 
+               dwb_biu_wb_err_cnt   <=1'b0; 
+               dwb_biu_wb_rty_cnt   <=1'b0;
+            end 
+          else 
+            begin 
+              if (  dwb_biu_wb_fsm_state_cur  ==  dwb_biu_wb_fsm_idle  |!(|  dwb_biu_clmode  )) 
+                  dwb_biu_wb_ack_cnt   <=1'b0;
+               else 
+                 if (  dwb_biu_wb_stb_o  &  dwb_biu_wb_ack  ) 
+                     dwb_biu_wb_ack_cnt   <=!  dwb_biu_wb_ack_cnt  ;
+              if (  dwb_biu_wb_fsm_state_cur  ==  dwb_biu_wb_fsm_idle  |!(|  dwb_biu_clmode  )) 
+                  dwb_biu_wb_err_cnt   <=1'b0;
+               else 
+                 if (  dwb_biu_wb_stb_o  &  dwb_biu_wb_err_i  ) 
+                     dwb_biu_wb_err_cnt   <=!  dwb_biu_wb_err_cnt  ;
+              if (  dwb_biu_wb_fsm_state_cur  ==  dwb_biu_wb_fsm_idle  |!(|  dwb_biu_clmode  )) 
+                  dwb_biu_wb_rty_cnt   <=1'b0;
+               else 
+                 if (  dwb_biu_wb_stb_o  &  dwb_biu_wb_rty_i  ) 
+                     dwb_biu_wb_rty_cnt   <=!  dwb_biu_wb_rty_cnt  ;
+            end 
+       end
+  
+  always @(  posedge    dwb_biu_clk          or  posedge   dwb_biu_rst  )
+       begin 
+         if (  dwb_biu_rst  ==(1'b1))
+            begin  
+               dwb_biu_biu_stb_reg   <=1'b0; 
+               dwb_biu_biu_ack_cnt   <=1'b0; 
+               dwb_biu_biu_err_cnt   <=1'b0; 
+               dwb_biu_biu_rty_cnt   <=1'b0;
+            end 
+          else 
+            begin 
+              if (  dwb_biu_biu_stb_i  &!  dwb_biu_biu_cab_i  &  dwb_biu_biu_ack_o  ) 
+                  dwb_biu_biu_stb_reg   <=1'b0;
+               else  
+                  dwb_biu_biu_stb_reg   <=  dwb_biu_biu_stb_i  ;
+              if (  dwb_biu_wb_fsm_state_cur  ==  dwb_biu_wb_fsm_idle  |!(|  dwb_biu_clmode  )) 
+                  dwb_biu_biu_ack_cnt   <=1'b0;
+               else 
+                 if (  dwb_biu_biu_ack_o  ) 
+                     dwb_biu_biu_ack_cnt   <=!  dwb_biu_biu_ack_cnt  ;
+              if (  dwb_biu_wb_fsm_state_cur  ==  dwb_biu_wb_fsm_idle  |!(|  dwb_biu_clmode  )) 
+                  dwb_biu_biu_err_cnt   <=1'b0;
+               else 
+                 if (  dwb_biu_wb_err_i  &  dwb_biu_biu_err_o  ) 
+                     dwb_biu_biu_err_cnt   <=!  dwb_biu_biu_err_cnt  ;
+              if (  dwb_biu_wb_fsm_state_cur  ==  dwb_biu_wb_fsm_idle  |!(|  dwb_biu_clmode  )) 
+                  dwb_biu_biu_rty_cnt   <=1'b0;
+               else 
+                 if (  dwb_biu_biu_rty  ) 
+                     dwb_biu_biu_rty_cnt   <=!  dwb_biu_biu_rty_cnt  ;
+            end 
+       end
+  
+  assign   dwb_biu_biu_stb  =  dwb_biu_biu_stb_i  &  dwb_biu_biu_stb_reg  ; 
+  assign   dwb_biu_biu_dat_o  =  dwb_biu_wb_dat_i  ; 
+  assign   dwb_biu_biu_rty  =(  dwb_biu_wb_fsm_state_cur  ==  dwb_biu_wb_fsm_trans  )&  dwb_biu_wb_rty_i  &  dwb_biu_wb_stb_o  &(  dwb_biu_wb_rty_cnt  ~^  dwb_biu_biu_rty_cnt  ); 
+  assign   dwb_biu_biu_ack_o  =(  dwb_biu_wb_fsm_state_cur  ==  dwb_biu_wb_fsm_trans  )&  dwb_biu_wb_ack  &  dwb_biu_wb_stb_o  &(  dwb_biu_wb_ack_cnt  ~^  dwb_biu_biu_ack_cnt  ); 
+  assign   dwb_biu_biu_err_o  =(  dwb_biu_wb_fsm_state_cur  ==  dwb_biu_wb_fsm_trans  )&  dwb_biu_wb_err_i  &  dwb_biu_wb_stb_o  &(  dwb_biu_wb_err_cnt  ~^  dwb_biu_biu_err_cnt  );
+assign iwb_biu_clk = clk_i;
+assign iwb_biu_rst = rst_i;
+assign iwb_biu_clmode = clmode_i;
+assign iwb_biu_wb_clk_i = dwb_clk_i;
+assign iwb_biu_wb_rst_i = dwb_rst_i;
+assign iwb_biu_wb_ack_i = dwb_ack_i;
+assign iwb_biu_wb_err_i = dwb_err_i;
+assign iwb_biu_wb_rty_i = dwb_rty_i;
+assign iwb_biu_wb_dat_i = dwb_dat_i;
+assign dwb_cyc_o = iwb_biu_wb_cyc_o;
+assign dwb_adr_o = iwb_biu_wb_adr_o;
+assign dwb_stb_o = iwb_biu_wb_stb_o;
+assign dwb_we_o = iwb_biu_wb_we_o;
+assign dwb_sel_o = iwb_biu_wb_sel_o;
+assign dwb_dat_o = iwb_biu_wb_dat_o;
+assign dwb_cti_o = iwb_biu_wb_cti_o;
+assign dwb_bte_o = iwb_biu_wb_bte_o;
+assign iwb_biu_biu_dat_i = sbbiu_dat_sb;
+assign iwb_biu_biu_adr_i = sbbiu_adr_sb;
+assign iwb_biu_biu_cyc_i = sbbiu_cyc_sb;
+assign iwb_biu_biu_stb_i = sbbiu_stb_sb;
+assign iwb_biu_biu_we_i = sbbiu_we_sb;
+assign iwb_biu_biu_sel_i = sbbiu_sel_sb;
+assign iwb_biu_biu_cab_i = sbbiu_cab_sb;
+assign sbbiu_dat_biu = iwb_biu_biu_dat_o;
+assign sbbiu_ack_biu = iwb_biu_biu_ack_o;
+assign sbbiu_err_biu = iwb_biu_biu_err_o;
+assign dwb_biu_clk = clk_i;
+assign dwb_biu_rst = rst_i;
+assign dwb_biu_clmode = clmode_i;
+assign dwb_biu_wb_clk_i = dwb_clk_i;
+assign dwb_biu_wb_rst_i = dwb_rst_i;
+assign dwb_biu_wb_ack_i = dwb_ack_i;
+assign dwb_biu_wb_err_i = dwb_err_i;
+assign dwb_biu_wb_rty_i = dwb_rty_i;
+assign dwb_biu_wb_dat_i = dwb_dat_i;
+assign dwb_cyc_o = dwb_biu_wb_cyc_o;
+assign dwb_adr_o = dwb_biu_wb_adr_o;
+assign dwb_stb_o = dwb_biu_wb_stb_o;
+assign dwb_we_o = dwb_biu_wb_we_o;
+assign dwb_sel_o = dwb_biu_wb_sel_o;
+assign dwb_dat_o = dwb_biu_wb_dat_o;
+assign dwb_cti_o = dwb_biu_wb_cti_o;
+assign dwb_bte_o = dwb_biu_wb_bte_o;
+assign dwb_biu_biu_dat_i = sbbiu_dat_sb;
+assign dwb_biu_biu_adr_i = sbbiu_adr_sb;
+assign dwb_biu_biu_cyc_i = sbbiu_cyc_sb;
+assign dwb_biu_biu_stb_i = sbbiu_stb_sb;
+assign dwb_biu_biu_we_i = sbbiu_we_sb;
+assign dwb_biu_biu_sel_i = sbbiu_sel_sb;
+assign dwb_biu_biu_cab_i = sbbiu_cab_sb;
+assign sbbiu_dat_biu = dwb_biu_biu_dat_o;
+assign sbbiu_ack_biu = dwb_biu_biu_ack_o;
+assign sbbiu_err_biu = dwb_biu_biu_err_o;
+ 
+  
+wire  or1200_immu_top_clk;
+wire  or1200_immu_top_rst;
+wire  or1200_immu_top_ic_en;
+wire  or1200_immu_top_immu_en;
+wire  or1200_immu_top_supv;
+wire [ or1200_immu_top_aw -1:0] or1200_immu_top_icpu_adr_i;
+wire  or1200_immu_top_icpu_cycstb_i;
+reg [ or1200_immu_top_aw -1:0] or1200_immu_top_icpu_adr_o;
+wire [3:0] or1200_immu_top_icpu_tag_o;
+wire  or1200_immu_top_icpu_rty_o;
+wire  or1200_immu_top_icpu_err_o;
+wire  or1200_immu_top_boot_adr_sel_i;
+wire  or1200_immu_top_spr_cs;
+wire  or1200_immu_top_spr_write;
+wire [ or1200_immu_top_aw -1:0] or1200_immu_top_spr_addr;
+wire [31:0] or1200_immu_top_spr_dat_i;
+wire [31:0] or1200_immu_top_spr_dat_o;
+wire  or1200_immu_top_qmemimmu_rty_i;
+wire  or1200_immu_top_qmemimmu_err_i;
+wire [3:0] or1200_immu_top_qmemimmu_tag_i;
+wire [ or1200_immu_top_aw -1:0] or1200_immu_top_qmemimmu_adr_o;
+wire  or1200_immu_top_qmemimmu_cycstb_o;
+wire  or1200_immu_top_qmemimmu_ci_o;
+ 
+   wire  or1200_immu_top_itlb_spr_access  ; 
+   wire[31:13]  or1200_immu_top_itlb_ppn  ; 
+   wire  or1200_immu_top_itlb_hit  ; 
+   wire  or1200_immu_top_itlb_uxe  ; 
+   wire  or1200_immu_top_itlb_sxe  ; 
+   wire[31:0]  or1200_immu_top_itlb_dat_o  ; 
+   wire  or1200_immu_top_itlb_en  ; 
+   wire  or1200_immu_top_itlb_ci  ; 
+   wire  or1200_immu_top_itlb_done  ; 
+   wire  or1200_immu_top_fault  ; 
+   wire  or1200_immu_top_miss  ; 
+   wire  or1200_immu_top_page_cross  ; 
+   reg[31:0]  or1200_immu_top_icpu_adr_default  ; 
+   reg  or1200_immu_top_icpu_adr_select  ; 
+   reg[31:13]  or1200_immu_top_icpu_vpn_r  ; 
+   reg  or1200_immu_top_itlb_en_r  ; 
+   reg  or1200_immu_top_dis_spr_access_frst_clk  ; 
+   reg  or1200_immu_top_dis_spr_access_scnd_clk  ; 
+   wire[31:0]  or1200_immu_top_icpu_adr_boot  =  or1200_immu_top_boot_adr  ; 
+  always @(  posedge    or1200_immu_top_rst          or  posedge   or1200_immu_top_clk  )
+       if (  or1200_immu_top_rst  ==(1'b1))
+          begin  
+             or1200_immu_top_icpu_adr_default   <=32'h0000_0100; 
+             or1200_immu_top_icpu_adr_select   <=1'b1;
+          end 
+        else 
+          if (  or1200_immu_top_icpu_adr_select  )
+             begin  
+                or1200_immu_top_icpu_adr_default   <=  or1200_immu_top_icpu_adr_boot  ; 
+                or1200_immu_top_icpu_adr_select   <=1'b0;
+             end 
+           else 
+             begin  
+                or1200_immu_top_icpu_adr_default   <=  or1200_immu_top_icpu_adr_i  ;
+             end
+  
+  always @(     or1200_immu_top_icpu_adr_boot              or    or1200_immu_top_icpu_adr_default           or    or1200_immu_top_icpu_adr_select   )
+       if (  or1200_immu_top_icpu_adr_select  ) 
+           or1200_immu_top_icpu_adr_o   =  or1200_immu_top_icpu_adr_boot  ;
+        else  
+           or1200_immu_top_icpu_adr_o   =  or1200_immu_top_icpu_adr_default  ;
+ 
+  assign   or1200_immu_top_page_cross  =  or1200_immu_top_icpu_adr_i  [31:13]!=  or1200_immu_top_icpu_vpn_r  ; 
+  always @(  posedge    or1200_immu_top_clk          or  posedge   or1200_immu_top_rst  )
+       if (  or1200_immu_top_rst  ==(1'b1)) 
+           or1200_immu_top_icpu_vpn_r   <={32-13{1'b0}};
+        else  
+           or1200_immu_top_icpu_vpn_r   <=  or1200_immu_top_icpu_adr_i  [31:13];
+ 
+  assign   or1200_immu_top_itlb_spr_access  =  or1200_immu_top_spr_cs  &~  or1200_immu_top_dis_spr_access_scnd_clk  ; 
+  always @(  posedge    or1200_immu_top_clk          or  posedge   or1200_immu_top_rst  )
+       if (  or1200_immu_top_rst  ==(1'b1)) 
+           or1200_immu_top_dis_spr_access_frst_clk   <=1'b0;
+        else 
+          if (!  or1200_immu_top_icpu_rty_o  ) 
+              or1200_immu_top_dis_spr_access_frst_clk   <=1'b0;
+           else 
+             if (  or1200_immu_top_spr_cs  ) 
+                 or1200_immu_top_dis_spr_access_frst_clk   <=1'b1;
+ 
+  always @(  posedge    or1200_immu_top_clk          or  posedge   or1200_immu_top_rst  )
+       if (  or1200_immu_top_rst  ==(1'b1)) 
+           or1200_immu_top_dis_spr_access_scnd_clk   <=1'b0;
+        else 
+          if (!  or1200_immu_top_icpu_rty_o  ) 
+              or1200_immu_top_dis_spr_access_scnd_clk   <=1'b0;
+           else 
+             if (  or1200_immu_top_dis_spr_access_frst_clk  ) 
+                 or1200_immu_top_dis_spr_access_scnd_clk   <=1'b1;
+ 
+  assign   or1200_immu_top_icpu_tag_o  =  or1200_immu_top_miss  ?4'hd:  or1200_immu_top_fault  ?4'hc:  or1200_immu_top_qmemimmu_tag_i  ; 
+  assign   or1200_immu_top_icpu_rty_o  =  or1200_immu_top_qmemimmu_rty_i  ; 
+  assign   or1200_immu_top_icpu_err_o  =  or1200_immu_top_miss  |  or1200_immu_top_fault  |  or1200_immu_top_qmemimmu_err_i  ; 
+  always @(  posedge    or1200_immu_top_clk          or  posedge   or1200_immu_top_rst  )
+       if (  or1200_immu_top_rst  ==(1'b1)) 
+           or1200_immu_top_itlb_en_r   <=1'b0;
+        else  
+           or1200_immu_top_itlb_en_r   <=  or1200_immu_top_itlb_en  &~  or1200_immu_top_itlb_spr_access  ;
+ 
+  assign   or1200_immu_top_itlb_done  =  or1200_immu_top_itlb_en_r  &~  or1200_immu_top_page_cross  ; 
+  assign   or1200_immu_top_qmemimmu_cycstb_o  =  or1200_immu_top_immu_en  ?~(  or1200_immu_top_miss  |  or1200_immu_top_fault  )&  or1200_immu_top_icpu_cycstb_i  &~  or1200_immu_top_page_cross  &  or1200_immu_top_itlb_done  &~  or1200_immu_top_itlb_spr_access  :  or1200_immu_top_icpu_cycstb_i  &~  or1200_immu_top_page_cross  ; 
+  assign   or1200_immu_top_qmemimmu_ci_o  =  or1200_immu_top_immu_en  ?  or1200_immu_top_itlb_ci  :1'b0; 
+  assign   or1200_immu_top_qmemimmu_adr_o  =  or1200_immu_top_immu_en  &  or1200_immu_top_itlb_done  ?{  or1200_immu_top_itlb_ppn  ,  or1200_immu_top_icpu_adr_i  [13-1:2],2'h0}:{  or1200_immu_top_icpu_vpn_r  ,  or1200_immu_top_icpu_adr_i  [13-1:2],2'h0}; 
+   reg[31:0]  or1200_immu_top_spr_dat_reg  ; 
+  always @(  posedge    or1200_immu_top_clk          or  posedge   or1200_immu_top_rst  )
+       if (  or1200_immu_top_rst  ==(1'b1)) 
+           or1200_immu_top_spr_dat_reg   <=32'h0000_0000;
+        else 
+          if (  or1200_immu_top_spr_cs  &!  or1200_immu_top_dis_spr_access_scnd_clk  ) 
+              or1200_immu_top_spr_dat_reg   <=  or1200_immu_top_itlb_dat_o  ;
+ 
+  assign   or1200_immu_top_spr_dat_o  =  or1200_immu_top_itlb_spr_access  ?  or1200_immu_top_itlb_dat_o  :  or1200_immu_top_spr_dat_reg  ; 
+  assign   or1200_immu_top_fault  =  or1200_immu_top_itlb_done  &((!  or1200_immu_top_supv  &!  or1200_immu_top_itlb_uxe  )||(  or1200_immu_top_supv  &!  or1200_immu_top_itlb_sxe  )); 
+  assign   or1200_immu_top_miss  =  or1200_immu_top_itlb_done  &!  or1200_immu_top_itlb_hit  ; 
+  assign   or1200_immu_top_itlb_en  =  or1200_immu_top_immu_en  &  or1200_immu_top_icpu_cycstb_i  ;  
+  
+wire  or1200_immu_top_or1200_immu_tlb_clk;
+wire  or1200_immu_top_or1200_immu_tlb_rst;
+wire  or1200_immu_top_or1200_immu_tlb_tlb_en;
+wire [ or1200_immu_top_or1200_immu_tlb_aw -1:0] or1200_immu_top_or1200_immu_tlb_vaddr;
+wire  or1200_immu_top_or1200_immu_tlb_hit;
+wire [31:13] or1200_immu_top_or1200_immu_tlb_ppn;
+wire  or1200_immu_top_or1200_immu_tlb_uxe;
+wire  or1200_immu_top_or1200_immu_tlb_sxe;
+wire  or1200_immu_top_or1200_immu_tlb_ci;
+wire  or1200_immu_top_or1200_immu_tlb_spr_cs;
+wire  or1200_immu_top_or1200_immu_tlb_spr_write;
+wire [31:0] or1200_immu_top_or1200_immu_tlb_spr_addr;
+wire [31:0] or1200_immu_top_or1200_immu_tlb_spr_dat_i;
+wire [31:0] or1200_immu_top_or1200_immu_tlb_spr_dat_o;
+ 
+   wire[31:13+6-1+1]  or1200_immu_top_or1200_immu_tlb_vpn  ; 
+   wire  or1200_immu_top_or1200_immu_tlb_v  ; 
+   wire[6-1:0]  or1200_immu_top_or1200_immu_tlb_tlb_index  ; 
+   wire  or1200_immu_top_or1200_immu_tlb_tlb_mr_en  ; 
+   wire  or1200_immu_top_or1200_immu_tlb_tlb_mr_we  ; 
+   wire[32-6-13+1-1:0]  or1200_immu_top_or1200_immu_tlb_tlb_mr_ram_in  ; 
+   wire[32-6-13+1-1:0]  or1200_immu_top_or1200_immu_tlb_tlb_mr_ram_out  ; 
+   wire  or1200_immu_top_or1200_immu_tlb_tlb_tr_en  ; 
+   wire  or1200_immu_top_or1200_immu_tlb_tlb_tr_we  ; 
+   wire[32-13+3-1:0]  or1200_immu_top_or1200_immu_tlb_tlb_tr_ram_in  ; 
+   wire[32-13+3-1:0]  or1200_immu_top_or1200_immu_tlb_tlb_tr_ram_out  ; 
+  assign   or1200_immu_top_or1200_immu_tlb_tlb_mr_en  =  or1200_immu_top_or1200_immu_tlb_tlb_en  |(  or1200_immu_top_or1200_immu_tlb_spr_cs  &!  or1200_immu_top_or1200_immu_tlb_spr_addr  [7]); 
+  assign   or1200_immu_top_or1200_immu_tlb_tlb_mr_we  =  or1200_immu_top_or1200_immu_tlb_spr_cs  &  or1200_immu_top_or1200_immu_tlb_spr_write  &!  or1200_immu_top_or1200_immu_tlb_spr_addr  [7]; 
+  assign   or1200_immu_top_or1200_immu_tlb_tlb_tr_en  =  or1200_immu_top_or1200_immu_tlb_tlb_en  |(  or1200_immu_top_or1200_immu_tlb_spr_cs  &  or1200_immu_top_or1200_immu_tlb_spr_addr  [7]); 
+  assign   or1200_immu_top_or1200_immu_tlb_tlb_tr_we  =  or1200_immu_top_or1200_immu_tlb_spr_cs  &  or1200_immu_top_or1200_immu_tlb_spr_write  &  or1200_immu_top_or1200_immu_tlb_spr_addr  [7]; 
+  assign   or1200_immu_top_or1200_immu_tlb_spr_dat_o  =(!  or1200_immu_top_or1200_immu_tlb_spr_write  &!  or1200_immu_top_or1200_immu_tlb_spr_addr  [7])?{  or1200_immu_top_or1200_immu_tlb_vpn  ,  or1200_immu_top_or1200_immu_tlb_tlb_index  ,{32-6-13-7{1'b0}},1'b0,5'b00000,  or1200_immu_top_or1200_immu_tlb_v  }:(!  or1200_immu_top_or1200_immu_tlb_spr_write  &  or1200_immu_top_or1200_immu_tlb_spr_addr  [7])?{  or1200_immu_top_or1200_immu_tlb_ppn  ,{13-8{1'b0}},  or1200_immu_top_or1200_immu_tlb_uxe  ,  or1200_immu_top_or1200_immu_tlb_sxe  ,{4{1'b0}},  or1200_immu_top_or1200_immu_tlb_ci  ,1'b0}:32'h00000000; 
+  assign {  or1200_immu_top_or1200_immu_tlb_vpn  ,  or1200_immu_top_or1200_immu_tlb_v  }=  or1200_immu_top_or1200_immu_tlb_tlb_mr_ram_out  ; 
+  assign   or1200_immu_top_or1200_immu_tlb_tlb_mr_ram_in  ={  or1200_immu_top_or1200_immu_tlb_spr_dat_i  [31:13+6-1+1],  or1200_immu_top_or1200_immu_tlb_spr_dat_i  [0]}; 
+  assign {  or1200_immu_top_or1200_immu_tlb_ppn  ,  or1200_immu_top_or1200_immu_tlb_uxe  ,  or1200_immu_top_or1200_immu_tlb_sxe  ,  or1200_immu_top_or1200_immu_tlb_ci  }=  or1200_immu_top_or1200_immu_tlb_tlb_tr_ram_out  ; 
+  assign   or1200_immu_top_or1200_immu_tlb_tlb_tr_ram_in  ={  or1200_immu_top_or1200_immu_tlb_spr_dat_i  [31:13],  or1200_immu_top_or1200_immu_tlb_spr_dat_i  [7],  or1200_immu_top_or1200_immu_tlb_spr_dat_i  [6],  or1200_immu_top_or1200_immu_tlb_spr_dat_i  [1]}; 
+  assign   or1200_immu_top_or1200_immu_tlb_hit  =(  or1200_immu_top_or1200_immu_tlb_vpn  ==  or1200_immu_top_or1200_immu_tlb_vaddr  [31:13+6-1+1])&  or1200_immu_top_or1200_immu_tlb_v  ; 
+  assign   or1200_immu_top_or1200_immu_tlb_tlb_index  =  or1200_immu_top_or1200_immu_tlb_spr_cs  ?  or1200_immu_top_or1200_immu_tlb_spr_addr  [6-1:0]:  or1200_immu_top_or1200_immu_tlb_vaddr  [13+6-1:13];  
+  
+wire  or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_clk;
+wire  or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_ce;
+wire  or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_we;
+wire [ or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_aw -1:0] or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_addr;
+wire [ or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_dw -1:0] or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_di;
+wire [ or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_dw -1:0] or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_doq;
+wire  or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_clk;
+wire  or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_ce;
+wire  or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_we;
+wire [ or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_aw -1:0] or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_addr;
+wire [ or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_dw -1:0] or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_di;
+wire [ or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_dw -1:0] or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_doq;
+ 
+   reg[  or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_dw  -1:0]  or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_mem  [(1<<  or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_aw  )-1:0]; 
+   reg[  or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_aw  -1:0]  or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_addr_reg  ; 
+  assign   or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_doq  =  or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_mem  [  or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_addr_reg  ]; 
+  always @( posedge   or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_clk  )
+       if (  or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_ce  ) 
+           or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_addr_reg   <=  or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_addr  ;
+ 
+  always @( posedge   or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_clk  )
+       if (  or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_we  &&  or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_ce  ) 
+           or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_mem   [  or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_addr  ]<=  or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_di  ;
+
+  
+  
+ 
+   reg[  or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_dw  -1:0]  or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_mem  [(1<<  or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_aw  )-1:0]; 
+   reg[  or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_aw  -1:0]  or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_addr_reg  ; 
+  assign   or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_doq  =  or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_mem  [  or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_addr_reg  ]; 
+  always @( posedge   or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_clk  )
+       if (  or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_ce  ) 
+           or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_addr_reg   <=  or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_addr  ;
+ 
+  always @( posedge   or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_clk  )
+       if (  or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_we  &&  or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_ce  ) 
+           or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_mem   [  or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_addr  ]<=  or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_di  ;
+
+assign or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_clk = or1200_immu_top_or1200_immu_tlb_clk;
+assign or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_ce = or1200_immu_top_or1200_immu_tlb_tlb_tr_en;
+assign or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_we = or1200_immu_top_or1200_immu_tlb_tlb_tr_we;
+assign or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_addr = or1200_immu_top_or1200_immu_tlb_tlb_index;
+assign or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_di = or1200_immu_top_or1200_immu_tlb_tlb_tr_ram_in;
+assign or1200_immu_top_or1200_immu_tlb_tlb_tr_ram_out = or1200_immu_top_or1200_immu_tlb_itlb_mr_ram_doq;
+assign or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_clk = or1200_immu_top_or1200_immu_tlb_clk;
+assign or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_ce = or1200_immu_top_or1200_immu_tlb_tlb_tr_en;
+assign or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_we = or1200_immu_top_or1200_immu_tlb_tlb_tr_we;
+assign or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_addr = or1200_immu_top_or1200_immu_tlb_tlb_index;
+assign or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_di = or1200_immu_top_or1200_immu_tlb_tlb_tr_ram_in;
+assign or1200_immu_top_or1200_immu_tlb_tlb_tr_ram_out = or1200_immu_top_or1200_immu_tlb_itlb_tr_ram_doq;
+
+assign or1200_immu_top_or1200_immu_tlb_clk = or1200_immu_top_clk;
+assign or1200_immu_top_or1200_immu_tlb_rst = or1200_immu_top_rst;
+assign or1200_immu_top_or1200_immu_tlb_tlb_en = or1200_immu_top_itlb_en;
+assign or1200_immu_top_or1200_immu_tlb_vaddr = or1200_immu_top_icpu_adr_i;
+assign or1200_immu_top_itlb_hit = or1200_immu_top_or1200_immu_tlb_hit;
+assign or1200_immu_top_itlb_ppn = or1200_immu_top_or1200_immu_tlb_ppn;
+assign or1200_immu_top_itlb_uxe = or1200_immu_top_or1200_immu_tlb_uxe;
+assign or1200_immu_top_itlb_sxe = or1200_immu_top_or1200_immu_tlb_sxe;
+assign or1200_immu_top_itlb_ci = or1200_immu_top_or1200_immu_tlb_ci;
+assign or1200_immu_top_or1200_immu_tlb_spr_cs = or1200_immu_top_itlb_spr_access;
+assign or1200_immu_top_or1200_immu_tlb_spr_write = or1200_immu_top_spr_write;
+assign or1200_immu_top_or1200_immu_tlb_spr_addr = or1200_immu_top_spr_addr;
+assign or1200_immu_top_or1200_immu_tlb_spr_dat_i = or1200_immu_top_spr_dat_i;
+assign or1200_immu_top_itlb_dat_o = or1200_immu_top_or1200_immu_tlb_spr_dat_o;
+
+assign or1200_immu_top_clk = clk_i;
+assign or1200_immu_top_rst = rst_i;
+assign or1200_immu_top_ic_en = ic_en;
+assign or1200_immu_top_immu_en = immu_en;
+assign or1200_immu_top_supv = supv;
+assign or1200_immu_top_icpu_adr_i = icpu_adr_cpu;
+assign or1200_immu_top_icpu_cycstb_i = icpu_cycstb_cpu;
+assign icpu_adr_immu = or1200_immu_top_icpu_adr_o;
+assign icpu_tag_immu = or1200_immu_top_icpu_tag_o;
+assign icpu_rty_immu = or1200_immu_top_icpu_rty_o;
+assign icpu_err_immu = or1200_immu_top_icpu_err_o;
+assign or1200_immu_top_boot_adr_sel_i = boot_adr_sel;
+assign or1200_immu_top_spr_cs = spr_cs[5'd02];
+assign or1200_immu_top_spr_write = spr_we;
+assign or1200_immu_top_spr_addr = spr_addr;
+assign or1200_immu_top_spr_dat_i = spr_dat_cpu;
+assign spr_dat_immu = or1200_immu_top_spr_dat_o;
+assign or1200_immu_top_qmemimmu_rty_i = qmemimmu_rty_qmem;
+assign or1200_immu_top_qmemimmu_err_i = qmemimmu_err_qmem;
+assign or1200_immu_top_qmemimmu_tag_i = qmemimmu_tag_qmem;
+assign qmemimmu_adr_immu = or1200_immu_top_qmemimmu_adr_o;
+assign qmemimmu_cycstb_immu = or1200_immu_top_qmemimmu_cycstb_o;
+assign qmemimmu_ci_immu = or1200_immu_top_qmemimmu_ci_o;
+ 
+  
+wire  or1200_ic_top_clk;
+wire  or1200_ic_top_rst;
+wire [ or1200_ic_top_dw -1:0] or1200_ic_top_icbiu_dat_o;
+wire [31:0] or1200_ic_top_icbiu_adr_o;
+wire  or1200_ic_top_icbiu_cyc_o;
+wire  or1200_ic_top_icbiu_stb_o;
+wire  or1200_ic_top_icbiu_we_o;
+wire [3:0] or1200_ic_top_icbiu_sel_o;
+wire  or1200_ic_top_icbiu_cab_o;
+wire [ or1200_ic_top_dw -1:0] or1200_ic_top_icbiu_dat_i;
+wire  or1200_ic_top_icbiu_ack_i;
+wire  or1200_ic_top_icbiu_err_i;
+wire  or1200_ic_top_ic_en;
+wire [31:0] or1200_ic_top_icqmem_adr_i;
+wire  or1200_ic_top_icqmem_cycstb_i;
+wire  or1200_ic_top_icqmem_ci_i;
+wire [3:0] or1200_ic_top_icqmem_sel_i;
+wire [3:0] or1200_ic_top_icqmem_tag_i;
+wire [ or1200_ic_top_dw -1:0] or1200_ic_top_icqmem_dat_o;
+wire  or1200_ic_top_icqmem_ack_o;
+wire  or1200_ic_top_icqmem_rty_o;
+wire  or1200_ic_top_icqmem_err_o;
+wire [3:0] or1200_ic_top_icqmem_tag_o;
+wire  or1200_ic_top_spr_cs;
+wire  or1200_ic_top_spr_write;
+wire [31:0] or1200_ic_top_spr_dat_i;
+ 
+   wire  or1200_ic_top_tag_v  ; 
+   wire[20-2:0]  or1200_ic_top_tag  ; 
+   wire[  or1200_ic_top_dw  -1:0]  or1200_ic_top_to_icram  ; 
+   wire[  or1200_ic_top_dw  -1:0]  or1200_ic_top_from_icram  ; 
+   wire[31:0]  or1200_ic_top_saved_addr  ; 
+   wire[3:0]  or1200_ic_top_icram_we  ; 
+   wire  or1200_ic_top_ictag_we  ; 
+   wire[31:0]  or1200_ic_top_ic_addr  ; 
+   wire  or1200_ic_top_icfsm_biu_read  ; 
+   reg  or1200_ic_top_tagcomp_miss  ; 
+   wire[13-1:4]  or1200_ic_top_ictag_addr  ; 
+   wire  or1200_ic_top_ictag_en  ; 
+   wire  or1200_ic_top_ictag_v  ; 
+   wire  or1200_ic_top_ic_inv  ; 
+   wire  or1200_ic_top_icfsm_first_hit_ack  ; 
+   wire  or1200_ic_top_icfsm_first_miss_ack  ; 
+   wire  or1200_ic_top_icfsm_first_miss_err  ; 
+   wire  or1200_ic_top_icfsm_burst  ; 
+   wire  or1200_ic_top_icfsm_tag_we  ; 
+   reg  or1200_ic_top_ic_inv_q  ; 
+  assign   or1200_ic_top_icbiu_adr_o  =  or1200_ic_top_ic_addr  ; 
+  assign   or1200_ic_top_ic_inv  =  or1200_ic_top_spr_cs  &  or1200_ic_top_spr_write  ; 
+  assign   or1200_ic_top_ictag_we  =  or1200_ic_top_icfsm_tag_we  |  or1200_ic_top_ic_inv  ; 
+  assign   or1200_ic_top_ictag_addr  =  or1200_ic_top_ic_inv  ?  or1200_ic_top_spr_dat_i  [13-1:4]:  or1200_ic_top_ic_addr  [13-1:4]; 
+  assign   or1200_ic_top_ictag_en  =  or1200_ic_top_ic_inv  |  or1200_ic_top_ic_en  ; 
+  assign   or1200_ic_top_ictag_v  =~  or1200_ic_top_ic_inv  ; 
+  assign   or1200_ic_top_icbiu_dat_o  =32'h00000000; 
+  assign   or1200_ic_top_icbiu_cyc_o  =(  or1200_ic_top_ic_en  )?  or1200_ic_top_icfsm_biu_read  :  or1200_ic_top_icqmem_cycstb_i  ; 
+  assign   or1200_ic_top_icbiu_stb_o  =(  or1200_ic_top_ic_en  )?  or1200_ic_top_icfsm_biu_read  :  or1200_ic_top_icqmem_cycstb_i  ; 
+  assign   or1200_ic_top_icbiu_we_o  =1'b0; 
+  assign   or1200_ic_top_icbiu_sel_o  =(  or1200_ic_top_ic_en  &  or1200_ic_top_icfsm_biu_read  )?4'b1111:  or1200_ic_top_icqmem_sel_i  ; 
+  assign   or1200_ic_top_icbiu_cab_o  =(  or1200_ic_top_ic_en  )?  or1200_ic_top_icfsm_burst  :1'b0; 
+  assign   or1200_ic_top_icqmem_rty_o  =~  or1200_ic_top_icqmem_ack_o  &~  or1200_ic_top_icqmem_err_o  ; 
+  assign   or1200_ic_top_icqmem_tag_o  =  or1200_ic_top_icqmem_err_o  ?4'hb:  or1200_ic_top_icqmem_tag_i  ; 
+  assign   or1200_ic_top_icqmem_ack_o  =  or1200_ic_top_ic_en  ?(  or1200_ic_top_icfsm_first_hit_ack  |  or1200_ic_top_icfsm_first_miss_ack  ):  or1200_ic_top_icbiu_ack_i  ; 
+  assign   or1200_ic_top_icqmem_err_o  =  or1200_ic_top_ic_en  ?  or1200_ic_top_icfsm_first_miss_err  :  or1200_ic_top_icbiu_err_i  ; 
+  assign   or1200_ic_top_ic_addr  =(  or1200_ic_top_icfsm_biu_read  )?  or1200_ic_top_saved_addr  :  or1200_ic_top_icqmem_adr_i  ; 
+  assign   or1200_ic_top_to_icram  =  or1200_ic_top_icbiu_dat_i  ; 
+  assign   or1200_ic_top_icqmem_dat_o  =  or1200_ic_top_icfsm_first_miss_ack  |!  or1200_ic_top_ic_en  ?  or1200_ic_top_icbiu_dat_i  :  or1200_ic_top_from_icram  ; 
+  always @(  posedge    or1200_ic_top_clk          or  posedge   or1200_ic_top_rst  )
+       if (  or1200_ic_top_rst  ==(1'b1)) 
+           or1200_ic_top_ic_inv_q   <=1'b0;
+        else  
+           or1200_ic_top_ic_inv_q   <=  or1200_ic_top_ic_inv  ;
+ 
+  always @(     or1200_ic_top_tag              or    or1200_ic_top_saved_addr           or    or1200_ic_top_tag_v   )
+       begin 
+         if ((  or1200_ic_top_tag  !=  or1200_ic_top_saved_addr  [31:13-1+1])|!  or1200_ic_top_tag_v  ) 
+             or1200_ic_top_tagcomp_miss   =1'b1;
+          else  
+             or1200_ic_top_tagcomp_miss   =1'b0;
+       end
+   
+  
+wire  or1200_ic_top_or1200_ic_fsm_clk;
+wire  or1200_ic_top_or1200_ic_fsm_rst;
+wire  or1200_ic_top_or1200_ic_fsm_ic_en;
+wire  or1200_ic_top_or1200_ic_fsm_icqmem_cycstb_i;
+wire  or1200_ic_top_or1200_ic_fsm_icqmem_ci_i;
+wire  or1200_ic_top_or1200_ic_fsm_tagcomp_miss;
+wire  or1200_ic_top_or1200_ic_fsm_biudata_valid;
+wire  or1200_ic_top_or1200_ic_fsm_biudata_error;
+wire [31:0] or1200_ic_top_or1200_ic_fsm_start_addr;
+wire [31:0] or1200_ic_top_or1200_ic_fsm_saved_addr;
+wire [3:0] or1200_ic_top_or1200_ic_fsm_icram_we;
+wire  or1200_ic_top_or1200_ic_fsm_tag_we;
+wire  or1200_ic_top_or1200_ic_fsm_biu_read;
+wire  or1200_ic_top_or1200_ic_fsm_first_hit_ack;
+wire  or1200_ic_top_or1200_ic_fsm_first_miss_ack;
+wire  or1200_ic_top_or1200_ic_fsm_first_miss_err;
+wire  or1200_ic_top_or1200_ic_fsm_burst;
+ 
+   reg[31:0]  or1200_ic_top_or1200_ic_fsm_saved_addr_r  ; 
+   reg[1:0]  or1200_ic_top_or1200_ic_fsm_state  ; 
+   reg[4-1:0]  or1200_ic_top_or1200_ic_fsm_cnt  ; 
+   reg  or1200_ic_top_or1200_ic_fsm_hitmiss_eval  ; 
+   reg  or1200_ic_top_or1200_ic_fsm_load  ; 
+   reg  or1200_ic_top_or1200_ic_fsm_cache_inhibit  ; 
+   reg  or1200_ic_top_or1200_ic_fsm_last_eval_miss  ; 
+  assign   or1200_ic_top_or1200_ic_fsm_icram_we  ={4{  or1200_ic_top_or1200_ic_fsm_biu_read  &  or1200_ic_top_or1200_ic_fsm_biudata_valid  &!  or1200_ic_top_or1200_ic_fsm_cache_inhibit  }}; 
+  assign   or1200_ic_top_or1200_ic_fsm_tag_we  =  or1200_ic_top_or1200_ic_fsm_biu_read  &  or1200_ic_top_or1200_ic_fsm_biudata_valid  &!  or1200_ic_top_or1200_ic_fsm_cache_inhibit  ; 
+  assign   or1200_ic_top_or1200_ic_fsm_biu_read  =(  or1200_ic_top_or1200_ic_fsm_hitmiss_eval  &  or1200_ic_top_or1200_ic_fsm_tagcomp_miss  )|(!  or1200_ic_top_or1200_ic_fsm_hitmiss_eval  &  or1200_ic_top_or1200_ic_fsm_load  ); 
+  assign   or1200_ic_top_or1200_ic_fsm_saved_addr  =  or1200_ic_top_or1200_ic_fsm_saved_addr_r  ; 
+  assign   or1200_ic_top_or1200_ic_fsm_first_hit_ack  =(  or1200_ic_top_or1200_ic_fsm_state  ==2'd1)&  or1200_ic_top_or1200_ic_fsm_hitmiss_eval  &!  or1200_ic_top_or1200_ic_fsm_tagcomp_miss  &!  or1200_ic_top_or1200_ic_fsm_cache_inhibit  ; 
+  assign   or1200_ic_top_or1200_ic_fsm_first_miss_ack  =(  or1200_ic_top_or1200_ic_fsm_state  ==2'd1)&  or1200_ic_top_or1200_ic_fsm_biudata_valid  &~  or1200_ic_top_or1200_ic_fsm_first_hit_ack  ; 
+  assign   or1200_ic_top_or1200_ic_fsm_first_miss_err  =(  or1200_ic_top_or1200_ic_fsm_state  ==2'd1)&  or1200_ic_top_or1200_ic_fsm_biudata_error  ; 
+  assign   or1200_ic_top_or1200_ic_fsm_burst  =(  or1200_ic_top_or1200_ic_fsm_state  ==2'd1)&  or1200_ic_top_or1200_ic_fsm_tagcomp_miss  &!  or1200_ic_top_or1200_ic_fsm_cache_inhibit  |(  or1200_ic_top_or1200_ic_fsm_state  ==2'd2); 
+  always @(  posedge    or1200_ic_top_or1200_ic_fsm_clk          or  posedge   or1200_ic_top_or1200_ic_fsm_rst  )
+       begin 
+         if (  or1200_ic_top_or1200_ic_fsm_rst  ==(1'b1))
+            begin  
+               or1200_ic_top_or1200_ic_fsm_state   <=2'd0; 
+               or1200_ic_top_or1200_ic_fsm_saved_addr_r   <=32'b0; 
+               or1200_ic_top_or1200_ic_fsm_hitmiss_eval   <=1'b0; 
+               or1200_ic_top_or1200_ic_fsm_load   <=1'b0; 
+               or1200_ic_top_or1200_ic_fsm_cnt   <=4'd0; 
+               or1200_ic_top_or1200_ic_fsm_cache_inhibit   <=1'b0; 
+               or1200_ic_top_or1200_ic_fsm_last_eval_miss   <=0;
+            end 
+          else 
+            case (  or1200_ic_top_or1200_ic_fsm_state  )
+             2 'd0:
+                if (  or1200_ic_top_or1200_ic_fsm_ic_en  &  or1200_ic_top_or1200_ic_fsm_icqmem_cycstb_i  )
+                   begin  
+                      or1200_ic_top_or1200_ic_fsm_state   <=2'd1; 
+                      or1200_ic_top_or1200_ic_fsm_saved_addr_r   <=  or1200_ic_top_or1200_ic_fsm_start_addr  ; 
+                      or1200_ic_top_or1200_ic_fsm_hitmiss_eval   <=1'b1; 
+                      or1200_ic_top_or1200_ic_fsm_load   <=1'b1; 
+                      or1200_ic_top_or1200_ic_fsm_cache_inhibit   <=  or1200_ic_top_or1200_ic_fsm_icqmem_ci_i  ; 
+                      or1200_ic_top_or1200_ic_fsm_last_eval_miss   <=0;
+                   end 
+                 else 
+                   begin  
+                      or1200_ic_top_or1200_ic_fsm_hitmiss_eval   <=1'b0; 
+                      or1200_ic_top_or1200_ic_fsm_load   <=1'b0; 
+                      or1200_ic_top_or1200_ic_fsm_cache_inhibit   <=1'b0;
+                   end 
+             2 'd1:
+                begin 
+                  if (  or1200_ic_top_or1200_ic_fsm_icqmem_cycstb_i  &  or1200_ic_top_or1200_ic_fsm_icqmem_ci_i  ) 
+                      or1200_ic_top_or1200_ic_fsm_cache_inhibit   <=1'b1;
+                  if (  or1200_ic_top_or1200_ic_fsm_hitmiss_eval  ) 
+                      or1200_ic_top_or1200_ic_fsm_saved_addr_r   [31:13-1+1]<=  or1200_ic_top_or1200_ic_fsm_start_addr  [31:13-1+1];
+                  if ((!  or1200_ic_top_or1200_ic_fsm_ic_en  )||(  or1200_ic_top_or1200_ic_fsm_hitmiss_eval  &!  or1200_ic_top_or1200_ic_fsm_icqmem_cycstb_i  )||(  or1200_ic_top_or1200_ic_fsm_biudata_error  )||(  or1200_ic_top_or1200_ic_fsm_cache_inhibit  &  or1200_ic_top_or1200_ic_fsm_biudata_valid  ))
+                     begin  
+                        or1200_ic_top_or1200_ic_fsm_state   <=2'd0; 
+                        or1200_ic_top_or1200_ic_fsm_hitmiss_eval   <=1'b0; 
+                        or1200_ic_top_or1200_ic_fsm_load   <=1'b0; 
+                        or1200_ic_top_or1200_ic_fsm_cache_inhibit   <=1'b0;
+                     end 
+                   else 
+                     if (  or1200_ic_top_or1200_ic_fsm_tagcomp_miss  &  or1200_ic_top_or1200_ic_fsm_biudata_valid  )
+                        begin  
+                           or1200_ic_top_or1200_ic_fsm_state   <=2'd2; 
+                           or1200_ic_top_or1200_ic_fsm_saved_addr_r   [4-1:2]<=  or1200_ic_top_or1200_ic_fsm_saved_addr_r  [4-1:2]+1; 
+                           or1200_ic_top_or1200_ic_fsm_hitmiss_eval   <=1'b0; 
+                           or1200_ic_top_or1200_ic_fsm_cnt   <=((1<<4)-(2*4)); 
+                           or1200_ic_top_or1200_ic_fsm_cache_inhibit   <=1'b0;
+                        end 
+                      else 
+                        if (!  or1200_ic_top_or1200_ic_fsm_icqmem_cycstb_i  &!  or1200_ic_top_or1200_ic_fsm_last_eval_miss  )
+                           begin  
+                              or1200_ic_top_or1200_ic_fsm_state   <=2'd0; 
+                              or1200_ic_top_or1200_ic_fsm_hitmiss_eval   <=1'b0; 
+                              or1200_ic_top_or1200_ic_fsm_load   <=1'b0; 
+                              or1200_ic_top_or1200_ic_fsm_cache_inhibit   <=1'b0;
+                           end 
+                         else 
+                           if (!  or1200_ic_top_or1200_ic_fsm_tagcomp_miss  &!  or1200_ic_top_or1200_ic_fsm_icqmem_ci_i  )
+                              begin  
+                                 or1200_ic_top_or1200_ic_fsm_saved_addr_r   <=  or1200_ic_top_or1200_ic_fsm_start_addr  ; 
+                                 or1200_ic_top_or1200_ic_fsm_cache_inhibit   <=1'b0;
+                              end 
+                            else  
+                               or1200_ic_top_or1200_ic_fsm_hitmiss_eval   <=1'b0;
+                  if (  or1200_ic_top_or1200_ic_fsm_hitmiss_eval  &!  or1200_ic_top_or1200_ic_fsm_tagcomp_miss  ) 
+                      or1200_ic_top_or1200_ic_fsm_last_eval_miss   <=1;
+                end 
+             2 'd2:
+                begin 
+                  if (!  or1200_ic_top_or1200_ic_fsm_ic_en  )
+                     begin  
+                        or1200_ic_top_or1200_ic_fsm_state   <=2'd0; 
+                        or1200_ic_top_or1200_ic_fsm_saved_addr_r   <=  or1200_ic_top_or1200_ic_fsm_start_addr  ; 
+                        or1200_ic_top_or1200_ic_fsm_hitmiss_eval   <=1'b0; 
+                        or1200_ic_top_or1200_ic_fsm_load   <=1'b0;
+                     end 
+                   else 
+                     if (  or1200_ic_top_or1200_ic_fsm_biudata_valid  &&(|  or1200_ic_top_or1200_ic_fsm_cnt  ))
+                        begin  
+                           or1200_ic_top_or1200_ic_fsm_cnt   <=  or1200_ic_top_or1200_ic_fsm_cnt  -4'd4; 
+                           or1200_ic_top_or1200_ic_fsm_saved_addr_r   [4-1:2]<=  or1200_ic_top_or1200_ic_fsm_saved_addr_r  [4-1:2]+1;
+                        end 
+                      else 
+                        if (  or1200_ic_top_or1200_ic_fsm_biudata_valid  )
+                           begin  
+                              or1200_ic_top_or1200_ic_fsm_state   <=2'd0; 
+                              or1200_ic_top_or1200_ic_fsm_saved_addr_r   <=  or1200_ic_top_or1200_ic_fsm_start_addr  ; 
+                              or1200_ic_top_or1200_ic_fsm_hitmiss_eval   <=1'b0; 
+                              or1200_ic_top_or1200_ic_fsm_load   <=1'b0;
+                           end 
+                end 
+             default : 
+                 or1200_ic_top_or1200_ic_fsm_state   <=2'd0;
+            endcase 
+       end
+ 
+assign or1200_ic_top_or1200_ic_fsm_clk = or1200_ic_top_clk;
+assign or1200_ic_top_or1200_ic_fsm_rst = or1200_ic_top_rst;
+assign or1200_ic_top_or1200_ic_fsm_ic_en = or1200_ic_top_ic_en;
+assign or1200_ic_top_or1200_ic_fsm_icqmem_cycstb_i = or1200_ic_top_icqmem_cycstb_i;
+assign or1200_ic_top_or1200_ic_fsm_icqmem_ci_i = or1200_ic_top_icqmem_ci_i;
+assign or1200_ic_top_or1200_ic_fsm_tagcomp_miss = or1200_ic_top_tagcomp_miss;
+assign or1200_ic_top_or1200_ic_fsm_biudata_valid = or1200_ic_top_icbiu_ack_i;
+assign or1200_ic_top_or1200_ic_fsm_biudata_error = or1200_ic_top_icbiu_err_i;
+assign or1200_ic_top_or1200_ic_fsm_start_addr = or1200_ic_top_icqmem_adr_i;
+assign or1200_ic_top_saved_addr = or1200_ic_top_or1200_ic_fsm_saved_addr;
+assign or1200_ic_top_icram_we = or1200_ic_top_or1200_ic_fsm_icram_we;
+assign or1200_ic_top_icfsm_tag_we = or1200_ic_top_or1200_ic_fsm_tag_we;
+assign or1200_ic_top_icfsm_biu_read = or1200_ic_top_or1200_ic_fsm_biu_read;
+assign or1200_ic_top_icfsm_first_hit_ack = or1200_ic_top_or1200_ic_fsm_first_hit_ack;
+assign or1200_ic_top_icfsm_first_miss_ack = or1200_ic_top_or1200_ic_fsm_first_miss_ack;
+assign or1200_ic_top_icfsm_first_miss_err = or1200_ic_top_or1200_ic_fsm_first_miss_err;
+assign or1200_ic_top_icfsm_burst = or1200_ic_top_or1200_ic_fsm_burst;
+  
+  
+wire  or1200_ic_top_or1200_ic_ram_clk;
+wire  or1200_ic_top_or1200_ic_ram_rst;
+wire [ or1200_ic_top_or1200_ic_ram_aw -1:0] or1200_ic_top_or1200_ic_ram_addr;
+wire  or1200_ic_top_or1200_ic_ram_en;
+wire [3:0] or1200_ic_top_or1200_ic_ram_we;
+wire [ or1200_ic_top_or1200_ic_ram_dw -1:0] or1200_ic_top_or1200_ic_ram_datain;
+wire [ or1200_ic_top_or1200_ic_ram_dw -1:0] or1200_ic_top_or1200_ic_ram_dataout;
+  
+  
+wire  or1200_ic_top_or1200_ic_ram_ic_ram0_clk;
+wire  or1200_ic_top_or1200_ic_ram_ic_ram0_ce;
+wire  or1200_ic_top_or1200_ic_ram_ic_ram0_we;
+wire [ or1200_ic_top_or1200_ic_ram_ic_ram0_aw -1:0] or1200_ic_top_or1200_ic_ram_ic_ram0_addr;
+wire [ or1200_ic_top_or1200_ic_ram_ic_ram0_dw -1:0] or1200_ic_top_or1200_ic_ram_ic_ram0_di;
+wire [ or1200_ic_top_or1200_ic_ram_ic_ram0_dw -1:0] or1200_ic_top_or1200_ic_ram_ic_ram0_doq;
+ 
+   reg[  or1200_ic_top_or1200_ic_ram_ic_ram0_dw  -1:0]  or1200_ic_top_or1200_ic_ram_ic_ram0_mem  [(1<<  or1200_ic_top_or1200_ic_ram_ic_ram0_aw  )-1:0]; 
+   reg[  or1200_ic_top_or1200_ic_ram_ic_ram0_aw  -1:0]  or1200_ic_top_or1200_ic_ram_ic_ram0_addr_reg  ; 
+  assign   or1200_ic_top_or1200_ic_ram_ic_ram0_doq  =  or1200_ic_top_or1200_ic_ram_ic_ram0_mem  [  or1200_ic_top_or1200_ic_ram_ic_ram0_addr_reg  ]; 
+  always @( posedge   or1200_ic_top_or1200_ic_ram_ic_ram0_clk  )
+       if (  or1200_ic_top_or1200_ic_ram_ic_ram0_ce  ) 
+           or1200_ic_top_or1200_ic_ram_ic_ram0_addr_reg   <=  or1200_ic_top_or1200_ic_ram_ic_ram0_addr  ;
+ 
+  always @( posedge   or1200_ic_top_or1200_ic_ram_ic_ram0_clk  )
+       if (  or1200_ic_top_or1200_ic_ram_ic_ram0_we  &&  or1200_ic_top_or1200_ic_ram_ic_ram0_ce  ) 
+           or1200_ic_top_or1200_ic_ram_ic_ram0_mem   [  or1200_ic_top_or1200_ic_ram_ic_ram0_addr  ]<=  or1200_ic_top_or1200_ic_ram_ic_ram0_di  ;
+
+assign or1200_ic_top_or1200_ic_ram_ic_ram0_clk = or1200_ic_top_or1200_ic_ram_clk;
+assign or1200_ic_top_or1200_ic_ram_ic_ram0_ce = or1200_ic_top_or1200_ic_ram_en;
+assign or1200_ic_top_or1200_ic_ram_ic_ram0_we = or1200_ic_top_or1200_ic_ram_we[0];
+assign or1200_ic_top_or1200_ic_ram_ic_ram0_addr = or1200_ic_top_or1200_ic_ram_addr;
+assign or1200_ic_top_or1200_ic_ram_ic_ram0_di = or1200_ic_top_or1200_ic_ram_datain;
+assign or1200_ic_top_or1200_ic_ram_dataout = or1200_ic_top_or1200_ic_ram_ic_ram0_doq;
+
+assign or1200_ic_top_or1200_ic_ram_clk = or1200_ic_top_clk;
+assign or1200_ic_top_or1200_ic_ram_rst = or1200_ic_top_rst;
+assign or1200_ic_top_or1200_ic_ram_addr = or1200_ic_top_ic_addr[13-1:2];
+assign or1200_ic_top_or1200_ic_ram_en = or1200_ic_top_ic_en;
+assign or1200_ic_top_or1200_ic_ram_we = or1200_ic_top_icram_we;
+assign or1200_ic_top_or1200_ic_ram_datain = or1200_ic_top_to_icram;
+assign or1200_ic_top_from_icram = or1200_ic_top_or1200_ic_ram_dataout;
+  
+  
+wire  or1200_ic_top_or1200_ic_tag_clk;
+wire  or1200_ic_top_or1200_ic_tag_rst;
+wire [ or1200_ic_top_or1200_ic_tag_aw -1:0] or1200_ic_top_or1200_ic_tag_addr;
+wire  or1200_ic_top_or1200_ic_tag_en;
+wire  or1200_ic_top_or1200_ic_tag_we;
+wire [ or1200_ic_top_or1200_ic_tag_dw -1:0] or1200_ic_top_or1200_ic_tag_datain;
+wire  or1200_ic_top_or1200_ic_tag_tag_v;
+wire [ or1200_ic_top_or1200_ic_tag_dw -2:0] or1200_ic_top_or1200_ic_tag_tag;
+  
+  or1200_spram  #(. aw (13-4),. dw (20))  or1200_ic_top_or1200_ic_tag_ic_tag0  (. clk (  or1200_ic_top_or1200_ic_tag_clk  ),. ce (  or1200_ic_top_or1200_ic_tag_en  ),. we (  or1200_ic_top_or1200_ic_tag_we  ),. addr (  or1200_ic_top_or1200_ic_tag_addr  ),. di (  or1200_ic_top_or1200_ic_tag_datain  ),. doq ({  or1200_ic_top_or1200_ic_tag_tag  ,  or1200_ic_top_or1200_ic_tag_tag_v  }));
+assign or1200_ic_top_or1200_ic_tag_clk = or1200_ic_top_clk;
+assign or1200_ic_top_or1200_ic_tag_rst = or1200_ic_top_rst;
+assign or1200_ic_top_or1200_ic_tag_addr = or1200_ic_top_ictag_addr;
+assign or1200_ic_top_or1200_ic_tag_en = or1200_ic_top_ictag_en;
+assign or1200_ic_top_or1200_ic_tag_we = or1200_ic_top_ictag_we;
+assign or1200_ic_top_or1200_ic_tag_datain = {or1200_ic_top_ic_addr[31:13-1+1],or1200_ic_top_ictag_v};
+assign or1200_ic_top_tag_v = or1200_ic_top_or1200_ic_tag_tag_v;
+assign or1200_ic_top_tag = or1200_ic_top_or1200_ic_tag_tag;
+
+assign or1200_ic_top_clk = clk_i;
+assign or1200_ic_top_rst = rst_i;
+assign icbiu_dat_ic = or1200_ic_top_icbiu_dat_o;
+assign icbiu_adr_ic = or1200_ic_top_icbiu_adr_o;
+assign icbiu_cyc_ic = or1200_ic_top_icbiu_cyc_o;
+assign icbiu_stb_ic = or1200_ic_top_icbiu_stb_o;
+assign icbiu_we_ic = or1200_ic_top_icbiu_we_o;
+assign icbiu_sel_ic = or1200_ic_top_icbiu_sel_o;
+assign icbiu_cab_ic = or1200_ic_top_icbiu_cab_o;
+assign or1200_ic_top_icbiu_dat_i = icbiu_dat_biu;
+assign or1200_ic_top_icbiu_ack_i = icbiu_ack_biu;
+assign or1200_ic_top_icbiu_err_i = icbiu_err_biu;
+assign or1200_ic_top_ic_en = ic_en;
+assign or1200_ic_top_icqmem_adr_i = icqmem_adr_qmem;
+assign or1200_ic_top_icqmem_cycstb_i = icqmem_cycstb_qmem;
+assign or1200_ic_top_icqmem_ci_i = icqmem_ci_qmem;
+assign or1200_ic_top_icqmem_sel_i = icqmem_sel_qmem;
+assign or1200_ic_top_icqmem_tag_i = icqmem_tag_qmem;
+assign icqmem_dat_ic = or1200_ic_top_icqmem_dat_o;
+assign icqmem_ack_ic = or1200_ic_top_icqmem_ack_o;
+assign icqmem_rty_ic = or1200_ic_top_icqmem_rty_o;
+assign icqmem_err_ic = or1200_ic_top_icqmem_err_o;
+assign icqmem_tag_ic = or1200_ic_top_icqmem_tag_o;
+assign or1200_ic_top_spr_cs = spr_cs[5'd04];
+assign or1200_ic_top_spr_write = spr_we;
+assign or1200_ic_top_spr_dat_i = spr_dat_cpu;
+ 
   or1200_cpu #(.boot_adr(boot_adr))or1200_cpu(.clk(clk_i),.rst(rst_i),.ic_en(ic_en),.icpu_adr_o(icpu_adr_cpu),.icpu_cycstb_o(icpu_cycstb_cpu),.icpu_sel_o(icpu_sel_cpu),.icpu_tag_o(icpu_tag_cpu),.icpu_dat_i(icpu_dat_qmem),.icpu_ack_i(icpu_ack_qmem),.icpu_rty_i(icpu_rty_immu),.icpu_adr_i(icpu_adr_immu),.icpu_err_i(icpu_err_immu),.icpu_tag_i(icpu_tag_immu),.id_void(id_void),.id_insn(id_insn),.ex_void(ex_void),.ex_insn(ex_insn),.ex_freeze(ex_freeze),.wb_insn(wb_insn),.wb_freeze(wb_freeze),.id_pc(id_pc),.ex_pc(ex_pc),.wb_pc(wb_pc),.branch_op(branch_op),.rf_dataw(rf_dataw),.ex_flushpipe(flushpipe),.du_stall(du_stall),.du_addr(du_addr),.du_dat_du(du_dat_du),.du_read(du_read),.du_write(du_write),.du_except_trig(du_except_trig),.du_except_stop(du_except_stop),.du_dsr(du_dsr),.du_dmr1(du_dmr1),.du_hwbkpt(du_hwbkpt),.du_hwbkpt_ls_r(du_hwbkpt_ls_r),.du_dat_cpu(du_dat_cpu),.du_lsu_store_dat(du_lsu_store_dat),.du_lsu_load_dat(du_lsu_load_dat),.abort_mvspr(abort_mvspr),.abort_ex(abort_ex),.du_flush_pipe(du_flush_pipe),.immu_en(immu_en),.dc_en(dc_en),.dcpu_adr_o(dcpu_adr_cpu),.dcpu_cycstb_o(dcpu_cycstb_cpu),.dcpu_we_o(dcpu_we_cpu),.dcpu_sel_o(dcpu_sel_cpu),.dcpu_tag_o(dcpu_tag_cpu),.dcpu_dat_o(dcpu_dat_cpu),.dcpu_dat_i(dcpu_dat_qmem),.dcpu_ack_i(dcpu_ack_qmem),.dcpu_rty_i(dcpu_rty_qmem),.dcpu_err_i(dcpu_err_dmmu),.dcpu_tag_i(dcpu_tag_dmmu),.dc_no_writethrough(dc_no_writethrough),.dmmu_en(dmmu_en),.boot_adr_sel_i(boot_adr_sel),.sb_en(sb_en),.sig_int(sig_int),.sig_tick(sig_tick),.supv(supv),.spr_addr(spr_addr),.spr_dat_cpu(spr_dat_cpu),.spr_dat_pic(spr_dat_pic),.spr_dat_tt(spr_dat_tt),.spr_dat_pm(spr_dat_pm),.spr_dat_dmmu(spr_dat_dmmu),.spr_dat_immu(spr_dat_immu),.spr_dat_du(spr_dat_du),.spr_dat_npc(spr_dat_npc),.spr_cs(spr_cs),.spr_we(spr_we),.mtspr_dc_done(mtspr_dc_done)); 
   or1200_dmmu_top or1200_dmmu_top(.clk(clk_i),.rst(rst_i),.dc_en(dc_en),.dmmu_en(dmmu_en),.supv(supv),.dcpu_adr_i(dcpu_adr_cpu),.dcpu_cycstb_i(dcpu_cycstb_cpu),.dcpu_we_i(dcpu_we_cpu),.dcpu_tag_o(dcpu_tag_dmmu),.dcpu_err_o(dcpu_err_dmmu),.spr_cs(spr_cs[5'd01]),.spr_write(spr_we),.spr_addr(spr_addr),.spr_dat_i(spr_dat_cpu),.spr_dat_o(spr_dat_dmmu),.qmemdmmu_err_i(qmemdmmu_err_qmem),.qmemdmmu_tag_i(qmemdmmu_tag_qmem),.qmemdmmu_adr_o(qmemdmmu_adr_dmmu),.qmemdmmu_cycstb_o(qmemdmmu_cycstb_dmmu),.qmemdmmu_ci_o(qmemdmmu_ci_dmmu)); 
   or1200_dc_top or1200_dc_top(.clk(clk_i),.rst(rst_i),.dc_en(dc_en),.dcqmem_adr_i(dcqmem_adr_qmem),.dcqmem_cycstb_i(dcqmem_cycstb_qmem),.dcqmem_ci_i(dcqmem_ci_qmem),.dcqmem_we_i(dcqmem_we_qmem),.dcqmem_sel_i(dcqmem_sel_qmem),.dcqmem_tag_i(dcqmem_tag_qmem),.dcqmem_dat_i(dcqmem_dat_qmem),.dcqmem_dat_o(dcqmem_dat_dc),.dcqmem_ack_o(dcqmem_ack_dc),.dcqmem_rty_o(dcqmem_rty_dc),.dcqmem_err_o(dcqmem_err_dc),.dcqmem_tag_o(dcqmem_tag_dc),.dc_no_writethrough(dc_no_writethrough),.spr_cs(spr_cs[5'd03]),.spr_addr(spr_addr),.spr_write(spr_we),.spr_dat_i(spr_dat_cpu),.mtspr_dc_done(mtspr_dc_done),.dcsb_dat_o(dcsb_dat_dc),.dcsb_adr_o(dcsb_adr_dc),.dcsb_cyc_o(dcsb_cyc_dc),.dcsb_stb_o(dcsb_stb_dc),.dcsb_we_o(dcsb_we_dc),.dcsb_sel_o(dcsb_sel_dc),.dcsb_cab_o(dcsb_cab_dc),.dcsb_dat_i(dcsb_dat_sb),.dcsb_ack_i(dcsb_ack_sb),.dcsb_err_i(dcsb_err_sb)); 
@@ -7890,3 +9010,12 @@ module or1200_fpu_post_norm_div #(
   assign s_output_o=(s_nan_in|s_nan_op) ? {s_sign_i,QNAN}:s_infa|s_overflow|s_inf_result ? {s_sign_i,INF}:s_op_0|s_infb ? {s_sign_i,ZERO_VECTOR}:{s_sign_i,s_expo3[7:0],s_fraco2[22:0]}; 
 endmodule
  
+
+
+
+
+
+
+
+
+

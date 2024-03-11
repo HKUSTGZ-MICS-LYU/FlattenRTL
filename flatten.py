@@ -76,6 +76,7 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
       self.module_param = []
       self.name_of_module_instances = []
       self.list_of_ports_rhs = []
+      self.dict_of_lhs_to_rhs = {}
       self.list_of_ports_rhs_width = []
       self.dict_of_parameters = {}
 
@@ -92,6 +93,8 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
                 pass
               else:
                 self.list_of_ports_rhs.append(child.expression().getText())
+                if child.port_identifier() is not None:
+                  self.dict_of_lhs_to_rhs[child.port_identifier().getText()] = child.expression().getText()
 
           if ctx.parameter_value_assignment() is not None:
             list_of_parameter_assignments = ctx.parameter_value_assignment().list_of_parameter_assignments()
@@ -113,6 +116,7 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
   cur_prefixs = cur_name_of_module_instances
   cur_list_of_ports_rhs = visitor.list_of_ports_rhs
   cur_dict_of_parameters = visitor.dict_of_parameters
+  dict_of_lhs_to_rhs = visitor.dict_of_lhs_to_rhs
 
   
 
@@ -440,6 +444,7 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
   cur_list_of_ports_direction = []
   cur_list_of_ports_type = []
   cur_list_of_data_type = []
+  cur_dict_of_ports = {}
 
   for i in range(0,len(inst_module_design_trees)):
     visitor = InstModulePortVisitor()
@@ -451,6 +456,11 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
     cur_list_of_ports_direction = cur_list_of_ports_direction + visitor.list_of_ports_direction
     cur_list_of_ports_type = cur_list_of_ports_type + visitor.list_of_ports_type
     cur_list_of_data_type = cur_list_of_data_type + visitor.list_of_data_type
+
+  # 4. Get the dict of ports from cur_list_of_ports_lhs, cur_list_of_ports_lhs_width, cur_list_of_ports_width, cur_list_of_ports_direction, cur_list_of_ports_type
+  for i in range(0,len(cur_list_of_ports_lhs)):
+    cur_dict_of_ports[cur_list_of_ports_lhs[i]] = {'width':cur_list_of_ports_lhs_width[i],'direction':cur_list_of_ports_direction[i],'type':cur_list_of_ports_type[i]}
+  
 
 
   # 4. Obtain new assignment with 'prefix', lhs and rhs and define the port as wire type
@@ -486,12 +496,18 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
         # if cur_list_of_ports_type[i] == 'reg' :
         #   cur_new_assign.append('always @(*)' + ' ' + cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ' = '+ cur_list_of_ports_rhs[i] + ';')
         # else:
-        cur_new_assign.append('assign ' + cur_prefixs[k] + '_' + cur_list_of_ports_lhs[k*len_instance_port+i] + ' = '+ cur_list_of_ports_rhs[k*len_instance_port+i] + ';')
+        rhs = dict_of_lhs_to_rhs.get(cur_list_of_ports_lhs[k*len_instance_port+i])
+        if rhs is None:
+            rhs = cur_list_of_ports_rhs[k*len_instance_port+i]
+        cur_new_assign.append('assign ' + cur_prefixs[k] + '_' + cur_list_of_ports_lhs[k*len_instance_port+i] + ' = '+ rhs + ';')
       else:
         # if cur_list_of_ports_type[i] == 'reg' :
         #   cur_new_assign.append('always @(*) ' + ' ' + cur_list_of_ports_rhs[i] + ' = '+ cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
         # else:
-          cur_new_assign.append('assign ' +  cur_list_of_ports_rhs[k*len_instance_port+i] + ' = '+ cur_prefixs[k] + '_' + cur_list_of_ports_lhs[k*len_instance_port+i] + ';')
+          rhs = dict_of_lhs_to_rhs.get(cur_list_of_ports_lhs[k*len_instance_port+i])
+          if rhs is None:
+            rhs = cur_list_of_ports_rhs[k*len_instance_port+i]
+          cur_new_assign.append('assign ' +  rhs + ' = '+ cur_prefixs[k] + '_' + cur_list_of_ports_lhs[k*len_instance_port+i] + ';')
 
 
   # 5. TODO: Get the instance body

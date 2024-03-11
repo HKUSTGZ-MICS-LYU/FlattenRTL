@@ -138931,6 +138931,7 @@ wire	[dw-1:0]	du_lsu_store_dat;
 wire	[dw-1:0]	du_lsu_load_dat;
 wire			du_hwbkpt;
 wire			du_hwbkpt_ls_r = 1'b0;
+wire			du_flush_pipe;
 wire			flushpipe;
 wire			ex_freeze;
 wire			wb_freeze;
