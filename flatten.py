@@ -94,7 +94,9 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
               else:
                 self.list_of_ports_rhs.append(child.expression().getText())
                 if child.port_identifier() is not None:
-                  self.dict_of_lhs_to_rhs[child.port_identifier().getText()] = child.expression().getText()
+                  if self.dict_of_lhs_to_rhs.get(self.name_of_module_instances[-1]) is None:
+                     self.dict_of_lhs_to_rhs[self.name_of_module_instances[-1]] = {}
+                  self.dict_of_lhs_to_rhs[self.name_of_module_instances[-1]][child.port_identifier().getText()] = child.expression().getText()
 
           if ctx.parameter_value_assignment() is not None:
             list_of_parameter_assignments = ctx.parameter_value_assignment().list_of_parameter_assignments()
@@ -496,7 +498,7 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
         # if cur_list_of_ports_type[i] == 'reg' :
         #   cur_new_assign.append('always @(*)' + ' ' + cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ' = '+ cur_list_of_ports_rhs[i] + ';')
         # else:
-        rhs = dict_of_lhs_to_rhs.get(cur_list_of_ports_lhs[k*len_instance_port+i])
+        rhs = dict_of_lhs_to_rhs[cur_prefixs[k]].get(cur_list_of_ports_lhs[k*len_instance_port+i])
         if rhs is None:
             rhs = cur_list_of_ports_rhs[k*len_instance_port+i]
         cur_new_assign.append('assign ' + cur_prefixs[k] + '_' + cur_list_of_ports_lhs[k*len_instance_port+i] + ' = '+ rhs + ';')
@@ -504,7 +506,7 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
         # if cur_list_of_ports_type[i] == 'reg' :
         #   cur_new_assign.append('always @(*) ' + ' ' + cur_list_of_ports_rhs[i] + ' = '+ cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ';')
         # else:
-          rhs = dict_of_lhs_to_rhs.get(cur_list_of_ports_lhs[k*len_instance_port+i])
+          rhs = dict_of_lhs_to_rhs[cur_prefixs[k]].get(cur_list_of_ports_lhs[k*len_instance_port+i])
           if rhs is None:
             rhs = cur_list_of_ports_rhs[k*len_instance_port+i]
           cur_new_assign.append('assign ' +  rhs + ' = '+ cur_prefixs[k] + '_' + cur_list_of_ports_lhs[k*len_instance_port+i] + ';')
