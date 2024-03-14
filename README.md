@@ -167,7 +167,7 @@ endmodule
 
 ```
 
-## Limitations
+## Limitations and Features
 ### Module Declaration
 
 The module declaration should be follow the standard style below without any parameters:
@@ -190,7 +190,7 @@ parameter A;
 parameter B;
 ```
 
-The assignment below is unacceptable
+The assignment below is not supported
 ```verilog
 parameter A,B;
 ```
