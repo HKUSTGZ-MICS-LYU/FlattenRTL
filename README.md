@@ -195,8 +195,41 @@ The assignment below is unacceptable
 parameter A,B;
 ```
 
+### Net Assignment
+
+The net assignment should follow:
+
+```verilog
+wire a;
+or
+wire a,b;
+```
+
+The assignment below is not supported
+```verilog
+wire a = [exp], b = [exp];
+```
+
+### Reg Assignment
+
+Same as net assignment
+
+### Module Inistialization
+
+The ordered parameter assignment(without identification of parameter) feature is supported:
+```verilog
+A a#(1,2)(x,y,z);
+```
+
+The two inistialization in one statement are supported:
+```verilog
+A a#(1,2)(x,y,z);
+```
+
+
 ### Duplication Declration
 
+The declration below is not supported
 ```verilog
 module A(output X)
 wire X;

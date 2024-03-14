@@ -1041,7 +1041,8 @@ module or1200_fpu_pre_norm_div #(
    reg [EXP_WIDTH+1:0] s_exp_10_o ;  
    reg [EXP_WIDTH+1:0] s_expa_in ;  
    reg [EXP_WIDTH+1:0] s_expb_in ;  
-   wire s_opa_dn,s_opb_dn ;  
+   wire s_opa_dn ; 
+   wire s_opb_dn ;  
    wire [FRAC_WIDTH:0] s_fracta_24 ;  
    wire [FRAC_WIDTH:0] s_fractb_24 ;  
   assign s_expa=opa_i[30:23]; 
@@ -1797,7 +1798,8 @@ module or1200_fpu_mul #(
    reg [47:0] s_fract_o ;  
    reg [23:0] s_fracta_i ;  
    reg [23:0] s_fractb_i ;  
-   reg s_signa_i,s_signb_i ;  
+   reg s_signa_i ; 
+   reg s_signb_i ;  
    wire s_sign_o ;  
    reg s_start_i ;  
    reg s_ready_o ;  
@@ -2029,12 +2031,17 @@ module or1200_fpu_intfloat_conv #(
   always @( posedge clk)
        fpu_op_r3 <=fpu_op_r2;
  
-   wire inf_d,ind_d,qnan_d,snan_d,opa_nan ;  
+   wire inf_d ; 
+   wire ind_d ; 
+   wire qnan_d ; 
+   wire snan_d ; 
+   wire opa_nan ;  
    wire opa_00 ;  
    wire opa_inf ;  
    wire opa_dn ;  
   or1200_fpu_intfloat_conv_except u0(.clk(clk),.opa(opa_r),.opb(),.inf(inf_d),.ind(ind_d),.qnan(qnan_d),.snan(snan_d),.opa_nan(opa_nan),.opb_nan(),.opa_00(opa_00),.opb_00(),.opa_inf(opa_inf),.opb_inf(),.opa_dn(opa_dn),.opb_dn()); 
-   wire nan_sign_d,result_zero_sign_d ;  
+   wire nan_sign_d ; 
+   wire result_zero_sign_d ;  
    reg sign_fasu_r ;  
    wire [1:0] exp_ovf ;  
    reg [1:0] exp_ovf_r ;  
@@ -2051,7 +2058,8 @@ module or1200_fpu_intfloat_conv #(
    reg sign ;  
    reg [30:0] opa_r1 ;  
    reg [47:0] fract_i2f ;  
-   reg opas_r1,opas_r2 ;  
+   reg opas_r1 ; 
+   reg opas_r2 ;  
    wire f2i_out_sign ;  
    wire [47:0] fract_denorm ;  
   always @( posedge clk)
@@ -2082,7 +2090,8 @@ module or1200_fpu_intfloat_conv #(
    wire f2i_special_case_no_inv ;  
   assign f2i_special_case_no_inv=(opa==32'hcf000000); 
   or1200_fpu_post_norm_intfloat_conv u4(.clk(clk),.fpu_op(fpu_op_r3),.opas(opas_r2),.sign(sign),.rmode(rmode_r3),.fract_in(fract_denorm),.exp_in(exp_r),.opa_dn(opa_dn),.opa_nan(opa_nan),.opa_inf(opa_inf),.opb_dn(),.out(out_d),.ine(ine_d),.inv(inv_d),.overflow(overflow_d),.underflow(underflow_d),.f2i_out_sign(f2i_out_sign)); 
-   reg fasu_op_r1,fasu_op_r2 ;  
+   reg fasu_op_r1 ; 
+   reg fasu_op_r2 ;  
    wire [30:0] out_fixed ;  
    wire output_zero_fasu ;  
    wire overflow_fasu ;  
@@ -2151,7 +2160,8 @@ module or1200_fpu_div #(
    reg [FRAC_WIDTH+3:0] s_rmndr_o ;  
    reg [2*(FRAC_WIDTH+2)-1:0] s_dvdnd_i ;  
    reg [FRAC_WIDTH+3:0] s_dvsor_i ;  
-   reg s_sign_dvd_i,s_sign_div_i ;  
+   reg s_sign_dvd_i ; 
+   reg s_sign_div_i ;  
    wire s_sign_o ;  
    wire s_div_zero_o ;  
    reg s_start_i ;  
@@ -2359,7 +2369,9 @@ module or1200_fpu_post_norm_mul #(
    wire [9:0] s_exp_10a ;  
    wire [9:0] s_exp_10b ;  
    reg [47:0] s_frac2a ;  
-   wire s_sticky,s_guard,s_round ;  
+   wire s_sticky ; 
+   wire s_guard ; 
+   wire s_round ;  
    wire s_roundup ;  
    reg [24:0] s_frac_rnd ;  
    wire [24:0] s_frac3 ;  
@@ -2368,8 +2380,12 @@ module or1200_fpu_post_norm_mul #(
    wire s_lost ;  
    wire s_op_0 ;  
    wire [8:0] s_expo3 ;  
-   wire s_infa,s_infb ;  
-   wire s_nan_in,s_nan_op,s_nan_a,s_nan_b ;  
+   wire s_infa ; 
+   wire s_infb ;  
+   wire s_nan_in ; 
+   wire s_nan_op ; 
+   wire s_nan_a ; 
+   wire s_nan_b ;  
   always @( posedge clk_i)
        begin 
          s_opa_i <=opa_i;
@@ -4602,7 +4618,8 @@ module or1200_fpu_pre_norm_mul #(
    wire [EXP_WIDTH+1:0] s_exp_10_o ;  
    wire [EXP_WIDTH+1:0] s_expa_in ;  
    wire [EXP_WIDTH+1:0] s_expb_in ;  
-   wire s_opa_dn,s_opb_dn ;  
+   wire s_opa_dn ; 
+   wire s_opb_dn ;  
   assign s_expa=opa_i[30:23]; 
   assign s_expb=opb_i[30:23]; 
   assign s_fracta=opa_i[22:0]; 
@@ -4732,7 +4749,8 @@ module or1200_fpu_post_norm_addsub #(
    wire [5:0] s_zeros ;  
    reg [5:0] s_shr1 ;  
    reg [5:0] s_shl1 ;  
-   wire s_shr2,s_carry ;  
+   wire s_shr2 ; 
+   wire s_carry ;  
    wire [9:0] s_exp10 ;  
    reg [EXP_WIDTH:0] s_expo9_1 ;  
    wire [EXP_WIDTH:0] s_expo9_2 ;  
@@ -4744,8 +4762,13 @@ module or1200_fpu_post_norm_addsub #(
    wire s_sticky ;  
    wire s_zero_fract ;  
    wire s_lost ;  
-   wire s_infa,s_infb ;  
-   wire s_nan_in,s_nan_op,s_nan_a,s_nan_b,s_nan_sign ;  
+   wire s_infa ; 
+   wire s_infb ;  
+   wire s_nan_in ; 
+   wire s_nan_op ; 
+   wire s_nan_a ; 
+   wire s_nan_b ; 
+   wire s_nan_sign ;  
   assign s_opa_i=opa_i; 
   assign s_opb_i=opb_i; 
   assign s_fract_28_i=fract_28_i; 
@@ -5082,9 +5105,24 @@ module or1200_du #(
    wire dmr2_sel ;  
    wire dsr_sel ;  
    wire drr_sel ;  
-   wire dvr0_sel,dvr1_sel,dvr2_sel,dvr3_sel,dvr4_sel,dvr5_sel,dvr6_sel,dvr7_sel ;  
-   wire dcr0_sel,dcr1_sel,dcr2_sel,dcr3_sel,dcr4_sel,dcr5_sel,dcr6_sel,dcr7_sel ;  
-   wire dwcr0_sel,dwcr1_sel ;  
+   wire dvr0_sel ; 
+   wire dvr1_sel ; 
+   wire dvr2_sel ; 
+   wire dvr3_sel ; 
+   wire dvr4_sel ; 
+   wire dvr5_sel ; 
+   wire dvr6_sel ; 
+   wire dvr7_sel ;  
+   wire dcr0_sel ; 
+   wire dcr1_sel ; 
+   wire dcr2_sel ; 
+   wire dcr3_sel ; 
+   wire dcr4_sel ; 
+   wire dcr5_sel ; 
+   wire dcr6_sel ; 
+   wire dcr7_sel ;  
+   wire dwcr0_sel ; 
+   wire dwcr1_sel ;  
    reg dbg_bp_r ;  
    reg ex_freeze_q ;  
    reg du_hwbkpt_hold ;  
@@ -5280,8 +5318,15 @@ module or1200_fpu_arith #(
    reg [FP_WIDTH-1:0] s_output1 ;  
    reg [FP_WIDTH-1:0] s_output_o ;  
    reg s_ine_o ;  
-   wire s_overflow_o,s_underflow_o,s_div_zero_o,s_inf_o,s_zero_o,s_qnan_o,s_snan_o ;  
-   wire s_infa,s_infb ;  
+   wire s_overflow_o ; 
+   wire s_underflow_o ; 
+   wire s_div_zero_o ; 
+   wire s_inf_o ; 
+   wire s_zero_o ; 
+   wire s_qnan_o ; 
+   wire s_snan_o ;  
+   wire s_infa ; 
+   wire s_infb ;  
     
     
    reg s_state ;  
@@ -6399,7 +6444,9 @@ module or1200_fpu_post_norm_intfloat_conv #(
    reg [22:0] fract_out ;  
    reg [7:0] exp_out ;  
    wire [30:0] out ;  
-   wire exp_out1_co,overflow,underflow ;  
+   wire exp_out1_co ; 
+   wire overflow ; 
+   wire underflow ;  
    wire [22:0] fract_out_final ;  
    reg [22:0] fract_out_rnd ;  
    wire [8:0] exp_next_mi ;  
@@ -6413,24 +6460,45 @@ module or1200_fpu_post_norm_intfloat_conv #(
    wire op_i2f=fpu_op[2:0]==3'b100 ;  
    wire op_f2i=fpu_op[2:0]==3'b101 ;  
    reg [5:0] fi_ldz ;  
-   wire g,r,s ;  
-   wire round,round2,round2a,round2_fasu,round2_fmul ;  
-   wire [7:0] exp_out_rnd0,exp_out_rnd1,exp_out_rnd2,exp_out_rnd2a ;  
-   wire [22:0] fract_out_rnd0,fract_out_rnd1,fract_out_rnd2,fract_out_rnd2a ;  
-   wire exp_rnd_adj0,exp_rnd_adj2a ;  
+   wire g ; 
+   wire r ; 
+   wire s ;  
+   wire round ; 
+   wire round2 ; 
+   wire round2a ; 
+   wire round2_fasu ; 
+   wire round2_fmul ;  
+   wire [7:0] exp_out_rnd0 ; 
+   wire [7:0] exp_out_rnd1 ; 
+   wire [7:0] exp_out_rnd2 ; 
+   wire [7:0] exp_out_rnd2a ;  
+   wire [22:0] fract_out_rnd0 ; 
+   wire [22:0] fract_out_rnd1 ; 
+   wire [22:0] fract_out_rnd2 ; 
+   wire [22:0] fract_out_rnd2a ;  
+   wire exp_rnd_adj0 ; 
+   wire exp_rnd_adj2a ;  
    wire r_sign ;  
-   wire ovf0,ovf1 ;  
+   wire ovf0 ; 
+   wire ovf1 ;  
    wire [23:0] fract_out_pl1 ;  
-   wire [7:0] exp_out_pl1,exp_out_mi1 ;  
-   wire exp_out_00,exp_out_fe,exp_out_ff,exp_in_00,exp_in_ff ;  
-   wire exp_out_final_ff,fract_out_7fffff ;  
+   wire [7:0] exp_out_pl1 ; 
+   wire [7:0] exp_out_mi1 ;  
+   wire exp_out_00 ; 
+   wire exp_out_fe ; 
+   wire exp_out_ff ; 
+   wire exp_in_00 ; 
+   wire exp_in_ff ;  
+   wire exp_out_final_ff ; 
+   wire fract_out_7fffff ;  
    reg [24:0] fract_trunc ;  
    wire [7:0] exp_out1 ;  
    wire grs_sel ;  
    wire fract_out_00 ;  
    reg fract_in_00 ;  
    wire shft_co ;  
-   wire [8:0] exp_in_pl1,exp_in_mi1 ;  
+   wire [8:0] exp_in_pl1 ; 
+   wire [8:0] exp_in_mi1 ;  
    wire [47:0] fract_in_shftr ;  
    wire [47:0] fract_in_shftl ;  
    wire [7:0] shft2 ;  
@@ -6446,11 +6514,15 @@ module or1200_fpu_post_norm_intfloat_conv #(
    wire [6:0] ldz_all ;  
    wire [7:0] f2i_shft ;  
    wire [55:0] exp_f2i_1 ;  
-   wire f2i_zero,f2i_max ;  
+   wire f2i_zero ; 
+   wire f2i_max ;  
    wire [7:0] f2i_emin ;  
-   wire f2i_exp_gt_max,f2i_exp_lt_min ;  
+   wire f2i_exp_gt_max ; 
+   wire f2i_exp_lt_min ;  
    wire [7:0] conv_shft ;  
-   wire [7:0] exp_i2f,exp_f2i,conv_exp ;  
+   wire [7:0] exp_i2f ; 
+   wire [7:0] exp_f2i ; 
+   wire [7:0] conv_exp ;  
    wire round2_f2i ;  
   always @( posedge clk)
        casez (fract_in)
@@ -6553,7 +6625,10 @@ module or1200_fpu_post_norm_intfloat_conv #(
        endcase
   
    wire exp_in_80 ;  
-   wire rmode_00,rmode_01,rmode_10,rmode_11 ;  
+   wire rmode_00 ; 
+   wire rmode_01 ; 
+   wire rmode_10 ; 
+   wire rmode_11 ;  
   assign exp_in_ff=&exp_in; 
   assign exp_in_00=!(|exp_in); 
   assign exp_in_80=exp_in[7]&!(|exp_in[6:0]); 
@@ -6707,11 +6782,22 @@ module or1200_fpu_intfloat_conv_except (
   output reg  opb_inf,
   output reg  opa_dn,
   output reg  opb_dn) ; 
-   wire [7:0] expa,expb ;  
-   wire [22:0] fracta,fractb ;  
-   reg expa_ff,infa_f_r,qnan_r_a,snan_r_a ;  
-   reg expb_ff,infb_f_r,qnan_r_b,snan_r_b ;  
-   reg expa_00,expb_00,fracta_00,fractb_00 ;  
+   wire [7:0] expa ; 
+   wire [7:0] expb ;  
+   wire [22:0] fracta ; 
+   wire [22:0] fractb ;  
+   reg expa_ff ; 
+   reg infa_f_r ; 
+   reg qnan_r_a ; 
+   reg snan_r_a ;  
+   reg expb_ff ; 
+   reg infb_f_r ; 
+   reg qnan_r_b ; 
+   reg snan_r_b ;  
+   reg expa_00 ; 
+   reg expb_00 ; 
+   reg fracta_00 ; 
+   reg fractb_00 ;  
   assign expa=opa[30:23]; 
   assign expb=opb[30:23]; 
   assign fracta=opa[22:0]; 
@@ -7279,7 +7365,8 @@ module or1200_fpu_pre_norm_addsub #(
     
     
    reg [EXP_WIDTH-1:0] s_exp_o ;  
-   wire [FRAC_WIDTH+4:0] s_fracta_28_o,s_fractb_28_o ;  
+   wire [FRAC_WIDTH+4:0] s_fracta_28_o ; 
+   wire [FRAC_WIDTH+4:0] s_fractb_28_o ;  
    wire [EXP_WIDTH-1:0] s_expa ;  
    wire [EXP_WIDTH-1:0] s_expb ;  
    wire [FRAC_WIDTH-1:0] s_fracta ;  
@@ -7294,7 +7381,9 @@ module or1200_fpu_pre_norm_addsub #(
    wire s_expa_gt_expb ;  
    wire s_fracta_1 ;  
    wire s_fractb_1 ;  
-   wire s_op_dn,s_opa_dn,s_opb_dn ;  
+   wire s_op_dn ; 
+   wire s_opa_dn ; 
+   wire s_opb_dn ;  
    wire [1:0] s_mux_diff ;  
    wire s_mux_exp ;  
    wire s_sticky ;  
@@ -7566,7 +7655,9 @@ module or1200_fpu_addsub #(
    wire [FRAC_WIDTH+4:0] s_fracta_i ;  
    wire [FRAC_WIDTH+4:0] s_fractb_i ;  
    wire [FRAC_WIDTH+4:0] s_fract_o ;  
-   wire s_signa_i,s_signb_i,s_sign_o ;  
+   wire s_signa_i ; 
+   wire s_signb_i ; 
+   wire s_sign_o ;  
    wire s_fpu_op_i ;  
    wire fracta_gt_fractb ;  
    wire s_addop ;  
@@ -7596,14 +7687,33 @@ module or1200_fpu_fcmp (
   output reg  aeqb,
   output inf,
   output zero) ; 
-   wire signa,signb ;  
-   wire [7:0] expa,expb ;  
-   wire [22:0] fracta,fractb ;  
-   wire expa_ff,expb_ff,fracta_00,fractb_00 ;  
-   wire qnan_a,snan_a,qnan_b,snan_b,opa_inf,opb_inf,inf ;  
-   wire qnan,snan,opa_zero,opb_zero ;  
-   wire exp_eq,exp_gt,exp_lt ;  
-   wire fract_eq,fract_gt,fract_lt ;  
+   wire signa ; 
+   wire signb ;  
+   wire [7:0] expa ; 
+   wire [7:0] expb ;  
+   wire [22:0] fracta ; 
+   wire [22:0] fractb ;  
+   wire expa_ff ; 
+   wire expb_ff ; 
+   wire fracta_00 ; 
+   wire fractb_00 ;  
+   wire qnan_a ; 
+   wire snan_a ; 
+   wire qnan_b ; 
+   wire snan_b ; 
+   wire opa_inf ; 
+   wire opb_inf ; 
+   wire inf ;  
+   wire qnan ; 
+   wire snan ; 
+   wire opa_zero ; 
+   wire opb_zero ;  
+   wire exp_eq ; 
+   wire exp_gt ; 
+   wire exp_lt ;  
+   wire fract_eq ; 
+   wire fract_gt ; 
+   wire fract_lt ;  
    wire all_zero ;  
   assign signa=opa[31]; 
   assign signb=opb[31]; 
@@ -7737,8 +7847,10 @@ module or1200_fpu_post_norm_div #(
    reg s_sign_i ;  
    reg [1:0] s_rmode_i ;  
    wire [FP_WIDTH-1:0] s_output_o ;  
-   wire s_ine_o,s_overflow ;  
-   wire s_opa_dn,s_opb_dn ;  
+   wire s_ine_o ; 
+   wire s_overflow ;  
+   wire s_opa_dn ; 
+   wire s_opb_dn ;  
    wire s_qutdn ;  
    wire [9:0] s_exp_10b ;  
    reg [5:0] s_shr1 ;  
@@ -7750,11 +7862,20 @@ module or1200_fpu_post_norm_div #(
    reg [26:0] s_fraco1 ;  
    wire [24:0] s_frac_rnd ;  
    reg [24:0] s_fraco2 ;  
-   wire s_guard,s_round,s_sticky,s_roundup ;  
+   wire s_guard ; 
+   wire s_round ; 
+   wire s_sticky ; 
+   wire s_roundup ;  
    wire s_lost ;  
-   wire s_op_0,s_opab_0,s_opb_0 ;  
-   wire s_infa,s_infb ;  
-   wire s_nan_in,s_nan_op,s_nan_a,s_nan_b ;  
+   wire s_op_0 ; 
+   wire s_opab_0 ; 
+   wire s_opb_0 ;  
+   wire s_infa ; 
+   wire s_infb ;  
+   wire s_nan_in ; 
+   wire s_nan_op ; 
+   wire s_nan_a ; 
+   wire s_nan_b ;  
    wire s_inf_result ;  
   always @( posedge clk_i)
        begin 

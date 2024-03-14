@@ -134,16 +134,16 @@ def formatter_file(design, outputpath):
                      self._visit_block_declaration(child)
 
                   # Delete duplicate wire
-                  if isinstance(child, VerilogParser.Net_declarationContext):
-                     for i in range(0,child.list_of_net_identifiers().getChildCount()):
-                        name = child.list_of_net_identifiers().getChild(i).getText()
-                        index_of_child = child.parentCtx.children.index(child)
-                        if self.module_port.get(name) != None:
-                           del child.parentCtx.children[index_of_child]
-                           if index_of_child == 0 and child.list_of_net_identifiers().getChildCount()!=1:
-                              del child.parentCtx.children[index_of_child+1]
-                           elif index_of_child != 0:
-                              del child.parentCtx.children[index_of_child-1]
+                  # if isinstance(child, VerilogParser.Net_declarationContext):
+                  #    for i in range(0,child.list_of_net_identifiers().getChildCount()):
+                  #       name = child.list_of_net_identifiers().getChild(i).getText()
+                  #       index_of_child = child.parentCtx.children.index(child)
+                  #       if self.module_port.get(name) != None:
+                  #          del child.parentCtx.children[index_of_child]
+                  #          if index_of_child == 0 and child.list_of_net_identifiers().getChildCount()!=1:
+                  #             del child.parentCtx.children[index_of_child+1]
+                  #          elif index_of_child != 0:
+                  #             del child.parentCtx.children[index_of_child-1]
                            
                self._visit_port_declaration(child)
 
@@ -275,19 +275,20 @@ def formatter_file(design, outputpath):
          
          def _modify_net_declaration(self, ctx:VerilogParser.Net_declarationContext):
             _before_identifier = ""
-            if ctx.list_of_net_identifiers().getChildCount()!=1:
-               for i in range(0,ctx.getChildCount()-2):
-                  _before_identifier += ctx.getChild(i).getText() + ' '
-               new_net_declaration = []
-               for i in range(0,ctx.list_of_net_identifiers().getChildCount()):
-                  if isinstance(ctx.list_of_net_identifiers().getChild(i),VerilogParser.Net_idContext):
-                     new_net_declaration.append(_before_identifier + ctx.list_of_net_identifiers().getChild(i).getText() + ';')
+            if ctx.list_of_net_identifiers() is not None:
+               if ctx.list_of_net_identifiers().getChildCount()!=1:
+                  for i in range(0,ctx.getChildCount()-2):
+                     _before_identifier += ctx.getChild(i).getText() + ' '
+                  new_net_declaration = []
+                  for i in range(0,ctx.list_of_net_identifiers().getChildCount()):
+                     if isinstance(ctx.list_of_net_identifiers().getChild(i),VerilogParser.Net_idContext):
+                        new_net_declaration.append(_before_identifier + ctx.list_of_net_identifiers().getChild(i).getText() + ';')
 
-               index_of_child = ctx.parentCtx.children.index(ctx)
-               del ctx.parentCtx.children[index_of_child]
+                  index_of_child = ctx.parentCtx.children.index(ctx)
+                  del ctx.parentCtx.children[index_of_child]
 
-               for i in range(0,len(new_net_declaration)):
-                  ctx.parentCtx.children.insert(index_of_child + i, NetDeclare2Tree(new_net_declaration[i]))
+                  for i in range(0,len(new_net_declaration)):
+                     ctx.parentCtx.children.insert(index_of_child + i, NetDeclare2Tree(new_net_declaration[i]))
             else:
                pass
 
