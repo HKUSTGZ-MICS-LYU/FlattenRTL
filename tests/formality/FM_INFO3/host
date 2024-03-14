@@ -1,7 +1,0 @@
-System name = Linux
-Host name   = cpu02
-Process     = 18781
-Release     = 3.10.0-1160.el7.x86_64
-Version     = #1 SMP Tue Aug 18 14:50:17 EDT 2020
-Machine     = x86_64
-Domain name = (none)

@@ -1,1 +1,0 @@
--1 12 96 13 11 87 79 5912 2 FMR_VLOG-079/hpc/home/connect.zzheng989/researchlib/FlattenRTL/tests/regression/or1200-master/f_or1200_top.v/or1200_genpcspr_dat_npcVariable 'spr_dat_npc' referenced inside always block which is not in sensitivity list.
