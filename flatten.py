@@ -25,7 +25,7 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
     tree = parser.module_parameter_port_list()
     return tree
 
-  "This function is used to convert the verilog to a tree"
+  # This function is used to convert the verilog to a tree
   def Design2Tree(Design):
       lexer = VerilogLexer(InputStream(Design))
       stream = CommonTokenStream(lexer)
@@ -33,25 +33,10 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
       tree = parser.source_text()
       return tree
 
-  def Wire2Tree(Wire):
-      lexer = VerilogLexer(InputStream(Wire))
-      stream = CommonTokenStream(lexer)
-      parser = VerilogParser(stream)
-      tree = parser.net_declaration()
-      return tree
-
-  def Assign2Tree(Assign):
-      lexer = VerilogLexer(InputStream(Assign))
-      stream = CommonTokenStream(lexer)
-      parser = VerilogParser(stream)
-      tree = parser.continuous_assign()
-      return tree
-
-  # 1. TODO: Specify the top module and convert the design to a tree
+  # 1. Specify the top module and convert the design to a tree
   tree = Design2Tree(design)
-  # top_module = 'adder_32bit'
 
-  # 2. TODO: Get the top module node
+  # 2. Get the top module node
   class MyTopModuleVisitor(VerilogParserVisitor):
     def __init__(self):
         self.top_module_node = ""
@@ -64,11 +49,9 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
   visitor.visit(tree)
   top_node_tree = visitor.top_module_node
 
-  # Print the design of top module
-  # print(design[top_node_tree.start.start:top_node_tree.stop.stop+1])
-
-  # 3. TODO: Walk to the first node with initialization
+  # 3. Walk to the first initialization node
   # According to module_identifier, we will get multiple name_of_module_instances
+  # e.g. if we have initialization of "A a", "A b", then we collect "a" and "b"
   class MyModuleInstantiationVisitor(VerilogParserVisitor):
     def __init__(self):
       self.is_first_instantiation_module = False
@@ -93,7 +76,10 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
                 pass
               else:
                 self.list_of_ports_rhs.append(child.expression().getText())
-                if child.port_identifier() is not None:
+                if isinstance(child,VerilogParser.Ordered_port_connectionContext):
+                   if self.dict_of_lhs_to_rhs.get(self.name_of_module_instances[-1]) is None:
+                     self.dict_of_lhs_to_rhs[self.name_of_module_instances[-1]] = {}
+                elif isinstance(child,VerilogParser.Named_port_connectionContext) is not None:
                   if self.dict_of_lhs_to_rhs.get(self.name_of_module_instances[-1]) is None:
                      self.dict_of_lhs_to_rhs[self.name_of_module_instances[-1]] = {}
                   self.dict_of_lhs_to_rhs[self.name_of_module_instances[-1]][child.port_identifier().getText()] = child.expression().getText()
@@ -105,10 +91,14 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
               if isinstance(child, antlr4.tree.Tree.TerminalNodeImpl):
                 pass
               else:
-                if self.dict_of_parameters.get(self.name_of_module_instances[-1]) is None:
-                   self.dict_of_parameters[self.name_of_module_instances[-1]] = {}
-                self.dict_of_parameters[self.name_of_module_instances[-1]][self.name_of_module_instances[-1]+'_'+child.parameter_identifier().getText()] = child.mintypmax_expression().getText()
-              
+                if isinstance(child, VerilogParser.Named_parameter_assignmentContext):
+                  if self.dict_of_parameters.get(self.name_of_module_instances[-1]) is None:
+                    self.dict_of_parameters[self.name_of_module_instances[-1]] = {}
+                  self.dict_of_parameters[self.name_of_module_instances[-1]][self.name_of_module_instances[-1]+'_'+child.parameter_identifier().getText()] = child.mintypmax_expression().getText()
+                elif isinstance(child, VerilogParser.Ordered_parameter_assignmentContext):
+                  if self.dict_of_parameters.get(self.name_of_module_instances[-1]) is None:
+                    self.dict_of_parameters[self.name_of_module_instances[-1]] = {}
+                  self.dict_of_parameters[self.name_of_module_instances[-1]][list_of_parameter_assignments.children.index(child)] = child.getText()
 
               
   visitor = MyModuleInstantiationVisitor()
@@ -121,7 +111,7 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
   dict_of_lhs_to_rhs = visitor.dict_of_lhs_to_rhs
 
   
-
+  # If we cannot find the current module identifier
   if cur_module_identifier == '':
      of_handler.close()
      os.remove(output_file)
@@ -137,7 +127,7 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
     print("[Processing] MODULE: %s\tNAME:%s"%(cur_module_identifier,cur_name_of_module_instances))
 
 
-  # 5. TODO: Get the start and stop index of the instance module
+  # 5. Get the start and stop index of the instance module
   class InstModuleVisitor(VerilogParserVisitor):
     def __init__(self):
         super().__init__()
@@ -155,7 +145,7 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
 
     class myParamVisitor(VerilogParserVisitor):
        def __init__(self):
-          pass
+          self.counter = 0
        # assign to cur_dict_of_parameters
        def visitParam_assignment(self, ctx: VerilogParser.Param_assignmentContext):
           if ctx.getChildCount() == 3:
@@ -165,7 +155,11 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
               if cur_dict_of_parameters.get(item) is None:
                 cur_dict_of_parameters[item] = {}
               if cur_dict_of_parameters[item].get(item+'_'+param_name) is None:
-                cur_dict_of_parameters[item][item+'_'+param_name] = param_value
+                # Handle the ordered parameter
+                if cur_dict_of_parameters[item].get(self.counter) is not None:
+                  cur_dict_of_parameters[item][item+'_'+param_name] = cur_dict_of_parameters[item].get(self.counter)
+                else:
+                  cur_dict_of_parameters[item][item+'_'+param_name] = param_value
 
     class myMoudleParameterPortVisitor(VerilogParserVisitor):
        def __init__(self):
@@ -173,7 +167,7 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
           self.stop = None
           self.ports_parameter = None
 
-       def _modify_port_parameter(self,ctx: VerilogParser.Module_parameter_port_listContext):
+       def _modify_port_parameter(self):
           ports_parameter = design[self.start:self.stop+1]
           for item in cur_prefixs:
             if cur_dict_of_parameters.get(item) is None:
@@ -183,16 +177,18 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
               index = ports_parameter.rfind(')')
               index = index - len(ports_parameter)
               for key in cur_dict_of_parameters[item]:
+                # ignore the key with int type
+                if isinstance(key,int):
+                  continue
                 ports_parameter = ports_parameter[:index]+",\nparameter "+key+"="+cur_dict_of_parameters[item][key]+ports_parameter[index:]
-          # remove the final ","
           self.ports_parameter = ports_parameter
 
        def visitModule_parameter_port_list(self, ctx: VerilogParser.Module_parameter_port_listContext):
           self.start = ctx.start.start
           self.stop = ctx.stop.stop
+          # If the submodule have parameters, we should generate new parameters from the submodule
           if self.start!=self.stop:
-            self._modify_port_parameter(ctx)
-            # ctx.parentCtx.children[2] = Parameter2Tree(self.ports_parameter)
+            self._modify_port_parameter()
 
         
 
@@ -215,10 +211,9 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
           
 
   visitor = InstModuleVisitor()
-  # Get the start and stop index and dict of param of the instance module
   visitor.visit(tree)
   inst_module_design = design[visitor.start:visitor.stop+1]
-  # Visit the parameter and port list of top module
+  # Regenerate the top module for identification of parameters
   if cur_dict_of_parameters != {}:
     visitor.visit(tree)
     # This can be optimized
@@ -228,7 +223,7 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
     visitor.visit(tree)
     top_node_tree = visitor.top_module_node
 
-  # 6. TODO: Rename all variable in the instance module
+  # 6.Rename all variable in the instance module
   # replace the corresponding variables with `cur_prefixs`
   class InstModuleVisitor(VerilogParserVisitor):
     def __init__(self, cur_prefixs_index):
@@ -511,51 +506,7 @@ def pyflattenverilog(design:str, top_module:str, output_file:str, debug_mode:boo
             rhs = cur_list_of_ports_rhs[k*len_instance_port+i]
           cur_new_assign.append('assign ' +  rhs + ' = '+ cur_prefixs[k] + '_' + cur_list_of_ports_lhs[k*len_instance_port+i] + ';')
 
-
-  # 5. TODO: Get the instance body
-  # '''
-  # The original instance body:
-  # // 16 bit adder
-  # module adder_16bit (
-  #   input [15:0] a,
-  #   input [15:0] b,
-  #   output [15:0] sum  
-  # );
-
-  #   // high 8 bit adder
-  #   adder_8bit add_high (
-  #     .a(a[15:8]),
-  #     .b(b[15:8]), 
-  #     .sum(sum[15:8])
-  #   );
-
-  #   // low 8 bit adder
-  #   adder_8bit add_low (
-  #     .a(a[7:0]),
-  #     .b(b[7:0]),
-  #     .sum(sum[7:0]) 
-  #   );
-
-  # endmodule 
-
-  # The output instance body:
-
-  # adder_8bit  add_high_add_high (.a( add_high_a [15:8]),.b( add_high_b [15:8]),.sum( add_high_sum [15:8])); 
-  # adder_8bit  add_high_add_low (.a( add_high_a [7:0]),.b( add_high_b [7:0]),.sum( add_high_sum [7:0]));
-
-  # '''
-  # inst_body_list = []
-  # if inst_module_node.getChildCount() >= 5:
-  #   for i in range(4, inst_module_node.getChildCount()-1):
-  #     inst_body_list.append(inst_module_node.getChild(i))
-  # else:
-  #   print("Instance body is empty!")
-
-  # print to check the instance body
-  # for i in range(0,len(inst_body_list)):
-  #    print(inst_body_list[i].getText())
-
-  # 8. TODO: Process the format of the instance body
+  # 5. Process the format of the instance body
   class InstBodyVisitor(VerilogParserVisitor):
     def __init__(self):
       super().__init__()

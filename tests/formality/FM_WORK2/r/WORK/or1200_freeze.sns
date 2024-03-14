@@ -1,0 +1,11 @@
+# struct_name_map
+multicycle_cnt[0]
+multicycle_cnt_reg[0]
+multicycle_cnt[1]
+multicycle_cnt_reg[1]
+multicycle_cnt[2]
+multicycle_cnt_reg[2]
+waiting_on[0]
+waiting_on_reg[0]
+waiting_on[1]
+waiting_on_reg[1]

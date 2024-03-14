@@ -1,0 +1,1 @@
+-1 12 104 21 3 104 91 727 2 FMR_VLOG-091/hpc/home/connect.zzheng989/researchlib/FlattenRTL/tests/regression/or1200-master/flatten_f_or1200_top.v/or1200_dpram/get_gprmemUsing non-local variable 'mem' in task/function 'get_gpr' may cause a simulation and synthesis mismatch.

@@ -4,36 +4,47 @@ import antlr4
 from io import StringIO
 import os
 
-
-"This function is used to convert the verilog to a tree"
-def Design2Tree(Design):
+def Parse(Design):
    lexer = VerilogLexer(InputStream(Design))
    stream = CommonTokenStream(lexer)
    parser = VerilogParser(stream)
+   return parser
+
+"This function is used to convert the verilog to a tree"
+def Design2Tree(Design):
+   parser = Parse(Design)
    tree = parser.source_text()
    return tree
 
 def Port2Tree(Design):
-   lexer = VerilogLexer(InputStream(Design))
-   stream = CommonTokenStream(lexer)
-   parser = VerilogParser(stream)
+   parser = Parse(Design)
    tree = parser.list_of_port_declarations()
    return tree
 
 def Parameter2Tree(Design):
-   lexer = VerilogLexer(InputStream(Design))
-   stream = CommonTokenStream(lexer)
-   parser = VerilogParser(stream)
+   parser = Parse(Design)
    tree = parser.module_parameter_port_list()
    return tree
 
 def Module2Tree(Design):
-   lexer = VerilogLexer(InputStream(Design))
-   stream = CommonTokenStream(lexer)
-   parser = VerilogParser(stream)
+   parser = Parse(Design)
    tree = parser.module_item()
    return tree
 
+def NetDeclare2Tree(Design):
+   parser = Parse(Design)
+   tree = parser.net_declaration()
+   return tree
+
+def RegDeclare2Tree(Design):
+   parser = Parse(Design)
+   tree = parser.reg_declaration()
+   return tree
+
+def ModIns2Tree(Design):
+   parser = Parse(Design)
+   tree = parser.module_instantiation()
+   return tree
 
 def formatter_file(design, outputpath):
    def formatter_design(tree):  
@@ -62,8 +73,9 @@ def formatter_file(design, outputpath):
                if isinstance(ctx.parentCtx, VerilogParser.Module_declarationContext):
                   pass
                else:
-                  param_assign = ctx.list_of_param_assignments().param_assignment()[0]
-                  self.parameter.append([param_assign.getChild(0).getText(), param_assign.getChild(2).getText()])
+                  for i in range(0,len(ctx.list_of_param_assignments().param_assignment())):
+                     param_assign = ctx.list_of_param_assignments().param_assignment()[i]
+                     self.parameter.append([param_assign.getChild(0).getText(), param_assign.getChild(2).getText()])
                   self.empty_all_text(ctx.parentCtx)
 
          def __init__(self):
@@ -99,7 +111,6 @@ def formatter_file(design, outputpath):
                pass
             else:
                for child in ctx.getChildren():
-                  # print(type(child))  # Debugging: Print out the type of each child
                   if isinstance(child, VerilogParser.Port_declarationContext):
                      if isinstance(child.getChild(0), VerilogParser.Input_declarationContext):
                         self._visit_input_declaration(child.getChild(0))
@@ -118,10 +129,22 @@ def formatter_file(design, outputpath):
 
                   if isinstance(child, VerilogParser.Block_nameContext):
                      index_of_child = child.parentCtx.children.index(child)
-                     # del child.parentCtx.children[index_of_child]
 
                   if isinstance(child, VerilogParser.Block_item_declarationContext):
                      self._visit_block_declaration(child)
+
+                  # Delete duplicate wire
+                  if isinstance(child, VerilogParser.Net_declarationContext):
+                     for i in range(0,child.list_of_net_identifiers().getChildCount()):
+                        name = child.list_of_net_identifiers().getChild(i).getText()
+                        index_of_child = child.parentCtx.children.index(child)
+                        if self.module_port.get(name) != None:
+                           del child.parentCtx.children[index_of_child]
+                           if index_of_child == 0 and child.list_of_net_identifiers().getChildCount()!=1:
+                              del child.parentCtx.children[index_of_child+1]
+                           elif index_of_child != 0:
+                              del child.parentCtx.children[index_of_child-1]
+                           
                self._visit_port_declaration(child)
 
          # visit integer declaration
@@ -177,15 +200,31 @@ def formatter_file(design, outputpath):
                if ctx.SIGNED() != None:
                   self.module_port[name]['data_type'] = ctx.SIGNED().getText()
 
+         def is_parent_implicit_port(self,ctx):
+            if ctx == None:
+               return False
+            
+            if isinstance(ctx,VerilogParser.Port_implicitContext):
+               return True
+            else:
+               return self.is_parent_implicit_port(ctx.parentCtx)
+
          # visit port list
          def _visit_port_list(self,ctx):
             if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
                pass
             else:
                for child in ctx.getChildren():
-                  if isinstance(child, VerilogParser.Simple_identifierContext):
+                  if isinstance(child, VerilogParser.Port_identifierContext):
                      port_name = child.getText()
                      self.module_port[port_name] = {'data_type': '','port_type':'wire','port_width':'','port_direction':''}
+                     if not self.is_parent_implicit_port(child):
+                        self.module_port[port_name]['port_direction'] = child.parentCtx.parentCtx.getChild(0).getText()
+                        if child.parentCtx.parentCtx.range_() !=None:
+                           self.module_port[port_name]['port_width'] = child.parentCtx.parentCtx.range_().getText()
+                        if child.parentCtx.parentCtx.SIGNED() !=None:
+                           self.module_port[port_name]['data_type'] = ctx.SIGNED().getText()
+                        continue
                   self._visit_port_list(child)
 
          # visit block declaration
@@ -208,7 +247,8 @@ def formatter_file(design, outputpath):
                   self.block_port[ctx.list_of_block_variable_identifiers().getText()]['data_type'] = ctx.SIGNED().getText()
 
 
-      # Module Declaration Visitor
+      
+      # 2. Module Declaration Visitor
       visitor = MyModuleVisitor()
       visitor.visitModule_declaration(tree)
       module_port = visitor.module_port
@@ -218,16 +258,108 @@ def formatter_file(design, outputpath):
       non_port_parameter = visitor.non_port_parameter
 
 
+      # 3. Module Item Modifier
+      # wire a,b;
+      # To:
+      # wire a;
+      # wire b;
+      #
+      # A a(x,y), b(x,y);
+      # To
+      # A a(x,y);
+      # A b(x,y);
+
+      class MyModuleItemModifier(VerilogParserVisitor):
+         def __init__(self):
+            pass
+         
+         def _modify_net_declaration(self, ctx:VerilogParser.Net_declarationContext):
+            _before_identifier = ""
+            if ctx.list_of_net_identifiers().getChildCount()!=1:
+               for i in range(0,ctx.getChildCount()-2):
+                  _before_identifier += ctx.getChild(i).getText() + ' '
+               new_net_declaration = []
+               for i in range(0,ctx.list_of_net_identifiers().getChildCount()):
+                  if isinstance(ctx.list_of_net_identifiers().getChild(i),VerilogParser.Net_idContext):
+                     new_net_declaration.append(_before_identifier + ctx.list_of_net_identifiers().getChild(i).getText() + ';')
+
+               index_of_child = ctx.parentCtx.children.index(ctx)
+               del ctx.parentCtx.children[index_of_child]
+
+               for i in range(0,len(new_net_declaration)):
+                  ctx.parentCtx.children.insert(index_of_child + i, NetDeclare2Tree(new_net_declaration[i]))
+            else:
+               pass
+
+         def _modify_reg_declaration(self, ctx:VerilogParser.Reg_declarationContext):
+            _before_identifier = ""
+            if ctx.list_of_variable_identifiers().getChildCount()!=1:
+               for i in range(0,ctx.getChildCount()-2):
+                  _before_identifier += ctx.getChild(i).getText() + ' '
+               new_reg_declaration = []
+               for i in range(0,ctx.list_of_variable_identifiers().getChildCount()):
+                  if isinstance(ctx.list_of_variable_identifiers().getChild(i),VerilogParser.Variable_typeContext):
+                     new_reg_declaration.append(_before_identifier + ctx.list_of_variable_identifiers().getChild(i).getText() + ';')
+
+               index_of_child = ctx.parentCtx.children.index(ctx)
+               del ctx.parentCtx.children[index_of_child]
+
+               for i in range(0,len(new_reg_declaration)):
+                  ctx.parentCtx.children.insert(index_of_child + i, RegDeclare2Tree(new_reg_declaration[i]))
+            else:
+               pass
+         
+         def _modify_module_instantiation(self, ctx:VerilogParser.Module_instantiationContext):
+            _before_identifier = ""
+            if len(ctx.module_instance())>1:
+               for i in range(0,ctx.getChildCount()-1):
+                  if isinstance(ctx.getChild(i), VerilogParser.Module_instanceContext):
+                     break
+                  _before_identifier += ctx.getChild(i).getText() + ' '
+               new_module_instantiation = []
+               for item in ctx.module_instance():
+                  new_module_instantiation.append(_before_identifier+design[item.start.start:item.stop.stop+1] + ';')
+
+               index_of_child = ctx.parentCtx.children.index(ctx)
+               del ctx.parentCtx.children[index_of_child]
+
+               for i in range(0,len(new_module_instantiation)):
+                  ctx.parentCtx.children.insert(index_of_child + i, ModIns2Tree(new_module_instantiation[i]))
+            else:
+               pass
+         
+         def _traverse_children(self,ctx):
+            if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
+               pass
+            else:
+               for child in ctx.getChildren():
+                  if isinstance(child, VerilogParser.Net_declarationContext):
+                     self._modify_net_declaration(child)
+                  elif isinstance(child, VerilogParser.Reg_declarationContext):
+                     self._modify_reg_declaration(child)
+                  elif isinstance(child, VerilogParser.Module_instantiationContext):
+                     self._modify_module_instantiation(child)
+
+                  self._traverse_children(child)
+
+         def visitModule_item(self, ctx: VerilogParser.Module_itemContext):
+            self._traverse_children(ctx)
+         
+      visitor = MyModuleItemModifier()
+      visitor.visitModule_item(tree)
+
+
+
       "This function is used to remove the port and define the port in the list"
       class PortModifyVisitor(VerilogParserVisitor):
          def __init__(self):
             self.module = None
          
-         def is_implicit_port_definition(self, ctx:VerilogParser.Module_declarationContext):
-            return ctx.list_of_port_declarations().port_declaration() == []
+         # def is_implicit_port_definition(self, ctx:VerilogParser.Module_declarationContext):
+         #    return ctx.list_of_port_declarations().port_declaration() == []
          
          def _insert_parameter(self, ctx:VerilogParser.Module_declarationContext):
-            parameter = '#(\n'
+            parameter = '#(\n\t'
             if non_port_parameter != []:
                for i , item in enumerate(non_port_parameter):
                   parameter += "parameter  "+item[0] + '=' + item[1]
@@ -235,16 +367,15 @@ def formatter_file(design, outputpath):
                      parameter += '\n'
                   else:
                      parameter += ',\n'
-               parameter += ');\n'
+               parameter += '\n);\n'
                ctx.children.insert(2, Parameter2Tree(parameter))
          def modifyModule_declaration(self, ctx:VerilogParser.Module_declarationContext):
-            if self.is_implicit_port_definition(ctx):
-               self._insert_parameter(ctx)
-               self._modify_module_declaration(ctx)
-               self._remove_signal_declaration(ctx)
-               self._add_block_content(ctx)
-               self._remove_block_content(ctx)
-
+            self._insert_parameter(ctx)
+            self._modify_module_declaration(ctx)
+            self._remove_signal_declaration(ctx)
+            self._add_block_content(ctx)
+            self._remove_block_content(ctx)
+            # if self.is_implicit_port_definition(ctx):
             self.module = ctx
          
          def _modify_module_declaration(self,ctx:VerilogParser.Module_declarationContext):  
@@ -394,9 +525,7 @@ def formatter_file(design, outputpath):
                            else:
                               item.start.text = ' ' + item.start.text
 
-                  #Parameter defination
-                  if isinstance(child, VerilogParser.Parameter_declarationContext):
-                     child.start.text = chr(31) + ' ' * indent + child.start.text 
+                  
                   #Reg defination
                   if isinstance(child, VerilogParser.Reg_declarationContext):
                      for i, item in enumerate(child.getChildren()):
@@ -424,7 +553,10 @@ def formatter_file(design, outputpath):
                               item.symbol.text = ' ' + item.symbol.text + ' '
                            else:
                               item.start.text = ' ' + item.start.text
-                     
+                              
+                  #Parameter defination
+                  if isinstance(child, VerilogParser.Parameter_declarationContext):
+                     child.start.text = chr(31) + ' ' * indent + child.start.text 
                   #Integer defination
                   if isinstance(child, VerilogParser.Integer_declarationContext):
                      for i, item in enumerate(child.getChildren()):
@@ -525,6 +657,7 @@ def formatter_file(design, outputpath):
          f.write(module_design)
          f.write('\n')
 
+   # 1. Visit all module
    class visitModule(VerilogParserVisitor):
       def __init__(self):
          self.module = None
@@ -533,9 +666,11 @@ def formatter_file(design, outputpath):
          print(self.module.module_identifier().getText())
          formatter_design(self.module)
 
-   design = Design2Tree(design)
+
+   # 1. Visit all module
+   _design = Design2Tree(design)
    visitor = visitModule()
-   visitor.visit(design)
+   visitor.visit(_design)
 
 
       

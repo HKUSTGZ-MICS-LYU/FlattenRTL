@@ -1,0 +1,248 @@
+Job <195407> is submitted to default queue <interactive>.
+
+                                 Formality (R)
+
+                 Version V-2023.12 for linux64 - Nov 16, 2023 
+
+                    Copyright (c) 1988 - 2023 Synopsys, Inc.
+   This software and the associated documentation are proprietary to Synopsys,
+ Inc. This software may only be used in accordance with the terms and conditions
+ of a written license agreement with Synopsys, Inc. All other use, reproduction,
+   or distribution of this software is strictly prohibited.  Licensed Products
+     communicate with Synopsys servers for the purpose of providing software
+    updates, detecting software piracy and verifying that customers are using
+    Licensed Products in conformity with the applicable License Key for such
+  Licensed Products. Synopsys will use information gathered in connection with
+    this process to deliver software updates and pursue software pirates and
+                                   infringers.
+
+ Inclusivity & Diversity - Visit SolvNetPlus to read the "Synopsys Statement on
+            Inclusivity and Diversity" (Refer to article 000036315 at
+                        https://solvnetplus.synopsys.com)
+
+Build: 8560677
+Hostname: cpu02
+Current time: Tue Mar 12 00:37:44 2024
+
+Loading db file '/hpc/Edatools/synopsys/formality/V-2023.12/libraries/syn/gtech.db'
+
+Script: verify.fms
+
+set_mismatch_message_filter -warn FMR_ELAB-147
+1
+set_mismatch_message_filter -warn FMR_VLOG-038
+Info:  'FMR_VLOG-038' is not a permitted message identifier.
+0
+set_mismatch_message_filter -warn FM-579
+Info:  'FM-579' is not a permitted message identifier.
+0
+set_mismatch_message_filter -warn FMR_VLOG-100
+1
+set_mismatch_message_filter -warn FMR_VLOG-079
+1
+set_mismatch_message_filter -warn FMR_VLOG-091
+1
+set hdlin_error_on_mismatch_message false
+Info:  Use of 'hdlin_error_on_mismatch_message' is deprecated,  using 'set_mismatch_message_filter -warn' instead.
+false
+read_verilog -r /hpc/home/connect.zzheng989/researchlib/FlattenRTL/tests/regression/or1200-master/or1200_top.v
+No target library specified, default is WORK
+Loading verilog file '/hpc/home/connect.zzheng989/researchlib/FlattenRTL/tests/regression/or1200-master/or1200_top.v'
+Warning: Using non-local variable 'mem' in task/function 'get_gpr' may cause a simulation and synthesis mismatch. (Signal: mem Block: /or1200_dpram/get_gpr File: /hpc/home/connect.zzheng989/researchlib/FlattenRTL/tests/regression/or1200-master/or1200_top.v Line: 15151)  (FMR_VLOG-091)
+Current container set to 'r'
+   ATTENTION: RTL interpretation messages were produced during read.
+              Verification results may disagree with a logic simulator.
+1
+set_top or1200_top
+Setting top design to 'r:/WORK/or1200_top'
+Status:   Elaborating design or1200_top   ...  
+Status:   Elaborating design or1200_wb_biu  bl=4 ...  
+Warning: Variable(s) is(are) being read asynchronously. This may cause simulation-synthesis mismatches. (Signal: wb_fsm_idle Block: /or1200_wb_biu File: /hpc/home/connect.zzheng989/researchlib/FlattenRTL/tests/regression/or1200-master/or1200_top.v Line: 136484)  (FMR_VLOG-100)
+Warning: Variable 'wb_fsm_idle' referenced inside always block which is not in sensitivity list. (Signal: wb_fsm_idle Block: /or1200_wb_biu File: /hpc/home/connect.zzheng989/researchlib/FlattenRTL/tests/regression/or1200-master/or1200_top.v Line: 136514)  (FMR_VLOG-079)
+Warning: Variable 'wb_fsm_trans' referenced inside always block which is not in sensitivity list. (Signal: wb_fsm_trans Block: /or1200_wb_biu File: /hpc/home/connect.zzheng989/researchlib/FlattenRTL/tests/regression/or1200-master/or1200_top.v Line: 136519)  (FMR_VLOG-079)
+Warning: Variable 'wb_fsm_last' referenced inside always block which is not in sensitivity list. (Signal: wb_fsm_last Block: /or1200_wb_biu File: /hpc/home/connect.zzheng989/researchlib/FlattenRTL/tests/regression/or1200-master/or1200_top.v Line: 136536)  (FMR_VLOG-079)
+Information: Created design named 'or1200_wb_biu_bl4'. (FE-LINK-13)
+Status:   Elaborating design or1200_immu_top  boot_adr=32'h00000100 ...  
+Information: Created design named 'or1200_immu_top_00000100'. (FE-LINK-13)
+Status:   Elaborating design or1200_immu_tlb   ...  
+Status:   Elaborating design or1200_spram  aw=6, dw=14 ...  
+Information: Created design named 'or1200_spram_aw6_dw14'. (FE-LINK-13)
+Status:   Elaborating design or1200_spram  aw=6, dw=22 ...  
+Information: Created design named 'or1200_spram_aw6_dw22'. (FE-LINK-13)
+Status:   Elaborating design or1200_ic_top   ...  
+Status:   Elaborating design or1200_ic_fsm   ...  
+Status:   Elaborating design or1200_ic_ram   ...  
+Status:   Elaborating design or1200_spram  aw=11, dw=32 ...  
+Information: Created design named 'or1200_spram_aw11_dw32'. (FE-LINK-13)
+Status:   Elaborating design or1200_ic_tag   ...  
+Status:   Elaborating design or1200_spram  aw=9, dw=20 ...  
+Information: Created design named 'or1200_spram_aw9_dw20'. (FE-LINK-13)
+Status:   Elaborating design or1200_cpu  boot_adr=32'h00000100 ...  
+Information: Created design named 'or1200_cpu_00000100'. (FE-LINK-13)
+Status:   Elaborating design or1200_genpc  boot_adr=32'h00000100 ...  
+Warning: Variable 'spr_dat_npc' referenced inside always block which is not in sensitivity list. (Signal: spr_dat_npc Block: /or1200_genpc File: /hpc/home/connect.zzheng989/researchlib/FlattenRTL/tests/regression/or1200-master/or1200_top.v Line: 110939)  (FMR_VLOG-079)
+Information: Created design named 'or1200_genpc_00000100'. (FE-LINK-13)
+Status:   Elaborating design or1200_if   ...  
+Status:   Elaborating design or1200_ctrl   ...  
+Status:   Elaborating design or1200_rf   ...  
+Status:   Elaborating design or1200_dpram  aw=5, dw=32 ...  
+Information: Created design named 'or1200_dpram_aw5_dw32'. (FE-LINK-13)
+Status:   Elaborating design or1200_operandmuxes   ...  
+Status:   Elaborating design or1200_alu   ...  
+Status:   Elaborating design or1200_fpu   ...  
+Status:   Elaborating design or1200_mult_mac   ...  
+Status:   Elaborating design or1200_gmultp2_32x32   ...  
+Status:   Elaborating design or1200_sprs   ...  
+Status:   Elaborating design or1200_lsu   ...  
+Status:   Elaborating design or1200_mem2reg   ...  
+Status:   Elaborating design or1200_reg2mem   ...  
+Status:   Elaborating design or1200_wbmux   ...  
+Status:   Elaborating design or1200_freeze   ...  
+Status:   Elaborating design or1200_except   ...  
+Status:   Elaborating design or1200_cfgr   ...  
+Status:   Elaborating design or1200_dmmu_top   ...  
+Status:   Elaborating design or1200_dmmu_tlb   ...  
+Status:   Elaborating design or1200_spram  aw=6, dw=24 ...  
+Information: Created design named 'or1200_spram_aw6_dw24'. (FE-LINK-13)
+Status:   Elaborating design or1200_dc_top   ...  
+Status:   Elaborating design or1200_dc_fsm   ...  
+Status:   Elaborating design or1200_dc_ram   ...  
+Status:   Elaborating design or1200_spram_32_bw  aw=11, dw=32 ...  
+Information: Created design named 'or1200_spram_32_bw_aw11_dw32'. (FE-LINK-13)
+Status:   Elaborating design or1200_dc_tag   ...  
+Status:   Elaborating design or1200_spram  aw=9, dw=21 ...  
+Information: Created design named 'or1200_spram_aw9_dw21'. (FE-LINK-13)
+Status:   Elaborating design or1200_qmem_top   ...  
+Status:   Elaborating design or1200_sb   ...  
+Status:   Elaborating design or1200_du   ...  
+Status:   Elaborating design or1200_pic   ...  
+Status:   Elaborating design or1200_tt   ...  
+Status:   Elaborating design or1200_pm   ...  
+Status:  Implementing inferred operators...
+Top design set to 'r:/WORK/or1200_top' with warnings
+   ATTENTION: RTL interpretation messages were produced during link.
+              Verification results may disagree with a logic simulator.
+
+************ RTL Interpretation Summary ************
+************ Design: r:/WORK/or1200_top
+1 FMR_VLOG-100 message produced    4 FMR_VLOG-079 messages produced    (Incomplete sensitivity list)
+1 FMR_VLOG-091 message produced    (Using non-local variable in task/function)
+
+Please refer to the Formality log file for more details,
+or execute report_hdlin_mismatches.
+****************************************************
+
+Reference design set to 'r:/WORK/or1200_top'
+1
+read_verilog -i /hpc/home/connect.zzheng989/researchlib/FlattenRTL/tests/regression/or1200-master/flatten_f_or1200_top.v
+No target library specified, default is WORK
+Loading verilog file '/hpc/home/connect.zzheng989/researchlib/FlattenRTL/tests/regression/or1200-master/flatten_f_or1200_top.v'
+Warning: Using non-local variable 'or1200_cpu_or1200_rf_rf_a_mem' in task/function 'or1200_cpu_or1200_rf_rf_a_get_gpr' may cause a simulation and synthesis mismatch. (Signal: or1200_cpu_or1200_rf_rf_a_mem Block: /or1200_top/or1200_cpu_or1200_rf_rf_a_get_gpr File: /hpc/home/connect.zzheng989/researchlib/FlattenRTL/tests/regression/or1200-master/flatten_f_or1200_top.v Line: 2650)  (FMR_VLOG-091)
+Warning: Using non-local variable 'or1200_cpu_or1200_rf_rf_b_mem' in task/function 'or1200_cpu_or1200_rf_rf_b_get_gpr' may cause a simulation and synthesis mismatch. (Signal: or1200_cpu_or1200_rf_rf_b_mem Block: /or1200_top/or1200_cpu_or1200_rf_rf_b_get_gpr File: /hpc/home/connect.zzheng989/researchlib/FlattenRTL/tests/regression/or1200-master/flatten_f_or1200_top.v Line: 2676)  (FMR_VLOG-091)
+Current container set to 'i'
+   ATTENTION: RTL interpretation messages were produced during read.
+              Verification results may disagree with a logic simulator.
+1
+set_top or1200_top 
+Setting top design to 'i:/WORK/or1200_top'
+Status:   Elaborating design or1200_top   ...  
+Warning: Variable(s) is(are) being read asynchronously. This may cause simulation-synthesis mismatches. (Signal: iwb_biu_wb_fsm_idle Block: /or1200_top File: /hpc/home/connect.zzheng989/researchlib/FlattenRTL/tests/regression/or1200-master/flatten_f_or1200_top.v Line: 352)  (FMR_VLOG-100)
+Warning: Variable 'iwb_biu_wb_fsm_idle' referenced inside always block which is not in sensitivity list. (Signal: iwb_biu_wb_fsm_idle Block: /or1200_top File: /hpc/home/connect.zzheng989/researchlib/FlattenRTL/tests/regression/or1200-master/flatten_f_or1200_top.v Line: 376)  (FMR_VLOG-079)
+Warning: Variable 'iwb_biu_wb_fsm_trans' referenced inside always block which is not in sensitivity list. (Signal: iwb_biu_wb_fsm_trans Block: /or1200_top File: /hpc/home/connect.zzheng989/researchlib/FlattenRTL/tests/regression/or1200-master/flatten_f_or1200_top.v Line: 382)  (FMR_VLOG-079)
+Warning: Variable 'iwb_biu_wb_fsm_last' referenced inside always block which is not in sensitivity list. (Signal: iwb_biu_wb_fsm_last Block: /or1200_top File: /hpc/home/connect.zzheng989/researchlib/FlattenRTL/tests/regression/or1200-master/flatten_f_or1200_top.v Line: 394)  (FMR_VLOG-079)
+Warning: Variable(s) is(are) being read asynchronously. This may cause simulation-synthesis mismatches. (Signal: dwb_biu_wb_fsm_idle Block: /or1200_top File: /hpc/home/connect.zzheng989/researchlib/FlattenRTL/tests/regression/or1200-master/flatten_f_or1200_top.v Line: 564)  (FMR_VLOG-100)
+Warning: Variable 'dwb_biu_wb_fsm_idle' referenced inside always block which is not in sensitivity list. (Signal: dwb_biu_wb_fsm_idle Block: /or1200_top File: /hpc/home/connect.zzheng989/researchlib/FlattenRTL/tests/regression/or1200-master/flatten_f_or1200_top.v Line: 588)  (FMR_VLOG-079)
+Warning: Variable 'dwb_biu_wb_fsm_trans' referenced inside always block which is not in sensitivity list. (Signal: dwb_biu_wb_fsm_trans Block: /or1200_top File: /hpc/home/connect.zzheng989/researchlib/FlattenRTL/tests/regression/or1200-master/flatten_f_or1200_top.v Line: 594)  (FMR_VLOG-079)
+Warning: Variable 'dwb_biu_wb_fsm_last' referenced inside always block which is not in sensitivity list. (Signal: dwb_biu_wb_fsm_last Block: /or1200_top File: /hpc/home/connect.zzheng989/researchlib/FlattenRTL/tests/regression/or1200-master/flatten_f_or1200_top.v Line: 606)  (FMR_VLOG-079)
+Warning: Variable 'or1200_cpu_or1200_genpc_spr_dat_npc' referenced inside always block which is not in sensitivity list. (Signal: or1200_cpu_or1200_genpc_spr_dat_npc Block: /or1200_top File: /hpc/home/connect.zzheng989/researchlib/FlattenRTL/tests/regression/or1200-master/flatten_f_or1200_top.v Line: 1710)  (FMR_VLOG-079)
+Status:  Implementing inferred operators...
+Top design set to 'i:/WORK/or1200_top' with warnings
+   ATTENTION: RTL interpretation messages were produced during link.
+              Verification results may disagree with a logic simulator.
+
+************ RTL Interpretation Summary ************
+************ Design: i:/WORK/or1200_top
+2 FMR_VLOG-091 messages produced    (Using non-local variable in task/function)
+2 FMR_VLOG-100 messages produced    7 FMR_VLOG-079 messages produced    (Incomplete sensitivity list)
+
+Please refer to the Formality log file for more details,
+or execute report_hdlin_mismatches.
+****************************************************
+
+Implementation design set to 'i:/WORK/or1200_top'
+1
+verify
+Reference design is 'r:/WORK/or1200_top'
+Implementation design is 'i:/WORK/or1200_top'
+Status:  Checking designs...
+Status:  Building verification models...
+    Info:  Constant registers have been identified that were initialized by some objects that were assumed to toggle.
+           For more info use commands: report_potentially_constant_registers  and report_init_toggle_objects
+Status:  Matching...
+    
+*********************************** Matching Results ***********************************    
+ 159953 Compare points matched by name    
+ 0 Compare points matched by signature analysis    
+ 0 Compare points matched by topology    
+ 165 Matched primary inputs, black-box outputs    
+ 0(0) Unmatched reference(implementation) compare points    
+ 0(0) Unmatched reference(implementation) primary inputs, black-box outputs    
+****************************************************************************************
+
+Status:  Verifying...
+... 0F/0A/159953P/0U (100% Verification completed) 03/12/24 00:45 3807MB/ 479sec (35.9 hrs until timeout)
+
+
+************ RTL Interpretation Summary ************
+************ Reference:      r:/WORK/or1200_top
+1 FMR_VLOG-100 message produced    4 FMR_VLOG-079 messages produced    (Incomplete sensitivity list)
+1 FMR_VLOG-091 message produced    (Using non-local variable in task/function)
+************ Implementation: i:/WORK/or1200_top
+2 FMR_VLOG-091 messages produced    (Using non-local variable in task/function)
+2 FMR_VLOG-100 messages produced    7 FMR_VLOG-079 messages produced    (Incomplete sensitivity list)
+
+Please refer to the Formality log file for more details,
+or execute report_hdlin_mismatches.
+****************************************************
+
+
+********************************* Verification Results *********************************
+Verification SUCCEEDED
+   ATTENTION: RTL interpretation messages were produced during link
+              of reference and implementation designs.
+              Verification results may disagree with a logic simulator.
+-----------------------------------------------------------------------
+ Reference design: r:/WORK/or1200_top
+ Implementation design: i:/WORK/or1200_top
+ 159953 Passing compare points
+----------------------------------------------------------------------------------------
+Matched Compare Points     BBPin    Loop   BBNet     Cut    Port     DFF     LAT   TOTAL
+----------------------------------------------------------------------------------------
+Passing (equivalent)           0       0       0       0     216  159737       0  159953
+Failing (not equivalent)       0       0       0       0       0       0       0       0
+Not Compared
+  Constant reg                                                       552       0     552
+  Unread                       0       0       0       0       0      89       0      89
+****************************************************************************************
+1
+report_unverified_points 
+**************************************************
+Report         : unverified_points
+
+Reference      : r:/WORK/or1200_top
+Implementation : i:/WORK/or1200_top
+Version        : V-2023.12
+Date           : Tue Mar 12 00:45:46 2024
+**************************************************
+
+No unverified compare points.
+
+1
+exit
+
+Maximum memory usage for this session: 3808 MB
+CPU usage for this session: 481.47 seconds ( 0.13 hours )
+Current time: Tue Mar 12 00:45:46 2024
+Elapsed time: 483 seconds ( 0.13 hours )
+
+Thank you for using Formality (R)!
