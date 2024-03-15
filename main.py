@@ -8,18 +8,18 @@ start_time = time.time()
 start_memory = psutil.Process(os.getpid()).memory_info().rss / (1024 * 1024)
 # formatted part
 
-path = "tests/regression/b30"
-inputfile = "/b30.v"
-outputfile = "/f_b30.v"
-top_module = "b30"
+path = "tests/regression/dma"
+inputfile = "/top.v"
+outputfile = "/f_top.v"
+top_module = "dma_axi64_core0_top"
 inputpath = path + inputfile
 formatpath = path + outputfile
 
-# if os.path.exists(formatpath):
-#    os.remove(path=formatpath)
-# with open(path+inputfile, 'r') as f:
-#     design = f.read()
-#     preprocess.formatter_file(design, formatpath)
+if os.path.exists(formatpath):
+   os.remove(path=formatpath)
+with open(path+inputfile, 'r') as f:
+    design = f.read()
+    preprocess.formatter_file(design, formatpath)
 # os.system("bin/iStyle -n --style=ansi " + formatpath)
 # copy the file to formatpath
 # with open(formatpath, 'w') as f:

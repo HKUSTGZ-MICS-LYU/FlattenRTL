@@ -164,14 +164,14 @@ module prgen_fifo (
           ptr_in <={3{1'b0}};
         else 
           if (fifo_push)
-             ptr_in <=ptr_in==6?0:ptr_in+1'b1;
+             ptr_in <=ptr_in==6 ? 0:ptr_in+1'b1;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
           ptr_out <={3{1'b0}};
         else 
           if (fifo_pop)
-             ptr_out <=ptr_out==6?0:ptr_out+1'b1;
+             ptr_out <=ptr_out==6 ? 0:ptr_out+1'b1;
  
   always @( posedge clk)
        if (fifo_push)
@@ -199,7 +199,7 @@ module prgen_fifo (
   assign next=|fullness; 
   assign fifo_empty=~next; 
   assign empty=fifo_empty&dout_empty; 
-  assign full=0?!dout_empty:&fullness; 
+  assign full=0 ? !dout_empty:&fullness; 
 endmodule
  
 module prgen_scatter8_1 (
@@ -1164,14 +1164,14 @@ module dma_axi64_core0_ch_reg_size (
   output reg  [8-1:0] burst_max_size) ; 
    wire [8-1:0] burst_max_size_fifo ;  
    wire [8-1:0] burst_max_size_pre ;  
-  assign burst_max_size_fifo=allow_full_burst|0?128:joint_flush&0?16:(burst_max_size_other>16)&(burst_max_size_reg>16)&(burst_max_size_other!=burst_max_size_reg)?16:allow_full_fifo?32:16; 
+  assign burst_max_size_fifo=allow_full_burst|0 ? 128:joint_flush&0 ? 16:(burst_max_size_other>16)&(burst_max_size_reg>16)&(burst_max_size_other!=burst_max_size_reg) ? 16:allow_full_fifo ? 32:16; 
   prgen_min2 min2_max(.a(burst_max_size_reg),.b(burst_max_size_fifo),.min(burst_max_size_pre)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
           burst_max_size <={8{1'b0}};
         else 
           if (update)
-             burst_max_size <=burst_max_size_pre>128?128:burst_max_size_pre;
+             burst_max_size <=burst_max_size_pre>128 ? 128:burst_max_size_pre;
  
 endmodule
  
@@ -1487,7 +1487,7 @@ module dma_axi64_core0_ch_wr_slicer (
           if (fifo_wr)
              align_wdata_d <=align_wdata;
  
-  assign wr_align_valid=rd_incr?wr_align:wr_align-wr_ptr[3-1:0]; 
+  assign wr_align_valid=rd_incr ? wr_align:wr_align-wr_ptr[3-1:0]; 
   always @(   fifo_wdata or  wr_align_valid or  fifo_wr)
        begin 
          case (wr_align_valid[3-1:0])
@@ -1532,7 +1532,7 @@ module dma_axi64_core0_ch_wr_slicer (
          endcase 
        end
   
-  assign bsel_dec=slice_wsize==4'd1?8'b00000001:slice_wsize==4'd2?8'b00000011:slice_wsize==4'd3?8'b00000111:slice_wsize==4'd4?8'b00001111:slice_wsize==4'd5?8'b00011111:slice_wsize==4'd6?8'b00111111:slice_wsize==4'd7?8'b01111111:slice_wsize==4'd8?8'b11111111:{8{1'b0}}; 
+  assign bsel_dec=slice_wsize==4'd1 ? 8'b00000001:slice_wsize==4'd2 ? 8'b00000011:slice_wsize==4'd3 ? 8'b00000111:slice_wsize==4'd4 ? 8'b00001111:slice_wsize==4'd5 ? 8'b00011111:slice_wsize==4'd6 ? 8'b00111111:slice_wsize==4'd7 ? 8'b01111111:slice_wsize==4'd8 ? 8'b11111111:{8{1'b0}}; 
   always @(  bsel_dec or  wr_ptr)
        begin 
          case (wr_ptr[3-1:0])
@@ -1557,9 +1557,9 @@ module dma_axi64_core0_ch_wr_slicer (
   
   assign next_wr=(~fifo_wr)&(|next_size); 
   assign slice_wr_pre=fifo_wr|next_wr; 
-  assign slice_wsize_pre=next_wr?next_size:append?append_wsize:direct_wsize; 
+  assign slice_wsize_pre=next_wr ? next_size:append ? append_wsize:direct_wsize; 
   assign slice_wr_ptr_pre=wr_ptr; 
-  assign slice_wdata_pre=append?next_wdata:align_wdata; 
+  assign slice_wdata_pre=append ? next_wdata:align_wdata; 
   assign slice_bsel_pre=bsel_shift; 
   prgen_delay delay_wr0(.clk(clk),.reset(reset),.din(slice_wr_pre),.dout(slice_wr)); 
   prgen_delay delay_wr(.clk(clk),.reset(reset),.din(slice_wr),.dout(slice_wr_fifo)); 
@@ -1707,9 +1707,9 @@ module dma_axi64_core0_axim_cmd (
   prgen_delay delay_cmd_line(.clk(clk),.reset(reset),.din(cmd_line_pre),.dout(cmd_line)); 
   assign AID_pre={end_line_cmd,ASIZE_pre[1:0],extra_bit,ch_num[2:0]}; 
   assign AADDR_pre=burst_addr; 
-  assign ASIZE_pre=burst_size=='d1?2'b00:burst_size=='d2?2'b01:burst_size=='d4?2'b10:AXI_WORD_SIZE; 
-  assign burst_length=next_burst?next_burst_size:page_cross?max_burst:burst_size; 
-  assign ALEN_pre=burst_length[8-1:3]=='d0?{4{1'b0}}:burst_length[8-1:3]-1'b1; 
+  assign ASIZE_pre=burst_size=='d1 ? 2'b00:burst_size=='d2 ? 2'b01:burst_size=='d4 ? 2'b10:AXI_WORD_SIZE; 
+  assign burst_length=next_burst ? next_burst_size:page_cross ? max_burst:burst_size; 
+  assign ALEN_pre=burst_length[8-1:3]=='d0 ? {4{1'b0}}:burst_length[8-1:3]-1'b1; 
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
@@ -1771,7 +1771,7 @@ module dma_axi64_core0_axim_cmd (
              if ((burst_start&(burst_size>'d0))|next_burst_start)
                 AVALID_reg <=1'b1;
  
-  assign AVALID=AJOINT?AVALID_reg&(~AWVALID):AVALID_reg; 
+  assign AVALID=AJOINT ? AVALID_reg&(~AWVALID):AVALID_reg; 
   dma_axi64_core0_axim_timeout dma_axi64_axim_timeout(.clk(clk),.reset(reset),.VALID(AVALID),.READY(AREADY),.ID(AID),.axim_timeout_num(axim_timeout_num),.axim_timeout(axim_timeout)); 
 endmodule
  
@@ -1835,7 +1835,7 @@ module dma_axi64_core0_ch_remain (
            else 
              rd_gap_reg <=rd_gap_reg-rd_burst_size_valid+wr_transfer_size_valid;
  
-  assign rd_gap=rd_gap_reg[5+1]?'d0:rd_gap_reg[5:0]; 
+  assign rd_gap=rd_gap_reg[5+1] ? 'd0:rd_gap_reg[5:0]; 
   always @(  posedge clk or  posedge reset)
        if (reset)
           wr_fullness_reg <={5+1{1'b0}};
@@ -1845,7 +1845,7 @@ module dma_axi64_core0_ch_remain (
            else 
              wr_fullness_reg <=wr_fullness_reg-wr_burst_size_valid+rd_transfer_size_valid;
  
-  assign wr_fullness=wr_fullness_reg[5+1]?'d0:wr_fullness_reg[5:0]; 
+  assign wr_fullness=wr_fullness_reg[5+1] ? 'd0:wr_fullness_reg[5:0]; 
 endmodule
  
 module prgen_demux8 (
@@ -1932,10 +1932,10 @@ module dma_axi64_core0_ch_calc_size (
    wire [8-1:0] joint_line_req_size ;  
    wire joint_buffer_small ;  
    wire release_fifo ;  
-  assign x_remain_fifo=|x_remain[10-1:8]?{1'b1,{8-1{1'b0}}}:x_remain[8-1:0]; 
+  assign x_remain_fifo=|x_remain[10-1:8] ? {1'b1,{8-1{1'b0}}}:x_remain[8-1:0]; 
   prgen_min3 min3(.clk(clk),.reset(reset),.a(max_burst_align),.b(burst_max_size),.c(x_remain_fifo),.min(burst_size_pre)); 
-  assign max_burst_align=burst_addr[0]?'d1:burst_addr[1]?'d2:burst_addr[2]?'d4:{1'b1,{8-1{1'b0}}}; 
-  assign burst_size_pre2=|burst_size_pre[8-1:3]?{burst_size_pre[8-1:3],3'b000}:burst_size_pre[2]?'d4:burst_size_pre[1]?'d2:burst_size_pre[0]?'d1:'d0; 
+  assign max_burst_align=burst_addr[0] ? 'd1:burst_addr[1] ? 'd2:burst_addr[2] ? 'd4:{1'b1,{8-1{1'b0}}}; 
+  assign burst_size_pre2=|burst_size_pre[8-1:3] ? {burst_size_pre[8-1:3],3'b000}:burst_size_pre[2] ? 'd4:burst_size_pre[1] ? 'd2:burst_size_pre[0] ? 'd1:'d0; 
   assign fifo_not_ready_pre=(fifo_remain<burst_size_pre2)&(~release_fifo); 
   prgen_delay delay_fifo_not_ready(.clk(clk),.reset(reset),.din(fifo_not_ready_pre),.dout(fifo_not_ready)); 
   assign burst_last=burst_size==x_remain; 
@@ -1987,7 +1987,7 @@ module dma_axi64_core0_ch_calc_size (
                 joint_burst_req_reg <=2'b00;
               else 
                 if (joint_burst_req_in)
-                   joint_burst_req_reg <=joint_burst_req_reg[0]?2'b11:2'b01;
+                   joint_burst_req_reg <=joint_burst_req_reg[0] ? 2'b11:2'b01;
  
   assign joint_burst_req=joint_burst_req_reg; 
   always @(  posedge clk or  posedge reset)
@@ -2004,8 +2004,8 @@ module dma_axi64_core0_ch_calc_size (
                    joint_line_req_reg <=1'b1;
  
   assign joint_line_req=joint_line_req_reg; 
-  assign joint_line_req_size=burst_addr[2:0]==3'd0?4'd8:burst_addr[1:0]==2'd0?'d4:burst_addr[0]==1'd0?'d2:'d1; 
-  assign joint_burst_req_size=burst_addr[0]?'d1:burst_addr[1]?'d2:burst_addr[2]&(!0)?'d4:joint_burst_req[1]?'d32:'d16; 
+  assign joint_line_req_size=burst_addr[2:0]==3'd0 ? 4'd8:burst_addr[1:0]==2'd0 ? 'd4:burst_addr[0]==1'd0 ? 'd2:'d1; 
+  assign joint_burst_req_size=burst_addr[0] ? 'd1:burst_addr[1] ? 'd2:burst_addr[2]&(!0) ? 'd4:joint_burst_req[1] ? 'd32:'d16; 
   dma_axi64_core0_ch_calc_joint dma_axi64_core0_ch_calc_joint(.clk(clk),.reset(reset),.joint_update(joint_update),.ch_end(ch_end),.ch_end_flush(ch_end_flush),.joint_line_req_clr(joint_line_req_clr),.burst_size_pre2(burst_size_pre2),.burst_max_size(burst_max_size),.fifo_not_ready(fifo_not_ready),.wr_cmd_pending(wr_cmd_pending),.outs_empty(outs_empty),.x_remain(x_remain),.fifo_wr_ready(fifo_wr_ready),.fifo_remain(fifo_remain),.joint(joint),.joint_ready_in(joint_ready_in),.joint_ready_out(joint_ready_out),.joint_line_req(joint_line_req_out),.joint_burst_req(joint_burst_req_out),.joint_wait(joint_wait),.page_cross(page_cross),.joint_cross(joint_cross),.joint_flush(joint_flush),.joint_flush_in(joint_flush_in),.joint_buffer_small(joint_buffer_small)); 
   assign release_fifo=joint_ready_in&joint_ready_out&(~joint_cross); 
 endmodule
@@ -2448,7 +2448,7 @@ module prgen_min2 (
   input [8-1:0] a,
   input [8-1:0] b,
   output [8-1:0] min) ; 
-  assign min=a<b?a:b; 
+  assign min=a<b ? a:b; 
 endmodule
  
 module dma_axi64_core0_axim_rd (
@@ -2965,10 +2965,10 @@ module dma_axi64_core0_ch_reg (
   assign load_wr_cycle1=load_wr&load_wr_cycle==2'd1; 
   assign load_wr_cycle2=load_wr&load_wr_cycle==2'd2; 
   assign load_wr_cycle3=load_wr&load_wr_cycle==2'd3; 
-  assign load_wr0=0?load_wr_cycle0:load_wr_cycle0; 
-  assign load_wr1=0?load_wr_cycle1:load_wr_cycle0; 
-  assign load_wr2=0?load_wr_cycle2:load_wr_cycle1; 
-  assign load_wr3=0?load_wr_cycle3:load_wr_cycle1; 
+  assign load_wr0=0 ? load_wr_cycle0:load_wr_cycle0; 
+  assign load_wr1=0 ? load_wr_cycle1:load_wr_cycle0; 
+  assign load_wr2=0 ? load_wr_cycle2:load_wr_cycle1; 
+  assign load_wr3=0 ? load_wr_cycle3:load_wr_cycle1; 
   assign load_wr_last=load_wr3; 
   always @(  posedge clk or  posedge reset)
        if (reset)
@@ -3065,8 +3065,8 @@ module dma_axi64_core0_ch_reg (
   assign cmd_next_addr=cmd_next_addr_reg; 
   assign cmd_counter=cmd_counter_reg; 
   assign int_counter=int_counter_reg; 
-  assign x_size=block?{{10-8{1'b0}},buff_size[8-1:0]}:buff_size; 
-  assign y_size=block?buff_size[10-1:8]:'d1; 
+  assign x_size=block ? {{10-8{1'b0}},buff_size[8-1:0]}:buff_size; 
+  assign y_size=block ? buff_size[10-1:8]:'d1; 
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
@@ -3108,14 +3108,14 @@ module dma_axi64_core0_ch_reg (
   assign rd_outstanding=1'b0; 
   assign wr_outstanding=1'b0; 
   assign rd_tokens=rd_tokens_reg; 
-  assign wr_tokens=joint_mux?rd_tokens_reg:wr_tokens_reg; 
+  assign wr_tokens=joint_mux ? rd_tokens_reg:wr_tokens_reg; 
   assign rd_outs_max=rd_outs_max_reg; 
-  assign wr_outs_max=joint_mux?rd_outs_max_reg:wr_outs_max_reg; 
+  assign wr_outs_max=joint_mux ? rd_outs_max_reg:wr_outs_max_reg; 
   assign rd_allow_full_fifo=rd_start_addr[5-1:0]=='d0; 
   assign wr_allow_full_fifo=wr_start_addr[5-1:0]=='d0; 
   assign allow_full_fifo=rd_allow_full_fifo&wr_allow_full_fifo; 
   assign rd_burst_max_size=rd_burst_max_size_pre; 
-  assign wr_burst_max_size=joint_mux?rd_burst_max_size_pre:wr_burst_max_size_pre; 
+  assign wr_burst_max_size=joint_mux ? rd_burst_max_size_pre:wr_burst_max_size_pre; 
   assign allow_joint_burst=joint&(~joint_flush)&(~page_cross)&(~joint_cross); 
   assign allow_full_burst=allow_joint_burst; 
   assign burst_max_size_update_pre=ch_update|ch_update_d|joint; 
@@ -3582,7 +3582,10 @@ module dma_axi64_core0_arbiter (
   assign ch_last='d1; 
 endmodule
  
-module dma_axi64_core0_axim_resp (
+module dma_axi64_core0_axim_resp #(
+ parameter CMD_DEPTH =8,
+ parameter RESP_SLVERR =2'b10,
+ parameter RESP_DECERR =2'b11) (
   input clk,
   input reset,
   output slverr,
@@ -3599,9 +3602,9 @@ module dma_axi64_core0_axim_resp (
   input VALID,
   input READY,
   input LAST) ; 
- parameter CMD_DEPTH =8; 
- parameter RESP_SLVERR =2'b10; 
- parameter RESP_DECERR =2'b11; 
+    
+    
+    
    wire clr_pre ;  
    wire [2:0] ch_num_resp_pre ;  
    wire clr_last_pre ;  
@@ -4252,27 +4255,27 @@ module dma_axi64_core0 (
   assign wr_arbiter_en=!joint_mode; 
   assign rd_ready=ch_rd_ready[rd_ch_num]; 
   assign wr_ready=ch_wr_ready[wr_ch_num_joint]; 
-  assign rd_ready_joint=joint_mode&joint_req?rd_ready&wr_ready:rd_ready; 
-  assign wr_ready_joint=joint_mode&joint_req?rd_ready&wr_ready:wr_ready; 
-  assign ch_active_joint=joint_mode?ch_rd_active|ch_wr_active:ch_rd_active; 
+  assign rd_ready_joint=joint_mode&joint_req ? rd_ready&wr_ready:rd_ready; 
+  assign wr_ready_joint=joint_mode&joint_req ? rd_ready&wr_ready:wr_ready; 
+  assign ch_active_joint=joint_mode ? ch_rd_active|ch_wr_active:ch_rd_active; 
   assign joint_page_cross=(rd_page_cross&rd_ready)|(wr_page_cross&wr_ready); 
   assign joint_req=ch_joint_req[rd_ch_num]; 
-  assign ch_rd_ready_joint=joint_mode?(ch_joint_req&ch_rd_ready&ch_wr_ready)|((~ch_joint_req)&(ch_rd_ready|ch_wr_ready)):ch_rd_ready; 
-  assign wr_burst_start_joint=joint_mode&joint_req?rd_burst_start:wr_burst_start; 
+  assign ch_rd_ready_joint=joint_mode ? (ch_joint_req&ch_rd_ready&ch_wr_ready)|((~ch_joint_req)&(ch_rd_ready|ch_wr_ready)):ch_rd_ready; 
+  assign wr_burst_start_joint=joint_mode&joint_req ? rd_burst_start:wr_burst_start; 
   assign joint_hold=joint_mux_in_prog|(joint_in_prog&(~joint_req))|(joint_not_in_prog&joint_req)|joint_stall|(joint_req&joint_page_cross); 
-  assign rd_hold_ctrl=joint_mode?rd_hold|joint_hold|(joint_in_prog&wr_hold):rd_hold; 
+  assign rd_hold_ctrl=joint_mode ? rd_hold|joint_hold|(joint_in_prog&wr_hold):rd_hold; 
   assign rd_hold_joint=joint_mode&(rd_hold_ctrl|rd_ctrl_busy|wr_ctrl_busy); 
-  assign wr_hold_ctrl=joint_mode&(joint_req|joint_in_prog)?wr_hold|joint_hold:wr_hold; 
+  assign wr_hold_ctrl=joint_mode&(joint_req|joint_in_prog) ? wr_hold|joint_hold:wr_hold; 
   assign rd_ch_go_joint=rd_ch_go&ch_rd_ready[rd_ch_num]&(~rd_ctrl_busy); 
-  assign wr_ch_go_joint=joint_mode?(wr_ready&(~wr_ctrl_busy)&(joint_req?rd_ch_go_joint:rd_ch_go&(~rd_ch_go_joint))):wr_ch_go; 
-  assign rd_ch_go_null=rd_ch_go&(~rd_ch_go_joint)&(joint_mode?(~wr_ch_go_joint):1'b1); 
-  assign wr_ch_num_joint=joint_mode?rd_ch_num:wr_ch_num; 
-  assign wr_ch_last_joint=joint_mode?rd_ch_last:wr_ch_last; 
-  assign rd_finish_joint=joint_mode?rd_finish|wr_finish|rd_ch_go_null:rd_finish|rd_ch_go_null; 
-  assign rd_cmd_full_joint=joint_mode&joint_req?wr_cmd_full|rd_cmd_full:rd_cmd_full; 
-  assign wr_cmd_full_joint=joint_mode&joint_req?wr_cmd_full|rd_cmd_full:wr_cmd_full; 
-  assign rd_cmd_pending_joint=joint_mode?rd_cmd_pending|wr_cmd_pending:rd_cmd_pending; 
-  assign wr_cmd_pending_joint=joint_mode&joint_req?rd_cmd_pending|wr_cmd_pending:wr_cmd_pending; 
+  assign wr_ch_go_joint=joint_mode ? (wr_ready&(~wr_ctrl_busy)&(joint_req ? rd_ch_go_joint:rd_ch_go&(~rd_ch_go_joint))):wr_ch_go; 
+  assign rd_ch_go_null=rd_ch_go&(~rd_ch_go_joint)&(joint_mode ? (~wr_ch_go_joint):1'b1); 
+  assign wr_ch_num_joint=joint_mode ? rd_ch_num:wr_ch_num; 
+  assign wr_ch_last_joint=joint_mode ? rd_ch_last:wr_ch_last; 
+  assign rd_finish_joint=joint_mode ? rd_finish|wr_finish|rd_ch_go_null:rd_finish|rd_ch_go_null; 
+  assign rd_cmd_full_joint=joint_mode&joint_req ? wr_cmd_full|rd_cmd_full:rd_cmd_full; 
+  assign wr_cmd_full_joint=joint_mode&joint_req ? wr_cmd_full|rd_cmd_full:wr_cmd_full; 
+  assign rd_cmd_pending_joint=joint_mode ? rd_cmd_pending|wr_cmd_pending:rd_cmd_pending; 
+  assign wr_cmd_pending_joint=joint_mode&joint_req ? rd_cmd_pending|wr_cmd_pending:wr_cmd_pending; 
   assign idle=&ch_idle; 
   assign gclk=clk; 
   dma_axi64_core0_wdt dma_axi64_core0_wdt(.clk(gclk),.reset(reset),.ch_active(ch_active),.rd_burst_start(rd_burst_start),.rd_ch_num(rd_ch_num),.wr_burst_start(wr_burst_start_joint),.wr_ch_num(wr_ch_num_joint),.wdt_timeout(wdt_timeout),.wdt_ch_num(wdt_ch_num)); 
@@ -4430,7 +4433,7 @@ module dma_axi64_core0_ch_rd_slicer (
   prgen_delay delay_fifo_rd_valid(.clk(clk),.reset(reset),.din(fifo_rd_d),.dout(slice_rd_valid)); 
   prgen_delay delay_fifo_rd1(.clk(clk),.reset(reset),.din(slice_rd_pre),.dout(slice_rd)); 
   prgen_delay delay_fifo_rd2(.clk(clk),.reset(reset),.din(slice_rd),.dout(slice_rd_d)); 
-  assign rd_align_valid_pre=(~wr_incr)&wr_single?rd_align-rd_ptr[3-1:0]:rd_align; 
+  assign rd_align_valid_pre=(~wr_incr)&wr_single ? rd_align-rd_ptr[3-1:0]:rd_align; 
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
@@ -4846,7 +4849,7 @@ module dma_axi64_core0_axim_wdata (
  
   assign cmd_data_push=cmd_push; 
   assign cmd_data_pop=WVALID&WREADY&WLAST; 
-  assign WSTRB=(rd_in_count[0]?{WSTRB_data[3:0],WSTRB_data[7:4]}:WSTRB_data)&{8{WVALID}}; 
+  assign WSTRB=(rd_in_count[0] ? {WSTRB_data[3:0],WSTRB_data[7:4]}:WSTRB_data)&{8{WVALID}}; 
   assign WID=WID_data; 
   prgen_fifo cmd_data_fifo(.clk(clk),.reset(reset),.push(cmd_data_push),.pop(cmd_data_pop),.din({WLEN_pre,WSIZE_pre,WSTRB_pre,WID_pre}),.dout({WLEN_data,WSIZE_data,WSTRB_data,WID_data}),.empty(cmd_data_empty),.full(cmd_data_full)); 
   always @(  posedge clk or  posedge reset)

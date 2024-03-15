@@ -181,6 +181,15 @@ module decl(a, b, c);
 
 Currently we don't support definitions and parameters.
 
+### Port Connection
+
+Ordered port connection, named port connection and no info at the rhs(right hand side) are supported.
+
+```verilog
+//Ordered port connection
+
+```
+
 ### Parameter Assignment
 
 The parameter assignment should follow:

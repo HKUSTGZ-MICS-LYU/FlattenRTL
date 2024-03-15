@@ -1,4 +1,6 @@
-module b14 (
+module b14 #(
+ parameter FETCH =0,
+ parameter EXEC =1) (
   input clock,
   input reset,
   output reg  [19:0] addr,
@@ -6,28 +8,6 @@ module b14 (
   output integer datao,
   output reg  rd,
   output reg  wr) ; 
- parameter FETCH =0; 
- parameter EXEC =1; 
-   reg [1:0] s ;  
-   integer temp ;  
-   integer d ;  
-   integer t ;  
-   integer m ;  
-   integer r ;  
-   reg [0:0] state ;  
-   integer IR ;  
-   reg [19:0] tail ;  
-   reg [3:0] ff ;  
-   reg [0:0] cf ;  
-   reg [2:0] df ;  
-   reg [1:0] mf ;  
-   integer MBR ;  
-   reg [19:0] MAR ;  
-   reg B ;  
-   integer reg3 ;  
-   integer reg2 ;  
-   integer reg1 ;  
-   integer reg0 ;  
   always @(  posedge clock or  posedge reset)
        begin :xhdl0
          if (reset==1'b1)
@@ -730,7 +710,9 @@ module b14 (
   
 endmodule
  
-module b14_1 (
+module b14_1 #(
+ parameter FETCH =0,
+ parameter EXEC =1) (
   input clock,
   input reset,
   output reg  [19:0] addr,
@@ -738,28 +720,6 @@ module b14_1 (
   output integer datao,
   output reg  rd,
   output reg  wr) ; 
- parameter FETCH =0; 
- parameter EXEC =1; 
-   reg [1:0] s ;  
-   integer temp ;  
-   integer d ;  
-   integer t ;  
-   integer m ;  
-   integer r ;  
-   reg [0:0] state ;  
-   integer IR ;  
-   reg [19:0] tail ;  
-   reg [3:0] ff ;  
-   reg [0:0] cf ;  
-   reg [2:0] df ;  
-   reg [1:0] mf ;  
-   integer MBR ;  
-   reg [19:0] MAR ;  
-   reg B ;  
-   integer reg3 ;  
-   integer reg2 ;  
-   integer reg1 ;  
-   integer reg0 ;  
   always @(  posedge clock or  posedge reset)
        begin :xhdl1
          if (reset==1'b1)
@@ -1462,7 +1422,9 @@ module b14_1 (
   
 endmodule
  
-module b14rev (
+module b14rev #(
+ parameter FETCH =0,
+ parameter EXEC =1) (
   input clock,
   input reset,
   output reg  [19:0] addr,
@@ -1470,28 +1432,6 @@ module b14rev (
   output integer datao,
   output reg  rd,
   output reg  wr) ; 
- parameter FETCH =0; 
- parameter EXEC =1; 
-   reg [1:0] s ;  
-   integer temp ;  
-   integer d ;  
-   integer t ;  
-   integer m ;  
-   integer r ;  
-   reg [0:0] state ;  
-   integer IR ;  
-   reg [19:0] tail ;  
-   reg [3:0] ff ;  
-   reg [0:0] cf ;  
-   reg [2:0] df ;  
-   reg [1:0] mf ;  
-   integer MBR ;  
-   reg [19:0] MAR ;  
-   reg B ;  
-   integer reg3 ;  
-   integer reg2 ;  
-   integer reg1 ;  
-   integer reg0 ;  
   always @(  posedge clock or  posedge reset)
        begin :xhdl2
          if (reset==1'b1)

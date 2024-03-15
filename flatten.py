@@ -89,6 +89,9 @@ def pyflattenverilog(design: str, top_module: str, output_file: str, debug_mode:
                     if isinstance(child, antlr4.tree.Tree.TerminalNodeImpl):
                         pass
                     else:
+                        # e.g. .a() -> no expression for port "a"
+                        if child.expression() is None:
+                            continue
                         self.list_of_ports_rhs.append(child.expression().getText())
                         if isinstance(
                             child, VerilogParser.Ordered_port_connectionContext
@@ -648,15 +651,34 @@ def pyflattenverilog(design: str, top_module: str, output_file: str, debug_mode:
                     + ";"
                 )
             elif cur_list_of_ports_type[k * len_instance_port + i] == "reg":
-                cur_new_variable.append(
-                    "reg "
-                    + ports_lhs_width[k * len_instance_port + i]
-                    + " "
-                    + cur_prefixs[k]
-                    + "_"
-                    + cur_list_of_ports_lhs[k * len_instance_port + i]
-                    + ";"
-                )
+                if cur_list_of_ports_direction[k * len_instance_port + i] != "output":
+                    cur_new_variable.append(
+                        "reg "
+                        + ports_lhs_width[k * len_instance_port + i]
+                        + " "
+                        + cur_prefixs[k]
+                        + "_"
+                        + cur_list_of_ports_lhs[k * len_instance_port + i]
+                        + ";"
+                    )
+                else:
+                    # if this is a o
+                    rhs = dict_of_lhs_to_rhs[cur_prefixs[k]].get(cur_list_of_ports_lhs[k * len_instance_port + i])
+                    if rhs is None:
+                        rhs = cur_list_of_ports_rhs[k * len_instance_port + i]
+                    cur_new_variable.append(
+                        "reg "
+                        + ports_lhs_width[k * len_instance_port + i]
+                        + " "
+                        + cur_prefixs[k]
+                        + "_"
+                        + cur_list_of_ports_lhs[k * len_instance_port + i]
+                        + " = "
+                        + rhs
+                        + ";"
+                    )
+                    # if is output reg, we should not assign any value of it, just continue to bypass assignment
+                    continue
             else:
                 cur_new_variable.append(
                     "wire "
@@ -667,6 +689,7 @@ def pyflattenverilog(design: str, top_module: str, output_file: str, debug_mode:
                     + cur_list_of_ports_lhs[k * len_instance_port + i]
                     + ";"
                 )
+            
             if cur_list_of_ports_direction[k * len_instance_port + i] == "input":
                 # if cur_list_of_ports_type[i] == 'reg' :
                 #   cur_new_assign.append('always @(*)' + ' ' + cur_prefixs[k] + '_' + cur_list_of_ports_lhs[i] + ' = '+ cur_list_of_ports_rhs[i] + ';')

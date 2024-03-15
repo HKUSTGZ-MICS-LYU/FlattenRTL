@@ -360,7 +360,7 @@ def formatter_file(design, outputpath):
          #    return ctx.list_of_port_declarations().port_declaration() == []
          
          def _insert_parameter(self, ctx:VerilogParser.Module_declarationContext):
-            parameter = '#(\n\t'
+            parameter = '#(\n'
             if non_port_parameter != []:
                for i , item in enumerate(non_port_parameter):
                   parameter += "parameter  "+item[0] + '=' + item[1]
@@ -374,7 +374,7 @@ def formatter_file(design, outputpath):
             self._insert_parameter(ctx)
             self._modify_module_declaration(ctx)
             self._remove_signal_declaration(ctx)
-            self._add_block_content(ctx)
+            # self._add_block_content(ctx)
             self._remove_block_content(ctx)
             # if self.is_implicit_port_definition(ctx):
             self.module = ctx
@@ -460,9 +460,9 @@ def formatter_file(design, outputpath):
             for child in ctx.getChildren():
                if isinstance(child, antlr4.tree.Tree.TerminalNodeImpl) and child.symbol.text == ';':
                   index = ctx.children.index(child)
-                  for i , item in enumerate(block_parameter):
-                     parameter = item
-                     ctx.children.insert(index + i + 1, Parameter2Tree(parameter))
+                  # for i , item in enumerate(block_parameter):
+                  #    parameter = item
+                  #    ctx.children.insert(index + i + 1, Parameter2Tree(parameter))
                   for key, value in block_port.items():
                      defination = value['port_type'] + ' ' + value['data_type'] + ' ' + value['port_width'] + ' ' + key + ';'
                      ctx.children.insert(index + len(block_parameter) + 1, Module2Tree(defination))
