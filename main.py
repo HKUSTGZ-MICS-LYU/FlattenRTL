@@ -8,10 +8,10 @@ start_time = time.time()
 start_memory = psutil.Process(os.getpid()).memory_info().rss / (1024 * 1024)
 # formatted part
 
-path = "tests/regression/dma"
-inputfile = "/top.v"
-outputfile = "/f_top.v"
-top_module = "dma_axi64_core0_top"
+path = "tests/regression/or1200-master"
+inputfile = "/or1200_top.v"
+outputfile = "/f_or1200_top.v"
+top_module = "or1200_top"
 inputpath = path + inputfile
 formatpath = path + outputfile
 

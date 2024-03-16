@@ -277,14 +277,14 @@ module or1200_top #(
     wire  iwb_biu_wb_err_i;
     wire  iwb_biu_wb_rty_i;
     wire [ iwb_biu_dw -1:0] iwb_biu_wb_dat_i;
-    reg  iwb_biu_wb_cyc_o;
-    reg [ iwb_biu_aw -1:0] iwb_biu_wb_adr_o;
-    reg  iwb_biu_wb_stb_o;
-    reg  iwb_biu_wb_we_o;
-    reg [3:0] iwb_biu_wb_sel_o;
+    reg  iwb_biu_wb_cyc_o = iwb_cyc_o;
+    reg [ iwb_biu_aw -1:0] iwb_biu_wb_adr_o = iwb_adr_o;
+    reg  iwb_biu_wb_stb_o = iwb_stb_o;
+    reg  iwb_biu_wb_we_o = iwb_we_o;
+    reg [3:0] iwb_biu_wb_sel_o = iwb_sel_o;
     wire [ iwb_biu_dw -1:0] iwb_biu_wb_dat_o;
-    reg [2:0] iwb_biu_wb_cti_o;
-    reg [1:0] iwb_biu_wb_bte_o;
+    reg [2:0] iwb_biu_wb_cti_o = iwb_cti_o;
+    reg [1:0] iwb_biu_wb_bte_o = iwb_bte_o;
     wire [ iwb_biu_dw -1:0] iwb_biu_biu_dat_i;
     wire [ iwb_biu_aw -1:0] iwb_biu_biu_adr_i;
     wire  iwb_biu_biu_cyc_i;
@@ -304,14 +304,14 @@ module or1200_top #(
     wire  dwb_biu_wb_err_i;
     wire  dwb_biu_wb_rty_i;
     wire [ dwb_biu_dw -1:0] dwb_biu_wb_dat_i;
-    reg  dwb_biu_wb_cyc_o;
-    reg [ dwb_biu_aw -1:0] dwb_biu_wb_adr_o;
-    reg  dwb_biu_wb_stb_o;
-    reg  dwb_biu_wb_we_o;
-    reg [3:0] dwb_biu_wb_sel_o;
+    reg  dwb_biu_wb_cyc_o = dwb_cyc_o;
+    reg [ dwb_biu_aw -1:0] dwb_biu_wb_adr_o = dwb_adr_o;
+    reg  dwb_biu_wb_stb_o = dwb_stb_o;
+    reg  dwb_biu_wb_we_o = dwb_we_o;
+    reg [3:0] dwb_biu_wb_sel_o = dwb_sel_o;
     wire [ dwb_biu_dw -1:0] dwb_biu_wb_dat_o;
-    reg [2:0] dwb_biu_wb_cti_o;
-    reg [1:0] dwb_biu_wb_bte_o;
+    reg [2:0] dwb_biu_wb_cti_o = dwb_cti_o;
+    reg [1:0] dwb_biu_wb_bte_o = dwb_bte_o;
     wire [ dwb_biu_dw -1:0] dwb_biu_biu_dat_i;
     wire [ dwb_biu_aw -1:0] dwb_biu_biu_adr_i;
     wire  dwb_biu_biu_cyc_i;
@@ -752,14 +752,7 @@ module or1200_top #(
     assign iwb_biu_wb_err_i = iwb_err_i;
     assign iwb_biu_wb_rty_i = iwb_rty_i;
     assign iwb_biu_wb_dat_i = iwb_dat_i;
-    assign iwb_cyc_o = iwb_biu_wb_cyc_o;
-    assign iwb_adr_o = iwb_biu_wb_adr_o;
-    assign iwb_stb_o = iwb_biu_wb_stb_o;
-    assign iwb_we_o = iwb_biu_wb_we_o;
-    assign iwb_sel_o = iwb_biu_wb_sel_o;
     assign iwb_dat_o = iwb_biu_wb_dat_o;
-    assign iwb_cti_o = iwb_biu_wb_cti_o;
-    assign iwb_bte_o = iwb_biu_wb_bte_o;
     assign iwb_biu_biu_dat_i = icbiu_dat_ic;
     assign iwb_biu_biu_adr_i = icbiu_adr_ic_word;
     assign iwb_biu_biu_cyc_i = icbiu_cyc_ic;
@@ -779,14 +772,7 @@ module or1200_top #(
     assign dwb_biu_wb_err_i = dwb_err_i;
     assign dwb_biu_wb_rty_i = dwb_rty_i;
     assign dwb_biu_wb_dat_i = dwb_dat_i;
-    assign dwb_cyc_o = dwb_biu_wb_cyc_o;
-    assign dwb_adr_o = dwb_biu_wb_adr_o;
-    assign dwb_stb_o = dwb_biu_wb_stb_o;
-    assign dwb_we_o = dwb_biu_wb_we_o;
-    assign dwb_sel_o = dwb_biu_wb_sel_o;
     assign dwb_dat_o = dwb_biu_wb_dat_o;
-    assign dwb_cti_o = dwb_biu_wb_cti_o;
-    assign dwb_bte_o = dwb_biu_wb_bte_o;
     assign dwb_biu_biu_dat_i = sbbiu_dat_sb;
     assign dwb_biu_biu_adr_i = sbbiu_adr_sb;
     assign dwb_biu_biu_cyc_i = sbbiu_cyc_sb;
@@ -806,7 +792,7 @@ module or1200_top #(
     wire  or1200_immu_top_supv;
     wire [ or1200_immu_top_aw -1:0] or1200_immu_top_icpu_adr_i;
     wire  or1200_immu_top_icpu_cycstb_i;
-    reg [ or1200_immu_top_aw -1:0] or1200_immu_top_icpu_adr_o;
+    reg [ or1200_immu_top_aw -1:0] or1200_immu_top_icpu_adr_o = icpu_adr_immu;
     wire [3:0] or1200_immu_top_icpu_tag_o;
     wire  or1200_immu_top_icpu_rty_o;
     wire  or1200_immu_top_icpu_err_o;
@@ -1030,7 +1016,6 @@ module or1200_top #(
     assign or1200_immu_top_supv = supv;
     assign or1200_immu_top_icpu_adr_i = icpu_adr_cpu;
     assign or1200_immu_top_icpu_cycstb_i = icpu_cycstb_cpu;
-    assign icpu_adr_immu = or1200_immu_top_icpu_adr_o;
     assign icpu_tag_immu = or1200_immu_top_icpu_tag_o;
     assign icpu_rty_immu = or1200_immu_top_icpu_rty_o;
     assign icpu_err_immu = or1200_immu_top_icpu_err_o;
@@ -1619,7 +1604,7 @@ module or1200_top #(
     wire [31:0] or1200_cpu_or1200_genpc_operand_b;
     wire  or1200_cpu_or1200_genpc_flag;
     wire  or1200_cpu_or1200_genpc_flagforw;
-    reg  or1200_cpu_or1200_genpc_ex_branch_taken;
+    reg  or1200_cpu_or1200_genpc_ex_branch_taken = or1200_cpu_ex_branch_taken;
     wire  or1200_cpu_or1200_genpc_except_start;
     wire [31:0] or1200_cpu_or1200_genpc_epcr;
     wire [31:0] or1200_cpu_or1200_genpc_spr_dat_i;
@@ -1771,7 +1756,6 @@ module or1200_top #(
     assign or1200_cpu_or1200_genpc_operand_b = or1200_cpu_operand_b;
     assign or1200_cpu_or1200_genpc_flag = or1200_cpu_flag;
     assign or1200_cpu_or1200_genpc_flagforw = or1200_cpu_flagforw;
-    assign or1200_cpu_ex_branch_taken = or1200_cpu_or1200_genpc_ex_branch_taken;
     assign or1200_cpu_or1200_genpc_except_start = or1200_cpu_except_start;
     assign or1200_cpu_or1200_genpc_epcr = or1200_cpu_epcr;
     assign or1200_cpu_or1200_genpc_spr_dat_i = or1200_cpu_spr_dat_cpu;
@@ -1916,42 +1900,42 @@ module or1200_top #(
     wire  or1200_cpu_or1200_ctrl_ex_freeze;
     wire  or1200_cpu_or1200_ctrl_wb_freeze;
     wire [31:0] or1200_cpu_or1200_ctrl_if_insn;
-    reg [31:0] or1200_cpu_or1200_ctrl_id_insn;
-    reg [31:0] or1200_cpu_or1200_ctrl_ex_insn;
+    reg [31:0] or1200_cpu_or1200_ctrl_id_insn = or1200_cpu_id_insn;
+    reg [31:0] or1200_cpu_or1200_ctrl_ex_insn = or1200_cpu_ex_insn;
     wire  or1200_cpu_or1200_ctrl_abort_mvspr;
-    reg [3-1:0] or1200_cpu_or1200_ctrl_id_branch_op;
-    reg [3-1:0] or1200_cpu_or1200_ctrl_ex_branch_op;
+    reg [3-1:0] or1200_cpu_or1200_ctrl_id_branch_op = or1200_cpu_pre_branch_op;
+    reg [3-1:0] or1200_cpu_or1200_ctrl_ex_branch_op = or1200_cpu_branch_op;
     wire  or1200_cpu_or1200_ctrl_ex_branch_taken;
     wire  or1200_cpu_or1200_ctrl_pc_we;
     wire [5-1:0] or1200_cpu_or1200_ctrl_rf_addra;
     wire [5-1:0] or1200_cpu_or1200_ctrl_rf_addrb;
     wire  or1200_cpu_or1200_ctrl_rf_rda;
     wire  or1200_cpu_or1200_ctrl_rf_rdb;
-    reg [5-1:0] or1200_cpu_or1200_ctrl_alu_op;
-    reg [4-1:0] or1200_cpu_or1200_ctrl_alu_op2;
+    reg [5-1:0] or1200_cpu_or1200_ctrl_alu_op = or1200_cpu_alu_op;
+    reg [4-1:0] or1200_cpu_or1200_ctrl_alu_op2 = or1200_cpu_alu_op2;
     wire [3-1:0] or1200_cpu_or1200_ctrl_mac_op;
-    reg [4-1:0] or1200_cpu_or1200_ctrl_comp_op;
-    reg [5-1:0] or1200_cpu_or1200_ctrl_rf_addrw;
-    reg [4-1:0] or1200_cpu_or1200_ctrl_rfwb_op;
+    reg [4-1:0] or1200_cpu_or1200_ctrl_comp_op = or1200_cpu_comp_op;
+    reg [5-1:0] or1200_cpu_or1200_ctrl_rf_addrw = or1200_cpu_rf_addrw;
+    reg [4-1:0] or1200_cpu_or1200_ctrl_rfwb_op = or1200_cpu_rfwb_op;
     wire [8-1:0] or1200_cpu_or1200_ctrl_fpu_op;
-    reg [31:0] or1200_cpu_or1200_ctrl_wb_insn;
-    reg [31:0] or1200_cpu_or1200_ctrl_id_simm;
-    reg [31:0] or1200_cpu_or1200_ctrl_ex_simm;
+    reg [31:0] or1200_cpu_or1200_ctrl_wb_insn = or1200_cpu_wb_insn;
+    reg [31:0] or1200_cpu_or1200_ctrl_id_simm = or1200_cpu_id_simm;
+    reg [31:0] or1200_cpu_or1200_ctrl_ex_simm = or1200_cpu_ex_simm;
     wire [31:2] or1200_cpu_or1200_ctrl_id_branch_addrtarget;
-    reg [31:2] or1200_cpu_or1200_ctrl_ex_branch_addrtarget;
-    reg [2-1:0] or1200_cpu_or1200_ctrl_sel_a;
-    reg [2-1:0] or1200_cpu_or1200_ctrl_sel_b;
-    reg [4-1:0] or1200_cpu_or1200_ctrl_id_lsu_op;
+    reg [31:2] or1200_cpu_or1200_ctrl_ex_branch_addrtarget = or1200_cpu_ex_branch_addrtarget;
+    reg [2-1:0] or1200_cpu_or1200_ctrl_sel_a = or1200_cpu_sel_a;
+    reg [2-1:0] or1200_cpu_or1200_ctrl_sel_b = or1200_cpu_sel_b;
+    reg [4-1:0] or1200_cpu_or1200_ctrl_id_lsu_op = or1200_cpu_id_lsu_op;
     wire [4:0] or1200_cpu_or1200_ctrl_cust5_op;
     wire [5:0] or1200_cpu_or1200_ctrl_cust5_limm;
     wire [31:0] or1200_cpu_or1200_ctrl_id_pc;
     wire [31:0] or1200_cpu_or1200_ctrl_ex_pc;
     wire  or1200_cpu_or1200_ctrl_du_hwbkpt;
-    reg [3-1:0] or1200_cpu_or1200_ctrl_multicycle;
-    reg [2-1:0] or1200_cpu_or1200_ctrl_wait_on;
+    reg [3-1:0] or1200_cpu_or1200_ctrl_multicycle = or1200_cpu_multicycle;
+    reg [2-1:0] or1200_cpu_or1200_ctrl_wait_on = or1200_cpu_wait_on;
     wire  or1200_cpu_or1200_ctrl_wbforw_valid;
-    reg  or1200_cpu_or1200_ctrl_sig_syscall;
-    reg  or1200_cpu_or1200_ctrl_sig_trap;
+    reg  or1200_cpu_or1200_ctrl_sig_syscall = or1200_cpu_sig_syscall;
+    reg  or1200_cpu_or1200_ctrl_sig_trap = or1200_cpu_sig_trap;
     wire  or1200_cpu_or1200_ctrl_force_dslot_fetch;
     wire  or1200_cpu_or1200_ctrl_no_more_dslot;
     wire  or1200_cpu_or1200_ctrl_id_void;
@@ -1963,7 +1947,7 @@ module or1200_top #(
     wire  or1200_cpu_or1200_ctrl_id_macrc_op;
     wire  or1200_cpu_or1200_ctrl_ex_macrc_op;
     wire  or1200_cpu_or1200_ctrl_rfe;
-    reg  or1200_cpu_or1200_ctrl_except_illegal;
+    reg  or1200_cpu_or1200_ctrl_except_illegal = or1200_cpu_except_illegal;
     wire  or1200_cpu_or1200_ctrl_dc_no_writethrough;
 
     wire  or1200_cpu_or1200_ctrl_if_maci_op  ;
@@ -2509,42 +2493,22 @@ module or1200_top #(
     assign or1200_cpu_or1200_ctrl_ex_freeze = or1200_cpu_ex_freeze;
     assign or1200_cpu_or1200_ctrl_wb_freeze = or1200_cpu_wb_freeze;
     assign or1200_cpu_or1200_ctrl_if_insn = or1200_cpu_if_insn;
-    assign or1200_cpu_id_insn = or1200_cpu_or1200_ctrl_id_insn;
-    assign or1200_cpu_ex_insn = or1200_cpu_or1200_ctrl_ex_insn;
     assign or1200_cpu_or1200_ctrl_abort_mvspr = or1200_cpu_abort_mvspr;
-    assign or1200_cpu_pre_branch_op = or1200_cpu_or1200_ctrl_id_branch_op;
-    assign or1200_cpu_branch_op = or1200_cpu_or1200_ctrl_ex_branch_op;
     assign or1200_cpu_or1200_ctrl_ex_branch_taken = or1200_cpu_ex_branch_taken;
     assign or1200_cpu_or1200_ctrl_pc_we = or1200_cpu_pc_we;
     assign or1200_cpu_rf_addra = or1200_cpu_or1200_ctrl_rf_addra;
     assign or1200_cpu_rf_addrb = or1200_cpu_or1200_ctrl_rf_addrb;
     assign or1200_cpu_rf_rda = or1200_cpu_or1200_ctrl_rf_rda;
     assign or1200_cpu_rf_rdb = or1200_cpu_or1200_ctrl_rf_rdb;
-    assign or1200_cpu_alu_op = or1200_cpu_or1200_ctrl_alu_op;
-    assign or1200_cpu_alu_op2 = or1200_cpu_or1200_ctrl_alu_op2;
     assign or1200_cpu_mac_op = or1200_cpu_or1200_ctrl_mac_op;
-    assign or1200_cpu_comp_op = or1200_cpu_or1200_ctrl_comp_op;
-    assign or1200_cpu_rf_addrw = or1200_cpu_or1200_ctrl_rf_addrw;
-    assign or1200_cpu_rfwb_op = or1200_cpu_or1200_ctrl_rfwb_op;
     assign or1200_cpu_fpu_op = or1200_cpu_or1200_ctrl_fpu_op;
-    assign or1200_cpu_wb_insn = or1200_cpu_or1200_ctrl_wb_insn;
-    assign or1200_cpu_id_simm = or1200_cpu_or1200_ctrl_id_simm;
-    assign or1200_cpu_ex_simm = or1200_cpu_or1200_ctrl_ex_simm;
     assign or1200_cpu_id_branch_addrtarget = or1200_cpu_or1200_ctrl_id_branch_addrtarget;
-    assign or1200_cpu_ex_branch_addrtarget = or1200_cpu_or1200_ctrl_ex_branch_addrtarget;
-    assign or1200_cpu_sel_a = or1200_cpu_or1200_ctrl_sel_a;
-    assign or1200_cpu_sel_b = or1200_cpu_or1200_ctrl_sel_b;
-    assign or1200_cpu_id_lsu_op = or1200_cpu_or1200_ctrl_id_lsu_op;
     assign or1200_cpu_cust5_op = or1200_cpu_or1200_ctrl_cust5_op;
     assign or1200_cpu_cust5_limm = or1200_cpu_or1200_ctrl_cust5_limm;
     assign or1200_cpu_or1200_ctrl_id_pc = or1200_cpu_id_pc;
     assign or1200_cpu_or1200_ctrl_ex_pc = or1200_cpu_ex_pc;
     assign or1200_cpu_or1200_ctrl_du_hwbkpt = or1200_cpu_du_hwbkpt;
-    assign or1200_cpu_multicycle = or1200_cpu_or1200_ctrl_multicycle;
-    assign or1200_cpu_wait_on = or1200_cpu_or1200_ctrl_wait_on;
     assign or1200_cpu_or1200_ctrl_wbforw_valid = or1200_cpu_wbforw_valid;
-    assign or1200_cpu_sig_syscall = or1200_cpu_or1200_ctrl_sig_syscall;
-    assign or1200_cpu_sig_trap = or1200_cpu_or1200_ctrl_sig_trap;
     assign or1200_cpu_force_dslot_fetch = or1200_cpu_or1200_ctrl_force_dslot_fetch;
     assign or1200_cpu_no_more_dslot = or1200_cpu_or1200_ctrl_no_more_dslot;
     assign or1200_cpu_id_void = or1200_cpu_or1200_ctrl_id_void;
@@ -2556,7 +2520,6 @@ module or1200_top #(
     assign or1200_cpu_id_macrc_op = or1200_cpu_or1200_ctrl_id_macrc_op;
     assign or1200_cpu_ex_macrc_op = or1200_cpu_or1200_ctrl_ex_macrc_op;
     assign or1200_cpu_rfe = or1200_cpu_or1200_ctrl_rfe;
-    assign or1200_cpu_except_illegal = or1200_cpu_or1200_ctrl_except_illegal;
     assign or1200_cpu_dc_no_writethrough = or1200_cpu_or1200_ctrl_dc_no_writethrough;
 
 
@@ -2747,10 +2710,10 @@ module or1200_top #(
     wire [ or1200_cpu_or1200_operandmuxes_width -1:0] or1200_cpu_or1200_operandmuxes_simm;
     wire [2-1:0] or1200_cpu_or1200_operandmuxes_sel_a;
     wire [2-1:0] or1200_cpu_or1200_operandmuxes_sel_b;
-    reg [ or1200_cpu_or1200_operandmuxes_width -1:0] or1200_cpu_or1200_operandmuxes_operand_a;
-    reg [ or1200_cpu_or1200_operandmuxes_width -1:0] or1200_cpu_or1200_operandmuxes_operand_b;
-    reg [ or1200_cpu_or1200_operandmuxes_width -1:0] or1200_cpu_or1200_operandmuxes_muxed_a;
-    reg [ or1200_cpu_or1200_operandmuxes_width -1:0] or1200_cpu_or1200_operandmuxes_muxed_b;
+    reg [ or1200_cpu_or1200_operandmuxes_width -1:0] or1200_cpu_or1200_operandmuxes_operand_a = or1200_cpu_operand_a;
+    reg [ or1200_cpu_or1200_operandmuxes_width -1:0] or1200_cpu_or1200_operandmuxes_operand_b = or1200_cpu_operand_b;
+    reg [ or1200_cpu_or1200_operandmuxes_width -1:0] or1200_cpu_or1200_operandmuxes_muxed_a = or1200_cpu_muxed_a;
+    reg [ or1200_cpu_or1200_operandmuxes_width -1:0] or1200_cpu_or1200_operandmuxes_muxed_b = or1200_cpu_muxed_b;
 
     reg  or1200_cpu_or1200_operandmuxes_saved_a  ;
     reg  or1200_cpu_or1200_operandmuxes_saved_b  ;
@@ -2837,10 +2800,6 @@ module or1200_top #(
     assign or1200_cpu_or1200_operandmuxes_simm = or1200_cpu_id_simm;
     assign or1200_cpu_or1200_operandmuxes_sel_a = or1200_cpu_sel_a;
     assign or1200_cpu_or1200_operandmuxes_sel_b = or1200_cpu_sel_b;
-    assign or1200_cpu_operand_a = or1200_cpu_or1200_operandmuxes_operand_a;
-    assign or1200_cpu_operand_b = or1200_cpu_or1200_operandmuxes_operand_b;
-    assign or1200_cpu_muxed_a = or1200_cpu_or1200_operandmuxes_muxed_a;
-    assign or1200_cpu_muxed_b = or1200_cpu_or1200_operandmuxes_muxed_b;
 
 
     wire [32-1:0] or1200_cpu_or1200_alu_a;
@@ -2852,13 +2811,13 @@ module or1200_top #(
     wire [4-1:0] or1200_cpu_or1200_alu_comp_op;
     wire [4:0] or1200_cpu_or1200_alu_cust5_op;
     wire [5:0] or1200_cpu_or1200_alu_cust5_limm;
-    reg [32-1:0] or1200_cpu_or1200_alu_result;
-    reg  or1200_cpu_or1200_alu_flagforw;
-    reg  or1200_cpu_or1200_alu_flag_we;
-    reg  or1200_cpu_or1200_alu_ovforw;
-    reg  or1200_cpu_or1200_alu_ov_we;
-    reg  or1200_cpu_or1200_alu_cyforw;
-    reg  or1200_cpu_or1200_alu_cy_we;
+    reg [32-1:0] or1200_cpu_or1200_alu_result = or1200_cpu_alu_dataout;
+    reg  or1200_cpu_or1200_alu_flagforw = or1200_cpu_flagforw_alu;
+    reg  or1200_cpu_or1200_alu_flag_we = or1200_cpu_flag_we_alu;
+    reg  or1200_cpu_or1200_alu_ovforw = or1200_cpu_ovforw;
+    reg  or1200_cpu_or1200_alu_ov_we = or1200_cpu_ov_we_alu;
+    reg  or1200_cpu_or1200_alu_cyforw = or1200_cpu_cyforw;
+    reg  or1200_cpu_or1200_alu_cy_we = or1200_cpu_cy_we_alu;
     wire  or1200_cpu_or1200_alu_carry;
     wire  or1200_cpu_or1200_alu_flag;
 
@@ -3062,13 +3021,6 @@ module or1200_top #(
     assign or1200_cpu_or1200_alu_comp_op = or1200_cpu_comp_op;
     assign or1200_cpu_or1200_alu_cust5_op = or1200_cpu_cust5_op;
     assign or1200_cpu_or1200_alu_cust5_limm = or1200_cpu_cust5_limm;
-    assign or1200_cpu_alu_dataout = or1200_cpu_or1200_alu_result;
-    assign or1200_cpu_flagforw_alu = or1200_cpu_or1200_alu_flagforw;
-    assign or1200_cpu_flag_we_alu = or1200_cpu_or1200_alu_flag_we;
-    assign or1200_cpu_ovforw = or1200_cpu_or1200_alu_ovforw;
-    assign or1200_cpu_ov_we_alu = or1200_cpu_or1200_alu_ov_we;
-    assign or1200_cpu_cyforw = or1200_cpu_or1200_alu_cyforw;
-    assign or1200_cpu_cy_we_alu = or1200_cpu_or1200_alu_cy_we;
     assign or1200_cpu_or1200_alu_carry = or1200_cpu_carry;
     assign or1200_cpu_or1200_alu_flag = or1200_cpu_flag;
 
@@ -3131,10 +3083,10 @@ module or1200_top #(
     wire [ or1200_cpu_or1200_mult_mac_width -1:0] or1200_cpu_or1200_mult_mac_b;
     wire [3-1:0] or1200_cpu_or1200_mult_mac_mac_op;
     wire [5-1:0] or1200_cpu_or1200_mult_mac_alu_op;
-    reg [ or1200_cpu_or1200_mult_mac_width -1:0] or1200_cpu_or1200_mult_mac_result;
+    reg [ or1200_cpu_or1200_mult_mac_width -1:0] or1200_cpu_or1200_mult_mac_result = or1200_cpu_mult_mac_result;
     wire  or1200_cpu_or1200_mult_mac_mult_mac_stall;
-    reg  or1200_cpu_or1200_mult_mac_ovforw;
-    reg  or1200_cpu_or1200_mult_mac_ov_we;
+    reg  or1200_cpu_or1200_mult_mac_ovforw = or1200_cpu_ovforw_mult_mac;
+    reg  or1200_cpu_or1200_mult_mac_ov_we = or1200_cpu_ov_we_mult_mac;
     wire  or1200_cpu_or1200_mult_mac_spr_cs;
     wire  or1200_cpu_or1200_mult_mac_spr_write;
     wire [31:0] or1200_cpu_or1200_mult_mac_spr_addr;
@@ -3347,10 +3299,7 @@ module or1200_top #(
     assign or1200_cpu_or1200_mult_mac_b = or1200_cpu_operand_b;
     assign or1200_cpu_or1200_mult_mac_mac_op = or1200_cpu_mac_op;
     assign or1200_cpu_or1200_mult_mac_alu_op = or1200_cpu_alu_op;
-    assign or1200_cpu_mult_mac_result = or1200_cpu_or1200_mult_mac_result;
     assign or1200_cpu_mult_mac_stall = or1200_cpu_or1200_mult_mac_mult_mac_stall;
-    assign or1200_cpu_ovforw_mult_mac = or1200_cpu_or1200_mult_mac_ovforw;
-    assign or1200_cpu_ov_we_mult_mac = or1200_cpu_or1200_mult_mac_ov_we;
     assign or1200_cpu_or1200_mult_mac_spr_cs = or1200_cpu_spr_cs[5'd05];
     assign or1200_cpu_or1200_mult_mac_spr_write = or1200_cpu_spr_we;
     assign or1200_cpu_or1200_mult_mac_spr_addr = or1200_cpu_spr_addr;
@@ -3379,14 +3328,14 @@ module or1200_top #(
     wire [ or1200_cpu_or1200_sprs_width -1:0] or1200_cpu_or1200_sprs_eear;
     wire [17-1:0] or1200_cpu_or1200_sprs_esr;
     wire  or1200_cpu_or1200_sprs_except_started;
-    reg [ or1200_cpu_or1200_sprs_width -1:0] or1200_cpu_or1200_sprs_to_wbmux;
+    reg [ or1200_cpu_or1200_sprs_width -1:0] or1200_cpu_or1200_sprs_to_wbmux = or1200_cpu_sprs_dataout;
     wire  or1200_cpu_or1200_sprs_epcr_we;
     wire  or1200_cpu_or1200_sprs_eear_we;
     wire  or1200_cpu_or1200_sprs_esr_we;
     wire  or1200_cpu_or1200_sprs_pc_we;
     wire  or1200_cpu_or1200_sprs_sr_we;
     wire [17-1:0] or1200_cpu_or1200_sprs_to_sr;
-    reg [17-1:0] or1200_cpu_or1200_sprs_sr;
+    reg [17-1:0] or1200_cpu_or1200_sprs_sr = or1200_cpu_sr;
     wire [31:0] or1200_cpu_or1200_sprs_spr_dat_cfgr;
     wire [31:0] or1200_cpu_or1200_sprs_spr_dat_rf;
     wire [31:0] or1200_cpu_or1200_sprs_spr_dat_npc;
@@ -3603,14 +3552,12 @@ module or1200_top #(
     assign or1200_cpu_or1200_sprs_eear = or1200_cpu_eear;
     assign or1200_cpu_or1200_sprs_esr = or1200_cpu_esr;
     assign or1200_cpu_or1200_sprs_except_started = or1200_cpu_except_started;
-    assign or1200_cpu_sprs_dataout = or1200_cpu_or1200_sprs_to_wbmux;
     assign or1200_cpu_epcr_we = or1200_cpu_or1200_sprs_epcr_we;
     assign or1200_cpu_eear_we = or1200_cpu_or1200_sprs_eear_we;
     assign or1200_cpu_esr_we = or1200_cpu_or1200_sprs_esr_we;
     assign or1200_cpu_pc_we = or1200_cpu_or1200_sprs_pc_we;
     assign or1200_cpu_sr_we = or1200_cpu_or1200_sprs_sr_we;
     assign or1200_cpu_to_sr = or1200_cpu_or1200_sprs_to_sr;
-    assign or1200_cpu_sr = or1200_cpu_or1200_sprs_sr;
     assign or1200_cpu_or1200_sprs_spr_dat_cfgr = or1200_cpu_spr_dat_cfgr;
     assign or1200_cpu_or1200_sprs_spr_dat_rf = or1200_cpu_spr_dat_rf;
     assign or1200_cpu_or1200_sprs_spr_dat_npc = or1200_cpu_spr_dat_npc;
@@ -3649,7 +3596,7 @@ module or1200_top #(
     wire  or1200_cpu_or1200_lsu_lsu_stall;
     wire  or1200_cpu_or1200_lsu_lsu_unstall;
     wire  or1200_cpu_or1200_lsu_du_stall;
-    reg  or1200_cpu_or1200_lsu_except_align;
+    reg  or1200_cpu_or1200_lsu_except_align = or1200_cpu_except_align;
     wire  or1200_cpu_or1200_lsu_except_dtlbmiss;
     wire  or1200_cpu_or1200_lsu_except_dmmufault;
     wire  or1200_cpu_or1200_lsu_except_dbuserr;
@@ -3659,7 +3606,7 @@ module or1200_top #(
     wire [31:0] or1200_cpu_or1200_lsu_dcpu_adr_o;
     wire  or1200_cpu_or1200_lsu_dcpu_cycstb_o;
     wire  or1200_cpu_or1200_lsu_dcpu_we_o;
-    reg [3:0] or1200_cpu_or1200_lsu_dcpu_sel_o;
+    reg [3:0] or1200_cpu_or1200_lsu_dcpu_sel_o = or1200_cpu_dcpu_sel_o;
     wire [3:0] or1200_cpu_or1200_lsu_dcpu_tag_o;
     wire [31:0] or1200_cpu_or1200_lsu_dcpu_dat_o;
     wire [31:0] or1200_cpu_or1200_lsu_dcpu_dat_i;
@@ -3753,7 +3700,7 @@ module or1200_top #(
     wire [1:0] or1200_cpu_or1200_lsu_or1200_mem2reg_addr;
     wire [4-1:0] or1200_cpu_or1200_lsu_or1200_mem2reg_lsu_op;
     wire [ or1200_cpu_or1200_lsu_or1200_mem2reg_width -1:0] or1200_cpu_or1200_lsu_or1200_mem2reg_memdata;
-    reg [ or1200_cpu_or1200_lsu_or1200_mem2reg_width -1:0] or1200_cpu_or1200_lsu_or1200_mem2reg_regdata;
+    reg [ or1200_cpu_or1200_lsu_or1200_mem2reg_width -1:0] or1200_cpu_or1200_lsu_or1200_mem2reg_regdata = or1200_cpu_or1200_lsu_lsu_dataout;
 
     reg[  or1200_cpu_or1200_lsu_or1200_mem2reg_width  -1:0]  or1200_cpu_or1200_lsu_or1200_mem2reg_aligned  ;
     always @(    or1200_cpu_or1200_lsu_or1200_mem2reg_addr            or    or1200_cpu_or1200_lsu_or1200_mem2reg_memdata   )
@@ -3801,7 +3748,6 @@ module or1200_top #(
     assign or1200_cpu_or1200_lsu_or1200_mem2reg_addr = or1200_cpu_or1200_lsu_dcpu_adr_o[1:0];
     assign or1200_cpu_or1200_lsu_or1200_mem2reg_lsu_op = or1200_cpu_or1200_lsu_ex_lsu_op;
     assign or1200_cpu_or1200_lsu_or1200_mem2reg_memdata = or1200_cpu_or1200_lsu_dcpu_dat_i;
-    assign or1200_cpu_or1200_lsu_lsu_dataout = or1200_cpu_or1200_lsu_or1200_mem2reg_regdata;
 
 
     wire [1:0] or1200_cpu_or1200_lsu_or1200_reg2mem_addr;
@@ -3866,7 +3812,6 @@ module or1200_top #(
     assign or1200_cpu_lsu_stall = or1200_cpu_or1200_lsu_lsu_stall;
     assign or1200_cpu_lsu_unstall = or1200_cpu_or1200_lsu_lsu_unstall;
     assign or1200_cpu_or1200_lsu_du_stall = or1200_cpu_du_stall;
-    assign or1200_cpu_except_align = or1200_cpu_or1200_lsu_except_align;
     assign or1200_cpu_except_dtlbmiss = or1200_cpu_or1200_lsu_except_dtlbmiss;
     assign or1200_cpu_except_dmmufault = or1200_cpu_or1200_lsu_except_dmmufault;
     assign or1200_cpu_except_dbuserr = or1200_cpu_or1200_lsu_except_dbuserr;
@@ -3876,7 +3821,6 @@ module or1200_top #(
     assign or1200_cpu_dcpu_adr_o = or1200_cpu_or1200_lsu_dcpu_adr_o;
     assign or1200_cpu_dcpu_cycstb_o = or1200_cpu_or1200_lsu_dcpu_cycstb_o;
     assign or1200_cpu_dcpu_we_o = or1200_cpu_or1200_lsu_dcpu_we_o;
-    assign or1200_cpu_dcpu_sel_o = or1200_cpu_or1200_lsu_dcpu_sel_o;
     assign or1200_cpu_dcpu_tag_o = or1200_cpu_or1200_lsu_dcpu_tag_o;
     assign or1200_cpu_dcpu_dat_o = or1200_cpu_or1200_lsu_dcpu_dat_o;
     assign or1200_cpu_or1200_lsu_dcpu_dat_i = or1200_cpu_dcpu_dat_i;
@@ -3895,9 +3839,9 @@ module or1200_top #(
     wire [ or1200_cpu_or1200_wbmux_width -1:0] or1200_cpu_or1200_wbmux_muxin_c;
     wire [ or1200_cpu_or1200_wbmux_width -1:0] or1200_cpu_or1200_wbmux_muxin_d;
     wire [ or1200_cpu_or1200_wbmux_width -1:0] or1200_cpu_or1200_wbmux_muxin_e;
-    reg [ or1200_cpu_or1200_wbmux_width -1:0] or1200_cpu_or1200_wbmux_muxout;
-    reg [ or1200_cpu_or1200_wbmux_width -1:0] or1200_cpu_or1200_wbmux_muxreg;
-    reg  or1200_cpu_or1200_wbmux_muxreg_valid;
+    reg [ or1200_cpu_or1200_wbmux_width -1:0] or1200_cpu_or1200_wbmux_muxout = or1200_cpu_rf_dataw;
+    reg [ or1200_cpu_or1200_wbmux_width -1:0] or1200_cpu_or1200_wbmux_muxreg = or1200_cpu_wb_forw;
+    reg  or1200_cpu_or1200_wbmux_muxreg_valid = or1200_cpu_wbforw_valid;
 
     always @(  posedge    or1200_cpu_or1200_wbmux_clk          or  posedge   or1200_cpu_or1200_wbmux_rst  )
     begin
@@ -3947,9 +3891,6 @@ module or1200_top #(
     assign or1200_cpu_or1200_wbmux_muxin_c = or1200_cpu_sprs_dataout;
     assign or1200_cpu_or1200_wbmux_muxin_d = or1200_cpu_ex_pc;
     assign or1200_cpu_or1200_wbmux_muxin_e = or1200_cpu_fpu_dataout;
-    assign or1200_cpu_rf_dataw = or1200_cpu_or1200_wbmux_muxout;
-    assign or1200_cpu_wb_forw = or1200_cpu_or1200_wbmux_muxreg;
-    assign or1200_cpu_wbforw_valid = or1200_cpu_or1200_wbmux_muxreg_valid;
 
 
     wire  or1200_cpu_or1200_freeze_clk;
@@ -4069,14 +4010,14 @@ module or1200_top #(
     wire  or1200_cpu_or1200_except_wb_freeze;
     wire  or1200_cpu_or1200_except_if_stall;
     wire [31:0] or1200_cpu_or1200_except_if_pc;
-    reg [31:0] or1200_cpu_or1200_except_id_pc;
-    reg [31:0] or1200_cpu_or1200_except_ex_pc;
-    reg [31:0] or1200_cpu_or1200_except_wb_pc;
+    reg [31:0] or1200_cpu_or1200_except_id_pc = or1200_cpu_id_pc;
+    reg [31:0] or1200_cpu_or1200_except_ex_pc = or1200_cpu_ex_pc;
+    reg [31:0] or1200_cpu_or1200_except_wb_pc = or1200_cpu_wb_pc;
     wire  or1200_cpu_or1200_except_id_flushpipe;
     wire  or1200_cpu_or1200_except_ex_flushpipe;
-    reg  or1200_cpu_or1200_except_extend_flush;
+    reg  or1200_cpu_or1200_except_extend_flush = or1200_cpu_extend_flush;
     wire  or1200_cpu_or1200_except_except_flushpipe;
-    reg [4-1:0] or1200_cpu_or1200_except_except_type;
+    reg [4-1:0] or1200_cpu_or1200_except_except_type = or1200_cpu_except_type;
     wire  or1200_cpu_or1200_except_except_start;
     wire  or1200_cpu_or1200_except_except_started;
     wire [13:0] or1200_cpu_or1200_except_except_stop;
@@ -4092,12 +4033,12 @@ module or1200_top #(
     wire  or1200_cpu_or1200_except_eear_we;
     wire  or1200_cpu_or1200_except_esr_we;
     wire  or1200_cpu_or1200_except_pc_we;
-    reg [31:0] or1200_cpu_or1200_except_epcr;
-    reg [31:0] or1200_cpu_or1200_except_eear;
+    reg [31:0] or1200_cpu_or1200_except_epcr = or1200_cpu_epcr;
+    reg [31:0] or1200_cpu_or1200_except_eear = or1200_cpu_eear;
     wire [24:0] or1200_cpu_or1200_except_du_dmr1;
     wire  or1200_cpu_or1200_except_du_hwbkpt;
     wire  or1200_cpu_or1200_except_du_hwbkpt_ls_r;
-    reg [17-1:0] or1200_cpu_or1200_except_esr;
+    reg [17-1:0] or1200_cpu_or1200_except_esr = or1200_cpu_esr;
     wire  or1200_cpu_or1200_except_sr_we;
     wire [17-1:0] or1200_cpu_or1200_except_to_sr;
     wire [17-1:0] or1200_cpu_or1200_except_sr;
@@ -4109,7 +4050,7 @@ module or1200_top #(
     wire  or1200_cpu_or1200_except_dcpu_err_i;
     wire  or1200_cpu_or1200_except_sig_fp;
     wire  or1200_cpu_or1200_except_fpcsr_fpee;
-    reg  or1200_cpu_or1200_except_dsx;
+    reg  or1200_cpu_or1200_except_dsx = or1200_cpu_dsx;
 
     reg  or1200_cpu_or1200_except_id_pc_val  ;
     reg  or1200_cpu_or1200_except_ex_pc_val  ;
@@ -4477,14 +4418,9 @@ module or1200_top #(
     assign or1200_cpu_or1200_except_wb_freeze = or1200_cpu_wb_freeze;
     assign or1200_cpu_or1200_except_if_stall = or1200_cpu_if_stall;
     assign or1200_cpu_or1200_except_if_pc = or1200_cpu_if_pc;
-    assign or1200_cpu_id_pc = or1200_cpu_or1200_except_id_pc;
-    assign or1200_cpu_ex_pc = or1200_cpu_or1200_except_ex_pc;
-    assign or1200_cpu_wb_pc = or1200_cpu_or1200_except_wb_pc;
     assign or1200_cpu_or1200_except_id_flushpipe = or1200_cpu_id_flushpipe;
     assign or1200_cpu_or1200_except_ex_flushpipe = or1200_cpu_ex_flushpipe;
-    assign or1200_cpu_extend_flush = or1200_cpu_or1200_except_extend_flush;
     assign or1200_cpu_except_flushpipe = or1200_cpu_or1200_except_except_flushpipe;
-    assign or1200_cpu_except_type = or1200_cpu_or1200_except_except_type;
     assign or1200_cpu_except_start = or1200_cpu_or1200_except_except_start;
     assign or1200_cpu_except_started = or1200_cpu_or1200_except_except_started;
     assign or1200_cpu_except_stop = or1200_cpu_or1200_except_except_stop;
@@ -4500,12 +4436,9 @@ module or1200_top #(
     assign or1200_cpu_or1200_except_eear_we = or1200_cpu_eear_we;
     assign or1200_cpu_or1200_except_esr_we = or1200_cpu_esr_we;
     assign or1200_cpu_or1200_except_pc_we = or1200_cpu_pc_we;
-    assign or1200_cpu_epcr = or1200_cpu_or1200_except_epcr;
-    assign or1200_cpu_eear = or1200_cpu_or1200_except_eear;
     assign or1200_cpu_or1200_except_du_dmr1 = or1200_cpu_du_dmr1;
     assign or1200_cpu_or1200_except_du_hwbkpt = or1200_cpu_du_hwbkpt;
     assign or1200_cpu_or1200_except_du_hwbkpt_ls_r = or1200_cpu_du_hwbkpt_ls_r;
-    assign or1200_cpu_esr = or1200_cpu_or1200_except_esr;
     assign or1200_cpu_or1200_except_sr_we = or1200_cpu_sr_we;
     assign or1200_cpu_or1200_except_to_sr = or1200_cpu_to_sr;
     assign or1200_cpu_or1200_except_sr = or1200_cpu_sr;
@@ -4517,11 +4450,10 @@ module or1200_top #(
     assign or1200_cpu_or1200_except_dcpu_err_i = or1200_cpu_dcpu_err_i;
     assign or1200_cpu_or1200_except_sig_fp = or1200_cpu_sig_fp;
     assign or1200_cpu_or1200_except_fpcsr_fpee = or1200_cpu_fpcsr[0];
-    assign or1200_cpu_dsx = or1200_cpu_or1200_except_dsx;
 
 
     wire [31:0] or1200_cpu_or1200_cfgr_spr_addr;
-    reg [31:0] or1200_cpu_or1200_cfgr_spr_dat_o;
+    reg [31:0] or1200_cpu_or1200_cfgr_spr_dat_o = or1200_cpu_spr_dat_cfgr;
 
     always @(   or1200_cpu_or1200_cfgr_spr_addr   )
         if (~|  or1200_cpu_or1200_cfgr_spr_addr  [31:4])
@@ -4624,7 +4556,6 @@ module or1200_top #(
             or1200_cpu_or1200_cfgr_spr_dat_o   =32'h0000_0000;
 
     assign or1200_cpu_or1200_cfgr_spr_addr = or1200_cpu_spr_addr;
-    assign or1200_cpu_spr_dat_cfgr = or1200_cpu_or1200_cfgr_spr_dat_o;
 
     assign or1200_cpu_clk = clk_i;
     assign or1200_cpu_rst = rst_i;
@@ -5624,19 +5555,19 @@ module or1200_top #(
     wire  or1200_du_spr_write;
     wire [ or1200_du_aw -1:0] or1200_du_spr_addr;
     wire [ or1200_du_dw -1:0] or1200_du_spr_dat_i;
-    reg [ or1200_du_dw -1:0] or1200_du_spr_dat_o;
+    reg [ or1200_du_dw -1:0] or1200_du_spr_dat_o = spr_dat_du;
     wire  or1200_du_dbg_stall_i;
     wire  or1200_du_dbg_ewt_i;
     wire [3:0] or1200_du_dbg_lss_o;
-    reg [1:0] or1200_du_dbg_is_o;
+    reg [1:0] or1200_du_dbg_is_o = dbg_is_o;
     wire [10:0] or1200_du_dbg_wp_o;
     wire  or1200_du_dbg_bp_o;
     wire  or1200_du_dbg_stb_i;
     wire  or1200_du_dbg_we_i;
     wire [ or1200_du_aw -1:0] or1200_du_dbg_adr_i;
     wire [ or1200_du_dw -1:0] or1200_du_dbg_dat_i;
-    reg [ or1200_du_dw -1:0] or1200_du_dbg_dat_o;
-    reg  or1200_du_dbg_ack_o;
+    reg [ or1200_du_dw -1:0] or1200_du_dbg_dat_o = dbg_dat_o;
+    reg  or1200_du_dbg_ack_o = dbg_ack_o;
 
     assign   or1200_du_dbg_lss_o  =4'b0000;
     always @(  posedge    or1200_du_clk          or  posedge   or1200_du_rst  )
@@ -5724,9 +5655,24 @@ module or1200_top #(
     wire  or1200_du_dmr2_sel  ;
     wire  or1200_du_dsr_sel  ;
     wire  or1200_du_drr_sel  ;
-    wire  or1200_du_dvr0_sel  ,  or1200_du_dvr1_sel  ,  or1200_du_dvr2_sel  ,  or1200_du_dvr3_sel  ,  or1200_du_dvr4_sel  ,  or1200_du_dvr5_sel  ,  or1200_du_dvr6_sel  ,  or1200_du_dvr7_sel  ;
-    wire  or1200_du_dcr0_sel  ,  or1200_du_dcr1_sel  ,  or1200_du_dcr2_sel  ,  or1200_du_dcr3_sel  ,  or1200_du_dcr4_sel  ,  or1200_du_dcr5_sel  ,  or1200_du_dcr6_sel  ,  or1200_du_dcr7_sel  ;
-    wire  or1200_du_dwcr0_sel  ,  or1200_du_dwcr1_sel  ;
+    wire  or1200_du_dvr0_sel  ;
+    wire  or1200_du_dvr1_sel  ;
+    wire  or1200_du_dvr2_sel  ;
+    wire  or1200_du_dvr3_sel  ;
+    wire  or1200_du_dvr4_sel  ;
+    wire  or1200_du_dvr5_sel  ;
+    wire  or1200_du_dvr6_sel  ;
+    wire  or1200_du_dvr7_sel  ;
+    wire  or1200_du_dcr0_sel  ;
+    wire  or1200_du_dcr1_sel  ;
+    wire  or1200_du_dcr2_sel  ;
+    wire  or1200_du_dcr3_sel  ;
+    wire  or1200_du_dcr4_sel  ;
+    wire  or1200_du_dcr5_sel  ;
+    wire  or1200_du_dcr6_sel  ;
+    wire  or1200_du_dcr7_sel  ;
+    wire  or1200_du_dwcr0_sel  ;
+    wire  or1200_du_dwcr1_sel  ;
     reg  or1200_du_dbg_bp_r  ;
     reg  or1200_du_ex_freeze_q  ;
     reg  or1200_du_du_hwbkpt_hold  ;
@@ -5903,19 +5849,15 @@ module or1200_top #(
     assign or1200_du_spr_write = spr_we;
     assign or1200_du_spr_addr = spr_addr;
     assign or1200_du_spr_dat_i = spr_dat_cpu;
-    assign spr_dat_du = or1200_du_spr_dat_o;
     assign or1200_du_dbg_stall_i = dbg_stall_i;
     assign or1200_du_dbg_ewt_i = dbg_ewt_i;
     assign dbg_lss_o = or1200_du_dbg_lss_o;
-    assign dbg_is_o = or1200_du_dbg_is_o;
     assign dbg_wp_o = or1200_du_dbg_wp_o;
     assign dbg_bp_o = or1200_du_dbg_bp_o;
     assign or1200_du_dbg_stb_i = dbg_stb_i;
     assign or1200_du_dbg_we_i = dbg_we_i;
     assign or1200_du_dbg_adr_i = dbg_adr_i;
     assign or1200_du_dbg_dat_i = dbg_dat_i;
-    assign dbg_dat_o = or1200_du_dbg_dat_o;
-    assign dbg_ack_o = or1200_du_dbg_ack_o;
 
 
     wire  or1200_pic_clk;
@@ -5924,7 +5866,7 @@ module or1200_top #(
     wire  or1200_pic_spr_write;
     wire [31:0] or1200_pic_spr_addr;
     wire [31:0] or1200_pic_spr_dat_i;
-    reg [31:0] or1200_pic_spr_dat_o;
+    reg [31:0] or1200_pic_spr_dat_o = spr_dat_pic;
     wire  or1200_pic_pic_wakeup;
     wire  or1200_pic_intr;
     wire [20-1:0] or1200_pic_pic_int;
@@ -5979,7 +5921,6 @@ module or1200_top #(
     assign or1200_pic_spr_write = spr_we;
     assign or1200_pic_spr_addr = spr_addr;
     assign or1200_pic_spr_dat_i = spr_dat_cpu;
-    assign spr_dat_pic = or1200_pic_spr_dat_o;
     assign pic_wakeup = or1200_pic_pic_wakeup;
     assign sig_int = or1200_pic_intr;
     assign or1200_pic_pic_int = pic_ints_i;
@@ -5992,7 +5933,7 @@ module or1200_top #(
     wire  or1200_tt_spr_write;
     wire [31:0] or1200_tt_spr_addr;
     wire [31:0] or1200_tt_spr_dat_i;
-    reg [31:0] or1200_tt_spr_dat_o;
+    reg [31:0] or1200_tt_spr_dat_o = spr_dat_tt;
     wire  or1200_tt_intr;
 
     reg[31:0]  or1200_tt_ttmr  ;
@@ -6046,7 +5987,6 @@ module or1200_top #(
     assign or1200_tt_spr_write = spr_we;
     assign or1200_tt_spr_addr = spr_addr;
     assign or1200_tt_spr_dat_i = spr_dat_cpu;
-    assign spr_dat_tt = or1200_tt_spr_dat_o;
     assign sig_tick = or1200_tt_intr;
 
 
