@@ -37,7 +37,7 @@
 
   
 module dma_axi64(clk,reset,scan_en,idle,INT,periph_tx_req,periph_tx_clr,periph_rx_req,periph_rx_clr,pclken,psel,penable,paddr,pwrite,pwdata,prdata,pslverr,pready,AWID0,AWADDR0,AWLEN0,AWSIZE0,AWVALID0,AWREADY0,WID0,WDATA0,WSTRB0,WLAST0,WVALID0,WREADY0,BID0,BRESP0,BVALID0,BREADY0,ARID0,ARADDR0,ARLEN0,ARSIZE0,ARVALID0,ARREADY0,RID0,RDATA0,RRESP0,RLAST0,RVALID0,RREADY0);
-`include "dma_axi64_defines.v"
+`include "./src/dma_axi64_defines.v"
    
    input                                clk;
    input                 reset;

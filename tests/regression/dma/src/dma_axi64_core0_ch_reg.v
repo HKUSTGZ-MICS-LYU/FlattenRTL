@@ -133,7 +133,7 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
    output [1:0]          end_swap;
       
    
-`include "dma_axi64_ch_reg_params.v"
+`include "./src/dma_axi64_ch_reg_params.v"
 
    
   parameter     13 = 13; 

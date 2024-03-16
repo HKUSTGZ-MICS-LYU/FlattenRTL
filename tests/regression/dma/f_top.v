@@ -108,104 +108,118 @@ module dma_axi64_core0_top (
   dma_axi64_core0 dma_axi64_core0(.clk(clk_out),.reset(reset),.scan_en(scan_en),.idle(idle),.ch_int_all_proc(ch_int_all_proc),.ch_start(ch_start),.periph_tx_req(periph_tx_req),.periph_tx_clr(periph_tx_clr),.periph_rx_req(periph_rx_req),.periph_rx_clr(periph_rx_clr),.pclk(clk),.clken(clken),.pclken(pclken),.psel(psel),.penable(penable),.paddr(paddr[10:0]),.pwrite(pwrite),.pwdata(pwdata),.prdata(prdata),.pslverr(pslverr),.joint_mode_in(joint_mode),.joint_remote(joint_remote),.rd_prio_top(rd_prio_top),.rd_prio_high(rd_prio_high),.rd_prio_top_num(rd_prio_top_num),.rd_prio_high_num(rd_prio_high_num),.wr_prio_top(wr_prio_top),.wr_prio_high(wr_prio_high),.wr_prio_top_num(wr_prio_top_num),.wr_prio_high_num(wr_prio_high_num),.rd_port_num(rd_port_num),.wr_port_num(wr_port_num),.AWADDR(slow_AWADDR),.AWLEN(slow_AWLEN),.AWSIZE(slow_AWSIZE),.AWVALID(slow_AWVALID),.AWREADY(slow_AWREADY),.WDATA(slow_WDATA),.WSTRB(slow_WSTRB),.WLAST(slow_WLAST),.WVALID(slow_WVALID),.WREADY(slow_WREADY),.BRESP(slow_BRESP),.BVALID(slow_BVALID),.BREADY(slow_BREADY),.ARADDR(slow_ARADDR),.ARLEN(slow_ARLEN),.ARSIZE(slow_ARSIZE),.ARVALID(slow_ARVALID),.ARREADY(slow_ARREADY),.RDATA(slow_RDATA),.RRESP(slow_RRESP),.RLAST(slow_RLAST),.RVALID(slow_RVALID),.RREADY(slow_RREADY)); 
 endmodule
  
-module prgen_fifo (
+module prgen_fifo #(
+ parameter WIDTH =8,
+ parameter DEPTH_FULL =8,
+ parameter SINGLE =DEPTH_FULL==1,
+ parameter DEPTH =SINGLE ? 1:DEPTH_FULL-1,
+ parameter DEPTH_BITS =(DEPTH<=2) ? 1:(DEPTH<=4) ? 2:(DEPTH<=8) ? 3:(DEPTH<=16) ? 4:(DEPTH<=32) ? 5:(DEPTH<=64) ? 6:(DEPTH<=128) ? 7:(DEPTH<=256) ? 8:0,
+ parameter LAST_LINE =DEPTH-1) (
   input clk,
   input reset,
   input push,
   input pop,
-  input [8-1:0] din,
-  output reg  [8-1:0] dout,
+  input [WIDTH-1:0] din,
+  output reg  [WIDTH-1:0] dout,
   output empty,
   output full) ; 
+    
+    
+    
+    
+    
+    
    wire reg_push ;  
    wire reg_pop ;  
    wire fifo_push ;  
    wire fifo_pop ;  
-   reg [7-1:0] fullness_in ;  
-   reg [7-1:0] fullness_out ;  
-   reg [7-1:0] fullness ;  
-   reg [8-1:0] fifo[7-1:0] ;  
+   reg [DEPTH-1:0] fullness_in ;  
+   reg [DEPTH-1:0] fullness_out ;  
+   reg [DEPTH-1:0] fullness ;  
+   reg [WIDTH-1:0] fifo[DEPTH-1:0] ;  
    wire fifo_empty ;  
    wire next ;  
    reg dout_empty ;  
-   reg [3-1:0] ptr_in ;  
-   reg [3-1:0] ptr_out ;  
+   reg [DEPTH_BITS-1:0] ptr_in ;  
+   reg [DEPTH_BITS-1:0] ptr_out ;  
   assign reg_push=push&fifo_empty&(dout_empty|pop); 
   assign reg_pop=pop&fifo_empty; 
-  assign fifo_push=!0&push&(~reg_push); 
-  assign fifo_pop=!0&pop&(~reg_pop); 
+  assign fifo_push=!SINGLE&push&(~reg_push); 
+  assign fifo_pop=!SINGLE&pop&(~reg_pop); 
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            dout <={8{1'b0}};
-            dout_empty <=1'b1;
+            dout <=#1{WIDTH{1'b0}};
+            dout_empty <=#11'b1;
           end 
         else 
           if (reg_push)
              begin 
-               dout <=din;
-               dout_empty <=1'b0;
+               dout <=#1din;
+               dout_empty <=#11'b0;
              end 
            else 
              if (reg_pop)
                 begin 
-                  dout <={8{1'b0}};
-                  dout_empty <=1'b1;
+                  dout <=#1{WIDTH{1'b0}};
+                  dout_empty <=#11'b1;
                 end 
               else 
                 if (fifo_pop)
                    begin 
-                     dout <=fifo[ptr_out];
-                     dout_empty <=1'b0;
+                     dout <=#1fifo[ptr_out];
+                     dout_empty <=#11'b0;
                    end
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          ptr_in <={3{1'b0}};
+          ptr_in <=#1{DEPTH_BITS{1'b0}};
         else 
           if (fifo_push)
-             ptr_in <=ptr_in==6 ? 0:ptr_in+1'b1;
+             ptr_in <=#1ptr_in==LAST_LINE ? 0:ptr_in+1'b1;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          ptr_out <={3{1'b0}};
+          ptr_out <=#1{DEPTH_BITS{1'b0}};
         else 
           if (fifo_pop)
-             ptr_out <=ptr_out==6 ? 0:ptr_out+1'b1;
+             ptr_out <=#1ptr_out==LAST_LINE ? 0:ptr_out+1'b1;
  
   always @( posedge clk)
        if (fifo_push)
-          fifo [ptr_in]<=din;
+          fifo [ptr_in]<=#1din;
  
   always @(  fifo_push or  ptr_in)
        begin 
-         fullness_in ={7{1'b0}};
+         fullness_in ={DEPTH{1'b0}};
          fullness_in [ptr_in]=fifo_push;
        end
   
   always @(  fifo_pop or  ptr_out)
        begin 
-         fullness_out ={7{1'b0}};
+         fullness_out ={DEPTH{1'b0}};
          fullness_out [ptr_out]=fifo_pop;
        end
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          fullness <={7{1'b0}};
+          fullness <=#1{DEPTH{1'b0}};
         else 
           if (fifo_push|fifo_pop)
-             fullness <=(fullness&(~fullness_out))|fullness_in;
+             fullness <=#1(fullness&(~fullness_out))|fullness_in;
  
   assign next=|fullness; 
   assign fifo_empty=~next; 
   assign empty=fifo_empty&dout_empty; 
-  assign full=0 ? !dout_empty:&fullness; 
+  assign full=SINGLE ? !dout_empty:&fullness; 
 endmodule
  
-module prgen_scatter8_1 (
+module prgen_scatter8_1 #(
+ parameter CH_NUM =0) (
   input [8*1-1:0] ch_x,
   output [8-1:0] x) ; 
-  assign x={ch_x[0+7],ch_x[0+6],ch_x[0+5],ch_x[0+4],ch_x[0+3],ch_x[0+2],ch_x[0+1],ch_x[0+0]}; 
+    
+  assign x={ch_x[CH_NUM+7],ch_x[CH_NUM+6],ch_x[CH_NUM+5],ch_x[CH_NUM+4],ch_x[CH_NUM+3],ch_x[CH_NUM+2],ch_x[CH_NUM+1],ch_x[CH_NUM+0]}; 
 endmodule
  
 module dma_axi64_core0_ch_offsets (
@@ -243,23 +257,23 @@ module dma_axi64_core0_ch_offsets (
   assign empty=ch_end_pre|ch_end; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          ch_end <=1'b0;
+          ch_end <=#11'b0;
         else 
           if (ch_update)
-             ch_end <=1'b0;
+             ch_end <=#11'b0;
            else 
              if (ch_end_pre)
-                ch_end <=1'b1;
+                ch_end <=#11'b1;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          x_remain <={10{1'b0}};
+          x_remain <=#1{10{1'b0}};
         else 
           if (ch_update|go_next_line)
-             x_remain <=x_size;
+             x_remain <=#1x_size;
            else 
              if (burst_start&(~load_req_in_prog))
-                x_remain <=x_remain-burst_size;
+                x_remain <=#1x_remain-burst_size;
  
   assign x_offset={10{1'b0}}; 
   assign y_offset={10-8{1'b0}}; 
@@ -267,29 +281,55 @@ module dma_axi64_core0_ch_offsets (
   assign align=start_align; 
 endmodule
  
-module prgen_stall (
+module prgen_stall #(
+ parameter DEPTH =1) (
   input clk,
   input reset,
   input din,
   input stall,
   output dout) ; 
-   reg [7-1:0] count ;  
+    
+   reg [DEPTH-1:0] count ;  
    wire pend ;  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          count <={7{1'b0}};
+          count <=#1{DEPTH{1'b0}};
         else 
-          if (pend&(~3'd4))
-             count <=count-1'b1;
+          if (pend&(~stall))
+             count <=#1count-1'b1;
            else 
-             if (din&3'd4)
-                count <=count+1'b1;
+             if (din&stall)
+                count <=#1count+1'b1;
  
   assign pend=(|count); 
-  assign dout=(din|pend)&(~3'd4); 
+  assign dout=(din|pend)&(~stall); 
 endmodule
  
-module dma_axi64_reg (
+module dma_axi64_reg #(
+ parameter PROC0_STATUS =8'h00,
+ parameter PROC1_STATUS =8'h04,
+ parameter PROC2_STATUS =8'h08,
+ parameter PROC3_STATUS =8'h0C,
+ parameter PROC4_STATUS =8'h10,
+ parameter PROC5_STATUS =8'h14,
+ parameter PROC6_STATUS =8'h18,
+ parameter PROC7_STATUS =8'h1C,
+ parameter CORE0_JOINT =8'h30,
+ parameter CORE1_JOINT =8'h34,
+ parameter CORE0_PRIO =8'h38,
+ parameter CORE1_PRIO =8'h3C,
+ parameter CORE0_CLKDIV =8'h40,
+ parameter CORE1_CLKDIV =8'h44,
+ parameter CORE0_START =8'h48,
+ parameter CORE1_START =8'h4C,
+ parameter PERIPH_RX_CTRL =8'h50,
+ parameter PERIPH_TX_CTRL =8'h54,
+ parameter IDLE =8'hD0,
+ parameter USER_DEF_STAT =8'hE0,
+ parameter USER_DEF0_STAT0 =8'hF0,
+ parameter USER_DEF0_STAT1 =8'hF4,
+ parameter USER_DEF1_STAT0 =8'hF8,
+ parameter USER_DEF1_STAT1 =8'hFC) (
   input clk,
   input reset,
   input pclken,
@@ -318,6 +358,30 @@ module dma_axi64_reg (
   output reg  [31:1] periph_tx_req_reg,
   input [31:1] periph_rx_clr,
   input [31:1] periph_tx_clr) ; 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
    wire [31:0] user_def_stat ;  
    wire [31:0] user_def0_stat0 ;  
    wire [31:0] user_def0_stat1 ;  
@@ -344,10 +408,10 @@ module dma_axi64_reg (
    wire gpread ;  
    reg [31:0] prdata_pre ;  
    reg pslverr_pre ;  
-  assign wr_joint0=gpwrite&gpaddr==8'h30; 
-  assign wr_clkdiv0=gpwrite&gpaddr==8'h40; 
-  assign wr_start0=gpwrite&gpaddr==8'h48; 
-  assign wr_prio0=gpwrite&gpaddr==8'h38; 
+  assign wr_joint0=gpwrite&gpaddr==CORE0_JOINT; 
+  assign wr_clkdiv0=gpwrite&gpaddr==CORE0_CLKDIV; 
+  assign wr_start0=gpwrite&gpaddr==CORE0_START; 
+  assign wr_prio0=gpwrite&gpaddr==CORE0_PRIO; 
   dma_axi64_reg_core0 dma_axi64_reg_core0(.clk(clk),.reset(reset),.wr_joint(wr_joint0),.wr_clkdiv(wr_clkdiv0),.wr_start(wr_start0),.wr_prio(wr_prio0),.pwdata(pwdata),.clkdiv(core0_clkdiv),.ch_start(core0_ch_start),.joint_mode(joint_mode0),.rd_prio_top(rd_prio_top0),.rd_prio_high(rd_prio_high0),.rd_prio_top_num(rd_prio_top_num0),.rd_prio_high_num(rd_prio_high_num0),.wr_prio_top(wr_prio_top0),.wr_prio_high(wr_prio_high0),.wr_prio_top_num(wr_prio_top_num0),.wr_prio_high_num(wr_prio_high_num0),.user_def_stat0(user_def0_stat0),.user_def_stat1(user_def0_stat1),.ch_int_all_proc(ch_int_all_proc0),.proc0_int_stat(proc0_int_stat0)); 
   assign user_def_proj=0; 
   assign user_def_proc_num=1; 
@@ -361,57 +425,57 @@ module dma_axi64_reg (
   assign gpaddr={8{psel}}&paddr; 
   assign gpwrite=psel&(~penable)&pwrite; 
   assign gpread=psel&(~penable)&(~pwrite); 
-  assign wr_periph_rx=gpwrite&gpaddr==8'h50; 
-  assign wr_periph_tx=gpwrite&gpaddr==8'h54; 
+  assign wr_periph_rx=gpwrite&gpaddr==PERIPH_RX_CTRL; 
+  assign wr_periph_tx=gpwrite&gpaddr==PERIPH_TX_CTRL; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          periph_rx_req_reg <={31{1'b0}};
+          periph_rx_req_reg <=#1{31{1'b0}};
         else 
           if (wr_periph_rx|(|periph_rx_clr))
-             periph_rx_req_reg <=({31{wr_periph_rx}}&pwdata[31:1])&(~periph_rx_clr);
+             periph_rx_req_reg <=#1({31{wr_periph_rx}}&pwdata[31:1])&(~periph_rx_clr);
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          periph_tx_req_reg <={31{1'b0}};
+          periph_tx_req_reg <=#1{31{1'b0}};
         else 
           if (wr_periph_tx|(|periph_tx_clr))
-             periph_tx_req_reg <=({31{wr_periph_tx}}&pwdata[31:1])&(~periph_tx_clr);
+             periph_tx_req_reg <=#1({31{wr_periph_tx}}&pwdata[31:1])&(~periph_tx_clr);
  
   assign proc0_int_stat={proc0_int_stat0}; 
   assign proc0_int=|proc0_int_stat; 
   assign int_all_proc_pre={proc0_int}; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          int_all_proc <={1{1'b0}};
+          int_all_proc <=#1{1{1'b0}};
         else 
-          int_all_proc <=int_all_proc_pre;
+          int_all_proc <=#1int_all_proc_pre;
  
   always @(*)
        begin 
          prdata_pre ={32{1'b0}};
          case (gpaddr)
-          8 'h00:
+          PROC0_STATUS :
              prdata_pre ={{16{1'b0}},proc0_int_stat0};
-          8 'h30:
+          CORE0_JOINT :
              prdata_pre ={{31{1'b0}},joint_mode0};
-          8 'h38:
+          CORE0_PRIO :
              prdata_pre ={{16{1'b0}},wr_prio_high0,wr_prio_high_num0,wr_prio_top0,wr_prio_top_num0,rd_prio_high0,rd_prio_high_num0,rd_prio_top0,rd_prio_top_num0};
-          8 'h40:
-             prdata_pre ={{28{1'b0}},8'h40};
-          8 'h48:
+          CORE0_CLKDIV :
+             prdata_pre ={{28{1'b0}},core0_clkdiv};
+          CORE0_START :
              prdata_pre ={32{1'b0}};
-          8 'h50:
+          PERIPH_RX_CTRL :
              prdata_pre ={periph_rx_req_reg,1'b0};
-          8 'h54:
+          PERIPH_TX_CTRL :
              prdata_pre ={periph_tx_req_reg,1'b0};
-          8 'hD0:
+          IDLE :
              prdata_pre ={{30{1'b0}},core0_idle};
-          8 'hE0:
-             prdata_pre =8'hE0;
-          8 'hF0:
-             prdata_pre =8'hF0;
-          8 'hF4:
-             prdata_pre =8'hF4;
+          USER_DEF_STAT :
+             prdata_pre =user_def_stat;
+          USER_DEF0_STAT0 :
+             prdata_pre =user_def0_stat0;
+          USER_DEF0_STAT1 :
+             prdata_pre =user_def0_stat1;
           default :
              prdata_pre ={32{1'b0}};
          endcase 
@@ -421,27 +485,27 @@ module dma_axi64_reg (
        begin 
          pslverr_pre =1'b0;
          case (gpaddr)
-          8 'h00:
+          PROC0_STATUS :
              pslverr_pre =gpwrite;
-          8 'h30:
+          CORE0_JOINT :
              pslverr_pre =1'b0;
-          8 'h38:
+          CORE0_PRIO :
              pslverr_pre =1'b0;
-          8 'h40:
+          CORE0_CLKDIV :
              pslverr_pre =1'b0;
-          8 'h48:
+          CORE0_START :
              pslverr_pre =gpread;
-          8 'h50:
+          PERIPH_RX_CTRL :
              pslverr_pre =1'b0;
-          8 'h54:
+          PERIPH_TX_CTRL :
              pslverr_pre =1'b0;
-          8 'hD0:
+          IDLE :
              pslverr_pre =gpwrite;
-          8 'hE0:
+          USER_DEF_STAT :
              pslverr_pre =gpwrite;
-          8 'hF0:
+          USER_DEF0_STAT0 :
              pslverr_pre =gpwrite;
-          8 'hF4:
+          USER_DEF0_STAT1 :
              pslverr_pre =gpwrite;
           default :
              pslverr_pre =psel;
@@ -450,23 +514,23 @@ module dma_axi64_reg (
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          prdata <={32{1'b0}};
+          prdata <=#1{32{1'b0}};
         else 
           if (gpread&pclken)
-             prdata <=prdata_pre;
+             prdata <=#1prdata_pre;
            else 
              if (pclken)
-                prdata <={32{1'b0}};
+                prdata <=#1{32{1'b0}};
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          pslverr <=1'b0;
+          pslverr <=#11'b0;
         else 
           if ((gpread|gpwrite)&pclken)
-             pslverr <=pslverr_pre;
+             pslverr <=#1pslverr_pre;
            else 
              if (pclken)
-                pslverr <=1'b0;
+                pslverr <=#11'b0;
  
 endmodule
  
@@ -696,74 +760,74 @@ module dma_axi64_core0_ch (
   assign outs_empty=rd_outs_empty&wr_outs_empty; 
   assign rd_clr_outs_d_pre=rd_clr_outs&(~rd_burst_start); 
   assign wr_clr_outs_d_pre=wr_clr_outs&(~wr_burst_start); 
-  prgen_delay delay_rd_clr_outs(.clk(clk),.reset(reset),.din(rd_clr_outs_d_pre),.dout(rd_clr_outs_d)); 
-  prgen_delay delay_wr_clr_outs(.clk(clk),.reset(reset),.din(wr_clr_outs_d_pre),.dout(wr_clr_outs_d)); 
-  prgen_delay delay_rd_clr(.clk(clk),.reset(reset),.din(rd_clr),.dout(rd_clr_d)); 
-  prgen_delay delay_wr_clr(.clk(clk),.reset(reset),.din(wr_clr),.dout(wr_clr_d)); 
+  prgen_delay #(1)delay_rd_clr_outs(.clk(clk),.reset(reset),.din(rd_clr_outs_d_pre),.dout(rd_clr_outs_d)); 
+  prgen_delay #(1)delay_wr_clr_outs(.clk(clk),.reset(reset),.din(wr_clr_outs_d_pre),.dout(wr_clr_outs_d)); 
+  prgen_delay #(1)delay_rd_clr(.clk(clk),.reset(reset),.din(rd_clr),.dout(rd_clr_d)); 
+  prgen_delay #(1)delay_wr_clr(.clk(clk),.reset(reset),.din(wr_clr),.dout(wr_clr_d)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          rd_joint_not_in_prog <=1'b0;
+          rd_joint_not_in_prog <=#11'b0;
         else 
           if (ch_update)
-             rd_joint_not_in_prog <=1'b0;
+             rd_joint_not_in_prog <=#11'b0;
            else 
              if (rd_burst_start)
-                rd_joint_not_in_prog <=(~joint_req);
+                rd_joint_not_in_prog <=#1(~joint_req);
               else 
                 if (rd_outs_empty&rd_clr_outs_d)
-                   rd_joint_not_in_prog <=1'b0;
+                   rd_joint_not_in_prog <=#11'b0;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          wr_joint_not_in_prog <=1'b0;
+          wr_joint_not_in_prog <=#11'b0;
         else 
           if (ch_update)
-             wr_joint_not_in_prog <=1'b0;
+             wr_joint_not_in_prog <=#11'b0;
            else 
              if (wr_burst_start)
-                wr_joint_not_in_prog <=(~joint_req);
+                wr_joint_not_in_prog <=#1(~joint_req);
               else 
                 if (wr_outs_empty&wr_clr_outs_d)
-                   wr_joint_not_in_prog <=1'b0;
+                   wr_joint_not_in_prog <=#11'b0;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          rd_joint_in_prog <=1'b0;
+          rd_joint_in_prog <=#11'b0;
         else 
           if (ch_update)
-             rd_joint_in_prog <=1'b0;
+             rd_joint_in_prog <=#11'b0;
            else 
              if (rd_burst_start)
-                rd_joint_in_prog <=joint_req;
+                rd_joint_in_prog <=#1joint_req;
               else 
                 if (rd_outs_empty&rd_clr_outs_d)
-                   rd_joint_in_prog <=1'b0;
+                   rd_joint_in_prog <=#11'b0;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          wr_joint_in_prog <=1'b0;
+          wr_joint_in_prog <=#11'b0;
         else 
           if (ch_update)
-             wr_joint_in_prog <=1'b0;
+             wr_joint_in_prog <=#11'b0;
            else 
              if (wr_burst_start)
-                wr_joint_in_prog <=joint_req;
+                wr_joint_in_prog <=#1joint_req;
               else 
                 if (wr_outs_empty&wr_clr_outs_d)
-                   wr_joint_in_prog <=1'b0;
+                   wr_joint_in_prog <=#11'b0;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          joint_cross_reg <=1'b0;
+          joint_cross_reg <=#11'b0;
         else 
           if (ch_update)
-             joint_cross_reg <=1'b0;
+             joint_cross_reg <=#11'b0;
            else 
              if (page_cross&joint)
-                joint_cross_reg <=1'b1;
+                joint_cross_reg <=#11'b1;
               else 
                 if (joint_not_in_prog&outs_empty)
-                   joint_cross_reg <=1'b0;
+                   joint_cross_reg <=#11'b0;
  
   assign joint_cross=joint_cross_reg; 
   assign page_cross=rd_page_cross|wr_page_cross; 
@@ -795,7 +859,7 @@ module dma_axi64_core0_ch (
   assign timeout_bus={timeout_aw,timeout_w,{timeout_wresp&(~timeout_aw)},timeout_ar,{timeout_rresp&(~timeout_ar)}}; 
   assign clk_en=ch_active|ch_update|(~outs_empty)|(~rd_wait_ready)|(~wr_wait_ready); 
   assign idle_pre=!clk_en; 
-  prgen_delay delay_idle(.clk(clk),.reset(reset),.din(idle_pre),.dout(idle)); 
+  prgen_delay #(1)delay_idle(.clk(clk),.reset(reset),.din(idle_pre),.dout(idle)); 
   assign gclk=clk; 
   dma_axi64_core0_ch_reg dma_axi64_ch_reg(.clk(pclk),.clken(clken),.pclken(pclken),.reset(reset),.psel(psel),.penable(penable),.paddr(paddr),.pwrite(pwrite),.pwdata(pwdata),.prdata(prdata),.pslverr(pslverr),.timeout_bus(timeout_bus),.wdt_timeout(wdt_timeout),.ch_start(ch_start),.load_wr(load_wr),.load_wr_cycle(load_wr_cycle),.load_wdata(load_wdata),.load_in_prog(load_in_prog),.load_req_in_prog(load_req_in_prog),.rd_ch_end(rd_ch_end),.wr_ch_end(wr_ch_end),.wr_clr_last(wr_clr_last),.rd_slverr(rd_slverr),.rd_decerr(rd_decerr),.wr_slverr(wr_slverr),.wr_decerr(wr_decerr),.int_all_proc(int_all_proc),.ch_rd_active(ch_rd_active),.ch_wr_active(ch_wr_active),.ch_in_prog(ch_in_prog),.wr_outstanding(wr_outstanding),.rd_outstanding(rd_outstanding),.ch_retry_wait(ch_retry_wait),.joint_mode(joint_mode),.joint_remote(joint_remote),.joint(joint),.joint_cross(joint_cross),.page_cross(page_cross),.joint_flush(joint_flush),.rd_x_offset(rd_x_offset),.rd_y_offset(rd_y_offset),.wr_x_offset(wr_x_offset),.wr_y_offset(wr_y_offset),.rd_gap(rd_gap),.wr_fullness(wr_fullness),.fifo_overflow(fifo_overflow),.fifo_underflow(fifo_underflow),.load_cmd(load_cmd),.load_addr(load_addr),.ch_update(ch_update),.rd_start_addr(rd_start_addr),.wr_start_addr(wr_start_addr),.x_size(x_size),.y_size(y_size),.rd_burst_max_size(rd_burst_max_size),.wr_burst_max_size(wr_burst_max_size),.rd_periph_delay(rd_periph_delay),.wr_periph_delay(wr_periph_delay),.rd_periph_block(rd_periph_block),.wr_periph_block(wr_periph_block),.rd_tokens(rd_tokens),.wr_tokens(wr_tokens),.end_swap(end_swap),.rd_port_num(rd_port_num),.wr_port_num(wr_port_num),.rd_outs_max(rd_outs_max),.wr_outs_max(wr_outs_max),.rd_outs(rd_outs),.wr_outs(wr_outs),.outs_empty(outs_empty),.rd_wait_limit(rd_wait_limit),.wr_wait_limit(wr_wait_limit),.rd_periph_num(rd_periph_num),.wr_periph_num(wr_periph_num),.rd_incr(rd_incr),.wr_incr(wr_incr),.block(block),.allow_line_cmd(allow_line_cmd),.frame_width(frame_width),.width_align(width_align)); 
   dma_axi64_core0_ch_offsets dma_axi64_ch_offsets_rd(.clk(gclk),.reset(reset),.ch_update(ch_update),.burst_start(rd_burst_start),.burst_last(rd_burst_last),.burst_size(rd_burst_size),.load_req_in_prog(load_req_in_prog),.x_size(x_size),.y_size(y_size),.x_offset(rd_x_offset),.y_offset(rd_y_offset),.x_remain(rd_x_remain),.clr_remain(rd_clr_remain),.ch_end(rd_ch_end),.go_next_line(rd_go_next_line),.incr(rd_incr),.clr_line(rd_clr_line),.line_empty(rd_line_empty),.empty(rd_empty),.start_align(rd_start_addr[3-1:0]),.width_align(width_align),.align(wr_align)); 
@@ -804,8 +868,8 @@ module dma_axi64_core0_ch (
   dma_axi64_core0_ch_outs dma_axi64_ch_outs_rd(.clk(gclk),.reset(reset),.cmd(rd_cmd_outs),.clr(rd_clr_outs),.outs_max(rd_outs_max),.outs(rd_outs),.outs_empty(rd_outs_empty),.stall(rd_stall),.timeout(timeout_rresp)); 
   dma_axi64_core0_ch_outs dma_axi64_ch_outs_wr(.clk(gclk),.reset(reset),.cmd(wr_cmd_outs),.clr(wr_clr_outs),.outs_max(wr_outs_max),.outs(wr_outs),.outs_empty(wr_outs_empty),.stall(wr_stall_pre),.timeout(timeout_wresp)); 
   assign wr_stall=wr_stall_pre&(~joint_req); 
-  dma_axi64_core0_ch_calc dma_axi64_ch_calc_rd(.clk(gclk),.reset(reset),.wr_cmd_pending(1'b0),.outs_empty(outs_empty),.load_in_prog(load_in_prog),.load_req_in_prog(load_req_in_prog),.load_addr(load_addr),.ch_update(ch_update),.ch_end(rd_ch_end),.ch_end_flush(1'b0),.go_next_line(rd_go_next_line),.burst_start(rd_burst_start),.burst_last(rd_burst_last),.burst_max_size(rd_burst_max_size),.start_addr(rd_start_addr),.incr(rd_incr),.frame_width(frame_width),.x_size(x_size[8-1:0]),.x_remain(rd_x_remain),.fifo_remain(rd_gap),.fifo_wr_ready(fifo_wr_ready),.burst_addr(rd_burst_addr),.burst_size(rd_burst_size),.burst_ready(rd_burst_ready),.single(),.joint_ready_out(rd_joint_ready),.joint_ready_in(wr_joint_ready),.joint_line_req_in(joint_line_req),.joint_line_req_out(),.joint_burst_req_in(1'b0),.joint_burst_req_out(joint_burst_req),.joint_line_req_clr(wr_clr_d),.joint(joint),.page_cross(rd_page_cross),.joint_cross(joint_cross),.joint_flush(rd_joint_flush),.joint_flush_in(joint_flush)); 
-  dma_axi64_core0_ch_calc dma_axi64_ch_calc_wr(.clk(gclk),.reset(reset),.wr_cmd_pending(wr_cmd_pending),.outs_empty(outs_empty),.load_in_prog(load_in_prog),.load_req_in_prog(1'b0),.load_addr({32{1'b0}}),.ch_update(ch_update),.ch_end(wr_ch_end),.ch_end_flush(rd_ch_end),.go_next_line(wr_go_next_line),.burst_start(wr_burst_start),.burst_last(wr_burst_last),.burst_max_size(wr_burst_max_size),.start_addr(wr_start_addr),.incr(wr_incr),.frame_width(frame_width),.x_size(x_size[8-1:0]),.x_remain(wr_x_remain),.fifo_wr_ready(1'b0),.fifo_remain(wr_fullness),.burst_addr(wr_burst_addr),.burst_size(wr_burst_size),.burst_ready(wr_burst_ready),.single(wr_single),.joint_ready_out(wr_joint_ready),.joint_ready_in(rd_joint_ready),.joint_line_req_in(1'b0),.joint_line_req_out(joint_line_req),.joint_burst_req_in(joint_burst_req),.joint_burst_req_out(),.joint_line_req_clr(rd_clr_d),.joint(joint),.page_cross(wr_page_cross),.joint_cross(joint_cross),.joint_flush(wr_joint_flush),.joint_flush_in(joint_flush)); 
+  dma_axi64_core0_ch_calc #(.READ(1))dma_axi64_ch_calc_rd(.clk(gclk),.reset(reset),.wr_cmd_pending(1'b0),.outs_empty(outs_empty),.load_in_prog(load_in_prog),.load_req_in_prog(load_req_in_prog),.load_addr(load_addr),.ch_update(ch_update),.ch_end(rd_ch_end),.ch_end_flush(1'b0),.go_next_line(rd_go_next_line),.burst_start(rd_burst_start),.burst_last(rd_burst_last),.burst_max_size(rd_burst_max_size),.start_addr(rd_start_addr),.incr(rd_incr),.frame_width(frame_width),.x_size(x_size[8-1:0]),.x_remain(rd_x_remain),.fifo_remain(rd_gap),.fifo_wr_ready(fifo_wr_ready),.burst_addr(rd_burst_addr),.burst_size(rd_burst_size),.burst_ready(rd_burst_ready),.single(),.joint_ready_out(rd_joint_ready),.joint_ready_in(wr_joint_ready),.joint_line_req_in(joint_line_req),.joint_line_req_out(),.joint_burst_req_in(1'b0),.joint_burst_req_out(joint_burst_req),.joint_line_req_clr(wr_clr_d),.joint(joint),.page_cross(rd_page_cross),.joint_cross(joint_cross),.joint_flush(rd_joint_flush),.joint_flush_in(joint_flush)); 
+  dma_axi64_core0_ch_calc #(.READ(0))dma_axi64_ch_calc_wr(.clk(gclk),.reset(reset),.wr_cmd_pending(wr_cmd_pending),.outs_empty(outs_empty),.load_in_prog(load_in_prog),.load_req_in_prog(1'b0),.load_addr({32{1'b0}}),.ch_update(ch_update),.ch_end(wr_ch_end),.ch_end_flush(rd_ch_end),.go_next_line(wr_go_next_line),.burst_start(wr_burst_start),.burst_last(wr_burst_last),.burst_max_size(wr_burst_max_size),.start_addr(wr_start_addr),.incr(wr_incr),.frame_width(frame_width),.x_size(x_size[8-1:0]),.x_remain(wr_x_remain),.fifo_wr_ready(1'b0),.fifo_remain(wr_fullness),.burst_addr(wr_burst_addr),.burst_size(wr_burst_size),.burst_ready(wr_burst_ready),.single(wr_single),.joint_ready_out(wr_joint_ready),.joint_ready_in(rd_joint_ready),.joint_line_req_in(1'b0),.joint_line_req_out(joint_line_req),.joint_burst_req_in(joint_burst_req),.joint_burst_req_out(),.joint_line_req_clr(rd_clr_d),.joint(joint),.page_cross(wr_page_cross),.joint_cross(joint_cross),.joint_flush(wr_joint_flush),.joint_flush_in(joint_flush)); 
   assign rd_wait_ready=1'b1; 
   assign wr_wait_ready=1'b1; 
   dma_axi64_core0_ch_periph_mux dma_axi64_ch_periph_mux_rd(.clk(gclk),.reset(reset),.clken(clken),.periph_req(periph_rx_req),.periph_clr(periph_rx_clr),.periph_ready(rd_periph_ready),.periph_num(rd_periph_num),.clr_valid(rd_clr_valid),.clr(rd_clr)); 
@@ -908,89 +972,89 @@ module dma_axi64_core0_ch_fifo_ptr (
   assign rd_ptr_pre=rd_ptr+({4{slice_rd}}&slice_rsize); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          wr_ptr <={5{1'b0}};
+          wr_ptr <=#1{5{1'b0}};
         else 
           if (ch_update)
-             wr_ptr <={5{1'b0}};
+             wr_ptr <=#1{5{1'b0}};
            else 
              if (slice_wr)
-                wr_ptr <=wr_ptr_pre;
+                wr_ptr <=#1wr_ptr_pre;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          rd_ptr <={5{1'b0}};
+          rd_ptr <=#1{5{1'b0}};
         else 
           if (ch_update)
-             rd_ptr <={5{1'b0}};
+             rd_ptr <=#1{5{1'b0}};
            else 
              if (slice_rd)
-                rd_ptr <=rd_ptr_pre;
+                rd_ptr <=#1rd_ptr_pre;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          rd_line_remain <=4'd8;
+          rd_line_remain <=#14'd8;
         else 
           if (ch_update|wr_clr_line)
-             rd_line_remain <=4'd8;
+             rd_line_remain <=#14'd8;
            else 
              if (slice_rd&(rd_line_remain==slice_rsize))
-                rd_line_remain <=4'd8;
+                rd_line_remain <=#14'd8;
               else 
                 if (slice_rd)
-                   rd_line_remain <=rd_line_remain-slice_rsize;
+                   rd_line_remain <=#1rd_line_remain-slice_rsize;
  
   assign fullness_pre=fullness+({4{slice_wr}}&slice_wsize)-({4{fifo_rd}}&fifo_rsize); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          fullness <={5+2{1'b0}};
+          fullness <=#1{5+2{1'b0}};
         else 
           if (ch_update)
-             fullness <={5+2{1'b0}};
+             fullness <=#1{5+2{1'b0}};
            else 
              if (fifo_rd|slice_wr)
-                fullness <=fullness_pre;
+                fullness <=#1fullness_pre;
  
-  prgen_delay delay_joint_in_prog(.clk(clk),.reset(reset),.din(joint_in_prog),.dout(joint_in_prog_d)); 
+  prgen_delay #(1)delay_joint_in_prog(.clk(clk),.reset(reset),.din(joint_in_prog),.dout(joint_in_prog_d)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          joint_delay_reg <=1'b0;
+          joint_delay_reg <=#11'b0;
         else 
           if (joint_in_prog&(~joint_in_prog_d))
-             joint_delay_reg <=fullness>32-4'd8;
+             joint_delay_reg <=#1fullness>32-4'd8;
            else 
              if (~joint_in_prog)
-                joint_delay_reg <=1'b0;
+                joint_delay_reg <=#11'b0;
  
   assign joint_delay=joint_delay_reg; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          fifo_wr_ready <=1'b0;
+          fifo_wr_ready <=#11'b0;
         else 
           if (joint_in_prog)
-             fifo_wr_ready <=1'b0;
+             fifo_wr_ready <=#11'b0;
            else 
              if (|wr_next_size)
-                fifo_wr_ready <=fullness_pre>=wr_next_size;
+                fifo_wr_ready <=#1fullness_pre>=wr_next_size;
  
   assign fifo_underflow_pre=fullness[5+1]; 
   assign fifo_overflow_pre=(~fullness[5+1])&(fullness[5:0]>32); 
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            fifo_overflow <=1'b0;
-            fifo_underflow <=1'b0;
+            fifo_overflow <=#11'b0;
+            fifo_underflow <=#11'b0;
           end 
         else 
           if (ch_update)
              begin 
-               fifo_overflow <=1'b0;
-               fifo_underflow <=1'b0;
+               fifo_overflow <=#11'b0;
+               fifo_underflow <=#11'b0;
              end 
            else 
              if ((!fifo_overflow)&(!fifo_underflow))
                 begin 
-                  fifo_overflow <=fifo_overflow_pre;
-                  fifo_underflow <=fifo_underflow_pre;
+                  fifo_overflow <=#1fifo_overflow_pre;
+                  fifo_underflow <=#1fifo_underflow_pre;
                 end
   
 endmodule
@@ -1141,17 +1205,21 @@ module prgen_swap64 (
    wire [3:0] bsel_in_high ;  
    wire [3:0] bsel_out_low ;  
    wire [3:0] bsel_out_high ;  
-  assign data_in_low=data_in[31:0]; 
-  assign data_in_high=data_in[63:32]; 
-  assign bsel_in_low=bsel_in[3:0]; 
-  assign bsel_in_high=bsel_in[7:4]; 
+  assign data_in_low=end_swap==2'b11 ? data_in[63:32]:data_in[31:0]; 
+  assign data_in_high=end_swap==2'b11 ? data_in[31:0]:data_in[63:32]; 
+  assign bsel_in_low=end_swap==2'b11 ? bsel_in[7:4]:bsel_in[3:0]; 
+  assign bsel_in_high=end_swap==2'b11 ? bsel_in[3:0]:bsel_in[7:4]; 
   prgen_swap32 swap32_low(.end_swap(end_swap),.data_in(data_in_low),.data_out(data_out_low),.bsel_in(bsel_in_low),.bsel_out(bsel_out_low)); 
   prgen_swap32 swap32_high(.end_swap(end_swap),.data_in(data_in_high),.data_out(data_out_high),.bsel_in(bsel_in_high),.bsel_out(bsel_out_high)); 
   assign data_out={data_out_high,data_out_low}; 
   assign bsel_out={bsel_out_high,bsel_out_low}; 
 endmodule
  
-module dma_axi64_core0_ch_reg_size (
+module dma_axi64_core0_ch_reg_size #(
+ parameter MAX_BURST =0 ? 64:128,
+ parameter HALF_BYTES =32/2,
+ parameter LARGE_FIFO =32>MAX_BURST,
+ parameter SMALL_FIFO =32==16) (
   input clk,
   input reset,
   input update,
@@ -1162,16 +1230,20 @@ module dma_axi64_core0_ch_reg_size (
   input allow_full_fifo,
   input joint_flush,
   output reg  [8-1:0] burst_max_size) ; 
+    
+    
+    
+    
    wire [8-1:0] burst_max_size_fifo ;  
    wire [8-1:0] burst_max_size_pre ;  
-  assign burst_max_size_fifo=allow_full_burst|0 ? 128:joint_flush&0 ? 16:(burst_max_size_other>16)&(burst_max_size_reg>16)&(burst_max_size_other!=burst_max_size_reg) ? 16:allow_full_fifo ? 32:16; 
-  prgen_min2 min2_max(.a(burst_max_size_reg),.b(burst_max_size_fifo),.min(burst_max_size_pre)); 
+  assign burst_max_size_fifo=allow_full_burst|LARGE_FIFO ? MAX_BURST:joint_flush&SMALL_FIFO ? HALF_BYTES:(burst_max_size_other>HALF_BYTES)&(burst_max_size_reg>HALF_BYTES)&(burst_max_size_other!=burst_max_size_reg) ? HALF_BYTES:allow_full_fifo ? 32:HALF_BYTES; 
+  prgen_min2 #(8)min2_max(.a(burst_max_size_reg),.b(burst_max_size_fifo),.min(burst_max_size_pre)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          burst_max_size <={8{1'b0}};
+          burst_max_size <=#1{8{1'b0}};
         else 
           if (update)
-             burst_max_size <=burst_max_size_pre>128 ? 128:burst_max_size_pre;
+             burst_max_size <=#1burst_max_size_pre>MAX_BURST ? MAX_BURST:burst_max_size_pre;
  
 endmodule
  
@@ -1191,21 +1263,26 @@ module dma_axi64_core0_channels_apb_mux (
    reg [2:0] paddr_sel_d ;  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          paddr_sel_d <=3'b000;
+          paddr_sel_d <=#13'b000;
         else 
           if (psel&(~penable))
-             paddr_sel_d <=paddr_sel;
+             paddr_sel_d <=#1paddr_sel;
            else 
              if ((~psel)&pclken)
-                paddr_sel_d <=3'b000;
+                paddr_sel_d <=#13'b000;
  
   assign paddr_sel=paddr[10:8]; 
-  prgen_demux8 mux_psel(.sel(paddr_sel),.x(psel),.ch_x(ch_psel)); 
-  prgen_mux8 mux_prdata(.sel(paddr_sel_d),.ch_x(ch_prdata),.x(prdata)); 
+  prgen_demux8 #(1)mux_psel(.sel(paddr_sel),.x(psel),.ch_x(ch_psel)); 
+  prgen_mux8 #(32)mux_prdata(.sel(paddr_sel_d),.ch_x(ch_prdata),.x(prdata)); 
   assign pslverr=ch_pslverr[paddr_sel_d]; 
 endmodule
  
-module dma_axi64_core0_ctrl (
+module dma_axi64_core0_ctrl #(
+ parameter IDLE =3'd0,
+ parameter CMD =3'd1,
+ parameter WAIT_CLR =3'd2,
+ parameter WAIT_DELAY =3'd3,
+ parameter STALL =3'd4) (
   input clk,
   input reset,
   input ch_go,
@@ -1239,161 +1316,166 @@ module dma_axi64_core0_ctrl (
    wire go_next_line_d ;  
    reg [2:0] ps ;  
    reg [2:0] ns ;  
+    
+    
+    
+    
+    
   assign busy=ps!=IDLE; 
   assign periph_clr_ch=periph_clr_valid&periph_clr&(ch_num==ch_num_resp); 
   assign periph_clr_last_ch=periph_clr_valid&periph_clr_last&(ch_num==ch_num_resp); 
   assign go_next_line_d=1'b0; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          joint_ctrl_reg <=1'b0;
+          joint_ctrl_reg <=#11'b0;
         else 
           if (finish)
-             joint_ctrl_reg <=1'b0;
+             joint_ctrl_reg <=#11'b0;
            else 
              if (ch_go)
-                joint_ctrl_reg <=joint_req;
+                joint_ctrl_reg <=#1joint_req;
  
   assign joint_ctrl=joint_ctrl_reg; 
-  assign tokens_remain=(|tokens_counter)|0; 
+  assign tokens_remain=(|tokens_counter)|ch_last; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          tokens_counter <={6{1'b0}};
+          tokens_counter <=#1{6{1'b0}};
         else 
           if (ch_go)
-             tokens_counter <=tokens;
+             tokens_counter <=#1tokens;
            else 
              if (burst_start&(|tokens_counter))
-                tokens_counter <=tokens_counter-1'b1;
+                tokens_counter <=#1tokens_counter-1'b1;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          delay_counter <={3{1'b0}};
+          delay_counter <=#1{3{1'b0}};
         else 
           if (periph_clr_ch)
-             delay_counter <=periph_delay;
+             delay_counter <=#1periph_delay;
            else 
              if (|delay_counter)
-                delay_counter <=delay_counter-1'b1;
+                delay_counter <=#1delay_counter-1'b1;
  
   assign stall=cmd_pending|cmd_full|go_next_line_d; 
-  always @(                ch_go or  0 or  ch_ready or  clr_stall or  delay_counter or  go_next_line_d or  hold or  joint_ctrl or  joint_req or  periph_clr_ch or  periph_clr_last_ch or  periph_clr_valid or  periph_delay or  ps or  3'd4 or  tokens_remain)
+  always @(                ch_go or  ch_last or  ch_ready or  clr_stall or  delay_counter or  go_next_line_d or  hold or  joint_ctrl or  joint_req or  periph_clr_ch or  periph_clr_last_ch or  periph_clr_valid or  periph_delay or  ps or  stall or  tokens_remain)
        begin 
-         ns =8'hD0;
+         ns =IDLE;
          burst_start =1'b0;
          finish =1'b0;
          case (ps)
-          8 'hD0:
+          IDLE :
              begin 
                if (ch_go)
                   begin 
                     if (!ch_ready)
                        begin 
-                         ns =8'hD0;
+                         ns =IDLE;
                          finish =1'b1;
                        end 
                      else 
-                       if (3'd4)
-                          ns =3'd4;
+                       if (stall)
+                          ns =STALL;
                         else 
-                          ns =3'd1;
+                          ns =CMD;
                   end 
                 else 
-                  ns =8'hD0;
+                  ns =IDLE;
              end 
-          3 'd1:
+          CMD :
              begin 
                if (joint_req^joint_ctrl)
                   begin 
-                    ns =8'hD0;
+                    ns =IDLE;
                     finish =1'b1;
                   end 
                 else 
                   if ((clr_stall|hold)&tokens_remain)
-                     ns =3'd1;
+                     ns =CMD;
                    else 
                      if (ch_ready&tokens_remain)
                         begin 
-                          if (3'd4)
-                             ns =3'd4;
+                          if (stall)
+                             ns =STALL;
                            else 
                              begin 
                                burst_start =1'b1;
-                               ns =3'd2;
+                               ns =WAIT_CLR;
                              end 
                         end 
                       else 
-                        if (0&(~ch_ready))
-                           ns =3'd1;
+                        if (ch_last&(~ch_ready))
+                           ns =CMD;
                          else 
                            begin 
-                             ns =8'hD0;
+                             ns =IDLE;
                              finish =1'b1;
                            end 
              end 
-          3 'd2:
+          WAIT_CLR :
              begin 
                if ((|periph_delay)&periph_clr_valid)
                   begin 
                     if (periph_clr_last_ch)
                        begin 
-                         ns =8'hD0;
+                         ns =IDLE;
                          finish =1'b1;
                        end 
                      else 
                        if (periph_clr_ch)
-                          ns =3'd3;
+                          ns =WAIT_DELAY;
                         else 
-                          ns =3'd2;
+                          ns =WAIT_CLR;
                   end 
                 else 
                   if (!tokens_remain)
                      begin 
-                       ns =8'hD0;
+                       ns =IDLE;
                        finish =1'b1;
                      end 
                    else 
-                     ns =3'd3;
+                     ns =WAIT_DELAY;
              end 
-          3 'd3:
+          WAIT_DELAY :
              begin 
                if (go_next_line_d)
-                  ns =3'd3;
+                  ns =WAIT_DELAY;
                 else 
                   if (delay_counter=='d0)
-                     ns =3'd4;
+                     ns =STALL;
                    else 
-                     ns =3'd3;
+                     ns =WAIT_DELAY;
              end 
-          3 'd4:
+          STALL :
              begin 
                if (ch_ready&tokens_remain)
                   begin 
-                    if (3'd4)
-                       ns =3'd4;
+                    if (stall)
+                       ns =STALL;
                      else 
-                       ns =3'd1;
+                       ns =CMD;
                   end 
                 else 
-                  if (0&(~ch_ready))
-                     ns =3'd1;
+                  if (ch_last&(~ch_ready))
+                     ns =CMD;
                    else 
                      begin 
-                       ns =8'hD0;
+                       ns =IDLE;
                        finish =1'b1;
                      end 
              end 
           default :
              begin 
-               ns =8'hD0;
+               ns =IDLE;
              end 
          endcase 
        end
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          ps <=8'hD0;
+          ps <=#1IDLE;
         else 
-          ps <=ns;
+          ps <=#1ns;
  
 endmodule
  
@@ -1440,52 +1522,52 @@ module dma_axi64_core0_ch_wr_slicer (
    wire slice_wr_fifo ;  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          line_remain <=4'd8;
+          line_remain <=#14'd8;
         else 
           if (ch_update|rd_clr_line)
-             line_remain <=4'd8;
+             line_remain <=#14'd8;
            else 
              if (slice_wr_pre&(line_remain==slice_wsize_pre))
-                line_remain <=4'd8;
+                line_remain <=#14'd8;
               else 
                 if (slice_wr_pre)
-                   line_remain <=line_remain-slice_wsize_pre;
+                   line_remain <=#1line_remain-slice_wsize_pre;
  
   assign join_wsize=next_size+fifo_wsize; 
-  prgen_min2 min2_append(.a(join_wsize),.b(4'd8),.min(append_wsize)); 
-  prgen_min2 min2_direct(.a(line_remain),.b(fifo_wsize),.min(direct_wsize)); 
+  prgen_min2 #(4)min2_append(.a(join_wsize),.b(4'd8),.min(append_wsize)); 
+  prgen_min2 #(4)min2_direct(.a(line_remain),.b(fifo_wsize),.min(direct_wsize)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          append <=1'b0;
+          append <=#11'b0;
         else 
           if (next_wr)
-             append <=1'b0;
+             append <=#11'b0;
            else 
              if (fifo_wr&(slice_wsize_pre==join_wsize))
-                append <=1'b0;
+                append <=#11'b0;
               else 
                 if (fifo_wr)
-                   append <=1'b1;
+                   append <=#11'b1;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          next_size <={4{1'b0}};
+          next_size <=#1{4{1'b0}};
         else 
           if (next_wr)
-             next_size <={4{1'b0}};
+             next_size <=#1{4{1'b0}};
            else 
              if (fifo_wr&append)
-                next_size <=join_wsize-append_wsize;
+                next_size <=#1join_wsize-append_wsize;
               else 
                 if (fifo_wr)
-                   next_size <=join_wsize-direct_wsize;
+                   next_size <=#1join_wsize-direct_wsize;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          align_wdata_d <={64{1'b0}};
+          align_wdata_d <=#1{64{1'b0}};
         else 
           if (fifo_wr)
-             align_wdata_d <=align_wdata;
+             align_wdata_d <=#1align_wdata;
  
   assign wr_align_valid=rd_incr ? wr_align:wr_align-wr_ptr[3-1:0]; 
   always @(   fifo_wdata or  wr_align_valid or  fifo_wr)
@@ -1561,40 +1643,42 @@ module dma_axi64_core0_ch_wr_slicer (
   assign slice_wr_ptr_pre=wr_ptr; 
   assign slice_wdata_pre=append ? next_wdata:align_wdata; 
   assign slice_bsel_pre=bsel_shift; 
-  prgen_delay delay_wr0(.clk(clk),.reset(reset),.din(slice_wr_pre),.dout(slice_wr)); 
-  prgen_delay delay_wr(.clk(clk),.reset(reset),.din(slice_wr),.dout(slice_wr_fifo)); 
+  prgen_delay #(1)delay_wr0(.clk(clk),.reset(reset),.din(slice_wr_pre),.dout(slice_wr)); 
+  prgen_delay #(1)delay_wr(.clk(clk),.reset(reset),.din(slice_wr),.dout(slice_wr_fifo)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            slice_wsize <={4{1'b0}};
-            slice_wdata_pre_d <={64{1'b0}};
+            slice_wsize <=#1{4{1'b0}};
+            slice_wdata_pre_d <=#1{64{1'b0}};
           end 
         else 
           if (slice_wr_pre)
              begin 
-               slice_wsize <=slice_wsize_pre;
-               slice_wdata_pre_d <=slice_wdata_pre;
+               slice_wsize <=#1slice_wsize_pre;
+               slice_wdata_pre_d <=#1slice_wdata_pre;
              end
   
   prgen_swap64 swap64(.end_swap(end_swap),.data_in(slice_wdata_pre_d),.data_out(slice_wdata_swap),.bsel_in(slice_bsel_pre),.bsel_out(slice_bsel_swap)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            slice_wdata <={64{1'b0}};
-            slice_wr_ptr <={5{1'b0}};
-            slice_bsel <={8{1'b0}};
+            slice_wdata <=#1{64{1'b0}};
+            slice_wr_ptr <=#1{5{1'b0}};
+            slice_bsel <=#1{8{1'b0}};
           end 
         else 
           if (slice_wr)
              begin 
-               slice_wdata <=slice_wdata_swap;
-               slice_wr_ptr <=slice_wr_ptr_pre;
-               slice_bsel <=slice_bsel_swap;
+               slice_wdata <=#1slice_wdata_swap;
+               slice_wr_ptr <=#1slice_wr_ptr_pre;
+               slice_bsel <=#1slice_bsel_swap;
              end
   
 endmodule
  
-module dma_axi64_core0_axim_cmd (
+module dma_axi64_core0_axim_cmd #(
+ parameter AXI_WORD_SIZE =0 ? 2'b10:2'b11,
+ parameter AXI_3 =0 ? 2:3) (
   input clk,
   input reset,
   input [2:0] ch_num,
@@ -1623,6 +1707,8 @@ module dma_axi64_core0_axim_cmd (
   output reg  AJOINT,
   output [2:0] axim_timeout_num,
   output axim_timeout) ; 
+    
+    
    reg [7-1:0] AID_reg ;  
    reg AVALID_reg ;  
    wire [7-1:0] AID_pre ;  
@@ -1653,41 +1739,41 @@ module dma_axi64_core0_axim_cmd (
   assign max_burst={1'b1,{8{1'b0}}}-burst_addr[7:0]; 
   assign next_burst_start=next_burst&(~AVALID_reg)&(~cmd_full); 
   assign cross_start=burst_start&page_cross; 
-  prgen_delay delay_high_addr(.clk(clk),.reset(reset),.din(high_addr_pre),.dout(high_addr)); 
-  prgen_delay delay_cross_start(.clk(clk),.reset(reset),.din(cross_start),.dout(cross_start_d)); 
+  prgen_delay #(1)delay_high_addr(.clk(clk),.reset(reset),.din(high_addr_pre),.dout(high_addr)); 
+  prgen_delay #(1)delay_cross_start(.clk(clk),.reset(reset),.din(cross_start),.dout(cross_start_d)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          burst_reach <={9{1'b0}};
+          burst_reach <=#1{9{1'b0}};
         else 
           if (high_addr_pre)
-             burst_reach <=burst_reach_pre;
+             burst_reach <=#1burst_reach_pre;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          next_burst <=1'b0;
+          next_burst <=#11'b0;
         else 
           if (next_burst_start)
-             next_burst <=1'b0;
+             next_burst <=#11'b0;
            else 
              if (cross_start)
-                next_burst <=1'b1;
+                next_burst <=#11'b1;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          max_burst_d <={9{1'b0}};
+          max_burst_d <=#1{9{1'b0}};
         else 
           if (cross_start)
-             max_burst_d <=max_burst;
+             max_burst_d <=#1max_burst;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          next_burst_size <={8{1'b0}};
+          next_burst_size <=#1{8{1'b0}};
         else 
           if (cross_start)
-             next_burst_size <=burst_size;
+             next_burst_size <=#1burst_size;
            else 
              if (cross_start_d)
-                next_burst_size <=next_burst_size-max_burst_d;
+                next_burst_size <=#1next_burst_size-max_burst_d;
  
   assign cmd_split=cross_start_d; 
   assign cmd=AVALID&AREADY; 
@@ -1696,39 +1782,39 @@ module dma_axi64_core0_axim_cmd (
   assign joint_pending=AVALID&(~AREADY)&AJOINT; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          cmd_pending <=1'b0;
+          cmd_pending <=#11'b0;
         else 
           if (burst_start)
-             cmd_pending <=1'b1;
+             cmd_pending <=#11'b1;
            else 
-             if (3'd1&(~next_burst))
-                cmd_pending <=1'b0;
+             if (cmd&(~next_burst))
+                cmd_pending <=#11'b0;
  
-  prgen_delay delay_cmd_line(.clk(clk),.reset(reset),.din(cmd_line_pre),.dout(cmd_line)); 
+  prgen_delay #(1)delay_cmd_line(.clk(clk),.reset(reset),.din(cmd_line_pre),.dout(cmd_line)); 
   assign AID_pre={end_line_cmd,ASIZE_pre[1:0],extra_bit,ch_num[2:0]}; 
   assign AADDR_pre=burst_addr; 
   assign ASIZE_pre=burst_size=='d1 ? 2'b00:burst_size=='d2 ? 2'b01:burst_size=='d4 ? 2'b10:AXI_WORD_SIZE; 
   assign burst_length=next_burst ? next_burst_size:page_cross ? max_burst:burst_size; 
-  assign ALEN_pre=burst_length[8-1:3]=='d0 ? {4{1'b0}}:burst_length[8-1:3]-1'b1; 
+  assign ALEN_pre=burst_length[8-1:AXI_3]=='d0 ? {4{1'b0}}:burst_length[8-1:AXI_3]-1'b1; 
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            ASIZE <={2{1'b0}};
-            AJOINT <=1'b0;
+            ASIZE <=#1{2{1'b0}};
+            AJOINT <=#11'b0;
           end 
         else 
           if (burst_start)
              begin 
-               ASIZE <=ASIZE_pre;
-               AJOINT <=joint_req;
+               ASIZE <=#1ASIZE_pre;
+               AJOINT <=#1joint_req;
              end
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          AID_reg <={7{1'b0}};
+          AID_reg <=#1{7{1'b0}};
         else 
           if (burst_start)
-             AID_reg <=AID_pre;
+             AID_reg <=#1AID_pre;
  
   always @(  AID_reg or  next_burst)
        begin 
@@ -1739,37 +1825,37 @@ module dma_axi64_core0_axim_cmd (
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          AADDR <={32{1'b0}};
+          AADDR <=#1{32{1'b0}};
         else 
           if (next_burst_start)
-             AADDR <={AADDR[32-1:12],{12{1'b1}}}+1'b1;
+             AADDR <=#1{AADDR[32-1:12],{12{1'b1}}}+1'b1;
            else 
              if (burst_start)
-                AADDR <=AADDR_pre;
+                AADDR <=#1AADDR_pre;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          APORT <=1'b0;
+          APORT <=#11'b0;
         else 
           if (burst_start)
-             APORT <=cmd_port;
+             APORT <=#1cmd_port;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          ALEN <={4{1'b0}};
+          ALEN <=#1{4{1'b0}};
         else 
           if (burst_start|next_burst_start)
-             ALEN <=ALEN_pre;
+             ALEN <=#1ALEN_pre;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          AVALID_reg <=1'b0;
+          AVALID_reg <=#11'b0;
         else 
           if (AVALID&AREADY)
-             AVALID_reg <=1'b0;
+             AVALID_reg <=#11'b0;
            else 
              if ((burst_start&(burst_size>'d0))|next_burst_start)
-                AVALID_reg <=1'b1;
+                AVALID_reg <=#11'b1;
  
   assign AVALID=AJOINT ? AVALID_reg&(~AWVALID):AVALID_reg; 
   dma_axi64_core0_axim_timeout dma_axi64_axim_timeout(.clk(clk),.reset(reset),.VALID(AVALID),.READY(AREADY),.ID(AID),.axim_timeout_num(axim_timeout_num),.axim_timeout(axim_timeout)); 
@@ -1808,78 +1894,82 @@ module dma_axi64_core0_ch_remain (
   assign wr_burst_qual=wr_burst_start; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          rd_burst_size_valid <={8{1'b0}};
+          rd_burst_size_valid <=#1{8{1'b0}};
         else 
           if (rd_burst_qual)
-             rd_burst_size_valid <=rd_burst_size;
+             rd_burst_size_valid <=#1rd_burst_size;
            else 
-             rd_burst_size_valid <={8{1'b0}};
+             rd_burst_size_valid <=#1{8{1'b0}};
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          wr_burst_size_valid <={8{1'b0}};
+          wr_burst_size_valid <=#1{8{1'b0}};
         else 
           if (wr_burst_qual)
-             wr_burst_size_valid <=wr_burst_size;
+             wr_burst_size_valid <=#1wr_burst_size;
            else 
-             wr_burst_size_valid <={8{1'b0}};
+             wr_burst_size_valid <=#1{8{1'b0}};
  
   assign rd_transfer_size_valid={4{rd_transfer}}&rd_transfer_size; 
   assign wr_transfer_size_valid={4{wr_transfer}}&wr_transfer_size; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          rd_gap_reg <={1'b0,1'b1,{5{1'b0}}};
+          rd_gap_reg <=#1{1'b0,1'b1,{5{1'b0}}};
         else 
           if (ch_update)
-             rd_gap_reg <={1'b0,1'b1,{5{1'b0}}};
+             rd_gap_reg <=#1{1'b0,1'b1,{5{1'b0}}};
            else 
-             rd_gap_reg <=rd_gap_reg-rd_burst_size_valid+wr_transfer_size_valid;
+             rd_gap_reg <=#1rd_gap_reg-rd_burst_size_valid+wr_transfer_size_valid;
  
   assign rd_gap=rd_gap_reg[5+1] ? 'd0:rd_gap_reg[5:0]; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          wr_fullness_reg <={5+1{1'b0}};
+          wr_fullness_reg <=#1{5+1{1'b0}};
         else 
           if (ch_update)
-             wr_fullness_reg <={5+1{1'b0}};
+             wr_fullness_reg <=#1{5+1{1'b0}};
            else 
-             wr_fullness_reg <=wr_fullness_reg-wr_burst_size_valid+rd_transfer_size_valid;
+             wr_fullness_reg <=#1wr_fullness_reg-wr_burst_size_valid+rd_transfer_size_valid;
  
   assign wr_fullness=wr_fullness_reg[5+1] ? 'd0:wr_fullness_reg[5:0]; 
 endmodule
  
-module prgen_demux8 (
+module prgen_demux8 #(
+ parameter WIDTH =8) (
   input [3-1:0] sel,
-  input [8-1:0] x,
-  output reg  [8*8-1:0] ch_x) ; 
+  input [WIDTH-1:0] x,
+  output reg  [8*WIDTH-1:0] ch_x) ; 
+    
   always @(  sel or  x)
        begin 
-         ch_x ={8*8{1'b0}};
+         ch_x ={8*WIDTH{1'b0}};
          case (sel)
           3 'd0:
-             ch_x [8-1+8*0:8*0]=x;
+             ch_x [WIDTH-1+WIDTH*0:WIDTH*0]=x;
           3 'd1:
-             ch_x [8-1+8*1:8*1]=x;
+             ch_x [WIDTH-1+WIDTH*1:WIDTH*1]=x;
           3 'd2:
-             ch_x [8-1+8*2:8*2]=x;
+             ch_x [WIDTH-1+WIDTH*2:WIDTH*2]=x;
           3 'd3:
-             ch_x [8-1+8*3:8*3]=x;
+             ch_x [WIDTH-1+WIDTH*3:WIDTH*3]=x;
           3 'd4:
-             ch_x [8-1+8*4:8*4]=x;
+             ch_x [WIDTH-1+WIDTH*4:WIDTH*4]=x;
           3 'd5:
-             ch_x [8-1+8*5:8*5]=x;
+             ch_x [WIDTH-1+WIDTH*5:WIDTH*5]=x;
           3 'd6:
-             ch_x [8-1+8*6:8*6]=x;
+             ch_x [WIDTH-1+WIDTH*6:WIDTH*6]=x;
           3 'd7:
-             ch_x [8-1+8*7:8*7]=x;
+             ch_x [WIDTH-1+WIDTH*7:WIDTH*7]=x;
           default :
-             ch_x [8-1:0]=x;
+             ch_x [WIDTH-1:0]=x;
          endcase 
        end
   
 endmodule
  
-module dma_axi64_core0_ch_calc_size (
+module dma_axi64_core0_ch_calc_size #(
+ parameter READ =0,
+ parameter CMD_SIZE =16) (
   input clk,
   input reset,
   input ch_update,
@@ -1913,6 +2003,8 @@ module dma_axi64_core0_ch_calc_size (
   input joint_cross,
   output joint_flush,
   input joint_flush_in) ; 
+    
+    
    wire [8-1:0] burst_size_pre ;  
    wire [8-1:0] x_remain_fifo ;  
    wire [8-1:0] max_burst_align ;  
@@ -1933,80 +2025,80 @@ module dma_axi64_core0_ch_calc_size (
    wire joint_buffer_small ;  
    wire release_fifo ;  
   assign x_remain_fifo=|x_remain[10-1:8] ? {1'b1,{8-1{1'b0}}}:x_remain[8-1:0]; 
-  prgen_min3 min3(.clk(clk),.reset(reset),.a(max_burst_align),.b(burst_max_size),.c(x_remain_fifo),.min(burst_size_pre)); 
+  prgen_min3 #(8)min3(.clk(clk),.reset(reset),.a(max_burst_align),.b(burst_max_size),.c(x_remain_fifo),.min(burst_size_pre)); 
   assign max_burst_align=burst_addr[0] ? 'd1:burst_addr[1] ? 'd2:burst_addr[2] ? 'd4:{1'b1,{8-1{1'b0}}}; 
   assign burst_size_pre2=|burst_size_pre[8-1:3] ? {burst_size_pre[8-1:3],3'b000}:burst_size_pre[2] ? 'd4:burst_size_pre[1] ? 'd2:burst_size_pre[0] ? 'd1:'d0; 
   assign fifo_not_ready_pre=(fifo_remain<burst_size_pre2)&(~release_fifo); 
-  prgen_delay delay_fifo_not_ready(.clk(clk),.reset(reset),.din(fifo_not_ready_pre),.dout(fifo_not_ready)); 
+  prgen_delay #(1)delay_fifo_not_ready(.clk(clk),.reset(reset),.din(fifo_not_ready_pre),.dout(fifo_not_ready)); 
   assign burst_last=burst_size==x_remain; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          burst_ready <=1'b0;
+          burst_ready <=#11'b0;
         else 
           if (ch_update|ch_update_d|ch_update_d2|ch_update_d3)
-             burst_ready <=1'b0;
+             burst_ready <=#11'b0;
            else 
              if (load_req_in_prog)
-                burst_ready <=1'b1;
+                burst_ready <=#11'b1;
               else 
                 if (|joint_burst_req)
-                   burst_ready <=1'b1;
+                   burst_ready <=#11'b1;
                  else 
                    if (joint_line_req&(~joint_buffer_small))
-                      burst_ready <=1'b1;
+                      burst_ready <=#11'b1;
                     else 
                       if (load_in_prog|fifo_not_ready_pre|joint_wait|(page_cross&(burst_size!=burst_size_pre2)))
-                         burst_ready <=1'b0;
+                         burst_ready <=#11'b0;
                        else 
-                         burst_ready <=|burst_size_pre2;
+                         burst_ready <=#1|burst_size_pre2;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          burst_size <={8{1'b0}};
+          burst_size <=#1{8{1'b0}};
         else 
           if (load_req_in_prog)
-             burst_size <=16;
+             burst_size <=#1CMD_SIZE;
            else 
              if (|joint_burst_req)
-                burst_size <=joint_burst_req_size;
+                burst_size <=#1joint_burst_req_size;
               else 
                 if (joint_line_req&(~joint_buffer_small))
-                   burst_size <=joint_line_req_size;
+                   burst_size <=#1joint_line_req_size;
                  else 
-                   burst_size <=burst_size_pre2;
+                   burst_size <=#1burst_size_pre2;
  
   assign joint_update=ch_update|ch_update_d|ch_update_d2; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          joint_burst_req_reg <=2'b00;
+          joint_burst_req_reg <=#12'b00;
         else 
           if (joint_update|joint_flush|joint_flush_in)
-             joint_burst_req_reg <=2'b00;
+             joint_burst_req_reg <=#12'b00;
            else 
              if (joint_burst_req_reg&burst_start)
-                joint_burst_req_reg <=2'b00;
+                joint_burst_req_reg <=#12'b00;
               else 
                 if (joint_burst_req_in)
-                   joint_burst_req_reg <=joint_burst_req_reg[0] ? 2'b11:2'b01;
+                   joint_burst_req_reg <=#1joint_burst_req_reg[0] ? 2'b11:2'b01;
  
   assign joint_burst_req=joint_burst_req_reg; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          joint_line_req_reg <=1'b0;
+          joint_line_req_reg <=#11'b0;
         else 
           if (joint_update|joint_flush|joint_flush_in)
-             joint_line_req_reg <=1'b0;
+             joint_line_req_reg <=#11'b0;
            else 
              if (joint_line_req_reg&burst_start)
-                joint_line_req_reg <=1'b0;
+                joint_line_req_reg <=#11'b0;
               else 
                 if (joint_line_req_in)
-                   joint_line_req_reg <=1'b1;
+                   joint_line_req_reg <=#11'b1;
  
   assign joint_line_req=joint_line_req_reg; 
   assign joint_line_req_size=burst_addr[2:0]==3'd0 ? 4'd8:burst_addr[1:0]==2'd0 ? 'd4:burst_addr[0]==1'd0 ? 'd2:'d1; 
   assign joint_burst_req_size=burst_addr[0] ? 'd1:burst_addr[1] ? 'd2:burst_addr[2]&(!0) ? 'd4:joint_burst_req[1] ? 'd32:'d16; 
-  dma_axi64_core0_ch_calc_joint dma_axi64_core0_ch_calc_joint(.clk(clk),.reset(reset),.joint_update(joint_update),.ch_end(ch_end),.ch_end_flush(ch_end_flush),.joint_line_req_clr(joint_line_req_clr),.burst_size_pre2(burst_size_pre2),.burst_max_size(burst_max_size),.fifo_not_ready(fifo_not_ready),.wr_cmd_pending(wr_cmd_pending),.outs_empty(outs_empty),.x_remain(x_remain),.fifo_wr_ready(fifo_wr_ready),.fifo_remain(fifo_remain),.joint(joint),.joint_ready_in(joint_ready_in),.joint_ready_out(joint_ready_out),.joint_line_req(joint_line_req_out),.joint_burst_req(joint_burst_req_out),.joint_wait(joint_wait),.page_cross(page_cross),.joint_cross(joint_cross),.joint_flush(joint_flush),.joint_flush_in(joint_flush_in),.joint_buffer_small(joint_buffer_small)); 
+  dma_axi64_core0_ch_calc_joint #(READ)dma_axi64_core0_ch_calc_joint(.clk(clk),.reset(reset),.joint_update(joint_update),.ch_end(ch_end),.ch_end_flush(ch_end_flush),.joint_line_req_clr(joint_line_req_clr),.burst_size_pre2(burst_size_pre2),.burst_max_size(burst_max_size),.fifo_not_ready(fifo_not_ready),.wr_cmd_pending(wr_cmd_pending),.outs_empty(outs_empty),.x_remain(x_remain),.fifo_wr_ready(fifo_wr_ready),.fifo_remain(fifo_remain),.joint(joint),.joint_ready_in(joint_ready_in),.joint_ready_out(joint_ready_out),.joint_line_req(joint_line_req_out),.joint_burst_req(joint_burst_req_out),.joint_wait(joint_wait),.page_cross(page_cross),.joint_cross(joint_cross),.joint_flush(joint_flush),.joint_flush_in(joint_flush_in),.joint_buffer_small(joint_buffer_small)); 
   assign release_fifo=joint_ready_in&joint_ready_out&(~joint_cross); 
 endmodule
  
@@ -2143,7 +2235,7 @@ module dma_axi64_dual_core (
   dma_axi64_apb_mux dma_axi64_apb_mux(.clk(clk),.reset(reset),.pclken(pclken),.psel(psel),.penable(penable),.pwrite(pwrite),.paddr(paddr[12:11]),.prdata(prdata),.pslverr(pslverr),.pready(pready),.psel0(psel0),.prdata0(prdata0),.pslverr0(pslverr0),.psel1(psel1),.prdata1(prdata1),.pslverr1(pslverr1),.psel_reg(psel_reg),.prdata_reg(prdata_reg),.pslverr_reg(pslverr_reg)); 
   dma_axi64_reg dma_axi64_reg(.clk(clk),.reset(reset),.pclken(pclken),.psel(psel_reg),.penable(penable),.paddr(paddr[7:0]),.pwrite(pwrite),.pwdata(pwdata),.prdata(prdata_reg),.pslverr(pslverr_reg),.core0_idle(core0_idle),.ch_int_all_proc0(ch_int_all_proc0),.int_all_proc(int_all_proc),.core0_clkdiv(core0_clkdiv),.core0_ch_start(core0_ch_start),.joint_mode0(joint_mode0),.rd_prio_top0(rd_prio_top0),.rd_prio_high0(rd_prio_high0),.rd_prio_top_num0(rd_prio_top_num0),.rd_prio_high_num0(rd_prio_high_num0),.wr_prio_top0(wr_prio_top0),.wr_prio_high0(wr_prio_high0),.wr_prio_top_num0(wr_prio_top_num0),.wr_prio_high_num0(wr_prio_high_num0),.periph_rx_req_reg(periph_rx_req_reg),.periph_tx_req_reg(periph_tx_req_reg),.periph_rx_clr(periph_rx_clr),.periph_tx_clr(periph_tx_clr)); 
   dma_axi64_core0_top dma_axi64_core0_top(.clk(clk),.reset(reset),.scan_en(scan_en),.idle(core0_idle),.ch_int_all_proc(ch_int_all_proc0),.ch_start(core0_ch_start),.clkdiv(core0_clkdiv),.periph_tx_req(periph_tx_req0),.periph_tx_clr(periph_tx_clr0),.periph_rx_req(periph_rx_req0),.periph_rx_clr(periph_rx_clr0),.pclken(pclken),.psel(psel0),.penable(penable),.paddr(paddr[10:0]),.pwrite(pwrite),.pwdata(pwdata),.prdata(prdata0),.pslverr(pslverr0),.rd_port_num(rd_port_num0),.wr_port_num(wr_port_num0),.joint_mode(joint_mode0),.joint_remote(joint_remote0),.rd_prio_top(rd_prio_top0),.rd_prio_high(rd_prio_high0),.rd_prio_top_num(rd_prio_top_num0),.rd_prio_high_num(rd_prio_high_num0),.wr_prio_top(wr_prio_top0),.wr_prio_high(wr_prio_high0),.wr_prio_top_num(wr_prio_top_num0),.wr_prio_high_num(wr_prio_high_num0),.AWADDR(M0_AWADDR),.AWLEN(M0_AWLEN),.AWSIZE(M0_AWSIZE),.AWVALID(M0_AWVALID),.AWREADY(M0_AWREADY),.WDATA(M0_WDATA),.WSTRB(M0_WSTRB),.WLAST(M0_WLAST),.WVALID(M0_WVALID),.WREADY(M0_WREADY),.BRESP(M0_BRESP),.BVALID(M0_BVALID),.BREADY(M0_BREADY),.ARADDR(M0_ARADDR),.ARLEN(M0_ARLEN),.ARSIZE(M0_ARSIZE),.ARVALID(M0_ARVALID),.ARREADY(M0_ARREADY),.RDATA(M0_RDATA),.RRESP(M0_RRESP),.RLAST(M0_RLAST),.RVALID(M0_RVALID),.RREADY(M0_RREADY)); 
-  prgen_delay delay_pslverr1(.clk(clk),.reset(reset),.din(psel1),.dout(pslverr1)); 
+  prgen_delay #(1)delay_pslverr1(.clk(clk),.reset(reset),.din(psel1),.dout(pslverr1)); 
   assign prdata1={32{1'b0}}; 
   assign periph_rx_clr1={31{1'b0}}; 
   assign periph_tx_clr1={31{1'b0}}; 
@@ -2171,36 +2263,48 @@ module dma_axi64_core0_ch_periph_mux (
   
   assign periph_req_full={periph_req,1'b1}; 
   assign periph_ready_pre=periph_req_full[periph_num]; 
-  prgen_delay delay_ready(.clk(clk),.reset(reset),.din(periph_ready_pre),.dout(periph_ready)); 
+  prgen_delay #(1)delay_ready(.clk(clk),.reset(reset),.din(periph_ready_pre),.dout(periph_ready)); 
 endmodule
  
-module prgen_min3 (
+module prgen_min3 #(
+ parameter WIDTH =8) (
   input clk,
   input reset,
-  input [8-1:0] a,
-  input [8-1:0] b,
-  input [8-1:0] c,
-  output [8-1:0] min) ; 
-   wire [8-1:0] min_ab_pre ;  
-   reg [8-1:0] min_ab ;  
-   reg [8-1:0] min_c ;  
-  prgen_min2 min2_ab(.a(a),.b(b),.min(min_ab_pre)); 
-  prgen_min2 min2_abc(.a(min_ab),.b(min_c),.min(min)); 
+  input [WIDTH-1:0] a,
+  input [WIDTH-1:0] b,
+  input [WIDTH-1:0] c,
+  output [WIDTH-1:0] min) ; 
+    
+   wire [WIDTH-1:0] min_ab_pre ;  
+   reg [WIDTH-1:0] min_ab ;  
+   reg [WIDTH-1:0] min_c ;  
+  prgen_min2 #(WIDTH)min2_ab(.a(a),.b(b),.min(min_ab_pre)); 
+  prgen_min2 #(WIDTH)min2_abc(.a(min_ab),.b(min_c),.min(min)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            min_ab <={8{1'b0}};
-            min_c <={8{1'b0}};
+            min_ab <=#1{WIDTH{1'b0}};
+            min_c <=#1{WIDTH{1'b0}};
           end 
         else 
           begin 
-            min_ab <=min_ab_pre;
-            min_c <=c;
+            min_ab <=#1min_ab_pre;
+            min_c <=#1c;
           end
   
 endmodule
  
-module dma_axi64_core0_ch_calc_joint (
+module dma_axi64_core0_ch_calc_joint #(
+ parameter READ =0,
+ parameter WRITE =!READ,
+ parameter IDLE =3'd0,
+ parameter REQ_LINE =3'd1,
+ parameter READY_OUT =3'd2,
+ parameter READY =3'd3,
+ parameter CROSS =3'd4,
+ parameter BURST_REQ =3'd5,
+ parameter RECHK =3'd6,
+ parameter FLUSH =3'd7) (
   input clk,
   input reset,
   input joint_update,
@@ -2226,6 +2330,16 @@ module dma_axi64_core0_ch_calc_joint (
   output reg  joint_flush,
   input joint_flush_in,
   output joint_buffer_small) ; 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
    reg [2:0] ps ;  
    reg [2:0] ns ;  
    wire joint_ready_out_pre ;  
@@ -2234,117 +2348,117 @@ module dma_axi64_core0_ch_calc_joint (
   assign joint_buffer_small=(burst_max_size>x_remain)|(x_remain<'d8); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          joint_ready_out <=1'b0;
+          joint_ready_out <=#11'b0;
         else 
           if ((page_cross|ch_end_flush|joint_flush|joint_wait)&(~ch_end))
-             joint_ready_out <=1'b0;
+             joint_ready_out <=#11'b0;
            else 
              if ((~ch_end)&(~wr_cmd_pending))
-                joint_ready_out <=joint_ready_out_pre;
+                joint_ready_out <=#1joint_ready_out_pre;
  
   always @(             ch_end_flush or  fifo_not_ready or  fifo_remain or  fifo_wr_ready or  joint_buffer_small or  joint_cross or  joint_flush_in or  joint_line_req_clr or  joint_ready_in or  joint_ready_out or  outs_empty or  page_cross or  ps)
        begin 
-         ns =8'hD0;
+         ns =IDLE;
          joint_line_req =1'b0;
          joint_burst_req =1'b0;
          joint_flush =1'b0;
          joint_wait =1'b0;
          case (ps)
-          8 'hD0:
+          IDLE :
              begin 
                if (joint_flush_in|joint_buffer_small)
-                  ns =3'd7;
+                  ns =FLUSH;
                 else 
                   if (joint_ready_out&joint_ready_in&outs_empty)
-                     ns =3'd3;
+                     ns =READY;
                    else 
                      if (joint_ready_out)
                         begin 
                           joint_wait =1'b1;
-                          ns =3'd2;
+                          ns =READY_OUT;
                         end 
                       else 
                         if (fifo_not_ready&joint_ready_in&outs_empty)
-                           if (1)
+                           if (WRITE)
                               begin 
                                 joint_line_req =1'b1;
-                                ns =3'd1;
+                                ns =REQ_LINE;
                               end 
                             else 
                               begin 
                                 joint_burst_req =1'b1;
-                                ns =3'd1;
+                                ns =REQ_LINE;
                               end 
                          else 
-                           ns =8'hD0;
+                           ns =IDLE;
              end 
-          3 'd1:
+          REQ_LINE :
              begin 
                if (joint_flush_in)
-                  ns =3'd7;
+                  ns =FLUSH;
                 else 
                   if (joint_line_req_clr)
                      begin 
-                       ns =8'hD0;
+                       ns =IDLE;
                        joint_wait =1'b0;
                      end 
                    else 
                      begin 
-                       ns =3'd1;
+                       ns =REQ_LINE;
                        joint_wait =1'b1;
                      end 
              end 
-          3 'd2:
+          READY_OUT :
              begin 
                joint_wait =1'b1;
                if (joint_cross|page_cross)
-                  ns =3'd4;
+                  ns =CROSS;
                 else 
                   if ((~joint_ready_out)|joint_flush_in|joint_buffer_small)
-                     ns =3'd7;
+                     ns =FLUSH;
                    else 
                      if (joint_ready_in&outs_empty)
                         begin 
                           joint_wait =1'b0;
-                          ns =3'd6;
+                          ns =RECHK;
                         end 
                       else 
-                        ns =3'd2;
+                        ns =READY_OUT;
              end 
-          3 'd6:
+          RECHK :
              begin 
                if (joint_flush_in|joint_buffer_small)
-                  ns =3'd7;
+                  ns =FLUSH;
                 else 
                   if (joint_ready_in&joint_ready_out)
-                     ns =3'd3;
+                     ns =READY;
                    else 
-                     if (1)
+                     if (WRITE)
                         begin 
                           joint_line_req =1'b1;
-                          ns =3'd1;
+                          ns =REQ_LINE;
                         end 
                       else 
-                        if (0)
-                           ns =3'd6;
+                        if (READ)
+                           ns =RECHK;
              end 
-          3 'd3:
+          READY :
              begin 
                if (joint_cross)
                   begin 
                     joint_wait =1'b1;
-                    ns =3'd2;
+                    ns =READY_OUT;
                   end 
                 else 
                   if ((~joint_ready_out)|(~joint_ready_in)|ch_end_flush)
-                     ns =3'd7;
+                     ns =FLUSH;
                    else 
-                     ns =3'd3;
+                     ns =READY;
              end 
-          3 'd4:
+          CROSS :
              begin 
                if (joint_buffer_small)
-                  ns =3'd7;
+                  ns =FLUSH;
                 else 
                   if (joint_ready_out&(~joint_cross)&outs_empty)
                      begin 
@@ -2352,55 +2466,57 @@ module dma_axi64_core0_ch_calc_joint (
                           begin 
                             joint_burst_req =1'b1;
                             if (fifo_remain=='d0)
-                               ns =3'd5;
+                               ns =BURST_REQ;
                              else 
-                               ns =3'd1;
+                               ns =REQ_LINE;
                           end 
                         else 
-                          ns =8'hD0;
+                          ns =IDLE;
                      end 
                    else 
-                     ns =3'd4;
+                     ns =CROSS;
              end 
-          3 'd5:
+          BURST_REQ :
              begin 
                joint_burst_req =1'b1;
-               ns =3'd1;
+               ns =REQ_LINE;
              end 
-          3 'd7:
+          FLUSH :
              begin 
                joint_flush =1'b1;
-               ns =3'd7;
+               ns =FLUSH;
              end 
           default :
-             ns =8'hD0;
+             ns =IDLE;
          endcase 
        end
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          ps <=8'hD0;
+          ps <=#1IDLE;
         else 
           if (joint_update)
-             ps <=8'hD0;
+             ps <=#1IDLE;
            else 
-             ps <=ns;
+             ps <=#1ns;
  
 endmodule
  
-module prgen_delay (
+module prgen_delay #(
+ parameter DELAY =2) (
   input clk,
   input reset,
   input din,
   output dout) ; 
-   reg [2:0] shift_reg ;  
+    
+   reg [DELAY:0] shift_reg ;  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          shift_reg <=3'b000;
+          shift_reg <=#1{DELAY+1{1'b0}};
         else 
-          shift_reg <={shift_reg[1:0],din};
+          shift_reg <=#1{shift_reg[DELAY-1:0],din};
  
-  assign dout=shift_reg[1]; 
+  assign dout=shift_reg[DELAY-1]; 
 endmodule
  
 module dma_axi64_core0_ch_outs (
@@ -2413,41 +2529,43 @@ module dma_axi64_core0_ch_outs (
   output outs_empty,
   output reg  stall,
   output timeout) ; 
-   wire [3:0] outs_pre ;  
+   wire [4-1:0] outs_pre ;  
    reg [10-1:0] counter ;  
   assign outs_empty=outs=='d0; 
-  assign outs_pre=outs+3'd1-clr; 
+  assign outs_pre=outs+cmd-clr; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          outs <='d0;
+          outs <=#1'd0;
         else 
           if (cmd|clr)
-             outs <=outs_pre;
+             outs <=#1outs_pre;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          stall <=1'b0;
+          stall <=#11'b0;
         else 
           if (|outs_max)
-             stall <=outs>=outs_max;
+             stall <=#1outs>=outs_max;
  
   assign timeout=(counter=='d0); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          counter <={10{1'b1}};
+          counter <=#1{10{1'b1}};
         else 
           if (clr)
-             counter <={10{1'b1}};
+             counter <=#1{10{1'b1}};
            else 
              if (|outs)
-                counter <=counter-1'b1;
+                counter <=#1counter-1'b1;
  
 endmodule
  
-module prgen_min2 (
-  input [8-1:0] a,
-  input [8-1:0] b,
-  output [8-1:0] min) ; 
+module prgen_min2 #(
+ parameter WIDTH =8) (
+  input [WIDTH-1:0] a,
+  input [WIDTH-1:0] b,
+  output [WIDTH-1:0] min) ; 
+    
   assign min=a<b ? a:b; 
 endmodule
  
@@ -2474,11 +2592,11 @@ module dma_axi64_core0_axim_rd (
   output rd_cmd_full,
   output ch_fifo_wr,
   output [64-1:0] ch_fifo_wdata,
-  output [3:0] ch_fifo_wsize,
+  output [4-1:0] ch_fifo_wsize,
   output [2:0] ch_fifo_wr_num,
   output [2:0] rd_transfer_num,
   output rd_transfer,
-  output reg  [3:0] rd_transfer_size,
+  output reg  [4-1:0] rd_transfer_size,
   output rd_burst_cmd,
   output rd_clr_line,
   output [2:0] rd_clr_line_num,
@@ -2491,7 +2609,7 @@ module dma_axi64_core0_axim_rd (
   output page_cross,
   output [32-1:0] ARADDR,
   output ARPORT,
-  output [3:0] ARLEN,
+  output [4-1:0] ARLEN,
   output [1:0] ARSIZE,
   output ARVALID,
   input ARREADY,
@@ -2513,21 +2631,21 @@ module dma_axi64_core0_axim_rd (
    wire RREADY ;  
   assign rd_clr=rd_clr_pre&(~rd_clr_last); 
   assign rd_clr_load=rd_clr_pre&rd_clr_last; 
-  prgen_delay delay_ready(.clk(clk),.reset(reset),.din(RREADY_out),.dout(RREADY)); 
-  prgen_delay delay_rvalid(.clk(clk),.reset(reset),.din(RVALID),.dout(RVALID_d)); 
+  prgen_delay #(1)delay_ready(.clk(clk),.reset(reset),.din(RREADY_out),.dout(RREADY)); 
+  prgen_delay #(1)delay_rvalid(.clk(clk),.reset(reset),.din(RVALID),.dout(RVALID_d)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            RRESP_d <=2'b00;
-            RDATA_d <={64{1'b0}};
-            RLAST_d <=1'b0;
+            RRESP_d <=#12'b00;
+            RDATA_d <=#1{64{1'b0}};
+            RLAST_d <=#11'b0;
           end 
         else 
           if (RVALID)
              begin 
-               RRESP_d <=RRESP;
-               RDATA_d <=RDATA;
-               RLAST_d <=RLAST;
+               RRESP_d <=#1RRESP;
+               RDATA_d <=#1RDATA;
+               RLAST_d <=#1RLAST;
              end
   
   always @( RID)
@@ -2544,9 +2662,9 @@ module dma_axi64_core0_axim_rd (
          endcase 
        end
   
-  dma_axi64_core0_axim_cmd dma_axi64_axim_rcmd(.clk(clk),.reset(reset),.end_line_cmd(rd_line_cmd),.extra_bit(load_req_in_prog),.cmd_port(rd_cmd_port),.ch_num(rd_ch_num),.joint_req(joint_req),.joint_pending(),.burst_start(rd_burst_start),.burst_addr(rd_burst_addr),.burst_size(rd_burst_size),.cmd_pending(rd_cmd_pending),.cmd_full(rd_cmd_full),.cmd_split(rd_cmd_split),.cmd_num(rd_cmd_num),.cmd_line(rd_cmd_line),.page_cross(page_cross),.AID(ARID),.AADDR(ARADDR),.APORT(ARPORT),.ALEN(ARLEN),.ASIZE(ARSIZE),.AVALID(ARVALID),.AREADY(ARREADY),.AWVALID(AWVALID),.AJOINT(),.axim_timeout_num(axim_timeout_num_ar),.axim_timeout(axim_timeout_ar)); 
+  dma_axi64_core0_axim_cmd dma_axi64_axim_rcmd(.clk(clk),.reset(reset),.end_line_cmd(rd_line_cmd),.extra_bit(load_req_in_prog),.cmd_port(rd_cmd_port),.ch_num(rd_ch_num),.joint_pending(),.joint_req(joint_req),.burst_start(rd_burst_start),.burst_addr(rd_burst_addr),.burst_size(rd_burst_size),.cmd_pending(rd_cmd_pending),.cmd_full(rd_cmd_full),.cmd_split(rd_cmd_split),.cmd_num(rd_cmd_num),.cmd_line(rd_cmd_line),.page_cross(page_cross),.AID(ARID),.AADDR(ARADDR),.APORT(ARPORT),.ALEN(ARLEN),.ASIZE(ARSIZE),.AVALID(ARVALID),.AREADY(ARREADY),.AWVALID(AWVALID),.AJOINT(),.axim_timeout_num(axim_timeout_num_ar),.axim_timeout(axim_timeout_ar)); 
   dma_axi64_core0_axim_rdata dma_axi64_axim_rdata(.clk(clk),.reset(reset),.load_wr(load_wr),.load_wr_num(load_wr_num),.load_wr_cycle(load_wr_cycle),.load_wdata(load_wdata),.joint_stall(joint_stall),.ch_fifo_wr(ch_fifo_wr),.ch_fifo_wdata(ch_fifo_wdata),.ch_fifo_wsize(ch_fifo_wsize),.ch_fifo_wr_num(ch_fifo_wr_num),.rd_transfer_num(rd_transfer_num),.rd_transfer(rd_transfer),.rd_transfer_size(rd_transfer_size),.rd_clr_line(rd_clr_line),.rd_clr_line_num(rd_clr_line_num),.rd_burst_cmd(rd_burst_cmd),.ARVALID(ARVALID),.ARREADY(ARREADY),.ARID(ARID),.RID(RID),.RDATA(RDATA_d),.RLAST(RLAST_d),.RVALID(RVALID_d),.RREADY(RREADY),.RREADY_out(RREADY_out)); 
-  dma_axi64_core0_axim_resp dma_axi64_axim_rresp(.clk(clk),.reset(reset),.slverr(rd_slverr),.decerr(rd_decerr),.clr(rd_clr_pre),.clr_last(rd_clr_last),.ch_num_resp(rd_ch_num_resp),.resp_full(rd_cmd_full),.AID(ARID),.AVALID(ARVALID),.AREADY(ARREADY),.ID(RID),.RESP(RRESP_d),.VALID(RVALID_d),.READY(RREADY),.LAST(RLAST_d)); 
+  dma_axi64_core0_axim_resp #(.CMD_DEPTH(4))dma_axi64_axim_rresp(.clk(clk),.reset(reset),.slverr(rd_slverr),.decerr(rd_decerr),.clr(rd_clr_pre),.clr_last(rd_clr_last),.ch_num_resp(rd_ch_num_resp),.resp_full(rd_cmd_full),.AID(ARID),.AVALID(ARVALID),.AREADY(ARREADY),.ID(RID),.RESP(RRESP_d),.VALID(RVALID_d),.READY(RREADY),.LAST(RLAST_d)); 
 endmodule
  
 module dma_axi64_core0_channels (
@@ -2727,7 +2845,30 @@ module dma_axi64_core0_channels (
   dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty7(.clk(clk),.reset(reset),.scan_en(scan_en),.idle(ch_idle[7]),.pclk(pclk),.clken(clken),.pclken(pclken),.psel(ch_psel[7]),.penable(penable),.paddr(paddr[7:0]),.pwrite(pwrite),.pwdata(pwdata),.prdata(ch_prdata[31+32*7:32*7]),.pslverr(ch_pslverr[7]),.periph_tx_req(periph_tx_req),.periph_tx_clr(ch_periph_tx_clr[31*7+31-1:31*7]),.periph_rx_req(periph_rx_req),.periph_rx_clr(ch_periph_rx_clr[31*7+31-1:31*7]),.rd_cmd_split(ch_rd_cmd_split[7]),.rd_cmd_line(ch_rd_cmd_line[7]),.rd_clr_line(ch_rd_clr_line[7]),.rd_clr(ch_rd_clr[7]),.rd_clr_load(ch_rd_clr_load[7]),.rd_slverr(ch_rd_slverr[7]),.rd_decerr(ch_rd_decerr[7]),.rd_line_cmd(ch_rd_line_cmd[7]),.rd_go_next_line(ch_rd_go_next_line[7]),.rd_transfer(ch_rd_transfer[7]),.rd_transfer_size(rd_transfer_size),.rd_clr_stall(ch_rd_clr_stall[7]),.wr_cmd_split(ch_wr_cmd_split[7]),.wr_cmd_pending(ch_wr_cmd_pending[7]),.wr_clr_line(ch_wr_clr_line[7]),.wr_clr(ch_wr_clr[7]),.wr_clr_last(ch_wr_clr_last[7]),.wr_slverr(ch_wr_slverr[7]),.wr_decerr(ch_wr_decerr[7]),.wr_last_cmd(ch_wr_last_cmd[7]),.wr_line_cmd(ch_wr_line_cmd[7]),.wr_go_next_line(ch_wr_go_next_line[7]),.wr_transfer(ch_wr_transfer[7]),.wr_transfer_size(wr_transfer_size),.wr_next_size(wr_next_size),.wr_clr_stall(ch_wr_clr_stall[7]),.timeout_aw(ch_timeout_aw[7]),.timeout_w(ch_timeout_w[7]),.timeout_ar(ch_timeout_ar[7]),.wdt_timeout(ch_wdt_timeout[7]),.load_wr(ch_load_wr[7]),.load_wr_cycle(load_wr_cycle),.load_wdata(load_wdata),.load_req_in_prog(ch_load_req_in_prog[7]),.ch_active(ch_active[7]),.ch_rd_active(ch_rd_active[7]),.ch_wr_active(ch_wr_active[7]),.rd_burst_start(ch_rd_burst_start[7]),.rd_ready(ch_rd_ready[7]),.rd_burst_addr(ch_rd_burst_addr[32-1+32*7:32*7]),.rd_burst_size(ch_rd_burst_size[8-1+8*7:8*7]),.rd_tokens(ch_rd_tokens[6-1+6*7:6*7]),.rd_port_num(ch_rd_port_num[7]),.rd_periph_delay(ch_rd_periph_delay[3-1+3*7:3*7]),.rd_clr_valid(ch_rd_clr_valid[7]),.wr_burst_start(ch_wr_burst_start[7]),.wr_ready(ch_wr_ready[7]),.wr_burst_addr(ch_wr_burst_addr[32-1+32*7:32*7]),.wr_burst_size(ch_wr_burst_size[8-1+8*7:8*7]),.wr_tokens(ch_wr_tokens[6-1+6*7:6*7]),.wr_port_num(ch_wr_port_num[7]),.wr_periph_delay(ch_wr_periph_delay[3-1+3*7:3*7]),.wr_clr_valid(ch_wr_clr_valid[7]),.fifo_wr(ch_fifo_wr[7]),.fifo_wdata(fifo_wdata),.fifo_wsize(fifo_wsize),.fifo_rd(ch_fifo_rd[7]),.fifo_rsize(fifo_rsize),.fifo_rd_valid(ch_fifo_rd_valid[7]),.fifo_rdata(ch_fifo_rdata[(64-1)+64*7:64*7]),.fifo_wr_ready(ch_fifo_wr_ready[7]),.joint_mode(joint_mode),.joint_remote(joint_remote),.rd_page_cross(ch_rd_page_cross[7]),.wr_page_cross(ch_wr_page_cross[7]),.joint_in_prog(ch_joint_in_prog[7]),.joint_not_in_prog(ch_joint_not_in_prog[7]),.joint_mux_in_prog(ch_joint_mux_in_prog[7]),.joint_req(ch_joint_req[7]),.ch_start(ch_start[7]),.int_all_proc(ch_int_all_proc[1-1+(1*7):1*7])); 
 endmodule
  
-module dma_axi64_core0_ch_reg (
+module dma_axi64_core0_ch_reg #(
+ parameter DATA_SHIFT =0 ? 32:0,
+ parameter CMD_LINE0 =8'h00,
+ parameter CMD_LINE1 =8'h04,
+ parameter CMD_LINE2 =8'h08,
+ parameter CMD_LINE3 =8'h0C,
+ parameter STATIC_LINE0 =8'h10,
+ parameter STATIC_LINE1 =8'h14,
+ parameter STATIC_LINE2 =8'h18,
+ parameter STATIC_LINE3 =8'h1C,
+ parameter STATIC_LINE4 =8'h20,
+ parameter RESTRICT =8'h2C,
+ parameter RD_OFFSETS =8'h30,
+ parameter WR_OFFSETS =8'h34,
+ parameter FIFO_FULLNESS =8'h38,
+ parameter CMD_OUTS =8'h3C,
+ parameter CH_ENABLE =8'h40,
+ parameter CH_START =8'h44,
+ parameter CH_ACTIVE =8'h48,
+ parameter CH_CMD_COUNTER =8'h50,
+ parameter INT_RAWSTAT =8'hA0,
+ parameter INT_CLEAR =8'hA4,
+ parameter INT_ENABLE =8'hA8,
+ parameter INT_STATUS =8'hAC) (
   input clk,
   input clken,
   input pclken,
@@ -2808,6 +2949,29 @@ module dma_axi64_core0_ch_reg (
   output joint,
   input joint_flush,
   output [1:0] end_swap) ; 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
    wire [7:0] gpaddr ;  
    wire gpwrite ;  
    wire gpread ;  
@@ -2947,20 +3111,20 @@ module dma_axi64_core0_ch_reg (
   assign gpaddr=paddr; 
   assign gpwrite=psel&(~penable)&pwrite; 
   assign gpread=psel&(~penable)&(~pwrite); 
-  assign wr_cmd_line0=gpwrite&gpaddr==8'h00; 
-  assign wr_cmd_line1=gpwrite&gpaddr==8'h04; 
-  assign wr_cmd_line2=gpwrite&gpaddr==8'h08; 
-  assign wr_cmd_line3=gpwrite&gpaddr==8'h0C; 
-  assign wr_static_line0=gpwrite&gpaddr==8'h10; 
-  assign wr_static_line1=gpwrite&gpaddr==8'h14; 
-  assign wr_static_line2=gpwrite&gpaddr==8'h18; 
-  assign wr_static_line3=gpwrite&gpaddr==8'h1C; 
-  assign wr_static_line4=gpwrite&gpaddr==8'h20; 
-  assign wr_ch_enable=gpwrite&gpaddr==8'h40; 
-  assign wr_ch_start=(gpwrite&gpaddr==8'h44)|8'h44; 
-  assign wr_int_rawstat=gpwrite&gpaddr==8'hA0; 
-  assign wr_int_clear=gpwrite&gpaddr==8'hA4; 
-  assign wr_int_enable=gpwrite&gpaddr==8'hA8; 
+  assign wr_cmd_line0=gpwrite&gpaddr==CMD_LINE0; 
+  assign wr_cmd_line1=gpwrite&gpaddr==CMD_LINE1; 
+  assign wr_cmd_line2=gpwrite&gpaddr==CMD_LINE2; 
+  assign wr_cmd_line3=gpwrite&gpaddr==CMD_LINE3; 
+  assign wr_static_line0=gpwrite&gpaddr==STATIC_LINE0; 
+  assign wr_static_line1=gpwrite&gpaddr==STATIC_LINE1; 
+  assign wr_static_line2=gpwrite&gpaddr==STATIC_LINE2; 
+  assign wr_static_line3=gpwrite&gpaddr==STATIC_LINE3; 
+  assign wr_static_line4=gpwrite&gpaddr==STATIC_LINE4; 
+  assign wr_ch_enable=gpwrite&gpaddr==CH_ENABLE; 
+  assign wr_ch_start=(gpwrite&gpaddr==CH_START)|ch_start; 
+  assign wr_int_rawstat=gpwrite&gpaddr==INT_RAWSTAT; 
+  assign wr_int_clear=gpwrite&gpaddr==INT_CLEAR; 
+  assign wr_int_enable=gpwrite&gpaddr==INT_ENABLE; 
   assign load_wr_cycle0=load_wr&load_wr_cycle==2'd0; 
   assign load_wr_cycle1=load_wr&load_wr_cycle==2'd1; 
   assign load_wr_cycle2=load_wr&load_wr_cycle==2'd2; 
@@ -2973,92 +3137,92 @@ module dma_axi64_core0_ch_reg (
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            rd_start_addr <={32{1'b0}};
+            rd_start_addr <=#1{32{1'b0}};
           end 
         else 
           if (wr_cmd_line0)
              begin 
-               rd_start_addr <=pwdata[32-1:0];
+               rd_start_addr <=#1pwdata[32-1:0];
              end 
            else 
              if (load_wr0)
                 begin 
-                  rd_start_addr <=load_wdata[32-1:0];
+                  rd_start_addr <=#1load_wdata[32-1:0];
                 end
   
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            wr_start_addr <={32{1'b0}};
+            wr_start_addr <=#1{32{1'b0}};
           end 
         else 
           if (wr_cmd_line1)
              begin 
-               wr_start_addr <=pwdata[32-1:0];
+               wr_start_addr <=#1pwdata[32-1:0];
              end 
            else 
              if (load_wr1)
                 begin 
-                  wr_start_addr <=load_wdata[32+32-0-1:32-0];
+                  wr_start_addr <=#1load_wdata[32+32-DATA_SHIFT-1:32-DATA_SHIFT];
                 end
   
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            buff_size <={10{1'b0}};
+            buff_size <=#1{10{1'b0}};
           end 
         else 
           if (wr_cmd_line2)
              begin 
-               buff_size <=pwdata[10-1:0];
+               buff_size <=#1pwdata[10-1:0];
              end 
            else 
              if (load_wr2)
                 begin 
-                  buff_size <=load_wdata[10-1:0];
+                  buff_size <=#1load_wdata[10-1:0];
                 end
   
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            cmd_set_int_reg <=1'b0;
-            cmd_last_reg <=1'b0;
-            cmd_next_addr_reg <={30{1'b0}};
+            cmd_set_int_reg <=#11'b0;
+            cmd_last_reg <=#11'b0;
+            cmd_next_addr_reg <=#1{30{1'b0}};
           end 
         else 
           if (wr_cmd_line3)
              begin 
-               cmd_set_int_reg <=pwdata[0];
-               cmd_last_reg <=pwdata[1];
-               cmd_next_addr_reg <=pwdata[32-1:2];
+               cmd_set_int_reg <=#1pwdata[0];
+               cmd_last_reg <=#1pwdata[1];
+               cmd_next_addr_reg <=#1pwdata[32-1:2];
              end 
            else 
              if (load_wr3)
                 begin 
-                  cmd_set_int_reg <=load_wdata[32-0];
-                  cmd_last_reg <=load_wdata[33-0];
-                  cmd_next_addr_reg <=load_wdata[32+32-0-1:34-0];
+                  cmd_set_int_reg <=#1load_wdata[32-DATA_SHIFT];
+                  cmd_last_reg <=#1load_wdata[33-DATA_SHIFT];
+                  cmd_next_addr_reg <=#1load_wdata[32+32-DATA_SHIFT-1:34-DATA_SHIFT];
                 end
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          cmd_counter_reg <={12{1'b0}};
+          cmd_counter_reg <=#1{12{1'b0}};
         else 
           if (wr_ch_start)
-             cmd_counter_reg <={12{1'b0}};
+             cmd_counter_reg <=#1{12{1'b0}};
            else 
              if (ch_end&clken)
-                cmd_counter_reg <=cmd_counter_reg+1'b1;
+                cmd_counter_reg <=#1cmd_counter_reg+1'b1;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          int_counter_reg <={4{1'b0}};
+          int_counter_reg <=#1{4{1'b0}};
         else 
           if (wr_ch_start)
-             int_counter_reg <={4{1'b0}};
+             int_counter_reg <=#1{4{1'b0}};
            else 
              if ((ch_end_int&clken)|ch_end_clear)
-                int_counter_reg <=int_counter_reg+(ch_end_int&clken)-ch_end_clear;
+                int_counter_reg <=#1int_counter_reg+(ch_end_int&clken)-ch_end_clear;
  
   assign cmd_set_int=cmd_set_int_reg; 
   assign cmd_last=cmd_last_reg; 
@@ -3070,35 +3234,35 @@ module dma_axi64_core0_ch_reg (
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            rd_burst_max_size_reg <='d0;
-            rd_tokens_reg <='d1;
-            rd_outs_max_reg <={4{1'b0}};
-            rd_incr_reg <='d1;
+            rd_burst_max_size_reg <=#1'd0;
+            rd_tokens_reg <=#1'd1;
+            rd_outs_max_reg <=#1{4{1'b0}};
+            rd_incr_reg <=#1'd1;
           end 
         else 
           if (wr_static_line0)
              begin 
-               rd_burst_max_size_reg <=pwdata[8-1:0];
-               rd_tokens_reg <=pwdata[6+16-1:16];
-               rd_outs_max_reg <=pwdata[4+24-1:24];
-               rd_incr_reg <=pwdata[31];
+               rd_burst_max_size_reg <=#1pwdata[8-1:0];
+               rd_tokens_reg <=#1pwdata[6+16-1:16];
+               rd_outs_max_reg <=#1pwdata[4+24-1:24];
+               rd_incr_reg <=#1pwdata[31];
              end
   
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            wr_burst_max_size_reg <='d0;
-            wr_tokens_reg <='d1;
-            wr_outs_max_reg <={4{1'b0}};
-            wr_incr_reg <='d1;
+            wr_burst_max_size_reg <=#1'd0;
+            wr_tokens_reg <=#1'd1;
+            wr_outs_max_reg <=#1{4{1'b0}};
+            wr_incr_reg <=#1'd1;
           end 
         else 
           if (wr_static_line1)
              begin 
-               wr_burst_max_size_reg <=pwdata[8-1:0];
-               wr_tokens_reg <=pwdata[6+16-1:16];
-               wr_outs_max_reg <=pwdata[4+24-1:24];
-               wr_incr_reg <=pwdata[31];
+               wr_burst_max_size_reg <=#1pwdata[8-1:0];
+               wr_tokens_reg <=#1pwdata[6+16-1:16];
+               wr_outs_max_reg <=#1pwdata[4+24-1:24];
+               wr_incr_reg <=#1pwdata[31];
              end
   
   assign rd_incr=rd_incr_reg; 
@@ -3119,28 +3283,28 @@ module dma_axi64_core0_ch_reg (
   assign allow_joint_burst=joint&(~joint_flush)&(~page_cross)&(~joint_cross); 
   assign allow_full_burst=allow_joint_burst; 
   assign burst_max_size_update_pre=ch_update|ch_update_d|joint; 
-  prgen_delay delay_max_size_update(.clk(clk),.reset(reset),.din(burst_max_size_update_pre),.dout(burst_max_size_update)); 
+  prgen_delay #(1)delay_max_size_update(.clk(clk),.reset(reset),.din(burst_max_size_update_pre),.dout(burst_max_size_update)); 
   dma_axi64_core0_ch_reg_size dma_axi64_core0_ch_reg_size_rd(.clk(clk),.reset(reset),.update(burst_max_size_update),.start_addr(rd_start_addr),.burst_max_size_reg(rd_burst_max_size_reg),.burst_max_size_other(wr_burst_max_size_rd),.allow_full_burst(allow_full_burst),.allow_full_fifo(allow_full_fifo),.joint_flush(joint_flush),.burst_max_size(rd_burst_max_size_pre)); 
   dma_axi64_core0_ch_reg_size dma_axi64_core0_ch_reg_size_wr(.clk(clk),.reset(reset),.update(burst_max_size_update),.start_addr(wr_start_addr),.burst_max_size_reg(wr_burst_max_size_reg),.burst_max_size_other(rd_burst_max_size_reg),.allow_full_burst(1'b0),.allow_full_fifo(allow_full_fifo),.joint_flush(joint_flush),.burst_max_size(wr_burst_max_size_pre)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            joint_reg <=1'b1;
-            end_swap_reg <=2'b00;
+            joint_reg <=#11'b1;
+            end_swap_reg <=#12'b00;
           end 
         else 
           if (wr_static_line2)
              begin 
-               joint_reg <=pwdata[16];
-               end_swap_reg <=pwdata[29:28];
+               joint_reg <=#1pwdata[16];
+               end_swap_reg <=#1pwdata[29:28];
              end
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          simple_mem <=1'b0;
+          simple_mem <=#11'b0;
         else 
           if (ch_update)
-             simple_mem <=(rd_periph_num=='d0)&(wr_periph_num=='d0)&(~allow_line_cmd);
+             simple_mem <=#1(rd_periph_num=='d0)&(wr_periph_num=='d0)&(~allow_line_cmd);
  
   assign joint=joint_mode&joint_reg&simple_mem&1'b1; 
   assign joint_mux=joint; 
@@ -3156,18 +3320,18 @@ module dma_axi64_core0_ch_reg (
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            rd_periph_num_reg <='d0;
-            rd_periph_delay_reg <='d0;
-            wr_periph_num_reg <='d0;
-            wr_periph_delay_reg <='d0;
+            rd_periph_num_reg <=#1'd0;
+            rd_periph_delay_reg <=#1'd0;
+            wr_periph_num_reg <=#1'd0;
+            wr_periph_delay_reg <=#1'd0;
           end 
         else 
           if (wr_static_line4)
              begin 
-               rd_periph_num_reg <=pwdata[4:0];
-               rd_periph_delay_reg <=pwdata[3+8-1:8];
-               wr_periph_num_reg <=pwdata[20:16];
-               wr_periph_delay_reg <=pwdata[3+24-1:24];
+               rd_periph_num_reg <=#1pwdata[4:0];
+               rd_periph_delay_reg <=#1pwdata[3+8-1:8];
+               wr_periph_num_reg <=#1pwdata[20:16];
+               wr_periph_delay_reg <=#1pwdata[3+24-1:24];
              end
   
   assign rd_periph_num=rd_periph_num_reg; 
@@ -3179,69 +3343,69 @@ module dma_axi64_core0_ch_reg (
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            ch_enable <=1'b1;
+            ch_enable <=#11'b1;
           end 
         else 
           if (wr_ch_enable)
              begin 
-               ch_enable <=pwdata[0];
+               ch_enable <=#1pwdata[0];
              end
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          ch_in_prog <=1'b0;
+          ch_in_prog <=#11'b0;
         else 
           if (ch_update)
-             ch_in_prog <=1'b1;
+             ch_in_prog <=#11'b1;
            else 
              if (ch_end&clken)
-                ch_in_prog <=1'b0;
+                ch_in_prog <=#11'b0;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          rd_ch_in_prog <=1'b0;
+          rd_ch_in_prog <=#11'b0;
         else 
           if (ch_update)
-             rd_ch_in_prog <=1'b1;
+             rd_ch_in_prog <=#11'b1;
            else 
              if (fifo_underflow|fifo_overflow)
-                rd_ch_in_prog <=1'b0;
+                rd_ch_in_prog <=#11'b0;
               else 
                 if (rd_ch_end&clken)
-                   rd_ch_in_prog <=1'b0;
+                   rd_ch_in_prog <=#11'b0;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          wr_ch_in_prog <=1'b0;
+          wr_ch_in_prog <=#11'b0;
         else 
           if (ch_update)
-             wr_ch_in_prog <=1'b1;
+             wr_ch_in_prog <=#11'b1;
            else 
              if (fifo_underflow|fifo_overflow)
-                wr_ch_in_prog <=1'b0;
+                wr_ch_in_prog <=#11'b0;
               else 
                 if (wr_ch_end&clken)
-                   wr_ch_in_prog <=1'b0;
+                   wr_ch_in_prog <=#11'b0;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          load_in_prog_reg <=1'b0;
+          load_in_prog_reg <=#11'b0;
         else 
           if (load_req&clken)
-             load_in_prog_reg <=1'b1;
+             load_in_prog_reg <=#11'b1;
            else 
              if (ch_update&clken)
-                load_in_prog_reg <=1'b0;
+                load_in_prog_reg <=#11'b0;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          load_req_in_prog_reg <=1'b0;
+          load_req_in_prog_reg <=#11'b0;
         else 
           if (load_req&clken)
-             load_req_in_prog_reg <=1'b1;
+             load_req_in_prog_reg <=#11'b1;
            else 
              if (load_cmd&clken)
-                load_req_in_prog_reg <=1'b0;
+                load_req_in_prog_reg <=#11'b0;
  
   assign load_in_prog=load_in_prog_reg; 
   assign load_req_in_prog=load_req_in_prog_reg; 
@@ -3251,32 +3415,32 @@ module dma_axi64_core0_ch_reg (
   assign ch_update_pre=wr_ch_start|load_wr_last|ch_retry; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          ch_update <=1'b0;
+          ch_update <=#11'b0;
         else 
           if (ch_update_pre)
-             ch_update <=1'b1;
+             ch_update <=#11'b1;
            else 
              if (clken)
-                ch_update <=1'b0;
+                ch_update <=#11'b0;
  
-  prgen_delay delay_ch_update(.clk(clk),.reset(reset),.din(ch_update),.dout(ch_update_d)); 
-  assign load_req=(8'h40&ch_end&(~cmd_last))|(ch_update&(x_size=='d0)); 
+  prgen_delay #(1)delay_ch_update(.clk(clk),.reset(reset),.din(ch_update),.dout(ch_update_d)); 
+  assign load_req=(ch_enable&ch_end&(~cmd_last))|(ch_update&(x_size=='d0)); 
   assign load_addr={cmd_next_addr[32-1:2],2'b00}; 
   assign ch_end=rd_ch_end&wr_ch_end&wr_clr_last&(~ch_retry_wait); 
-  assign ch_end_int=8'h40&ch_end&cmd_set_int; 
-  assign ch_rd_active=8'h40&(rd_ch_in_prog|load_req_in_prog); 
-  assign ch_wr_active=8'h40&wr_ch_in_prog; 
+  assign ch_end_int=ch_enable&ch_end&cmd_set_int; 
+  assign ch_rd_active=ch_enable&(rd_ch_in_prog|load_req_in_prog); 
+  assign ch_wr_active=ch_enable&wr_ch_in_prog; 
   assign ch_end_set=|int_counter; 
   assign ch_end_clear=wr_int_clear&pwdata[0]; 
   assign {timeout_aw,timeout_w,timeout_b,timeout_ar,timeout_r}=timeout_bus[4:0]; 
   assign int_bus={13{clken}}&{wdt_timeout,timeout_aw,timeout_w,timeout_b,timeout_ar,timeout_r,fifo_underflow,fifo_overflow,wr_decerr,rd_decerr,wr_slverr,rd_slverr,ch_end_set}; 
-  prgen_rawstat rawstat(.clk(clk),.reset(reset),.clear(wr_int_clear),.write(wr_int_rawstat),.pwdata(pwdata[13-1:0]),.int_bus(int_bus),.rawstat(8'hA0)); 
+  prgen_rawstat #(13)rawstat(.clk(clk),.reset(reset),.clear(wr_int_clear),.write(wr_int_rawstat),.pwdata(pwdata[13-1:0]),.int_bus(int_bus),.rawstat(int_rawstat)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          int_enable <={13{1'b1}};
+          int_enable <=#1{13{1'b1}};
         else 
           if (wr_int_enable)
-             int_enable <=pwdata[13-1:0];
+             int_enable <=#1pwdata[13-1:0];
  
   assign int_status=int_rawstat&int_enable; 
   assign ch_int=|int_status; 
@@ -3353,63 +3517,63 @@ module dma_axi64_core0_ch_reg (
          rd_fifo_fullness [5+16:16]=wr_fullness;
          rd_cmd_outs [4-1:0]=rd_outs;
          rd_cmd_outs [4-1+8:8]=wr_outs;
-         rd_ch_enable [0]=8'h40;
+         rd_ch_enable [0]=ch_enable;
          rd_ch_active [0]=ch_rd_active;
          rd_ch_active [1]=ch_wr_active;
          rd_cmd_counter [12-1:0]=cmd_counter;
          rd_cmd_counter [4-1+16:16]=int_counter;
-         rd_int_rawstat [13-1:0]=8'hA0;
-         rd_int_enable [13-1:0]=8'hA8;
-         rd_int_status [13-1:0]=8'hAC;
+         rd_int_rawstat [13-1:0]=int_rawstat;
+         rd_int_enable [13-1:0]=int_enable;
+         rd_int_status [13-1:0]=int_status;
        end
   
   always @(                     gpaddr or  rd_ch_active or  rd_ch_enable or  rd_cmd_counter or  rd_cmd_line0 or  rd_cmd_line1 or  rd_cmd_line2 or  rd_cmd_line3 or  rd_cmd_outs or  rd_fifo_fullness or  rd_int_enable or  rd_int_rawstat or  rd_int_status or  rd_rd_offsets or  rd_restrict or  rd_static_line0 or  rd_static_line1 or  rd_static_line2 or  rd_static_line3 or  rd_static_line4 or  rd_wr_offsets)
        begin 
          prdata_pre ={32{1'b0}};
          case (gpaddr)
-          8 'h00:
+          CMD_LINE0 :
              prdata_pre =rd_cmd_line0;
-          8 'h04:
+          CMD_LINE1 :
              prdata_pre =rd_cmd_line1;
-          8 'h08:
+          CMD_LINE2 :
              prdata_pre =rd_cmd_line2;
-          8 'h0C:
+          CMD_LINE3 :
              prdata_pre =rd_cmd_line3;
-          8 'h10:
+          STATIC_LINE0 :
              prdata_pre =rd_static_line0;
-          8 'h14:
+          STATIC_LINE1 :
              prdata_pre =rd_static_line1;
-          8 'h18:
+          STATIC_LINE2 :
              prdata_pre =rd_static_line2;
-          8 'h1C:
+          STATIC_LINE3 :
              prdata_pre =rd_static_line3;
-          8 'h20:
+          STATIC_LINE4 :
              prdata_pre =rd_static_line4;
-          8 'h2C:
+          RESTRICT :
              prdata_pre =rd_restrict;
-          8 'h30:
+          RD_OFFSETS :
              prdata_pre =rd_rd_offsets;
-          8 'h34:
+          WR_OFFSETS :
              prdata_pre =rd_wr_offsets;
-          8 'h38:
+          FIFO_FULLNESS :
              prdata_pre =rd_fifo_fullness;
-          8 'h3C:
+          CMD_OUTS :
              prdata_pre =rd_cmd_outs;
-          8 'h40:
+          CH_ENABLE :
              prdata_pre =rd_ch_enable;
-          8 'h44:
+          CH_START :
              prdata_pre ={32{1'b0}};
-          8 'h48:
+          CH_ACTIVE :
              prdata_pre =rd_ch_active;
-          8 'h50:
+          CH_CMD_COUNTER :
              prdata_pre =rd_cmd_counter;
-          8 'hA0:
+          INT_RAWSTAT :
              prdata_pre =rd_int_rawstat;
-          8 'hA4:
+          INT_CLEAR :
              prdata_pre ={32{1'b0}};
-          8 'hA8:
+          INT_ENABLE :
              prdata_pre =rd_int_enable;
-          8 'hAC:
+          INT_STATUS :
              prdata_pre =rd_int_status;
           default :
              prdata_pre ={32{1'b0}};
@@ -3420,49 +3584,49 @@ module dma_axi64_core0_ch_reg (
        begin 
          pslverr_pre =1'b0;
          case (gpaddr)
-          8 'h00:
+          CMD_LINE0 :
              pslverr_pre =1'b0;
-          8 'h04:
+          CMD_LINE1 :
              pslverr_pre =1'b0;
-          8 'h08:
+          CMD_LINE2 :
              pslverr_pre =1'b0;
-          8 'h0C:
+          CMD_LINE3 :
              pslverr_pre =1'b0;
-          8 'h10:
+          STATIC_LINE0 :
              pslverr_pre =1'b0;
-          8 'h14:
+          STATIC_LINE1 :
              pslverr_pre =1'b0;
-          8 'h18:
+          STATIC_LINE2 :
              pslverr_pre =1'b0;
-          8 'h1C:
+          STATIC_LINE3 :
              pslverr_pre =1'b0;
-          8 'h20:
+          STATIC_LINE4 :
              pslverr_pre =1'b0;
-          8 'h2C:
+          RESTRICT :
              pslverr_pre =gpwrite;
-          8 'h30:
+          RD_OFFSETS :
              pslverr_pre =gpwrite;
-          8 'h34:
+          WR_OFFSETS :
              pslverr_pre =gpwrite;
-          8 'h38:
+          FIFO_FULLNESS :
              pslverr_pre =gpwrite;
-          8 'h3C:
+          CMD_OUTS :
              pslverr_pre =gpwrite;
-          8 'h40:
+          CH_ENABLE :
              pslverr_pre =1'b0;
-          8 'h44:
+          CH_START :
              pslverr_pre =gpread;
-          8 'h48:
+          CH_ACTIVE :
              pslverr_pre =gpwrite;
-          8 'h50:
+          CH_CMD_COUNTER :
              pslverr_pre =gpwrite;
-          8 'hA0:
+          INT_RAWSTAT :
              pslverr_pre =1'b0;
-          8 'hA4:
+          INT_CLEAR :
              pslverr_pre =gpread;
-          8 'hA8:
+          INT_ENABLE :
              pslverr_pre =1'b0;
-          8 'hAC:
+          INT_STATUS :
              pslverr_pre =gpwrite;
           default :
              pslverr_pre =psel;
@@ -3471,23 +3635,23 @@ module dma_axi64_core0_ch_reg (
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          prdata <={32{1'b0}};
+          prdata <=#1{32{1'b0}};
         else 
           if (gpread&pclken)
-             prdata <=prdata_pre;
+             prdata <=#1prdata_pre;
            else 
              if (pclken)
-                prdata <={32{1'b0}};
+                prdata <=#1{32{1'b0}};
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          pslverr <=1'b0;
+          pslverr <=#11'b0;
         else 
           if ((gpread|gpwrite)&pclken)
-             pslverr <=pslverr_pre;
+             pslverr <=#1pslverr_pre;
            else 
              if (pclken)
-                pslverr <=1'b0;
+                pslverr <=#11'b0;
  
 endmodule
  
@@ -3522,14 +3686,15 @@ module dma_axi64_apb_mux (
   assign pslverr=pslverr_pre; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          pready <=1'b0;
+          pready <=#11'b0;
         else 
           if (pclken)
-             pready <=psel&(~penable);
+             pready <=#1psel&(~penable);
  
 endmodule
  
-module dma_axi64_core0_arbiter (
+module dma_axi64_core0_arbiter #(
+ parameter CH_LAST =1-1) (
   input clk,
   input reset,
   input enable,
@@ -3547,6 +3712,7 @@ module dma_axi64_core0_arbiter (
   output ch_go_out,
   output [2:0] ch_num,
   output ch_last) ; 
+    
    reg [7:0] current_active ;  
    wire current_ready_only ;  
    wire ch_last_pre ;  
@@ -3622,18 +3788,18 @@ module dma_axi64_core0_axim_resp #(
   assign slverr_pre=clr_pre&RESP==RESP_SLVERR; 
   assign decerr_pre=clr_pre&RESP==RESP_DECERR; 
   assign clr_last_pre=clr_pre&ID[3]; 
-  prgen_delay delay_clr(.clk(clk),.reset(reset),.din(clr_pre),.dout(clr)); 
-  prgen_delay delay_clr_last(.clk(clk),.reset(reset),.din(clr_last_pre),.dout(clr_last)); 
-  prgen_delay delay_slverr(.clk(clk),.reset(reset),.din(slverr_pre),.dout(slverr)); 
-  prgen_delay delay_decerr(.clk(clk),.reset(reset),.din(decerr_pre),.dout(decerr)); 
+  prgen_delay #(1)delay_clr(.clk(clk),.reset(reset),.din(clr_pre),.dout(clr)); 
+  prgen_delay #(1)delay_clr_last(.clk(clk),.reset(reset),.din(clr_last_pre),.dout(clr_last)); 
+  prgen_delay #(1)delay_slverr(.clk(clk),.reset(reset),.din(slverr_pre),.dout(slverr)); 
+  prgen_delay #(1)delay_decerr(.clk(clk),.reset(reset),.din(decerr_pre),.dout(decerr)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          ch_num_resp <=3'b000;
+          ch_num_resp <=#13'b000;
         else 
           if (clr_pre)
-             ch_num_resp <=ch_num_resp_pre;
+             ch_num_resp <=#1ch_num_resp_pre;
  
-  prgen_fifo resp_fifo(.clk(clk),.reset(reset),.push(resp_push),.pop(resp_pop),.din(AID),.dout(ID),.empty(resp_empty),.full(resp_full)); 
+  prgen_fifo #(7,CMD_DEPTH)resp_fifo(.clk(clk),.reset(reset),.push(resp_push),.pop(resp_pop),.din(AID),.dout(ID),.empty(resp_empty),.full(resp_full)); 
 endmodule
  
 module dma_axi64 (
@@ -3778,35 +3944,37 @@ module dma_axi64_core0_ch_calc_addr (
   assign go_next_line_d=1'b0; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          burst_addr <={32{1'b0}};
+          burst_addr <=#1{32{1'b0}};
         else 
           if (load_in_prog)
-             burst_addr <=load_addr;
+             burst_addr <=#1load_addr;
            else 
              if (ch_update_d)
-                burst_addr <=start_addr;
+                burst_addr <=#1start_addr;
               else 
                 if (burst_start&incr)
-                   burst_addr <=burst_addr+burst_size;
+                   burst_addr <=#1burst_addr+burst_size;
                  else 
                    if (go_next_line_d&incr)
-                      burst_addr <=burst_addr+frame_width_diff;
+                      burst_addr <=#1burst_addr+frame_width_diff;
  
 endmodule
  
-module prgen_joint_stall (
+module prgen_joint_stall #(
+ parameter SIZE_BITS =1) (
   input clk,
   input reset,
   input joint_req_out,
   input rd_transfer,
-  input [2-1:0] rd_transfer_size,
+  input [SIZE_BITS-1:0] rd_transfer_size,
   input ch_fifo_rd,
   input [2:0] data_fullness_pre,
   input HOLD,
   output joint_fifo_rd_valid,
-  output [2-1:0] rd_transfer_size_joint,
+  output [SIZE_BITS-1:0] rd_transfer_size_joint,
   output rd_transfer_full,
   output joint_stall) ; 
+    
    wire rd_transfer_joint ;  
    wire joint_fifo_rd ;  
    wire joint_fifo_rd_valid ;  
@@ -3816,55 +3984,57 @@ module prgen_joint_stall (
    reg joint_stall_reg ;  
    wire joint_not_ready_pre ;  
    wire joint_not_ready ;  
-   wire [2-1:0] rd_transfer_size_joint ;  
+   wire [SIZE_BITS-1:0] rd_transfer_size_joint ;  
    wire rd_transfer_full ;  
    reg [2:0] joint_rd_stall_num ;  
    wire joint_rd_stall ;  
   assign rd_transfer_joint=joint_req_out&rd_transfer; 
-  prgen_delay delay_joint_fifo_rd(.clk(clk),.reset(reset),.din(rd_transfer_joint),.dout(joint_fifo_rd)); 
+  prgen_delay #(2)delay_joint_fifo_rd(.clk(clk),.reset(reset),.din(rd_transfer_joint),.dout(joint_fifo_rd)); 
   assign count_ch_fifo_pre=count_ch_fifo+rd_transfer_joint-ch_fifo_rd; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          count_ch_fifo <=3'd0;
+          count_ch_fifo <=#13'd0;
         else 
           if (joint_req_out&(rd_transfer_joint|ch_fifo_rd))
-             count_ch_fifo <=count_ch_fifo_pre;
+             count_ch_fifo <=#1count_ch_fifo_pre;
  
   assign joint_stall_pre=joint_req_out&((count_ch_fifo_pre>'d2)|((count_ch_fifo_pre=='d2)&(data_fullness_pre>'d1))|HOLD); 
   assign joint_not_ready_pre=joint_req_out&(data_fullness_pre>'d1)&(~(rd_transfer_joint&joint_stall_pre)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          joint_stall_reg <=1'b0;
+          joint_stall_reg <=#11'b0;
         else 
           if (joint_stall_pre)
-             joint_stall_reg <=1'b1;
+             joint_stall_reg <=#11'b1;
            else 
              if (count_ch_fifo_pre=='d0)
-                joint_stall_reg <=1'b0;
+                joint_stall_reg <=#11'b0;
  
   assign joint_stall=joint_stall_reg|(joint_req_out&HOLD); 
-  prgen_delay delay_joint_not_ready(.clk(clk),.reset(reset),.din(joint_not_ready_pre),.dout(joint_not_ready)); 
-  prgen_fifo rd_transfer_fifo(.clk(clk),.reset(reset),.push(rd_transfer_joint),.pop(joint_fifo_rd_valid),.din(rd_transfer_size),.dout(rd_transfer_size_joint),.empty(),.full(rd_transfer_full)); 
-  prgen_stall stall_joint_fifo_rd(.clk(clk),.reset(reset),.din(joint_fifo_rd),.stall(joint_not_ready),.dout(joint_fifo_rd_valid)); 
+  prgen_delay #(1)delay_joint_not_ready(.clk(clk),.reset(reset),.din(joint_not_ready_pre),.dout(joint_not_ready)); 
+  prgen_fifo #(SIZE_BITS,2)rd_transfer_fifo(.clk(clk),.reset(reset),.push(rd_transfer_joint),.pop(joint_fifo_rd_valid),.din(rd_transfer_size),.dout(rd_transfer_size_joint),.empty(),.full(rd_transfer_full)); 
+  prgen_stall #(3)stall_joint_fifo_rd(.clk(clk),.reset(reset),.din(joint_fifo_rd),.stall(joint_not_ready),.dout(joint_fifo_rd_valid)); 
 endmodule
  
-module prgen_rawstat (
+module prgen_rawstat #(
+ parameter SIZE =32) (
   input clk,
   input reset,
   input clear,
   input write,
-  input [32-1:0] pwdata,
-  input [32-1:0] int_bus,
-  output reg  [32-1:0] rawstat) ; 
-   wire [32-1:0] write_bus ;  
-   wire [32-1:0] clear_bus ;  
-  assign write_bus={32{write}}&pwdata; 
-  assign clear_bus={32{clear}}&pwdata; 
+  input [SIZE-1:0] pwdata,
+  input [SIZE-1:0] int_bus,
+  output reg  [SIZE-1:0] rawstat) ; 
+    
+   wire [SIZE-1:0] write_bus ;  
+   wire [SIZE-1:0] clear_bus ;  
+  assign write_bus={SIZE{write}}&pwdata; 
+  assign clear_bus={SIZE{clear}}&pwdata; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          rawstat <={32{1'b0}};
+          rawstat <=#1{SIZE{1'b0}};
         else 
-          rawstat <=(rawstat|int_bus|write_bus)&(~clear_bus);
+          rawstat <=#1(rawstat|int_bus|write_bus)&(~clear_bus);
  
 endmodule
  
@@ -3996,22 +4166,22 @@ module dma_axi64_core0_channels_mux (
   output [7:0] ch_wr_decerr,
   output [7:0] ch_wr_clr_last,
   output [7:0] ch_wr_clr) ; 
-  prgen_or8 mux_2(.ch_x(ch_fifo_rd_valid),.x(fifo_rd_valid)); 
-  prgen_or8 mux_3(.ch_x(ch_fifo_rdata),.x(fifo_rdata)); 
-  prgen_or8 mux_4(.ch_x(ch_periph_rx_clr),.x(periph_rx_clr)); 
-  prgen_or8 mux_5(.ch_x(ch_periph_tx_clr),.x(periph_tx_clr)); 
-  prgen_mux8 mux_30(.sel(rd_ch_num),.ch_x(ch_rd_periph_delay),.x(rd_periph_delay)); 
-  prgen_mux8 mux_51(.sel(wr_ch_num),.ch_x(ch_wr_periph_delay),.x(wr_periph_delay)); 
-  prgen_demux8 mux_6(.sel(timeout_num_aw),.x(timeout_aw),.ch_x(ch_timeout_aw)); 
-  prgen_demux8 mux_7(.sel(timeout_num_w),.x(timeout_w),.ch_x(ch_timeout_w)); 
-  prgen_demux8 mux_8(.sel(timeout_num_ar),.x(timeout_ar),.ch_x(ch_timeout_ar)); 
-  prgen_demux8 mux_9(.sel(wdt_ch_num),.x(wdt_timeout),.ch_x(ch_wdt_timeout)); 
-  prgen_or8 mux_55(.ch_x(ch_joint_in_prog),.x(joint_in_prog)); 
-  prgen_or8 mux_56(.ch_x(ch_joint_not_in_prog),.x(joint_not_in_prog)); 
-  prgen_or8 mux_57(.ch_x(ch_joint_mux_in_prog),.x(joint_mux_in_prog)); 
-  prgen_demux8 mux_60(.sel(wr_ch_num),.x(wr_cmd_pending),.ch_x(ch_wr_cmd_pending)); 
-  prgen_demux8 mux_11(.sel(rd_ch_num),.x(rd_burst_start),.ch_x(ch_rd_burst_start)); 
-  prgen_demux8 mux_13(.sel(load_wr_num),.x(load_wr),.ch_x(ch_load_wr)); 
+  prgen_or8 #(1)mux_2(.ch_x(ch_fifo_rd_valid),.x(fifo_rd_valid)); 
+  prgen_or8 #(64)mux_3(.ch_x(ch_fifo_rdata),.x(fifo_rdata)); 
+  prgen_or8 #(31)mux_4(.ch_x(ch_periph_rx_clr),.x(periph_rx_clr)); 
+  prgen_or8 #(31)mux_5(.ch_x(ch_periph_tx_clr),.x(periph_tx_clr)); 
+  prgen_mux8 #(3)mux_30(.sel(rd_ch_num),.ch_x(ch_rd_periph_delay),.x(rd_periph_delay)); 
+  prgen_mux8 #(3)mux_51(.sel(wr_ch_num),.ch_x(ch_wr_periph_delay),.x(wr_periph_delay)); 
+  prgen_demux8 #(1)mux_6(.sel(timeout_num_aw),.x(timeout_aw),.ch_x(ch_timeout_aw)); 
+  prgen_demux8 #(1)mux_7(.sel(timeout_num_w),.x(timeout_w),.ch_x(ch_timeout_w)); 
+  prgen_demux8 #(1)mux_8(.sel(timeout_num_ar),.x(timeout_ar),.ch_x(ch_timeout_ar)); 
+  prgen_demux8 #(1)mux_9(.sel(wdt_ch_num),.x(wdt_timeout),.ch_x(ch_wdt_timeout)); 
+  prgen_or8 #(1)mux_55(.ch_x(ch_joint_in_prog),.x(joint_in_prog)); 
+  prgen_or8 #(1)mux_56(.ch_x(ch_joint_not_in_prog),.x(joint_not_in_prog)); 
+  prgen_or8 #(1)mux_57(.ch_x(ch_joint_mux_in_prog),.x(joint_mux_in_prog)); 
+  prgen_demux8 #(1)mux_60(.sel(wr_ch_num),.x(wr_cmd_pending),.ch_x(ch_wr_cmd_pending)); 
+  prgen_demux8 #(1)mux_11(.sel(rd_ch_num),.x(rd_burst_start),.ch_x(ch_rd_burst_start)); 
+  prgen_demux8 #(1)mux_13(.sel(load_wr_num),.x(load_wr),.ch_x(ch_load_wr)); 
   assign ch_rd_clr_line='d0; 
   assign ch_rd_cmd_line='d0; 
   assign rd_line_cmd='d0; 
@@ -4021,36 +4191,36 @@ module dma_axi64_core0_channels_mux (
   assign ch_wr_clr_line='d0; 
   assign wr_line_cmd='d0; 
   assign wr_go_next_line='d0; 
-  prgen_mux8 mux_33(.sel(rd_ch_num),.ch_x(ch_rd_clr_valid),.x(rd_clr_valid)); 
-  prgen_mux8 mux_53(.sel(wr_ch_num),.ch_x(ch_wr_clr_valid),.x(wr_clr_valid)); 
-  prgen_demux8 mux_15(.sel(rd_transfer_num),.x(rd_transfer),.ch_x(ch_rd_transfer)); 
-  prgen_demux8 mux_16(.sel(rd_ch_num_resp),.x(rd_slverr),.ch_x(ch_rd_slverr)); 
-  prgen_demux8 mux_17(.sel(rd_ch_num_resp),.x(rd_decerr),.ch_x(ch_rd_decerr)); 
-  prgen_demux8 mux_39(.sel(wr_ch_num_resp),.x(wr_decerr),.ch_x(ch_wr_decerr)); 
-  prgen_demux8 mux_20(.sel(rd_cmd_num),.x(rd_cmd_split),.ch_x(ch_rd_cmd_split)); 
-  prgen_demux8 mux_42(.sel(wr_cmd_num),.x(wr_cmd_split),.ch_x(ch_wr_cmd_split)); 
-  prgen_demux8 mux_58(.sel(rd_ch_num),.x(rd_page_cross),.ch_x(ch_rd_page_cross)); 
-  prgen_demux8 mux_59(.sel(wr_ch_num),.x(wr_page_cross),.ch_x(ch_wr_page_cross)); 
-  prgen_demux8 mux_18(.sel(rd_ch_num_resp),.x(rd_clr),.ch_x(ch_rd_clr)); 
-  prgen_demux8 mux_19(.sel(rd_ch_num_resp),.x(rd_clr_load),.ch_x(ch_rd_clr_load)); 
-  prgen_demux8 mux_21(.sel(ch_fifo_rd_num),.x(fifo_rd),.ch_x(ch_fifo_rd)); 
-  prgen_mux8 mux_23(.sel(rd_ch_num),.ch_x(ch_load_req_in_prog),.x(load_req_in_prog)); 
-  prgen_mux8 mux_26(.sel(rd_ch_num),.ch_x(ch_rd_burst_addr),.x(rd_burst_addr)); 
-  prgen_mux8 mux_27(.sel(rd_ch_num),.ch_x(ch_rd_burst_size),.x(rd_burst_size)); 
-  prgen_mux8 mux_28(.sel(rd_ch_num),.ch_x(ch_rd_tokens),.x(rd_tokens)); 
-  prgen_mux8 mux_49(.sel(wr_ch_num),.ch_x(ch_wr_tokens),.x(wr_tokens)); 
+  prgen_mux8 #(1)mux_33(.sel(rd_ch_num),.ch_x(ch_rd_clr_valid),.x(rd_clr_valid)); 
+  prgen_mux8 #(1)mux_53(.sel(wr_ch_num),.ch_x(ch_wr_clr_valid),.x(wr_clr_valid)); 
+  prgen_demux8 #(1)mux_15(.sel(rd_transfer_num),.x(rd_transfer),.ch_x(ch_rd_transfer)); 
+  prgen_demux8 #(1)mux_16(.sel(rd_ch_num_resp),.x(rd_slverr),.ch_x(ch_rd_slverr)); 
+  prgen_demux8 #(1)mux_17(.sel(rd_ch_num_resp),.x(rd_decerr),.ch_x(ch_rd_decerr)); 
+  prgen_demux8 #(1)mux_39(.sel(wr_ch_num_resp),.x(wr_decerr),.ch_x(ch_wr_decerr)); 
+  prgen_demux8 #(1)mux_20(.sel(rd_cmd_num),.x(rd_cmd_split),.ch_x(ch_rd_cmd_split)); 
+  prgen_demux8 #(1)mux_42(.sel(wr_cmd_num),.x(wr_cmd_split),.ch_x(ch_wr_cmd_split)); 
+  prgen_demux8 #(1)mux_58(.sel(rd_ch_num),.x(rd_page_cross),.ch_x(ch_rd_page_cross)); 
+  prgen_demux8 #(1)mux_59(.sel(wr_ch_num),.x(wr_page_cross),.ch_x(ch_wr_page_cross)); 
+  prgen_demux8 #(1)mux_18(.sel(rd_ch_num_resp),.x(rd_clr),.ch_x(ch_rd_clr)); 
+  prgen_demux8 #(1)mux_19(.sel(rd_ch_num_resp),.x(rd_clr_load),.ch_x(ch_rd_clr_load)); 
+  prgen_demux8 #(1)mux_21(.sel(ch_fifo_rd_num),.x(fifo_rd),.ch_x(ch_fifo_rd)); 
+  prgen_mux8 #(1)mux_23(.sel(rd_ch_num),.ch_x(ch_load_req_in_prog),.x(load_req_in_prog)); 
+  prgen_mux8 #(32)mux_26(.sel(rd_ch_num),.ch_x(ch_rd_burst_addr),.x(rd_burst_addr)); 
+  prgen_mux8 #(8)mux_27(.sel(rd_ch_num),.ch_x(ch_rd_burst_size),.x(rd_burst_size)); 
+  prgen_mux8 #(6)mux_28(.sel(rd_ch_num),.ch_x(ch_rd_tokens),.x(rd_tokens)); 
+  prgen_mux8 #(6)mux_49(.sel(wr_ch_num),.ch_x(ch_wr_tokens),.x(wr_tokens)); 
   assign rd_cmd_port='d0; 
   assign wr_cmd_port='d0; 
-  prgen_mux8 mux_31(.sel(ch_fifo_rd_num),.ch_x(ch_fifo_wr_ready),.x(fifo_wr_ready)); 
-  prgen_demux8 mux_34(.sel(wr_ch_num),.x(wr_burst_start),.ch_x(ch_wr_burst_start)); 
-  prgen_demux8 mux_37(.sel(wr_transfer_num),.x(wr_transfer),.ch_x(ch_wr_transfer)); 
-  prgen_demux8 mux_38(.sel(wr_ch_num_resp),.x(wr_slverr),.ch_x(ch_wr_slverr)); 
-  prgen_demux8 mux_40(.sel(wr_ch_num_resp),.x(wr_clr),.ch_x(ch_wr_clr)); 
-  prgen_demux8 mux_41(.sel(wr_ch_num_resp),.x(wr_clr_last),.ch_x(ch_wr_clr_last)); 
-  prgen_demux8 mux_43(.sel(ch_fifo_wr_num),.x(fifo_wr),.ch_x(ch_fifo_wr)); 
-  prgen_mux8 mux_44(.sel(wr_ch_num),.ch_x(ch_wr_last_cmd),.x(wr_last_cmd)); 
-  prgen_mux8 mux_47(.sel(wr_ch_num),.ch_x(ch_wr_burst_addr),.x(wr_burst_addr)); 
-  prgen_mux8 mux_48(.sel(wr_ch_num),.ch_x(ch_wr_burst_size),.x(wr_burst_size)); 
+  prgen_mux8 #(1)mux_31(.sel(ch_fifo_rd_num),.ch_x(ch_fifo_wr_ready),.x(fifo_wr_ready)); 
+  prgen_demux8 #(1)mux_34(.sel(wr_ch_num),.x(wr_burst_start),.ch_x(ch_wr_burst_start)); 
+  prgen_demux8 #(1)mux_37(.sel(wr_transfer_num),.x(wr_transfer),.ch_x(ch_wr_transfer)); 
+  prgen_demux8 #(1)mux_38(.sel(wr_ch_num_resp),.x(wr_slverr),.ch_x(ch_wr_slverr)); 
+  prgen_demux8 #(1)mux_40(.sel(wr_ch_num_resp),.x(wr_clr),.ch_x(ch_wr_clr)); 
+  prgen_demux8 #(1)mux_41(.sel(wr_ch_num_resp),.x(wr_clr_last),.ch_x(ch_wr_clr_last)); 
+  prgen_demux8 #(1)mux_43(.sel(ch_fifo_wr_num),.x(fifo_wr),.ch_x(ch_fifo_wr)); 
+  prgen_mux8 #(1)mux_44(.sel(wr_ch_num),.ch_x(ch_wr_last_cmd),.x(wr_last_cmd)); 
+  prgen_mux8 #(32)mux_47(.sel(wr_ch_num),.ch_x(ch_wr_burst_addr),.x(wr_burst_addr)); 
+  prgen_mux8 #(8)mux_48(.sel(wr_ch_num),.ch_x(ch_wr_burst_size),.x(wr_burst_size)); 
 endmodule
  
 module dma_axi64_core0 (
@@ -4303,13 +4473,13 @@ module dma_axi64_core0_axim_timeout (
   assign axim_timeout=(counter=='d0); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          counter <={10{1'b1}};
+          counter <=#1{10{1'b1}};
         else 
           if (VALID&READY)
-             counter <={10{1'b1}};
+             counter <=#1{10{1'b1}};
            else 
              if (VALID)
-                counter <=counter-1'b1;
+                counter <=#1counter-1'b1;
  
 endmodule
  
@@ -4374,27 +4544,29 @@ module dma_axi64_core0_axim_wr (
    reg [1:0] BRESP_d ;  
    wire wr_resp_full ;  
   assign BREADY=1'b1; 
-  prgen_delay delay_bvalid(.clk(clk),.reset(reset),.din(BVALID),.dout(BVALID_d)); 
+  prgen_delay #(1)delay_bvalid(.clk(clk),.reset(reset),.din(BVALID),.dout(BVALID_d)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            BRESP_d <=2'b00;
+            BRESP_d <=#12'b00;
           end 
         else 
           if (BVALID)
              begin 
-               BRESP_d <=BRESP;
+               BRESP_d <=#1BRESP;
              end
   
-  dma_axi64_core0_axim_cmd dma_axi64_axim_wcmd(.clk(clk),.reset(reset),.end_line_cmd(wr_line_cmd),.extra_bit(wr_last_cmd),.cmd_port(wr_cmd_port),.joint_req(joint_req),.joint_pending(),.ch_num(wr_ch_num),.burst_start(wr_burst_start),.burst_addr(wr_burst_addr),.burst_size(wr_burst_size),.cmd_pending(wr_cmd_pending),.cmd_full(wr_cmd_full),.cmd_split(wr_cmd_split),.cmd_num(wr_cmd_num),.cmd_line(),.page_cross(page_cross),.AID(AWID),.AADDR(AWADDR),.APORT(AWPORT),.ALEN(AWLEN),.ASIZE(AWSIZE),.AVALID(AWVALID),.AREADY(AWREADY),.AWVALID(1'b0),.AJOINT(AJOINT),.axim_timeout_num(axim_timeout_num_aw),.axim_timeout(axim_timeout_aw)); 
+  dma_axi64_core0_axim_cmd dma_axi64_axim_wcmd(.clk(clk),.reset(reset),.end_line_cmd(wr_line_cmd),.extra_bit(wr_last_cmd),.cmd_port(wr_cmd_port),.joint_req(joint_req),.ch_num(wr_ch_num),.burst_start(wr_burst_start),.burst_addr(wr_burst_addr),.burst_size(wr_burst_size),.cmd_pending(wr_cmd_pending),.cmd_full(wr_cmd_full),.cmd_split(wr_cmd_split),.cmd_num(wr_cmd_num),.cmd_line(),.page_cross(page_cross),.AID(AWID),.AADDR(AWADDR),.APORT(AWPORT),.ALEN(AWLEN),.ASIZE(AWSIZE),.AVALID(AWVALID),.AREADY(AWREADY),.AWVALID(1'b0),.AJOINT(AJOINT),.axim_timeout_num(axim_timeout_num_aw),.axim_timeout(axim_timeout_aw)); 
   dma_axi64_core0_axim_wdata dma_axi64_axim_wdata(.clk(clk),.reset(reset),.joint_stall(joint_stall),.rd_transfer(rd_transfer),.rd_transfer_size(rd_transfer_size),.ch_fifo_rd(ch_fifo_rd),.ch_fifo_rdata(ch_fifo_rdata),.ch_fifo_rd_valid(ch_fifo_rd_valid),.ch_fifo_rsize(ch_fifo_rsize),.ch_fifo_rd_num(ch_fifo_rd_num),.ch_fifo_wr_ready(ch_fifo_wr_ready),.wr_transfer_num(wr_transfer_num),.wr_transfer(wr_transfer),.wr_transfer_size(wr_transfer_size),.wr_next_size(wr_next_size),.wr_resp_full(wr_resp_full),.wr_cmd_full(wr_cmd_full),.wr_clr_line(wr_clr_line),.wr_clr_line_num(wr_clr_line_num),.AWID(AWID),.AWADDR(AWADDR),.AWLEN(AWLEN),.AWSIZE(AWSIZE),.AWVALID(AWVALID),.AWREADY(AWREADY),.AJOINT(AJOINT),.WDATA(WDATA),.WSTRB(WSTRB),.WLAST(WLAST),.WVALID(WVALID),.WREADY(WREADY),.axim_timeout_num(axim_timeout_num_w),.axim_timeout(axim_timeout_w)); 
-  dma_axi64_core0_axim_resp dma_axi64_axim_wresp(.clk(clk),.reset(reset),.slverr(wr_slverr),.decerr(wr_decerr),.clr(wr_clr),.clr_last(wr_clr_last),.ch_num_resp(wr_ch_num_resp),.resp_full(wr_resp_full),.AID(AWID),.AVALID(AWVALID),.AREADY(AWREADY),.ID(BID),.RESP(BRESP_d),.VALID(BVALID_d),.READY(BREADY),.LAST(1'b1)); 
+  dma_axi64_core0_axim_resp #(.CMD_DEPTH(4))dma_axi64_axim_wresp(.clk(clk),.reset(reset),.slverr(wr_slverr),.decerr(wr_decerr),.clr(wr_clr),.clr_last(wr_clr_last),.ch_num_resp(wr_ch_num_resp),.resp_full(wr_resp_full),.AID(AWID),.AVALID(AWVALID),.AREADY(AWREADY),.ID(BID),.RESP(BRESP_d),.VALID(BVALID_d),.READY(BREADY),.LAST(1'b1)); 
 endmodule
  
-module prgen_or8 (
-  input [8*8-1:0] ch_x,
-  output [8-1:0] x) ; 
-  assign x=ch_x[8-1+8*0:8*0]|ch_x[8-1+8*1:8*1]|ch_x[8-1+8*2:8*2]|ch_x[8-1+8*3:8*3]|ch_x[8-1+8*4:8*4]|ch_x[8-1+8*5:8*5]|ch_x[8-1+8*6:8*6]|ch_x[8-1+8*7:8*7]; 
+module prgen_or8 #(
+ parameter WIDTH =8) (
+  input [8*WIDTH-1:0] ch_x,
+  output [WIDTH-1:0] x) ; 
+    
+  assign x=ch_x[WIDTH-1+WIDTH*0:WIDTH*0]|ch_x[WIDTH-1+WIDTH*1:WIDTH*1]|ch_x[WIDTH-1+WIDTH*2:WIDTH*2]|ch_x[WIDTH-1+WIDTH*3:WIDTH*3]|ch_x[WIDTH-1+WIDTH*4:WIDTH*4]|ch_x[WIDTH-1+WIDTH*5:WIDTH*5]|ch_x[WIDTH-1+WIDTH*6:WIDTH*6]|ch_x[WIDTH-1+WIDTH*7:WIDTH*7]; 
 endmodule
  
 module dma_axi64_core0_ch_rd_slicer (
@@ -4429,21 +4601,21 @@ module dma_axi64_core0_ch_rd_slicer (
    reg [4-1:0] next_rsize_reg ;  
    wire [4-1:0] next_rsize ;  
    wire next_rd ;  
-  prgen_delay delay_fifo_rd0(.clk(clk),.reset(reset),.din(fifo_rd),.dout(fifo_rd_d)); 
-  prgen_delay delay_fifo_rd_valid(.clk(clk),.reset(reset),.din(fifo_rd_d),.dout(slice_rd_valid)); 
-  prgen_delay delay_fifo_rd1(.clk(clk),.reset(reset),.din(slice_rd_pre),.dout(slice_rd)); 
-  prgen_delay delay_fifo_rd2(.clk(clk),.reset(reset),.din(slice_rd),.dout(slice_rd_d)); 
+  prgen_delay #(1)delay_fifo_rd0(.clk(clk),.reset(reset),.din(fifo_rd),.dout(fifo_rd_d)); 
+  prgen_delay #(2)delay_fifo_rd_valid(.clk(clk),.reset(reset),.din(fifo_rd_d),.dout(slice_rd_valid)); 
+  prgen_delay #(1)delay_fifo_rd1(.clk(clk),.reset(reset),.din(slice_rd_pre),.dout(slice_rd)); 
+  prgen_delay #(1)delay_fifo_rd2(.clk(clk),.reset(reset),.din(slice_rd),.dout(slice_rd_d)); 
   assign rd_align_valid_pre=(~wr_incr)&wr_single ? rd_align-rd_ptr[3-1:0]:rd_align; 
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            rd_align_valid <={3{1'b0}};
-            rd_align_d <={3{1'b0}};
+            rd_align_valid <=#1{3{1'b0}};
+            rd_align_d <=#1{3{1'b0}};
           end 
         else 
           begin 
-            rd_align_valid <=rd_align_valid_pre;
-            rd_align_d <=rd_align_valid;
+            rd_align_valid <=#1rd_align_valid_pre;
+            rd_align_d <=#1rd_align_valid;
           end
   
   always @(   fifo_rdata or  next_rdata or  rd_align_d)
@@ -4492,29 +4664,29 @@ module dma_axi64_core0_ch_rd_slicer (
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          next_rdata <={64{1'b0}};
+          next_rdata <=#1{64{1'b0}};
         else 
           if (slice_rd_d)
-             next_rdata <=next_rdata_pre;
+             next_rdata <=#1next_rdata_pre;
  
   assign actual_rsize_pre=next_rsize+({4{fifo_rd}}&fifo_rsize); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          actual_rsize <={4{1'b0}};
+          actual_rsize <=#1{4{1'b0}};
         else 
           if (fifo_rd|(|next_rsize))
-             actual_rsize <=actual_rsize_pre;
+             actual_rsize <=#1actual_rsize_pre;
  
-  prgen_min2 min_rsize(.a(rd_line_remain),.b(actual_rsize),.min(slice_rsize)); 
+  prgen_min2 #(4)min_rsize(.a(rd_line_remain),.b(actual_rsize),.min(slice_rsize)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          next_rsize_reg <={4{1'b0}};
+          next_rsize_reg <=#1{4{1'b0}};
         else 
           if (next_rd)
-             next_rsize_reg <={4{1'b0}};
+             next_rsize_reg <=#1{4{1'b0}};
            else 
              if (fifo_rd|slice_rd)
-                next_rsize_reg <=next_rsize+({4{fifo_rd}}&fifo_rsize);
+                next_rsize_reg <=#1next_rsize+({4{fifo_rd}}&fifo_rsize);
  
   assign next_rsize=next_rsize_reg-({4{fifo_rd_d}}&slice_rsize); 
   assign next_rd=(~fifo_rd)&(|next_rsize); 
@@ -4522,7 +4694,9 @@ module dma_axi64_core0_ch_rd_slicer (
   assign slice_rd_ptr=rd_ptr; 
 endmodule
  
-module dma_axi64_core0_ch_calc (
+module dma_axi64_core0_ch_calc #(
+ parameter READ =0,
+ parameter SINGLE_SIZE =8) (
   input clk,
   input reset,
   input load_in_prog,
@@ -4560,23 +4734,25 @@ module dma_axi64_core0_ch_calc (
   input joint_cross,
   output joint_flush,
   input joint_flush_in) ; 
+    
+    
    wire ch_update_d ;  
    wire ch_update_d2 ;  
    wire ch_update_d3 ;  
    wire [32-1:0] burst_addr ;  
    wire [8-1:0] burst_size ;  
-  prgen_delay delay_calc0(.clk(clk),.reset(reset),.din(ch_update),.dout(ch_update_d)); 
-  prgen_delay delay_calc1(.clk(clk),.reset(reset),.din(ch_update_d),.dout(ch_update_d2)); 
-  prgen_delay delay_calc2(.clk(clk),.reset(reset),.din(ch_update_d2),.dout(ch_update_d3)); 
+  prgen_delay #(1)delay_calc0(.clk(clk),.reset(reset),.din(ch_update),.dout(ch_update_d)); 
+  prgen_delay #(1)delay_calc1(.clk(clk),.reset(reset),.din(ch_update_d),.dout(ch_update_d2)); 
+  prgen_delay #(1)delay_calc2(.clk(clk),.reset(reset),.din(ch_update_d2),.dout(ch_update_d3)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          single <=1'b0;
+          single <=#11'b0;
         else 
           if (burst_start)
-             single <=(burst_size<=SINGLE_SIZE);
+             single <=#1(burst_size<=SINGLE_SIZE);
  
   dma_axi64_core0_ch_calc_addr dma_axi64_ch_calc_addr(.clk(clk),.reset(reset),.ch_update_d(ch_update_d),.load_in_prog(load_in_prog),.load_addr(load_addr),.go_next_line(go_next_line),.burst_start(burst_start),.incr(incr),.start_addr(start_addr),.frame_width(frame_width),.x_size(x_size),.burst_size(burst_size),.burst_addr(burst_addr)); 
-  dma_axi64_core0_ch_calc_size dma_axi64_ch_calc_size(.clk(clk),.reset(reset),.ch_update(ch_update),.ch_update_d(ch_update_d),.ch_update_d2(ch_update_d2),.ch_update_d3(ch_update_d3),.ch_end(ch_end),.ch_end_flush(ch_end_flush),.joint_line_req_clr(joint_line_req_clr),.wr_cmd_pending(wr_cmd_pending),.outs_empty(outs_empty),.load_in_prog(load_in_prog),.load_req_in_prog(load_req_in_prog),.burst_start(burst_start),.burst_addr(burst_addr),.burst_max_size(burst_max_size),.x_remain(x_remain),.fifo_wr_ready(fifo_wr_ready),.fifo_remain(fifo_remain),.burst_size(burst_size),.burst_ready(burst_ready),.burst_last(burst_last),.joint_ready_out(joint_ready_out),.joint_ready_in(joint_ready_in),.joint_line_req_in(joint_line_req_in),.joint_line_req_out(joint_line_req_out),.joint_burst_req_in(joint_burst_req_in),.joint_burst_req_out(joint_burst_req_out),.joint(joint),.page_cross(page_cross),.joint_cross(joint_cross),.joint_flush(joint_flush),.joint_flush_in(joint_flush_in)); 
+  dma_axi64_core0_ch_calc_size #(.READ(READ))dma_axi64_ch_calc_size(.clk(clk),.reset(reset),.ch_update(ch_update),.ch_update_d(ch_update_d),.ch_update_d2(ch_update_d2),.ch_update_d3(ch_update_d3),.ch_end(ch_end),.ch_end_flush(ch_end_flush),.joint_line_req_clr(joint_line_req_clr),.wr_cmd_pending(wr_cmd_pending),.outs_empty(outs_empty),.load_in_prog(load_in_prog),.load_req_in_prog(load_req_in_prog),.burst_start(burst_start),.burst_addr(burst_addr),.burst_max_size(burst_max_size),.x_remain(x_remain),.fifo_wr_ready(fifo_wr_ready),.fifo_remain(fifo_remain),.burst_size(burst_size),.burst_ready(burst_ready),.burst_last(burst_last),.joint_ready_out(joint_ready_out),.joint_ready_in(joint_ready_in),.joint_line_req_in(joint_line_req_in),.joint_line_req_out(joint_line_req_out),.joint_burst_req_in(joint_burst_req_in),.joint_burst_req_out(joint_burst_req_out),.joint(joint),.page_cross(page_cross),.joint_cross(joint_cross),.joint_flush(joint_flush),.joint_flush_in(joint_flush_in)); 
 endmodule
  
 module dma_axi64_core0_wdt (
@@ -4600,20 +4776,20 @@ module dma_axi64_core0_wdt (
   assign advance=(!current_ch_active)|current_burst_start|wdt_timeout; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          wdt_ch_num <=3'd0;
+          wdt_ch_num <=#13'd0;
         else 
           if (advance)
-             wdt_ch_num <=wdt_ch_num+1'b1;
+             wdt_ch_num <=#1wdt_ch_num+1'b1;
  
   assign wdt_timeout=(counter=='d0); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          counter <={11{1'b1}};
+          counter <=#1{11{1'b1}};
         else 
-          if (advance|8'hD0)
-             counter <={11{1'b1}};
+          if (advance|idle)
+             counter <=#1{11{1'b1}};
            else 
-             counter <=counter-1'b1;
+             counter <=#1counter-1'b1;
  
 endmodule
  
@@ -4633,11 +4809,11 @@ module dma_axi64_core0_ch_fifo (
   assign DIN_BitSEL=(Mem[WR_ADDR]&~BitSEL)|(DIN&BitSEL); 
   always @( posedge CLK)
        if (WR)
-          Mem [WR_ADDR]<=DIN_BitSEL;
+          Mem [WR_ADDR]<=#1DIN_BitSEL;
  
   always @( posedge CLK)
        if (RD)
-          DOUT <=Mem[RD_ADDR];
+          DOUT <=#1Mem[RD_ADDR];
  
 endmodule
  
@@ -4730,14 +4906,14 @@ module dma_axi64_core0_axim_wdata (
   assign data_fullness_pre=data_fullness+data_ready-wr_transfer_pre; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          data_fullness <=3'd0;
+          data_fullness <=#13'd0;
         else 
           if (data_ready|wr_transfer_pre)
-             data_fullness <=data_fullness_pre;
+             data_fullness <=#1data_fullness_pre;
  
-  prgen_joint_stall gen_joint_stall(.clk(clk),.reset(reset),.joint_req_out(joint_req_out),.rd_transfer(rd_transfer),.rd_transfer_size(rd_transfer_size),.ch_fifo_rd(ch_fifo_rd),.data_fullness_pre(data_fullness_pre),.HOLD(1'b0),.joint_fifo_rd_valid(joint_fifo_rd_valid),.rd_transfer_size_joint(rd_transfer_size_joint),.rd_transfer_full(rd_transfer_full),.joint_stall(joint_stall)); 
+  prgen_joint_stall #(4)gen_joint_stall(.clk(clk),.reset(reset),.joint_req_out(joint_req_out),.rd_transfer(rd_transfer),.rd_transfer_size(rd_transfer_size),.ch_fifo_rd(ch_fifo_rd),.data_fullness_pre(data_fullness_pre),.HOLD(1'b0),.joint_fifo_rd_valid(joint_fifo_rd_valid),.rd_transfer_size_joint(rd_transfer_size_joint),.rd_transfer_full(rd_transfer_full),.joint_stall(joint_stall)); 
   assign data_pending_pre=WVALID&(~WREADY); 
-  prgen_delay delay_pending(.clk(clk),.reset(reset),.din(data_pending_pre),.dout(data_pending)); 
+  prgen_delay #(1)delay_pending(.clk(clk),.reset(reset),.din(data_pending_pre),.dout(data_pending)); 
   always @( WSIZE_cmd)
        begin 
          case (WSIZE_cmd)
@@ -4753,45 +4929,45 @@ module dma_axi64_core0_axim_wdata (
        end
   
   assign ch_fifo_rd=joint_fifo_rd_valid|((~cmd_empty)&(~data_pending)&(~wr_clr_line_stall)&ch_fifo_wr_ready); 
-  assign ch_fifo_rsize=4'd8; 
+  assign ch_fifo_rsize=joint_fifo_rd_valid ? rd_transfer_size_joint:WID_cmd[5:4]==2'b00 ? 4'd1:WID_cmd[5:4]==2'b01 ? 4'd2:WID_cmd[5:4]==2'b10 ? 4'd4:4'd8; 
   assign ch_fifo_rd_num=WID_cmd[2:0]; 
-  prgen_delay delay_cmd_pop(.clk(clk),.reset(reset),.din(cmd_pop),.dout(cmd_pop_d)); 
+  prgen_delay #(1)delay_cmd_pop(.clk(clk),.reset(reset),.din(cmd_pop),.dout(cmd_pop_d)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          last_channel <=3'b000;
+          last_channel <=#13'b000;
         else 
           if (cmd_push)
-             last_channel <=WID_pre[2:0];
+             last_channel <=#1WID_pre[2:0];
  
   assign wr_transfer_num_pre=WID_data[2:0]; 
   assign wr_transfer_pre=WVALID&WREADY; 
-  assign wr_transfer_size_pre=4'd8; 
-  prgen_delay delay_wr_transfer(.clk(clk),.reset(reset),.din(wr_transfer_pre),.dout(wr_transfer)); 
+  assign wr_transfer_size_pre=WID_data[5:4]==2'b00 ? 4'd1:WID_data[5:4]==2'b01 ? 4'd2:WID_data[5:4]==2'b10 ? 4'd4:4'd8; 
+  prgen_delay #(1)delay_wr_transfer(.clk(clk),.reset(reset),.din(wr_transfer_pre),.dout(wr_transfer)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            wr_transfer_num <=3'd0;
-            wr_transfer_size <=3'd0;
+            wr_transfer_num <=#13'd0;
+            wr_transfer_size <=#13'd0;
           end 
         else 
           if (wr_transfer_pre)
              begin 
-               wr_transfer_num <=wr_transfer_num_pre;
-               wr_transfer_size <=wr_transfer_size_pre;
+               wr_transfer_num <=#1wr_transfer_num_pre;
+               wr_transfer_size <=#1wr_transfer_size_pre;
              end
   
   assign valid_last=ch_fifo_rd&(rd_out_count==WLEN_cmd)&(~cmd_empty); 
   assign wr_clr_line_pre=valid_last&line_end; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          wr_clr_line_num <=3'd0;
+          wr_clr_line_num <=#13'd0;
         else 
           if (wr_clr_line_pre)
-             wr_clr_line_num <=line_end_num;
+             wr_clr_line_num <=#1line_end_num;
  
   assign wr_clr_line_stall_pre=wr_clr_line_pre&(ch_fifo_rd_num==line_end_num); 
-  prgen_delay delay_stall(.clk(clk),.reset(reset),.din(wr_clr_line_stall_pre),.dout(wr_clr_line_stall)); 
-  prgen_delay delay_clr_line(.clk(clk),.reset(reset),.din(wr_clr_line_pre),.dout(wr_clr_line)); 
+  prgen_delay #(1)delay_stall(.clk(clk),.reset(reset),.din(wr_clr_line_stall_pre),.dout(wr_clr_line_stall)); 
+  prgen_delay #(2)delay_clr_line(.clk(clk),.reset(reset),.din(wr_clr_line_pre),.dout(wr_clr_line)); 
   assign wr_cmd_full=cmd_full|cmd_data_full|wr_resp_full; 
   assign cmd_push=AWVALID&AWREADY; 
   assign cmd_pop=valid_last; 
@@ -4834,37 +5010,37 @@ module dma_axi64_core0_axim_wdata (
          endcase 
        end
   
-  prgen_fifo cmd_fifo(.clk(clk),.reset(reset),.push(cmd_push),.pop(cmd_pop),.din({WID_pre,WSIZE_pre,WLEN_pre,AJOINT}),.dout({WID_cmd,WSIZE_cmd,WLEN_cmd,joint_req_out}),.empty(cmd_empty),.full(cmd_full)); 
+  prgen_fifo #(7+4+2+1,4)cmd_fifo(.clk(clk),.reset(reset),.push(cmd_push),.pop(cmd_pop),.din({WID_pre,WSIZE_pre,WLEN_pre,AJOINT}),.dout({WID_cmd,WSIZE_cmd,WLEN_cmd,joint_req_out}),.empty(cmd_empty),.full(cmd_full)); 
   assign line_end=WID_cmd[6]; 
   assign line_end_num=WID_cmd[2:0]; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          rd_out_count <={4{1'b0}};
+          rd_out_count <=#1{4{1'b0}};
         else 
           if (cmd_pop)
-             rd_out_count <={4{1'b0}};
+             rd_out_count <=#1{4{1'b0}};
            else 
              if (ch_fifo_rd)
-                rd_out_count <=rd_out_count+1'b1;
+                rd_out_count <=#1rd_out_count+1'b1;
  
   assign cmd_data_push=cmd_push; 
   assign cmd_data_pop=WVALID&WREADY&WLAST; 
   assign WSTRB=(rd_in_count[0] ? {WSTRB_data[3:0],WSTRB_data[7:4]}:WSTRB_data)&{8{WVALID}}; 
   assign WID=WID_data; 
-  prgen_fifo cmd_data_fifo(.clk(clk),.reset(reset),.push(cmd_data_push),.pop(cmd_data_pop),.din({WLEN_pre,WSIZE_pre,WSTRB_pre,WID_pre}),.dout({WLEN_data,WSIZE_data,WSTRB_data,WID_data}),.empty(cmd_data_empty),.full(cmd_data_full)); 
+  prgen_fifo #(8+4+7+2,4)cmd_data_fifo(.clk(clk),.reset(reset),.push(cmd_data_push),.pop(cmd_data_pop),.din({WLEN_pre,WSIZE_pre,WSTRB_pre,WID_pre}),.dout({WLEN_data,WSIZE_data,WSTRB_data,WID_data}),.empty(cmd_data_empty),.full(cmd_data_full)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          rd_in_count <={4{1'b0}};
+          rd_in_count <=#1{4{1'b0}};
         else 
           if (cmd_data_pop)
-             rd_in_count <={4{1'b0}};
+             rd_in_count <=#1{4{1'b0}};
            else 
              if (wr_transfer_pre)
-                rd_in_count <=rd_in_count+1'b1;
+                rd_in_count <=#1rd_in_count+1'b1;
  
   assign data_push=ch_fifo_rd_valid; 
   assign data_pop=wr_transfer_pre; 
-  prgen_fifo data_fifo(.clk(clk),.reset(reset),.push(data_push),.pop(data_pop),.din(ch_fifo_rdata),.dout(WDATA),.empty(data_empty),.full(data_full)); 
+  prgen_fifo #(64,5+2)data_fifo(.clk(clk),.reset(reset),.push(data_push),.pop(data_pop),.din(ch_fifo_rdata),.dout(WDATA),.empty(data_empty),.full(data_full)); 
   assign WVALID=~data_empty; 
   assign WLAST=WVALID&(rd_in_count==WLEN_data)&(~cmd_data_empty); 
   dma_axi64_core0_axim_timeout dma_axi64_axim_timeout(.clk(clk),.reset(reset),.VALID(WVALID),.READY(WREADY),.ID(WID),.axim_timeout_num(axim_timeout_num),.axim_timeout(axim_timeout)); 
@@ -4895,7 +5071,7 @@ module dma_axi64_reg_core0 (
   output [7:0] proc0_int_stat) ; 
    wire user_def_clkdiv ;  
    wire user_def_bus_32 ;  
-   wire [3:0] user_def_0 ;  
+   wire [3:0] user_def_ch_num ;  
    wire [3:0] user_def_fifo_size ;  
    wire [3:0] user_def_wcmd_depth ;  
    wire [3:0] user_def_rcmd_depth ;  
@@ -4915,7 +5091,7 @@ module dma_axi64_reg_core0 (
    wire [4:0] user_def_buff_bits ;  
   assign user_def_clkdiv=0; 
   assign user_def_bus_32=0; 
-  assign user_def_0=1; 
+  assign user_def_ch_num=1; 
   assign user_def_fifo_size=5; 
   assign user_def_wcmd_depth=2; 
   assign user_def_rcmd_depth=2; 
@@ -4938,12 +5114,12 @@ module dma_axi64_reg_core0 (
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            joint_mode <=1'b0;
+            joint_mode <=#11'b0;
           end 
         else 
           if (wr_joint)
              begin 
-               joint_mode <=pwdata[0];
+               joint_mode <=#1pwdata[0];
              end
   
   assign rd_prio_top='d0; 
@@ -4956,7 +5132,7 @@ module dma_axi64_reg_core0 (
   assign wr_prio_high_num='d0; 
   assign clkdiv=4'd0; 
   assign ch_start={8{wr_start}}&pwdata[7:0]; 
-  prgen_scatter8_1 scatter_proc0(.ch_x(ch_int_all_proc),.x(proc0_int_stat)); 
+  prgen_scatter8_1 #(0)scatter_proc0(.ch_x(ch_int_all_proc),.x(proc0_int_stat)); 
 endmodule
  
 module dma_axi64_core0_axim_rdata (
@@ -5000,62 +5176,64 @@ module dma_axi64_core0_axim_rdata (
   assign ch_fifo_wsize=rd_transfer_size; 
   assign ch_fifo_wr_num=RID[2:0]; 
   assign rd_clr_line_pre=RVALID&RREADY&RLAST&RID[6]&(~RID[3]); 
-  prgen_delay delay_clr(.clk(clk),.reset(reset),.din(rd_clr_line_pre),.dout(rd_clr_line_pre_d)); 
-  prgen_delay delay_clr2(.clk(clk),.reset(reset),.din(rd_clr_line_pre_d),.dout(rd_clr_line)); 
+  prgen_delay #(1)delay_clr(.clk(clk),.reset(reset),.din(rd_clr_line_pre),.dout(rd_clr_line_pre_d)); 
+  prgen_delay #(1)delay_clr2(.clk(clk),.reset(reset),.din(rd_clr_line_pre_d),.dout(rd_clr_line)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          ch_fifo_wr_num_d <=3'b000;
+          ch_fifo_wr_num_d <=#13'b000;
         else 
           if (rd_clr_line_pre)
-             ch_fifo_wr_num_d <=ch_fifo_wr_num;
+             ch_fifo_wr_num_d <=#1ch_fifo_wr_num;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          rd_clr_line_num <=3'b000;
+          rd_clr_line_num <=#13'b000;
         else 
           if (rd_clr_line_pre_d)
-             rd_clr_line_num <=ch_fifo_wr_num_d;
+             rd_clr_line_num <=#1ch_fifo_wr_num_d;
  
   assign load_wr=RVALID&RREADY&load_cmd_id; 
   assign load_wr_num=RID[2:0]; 
   assign load_wdata=RDATA; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          load_wr_cycle <=2'b00;
+          load_wr_cycle <=#12'b00;
         else 
           if (load_wr&load_wr_cycle[0]&1'b1)
-             load_wr_cycle <=2'b00;
+             load_wr_cycle <=#12'b00;
            else 
              if (load_wr)
-                load_wr_cycle <=load_wr_cycle+1'b1;
+                load_wr_cycle <=#1load_wr_cycle+1'b1;
  
 endmodule
  
-module prgen_mux8 (
+module prgen_mux8 #(
+ parameter WIDTH =8) (
   input [3-1:0] sel,
-  input [8*8-1:0] ch_x,
-  output reg  [8-1:0] x) ; 
+  input [8*WIDTH-1:0] ch_x,
+  output reg  [WIDTH-1:0] x) ; 
+    
   always @(  ch_x or  sel)
        begin 
          case (sel)
           3 'd0:
-             x =ch_x[8-1+8*0:8*0];
+             x =ch_x[WIDTH-1+WIDTH*0:WIDTH*0];
           3 'd1:
-             x =ch_x[8-1+8*1:8*1];
+             x =ch_x[WIDTH-1+WIDTH*1:WIDTH*1];
           3 'd2:
-             x =ch_x[8-1+8*2:8*2];
+             x =ch_x[WIDTH-1+WIDTH*2:WIDTH*2];
           3 'd3:
-             x =ch_x[8-1+8*3:8*3];
+             x =ch_x[WIDTH-1+WIDTH*3:WIDTH*3];
           3 'd4:
-             x =ch_x[8-1+8*4:8*4];
+             x =ch_x[WIDTH-1+WIDTH*4:WIDTH*4];
           3 'd5:
-             x =ch_x[8-1+8*5:8*5];
+             x =ch_x[WIDTH-1+WIDTH*5:WIDTH*5];
           3 'd6:
-             x =ch_x[8-1+8*6:8*6];
+             x =ch_x[WIDTH-1+WIDTH*6:WIDTH*6];
           3 'd7:
-             x =ch_x[8-1+8*7:8*7];
+             x =ch_x[WIDTH-1+WIDTH*7:WIDTH*7];
           default :
-             x =ch_x[8-1:0];
+             x =ch_x[WIDTH-1:0];
          endcase 
        end
   

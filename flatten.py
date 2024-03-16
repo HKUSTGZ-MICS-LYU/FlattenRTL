@@ -396,7 +396,9 @@ def pyflattenverilog(design: str, top_module: str, output_file: str, debug_mode:
                     ctx.symbol.text = ""
                     pass
             if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
-                pass
+                # Handle '?' identification problem
+                if ctx.symbol.text == "?":
+                    ctx.symbol.text = " ? "
             else:
                 for child in ctx.getChildren():
                     # Dont rename parameter identifier in the port
@@ -442,6 +444,7 @@ def pyflattenverilog(design: str, top_module: str, output_file: str, debug_mode:
                                 + " "
                             )
                     self._traverse_children(child)
+                    
 
         # def _traverse_param_assignment(self,ctx):
         #   if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):

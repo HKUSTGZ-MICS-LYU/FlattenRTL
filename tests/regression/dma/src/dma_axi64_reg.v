@@ -69,7 +69,7 @@ module dma_axi64_reg(clk,reset,pclken,psel,penable,paddr,pwrite,pwdata,prdata,ps
    input [31:1]               periph_rx_clr;
    input [31:1]               periph_tx_clr;
 
-`include "dma_axi64_reg_params.v"
+`include "./src/dma_axi64_reg_params.v"
 
    
    wire [31:0]                   user_def_stat;
