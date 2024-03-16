@@ -218,11 +218,28 @@ def pyflattenverilog(design: str, top_module: str, output_file: str, debug_mode:
             def __init__(self):
                 self.counter = 0
 
+            # A very special case:
+            # "Parameter A = 3"
+            # "Parameter B = A;"
+            # After flatten, it should be
+            # Parameter B = [cur_prefix]_A;
+            def find_and_repalce_param_in_param_value(self,  param_value, prefix, cur_dict_of_parameter):
+                item = cur_dict_of_parameter[prefix]
+                for _key in item.keys():
+                    tmp_item = _key[len(prefix) + 1 :]
+                    # Find whole word 'item' in param_value
+                    pattern = r"\b{}\b".format(tmp_item)
+                    if re.search(pattern, param_value):
+                        if prefix + '_' + tmp_item in item:
+                            param_value = re.sub(pattern, _key, param_value)
+                return param_value
+
             # assign to cur_dict_of_parameters
             def visitParam_assignment(self, ctx: VerilogParser.Param_assignmentContext):
                 if ctx.getChildCount() == 3:
                     param_name = ctx.getChild(0).getText().replace(" ", "")
                     param_value = ctx.getChild(2).getText().replace(" ", "")
+                    
                     for item in cur_prefixs:
                         if cur_dict_of_parameters.get(item) is None:
                             cur_dict_of_parameters[item] = {}
@@ -231,17 +248,13 @@ def pyflattenverilog(design: str, top_module: str, output_file: str, debug_mode:
                             is None
                         ):
                             # Handle the ordered parameter
-                            if (
-                                cur_dict_of_parameters[item].get(self.counter)
-                                is not None
-                            ):
-                                cur_dict_of_parameters[item][
-                                    item + "_" + param_name
-                                ] = cur_dict_of_parameters[item].get(self.counter)
+                            if (cur_dict_of_parameters[item].get(self.counter)is not None):
+                                cur_dict_of_parameters[item][item + "_" + param_name] = cur_dict_of_parameters[item].get(self.counter)
                             else:
-                                cur_dict_of_parameters[item][
-                                    item + "_" + param_name
-                                ] = param_value
+                                param_value = self.find_and_repalce_param_in_param_value(
+                                    param_value, item, cur_dict_of_parameters
+                                )
+                                cur_dict_of_parameters[item][item + "_" + param_name] = param_value
 
         class myMoudleParameterPortVisitor(VerilogParserVisitor):
             def __init__(self):
