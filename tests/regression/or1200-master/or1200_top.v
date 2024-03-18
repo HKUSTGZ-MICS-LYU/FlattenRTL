@@ -131975,7 +131975,7 @@ module or1200_fpu_post_norm_intfloat_conv
    /*wire*/ reg [22:0] 		fract_out;
    /*wire*/reg [7:0] 		exp_out;
    wire [30:0] 		out;
-   wire 		exp_out1_co, overflow, underflow;
+   wire 		exp_out1_co/*, overflow, underflow*/;
    wire [22:0] 		fract_out_final;
    reg [22:0] 		fract_out_rnd;
    wire [8:0] 		exp_next_mi;
@@ -144043,7 +144043,7 @@ wire	[7:0]	expa, expb;
 wire	[22:0]	fracta, fractb;
 
 wire		expa_ff, expb_ff, fracta_00, fractb_00;
-wire		qnan_a, snan_a, qnan_b, snan_b, opa_inf, opb_inf, inf;
+wire		qnan_a, snan_a, qnan_b, snan_b, opa_inf, opb_inf/*, inf*/;
 wire		qnan, snan, opa_zero, opb_zero;
 
 wire 		exp_eq, exp_gt, exp_lt;

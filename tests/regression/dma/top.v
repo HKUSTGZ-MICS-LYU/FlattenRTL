@@ -387,40 +387,40 @@ module prgen_fifo(clk,reset,push,pop,din,dout,empty,full);
    always @(posedge clk or posedge reset)
      if (reset)
        begin
-      dout       <= #1 {WIDTH{1'b0}};
-      dout_empty <= #1 1'b1;
+      dout       <= {WIDTH{1'b0}};
+      dout_empty <= 1'b1;
        end
      else if (reg_push)
        begin
-      dout       <= #1 din;
-      dout_empty <= #1 1'b0;
+      dout       <= din;
+      dout_empty <= 1'b0;
        end
      else if (reg_pop)
        begin
-      dout       <= #1 {WIDTH{1'b0}};
-      dout_empty <= #1 1'b1;
+      dout       <= {WIDTH{1'b0}};
+      dout_empty <= 1'b1;
        end
      else if (fifo_pop)
        begin
-      dout       <= #1 fifo[ptr_out];
-      dout_empty <= #1 1'b0;
+      dout       <= fifo[ptr_out];
+      dout_empty <= 1'b0;
        end
    
    always @(posedge clk or posedge reset)
      if (reset)
-       ptr_in <= #1 {DEPTH_BITS{1'b0}};
+       ptr_in <= {DEPTH_BITS{1'b0}};
      else if (fifo_push)
-       ptr_in <= #1 ptr_in == LAST_LINE ? 0 : ptr_in + 1'b1;
+       ptr_in <= ptr_in == LAST_LINE ? 0 : ptr_in + 1'b1;
 
    always @(posedge clk or posedge reset)
      if (reset)
-       ptr_out <= #1 {DEPTH_BITS{1'b0}};
+       ptr_out <= {DEPTH_BITS{1'b0}};
      else if (fifo_pop)
-       ptr_out <= #1 ptr_out == LAST_LINE ? 0 : ptr_out + 1'b1;
+       ptr_out <= ptr_out == LAST_LINE ? 0 : ptr_out + 1'b1;
 
    always @(posedge clk)
      if (fifo_push)
-       fifo[ptr_in] <= #1 din;
+       fifo[ptr_in] <= din;
 
    
    always @(/*AUTOSENSE*/fifo_push or ptr_in)
@@ -437,9 +437,9 @@ module prgen_fifo(clk,reset,push,pop,din,dout,empty,full);
    
    always @(posedge clk or posedge reset)
      if (reset)
-       fullness <= #1 {DEPTH{1'b0}};
+       fullness <= {DEPTH{1'b0}};
      else if (fifo_push | fifo_pop)
-       fullness <= #1 (fullness & (~fullness_out)) | fullness_in;
+       fullness <= (fullness & (~fullness_out)) | fullness_in;
 
 
    assign next       = |fullness;
@@ -603,19 +603,19 @@ module dma_axi64_core0_ch_offsets(clk,reset,ch_update,burst_start,burst_last,bur
    
    always @(posedge clk or posedge reset)
      if (reset)
-       ch_end <= #1 1'b0;
+       ch_end <= 1'b0;
      else if (ch_update)
-       ch_end <= #1 1'b0;
+       ch_end <= 1'b0;
      else if (ch_end_pre)
-       ch_end <= #1 1'b1;
+       ch_end <= 1'b1;
 
    always @(posedge clk or posedge reset)
      if (reset)
-       x_remain <= #1 {10{1'b0}};
+       x_remain <= {10{1'b0}};
      else if (ch_update | go_next_line)
-       x_remain <= #1 x_size;
+       x_remain <= x_size;
      else if (burst_start & (~load_req_in_prog))
-       x_remain <= #1 x_remain - burst_size;
+       x_remain <= x_remain - burst_size;
        
    
    assign             x_offset   = {10{1'b0}};
@@ -688,11 +688,11 @@ module prgen_stall(clk,reset,din,stall,dout);
    
    always @(posedge clk or posedge reset)
      if (reset)
-       count <= #1 {DEPTH{1'b0}};
+       count <= {DEPTH{1'b0}};
      else if (pend & (~stall))
-       count <= #1 count - 1'b1;
+       count <= count - 1'b1;
      else if (din & stall)
-       count <= #1 count + 1'b1;
+       count <= count + 1'b1;
 
    assign               pend = (|count);
    assign               dout = (din | pend) & (~stall);
@@ -971,15 +971,15 @@ dma_axi64_reg_core0 dma_axi64_reg_core0(
    
    always @(posedge clk or posedge reset)
      if (reset)
-       periph_rx_req_reg <= #1 {31{1'b0}};
+       periph_rx_req_reg <= {31{1'b0}};
      else if (wr_periph_rx | (|periph_rx_clr))
-       periph_rx_req_reg <= #1 ({31{wr_periph_rx}} & pwdata[31:1]) & (~periph_rx_clr);
+       periph_rx_req_reg <= ({31{wr_periph_rx}} & pwdata[31:1]) & (~periph_rx_clr);
    
    always @(posedge clk or posedge reset)
      if (reset)
-       periph_tx_req_reg <= #1 {31{1'b0}};
+       periph_tx_req_reg <= {31{1'b0}};
      else if (wr_periph_tx | (|periph_tx_clr))
-       periph_tx_req_reg <= #1 ({31{wr_periph_tx}} & pwdata[31:1]) & (~periph_tx_clr);
+       periph_tx_req_reg <= ({31{wr_periph_tx}} & pwdata[31:1]) & (~periph_tx_clr);
 
    assign                   proc0_int_stat = {proc0_int_stat0};
 
@@ -989,9 +989,9 @@ dma_axi64_reg_core0 dma_axi64_reg_core0(
    
    always @(posedge clk or posedge reset)
      if (reset)
-       int_all_proc <= #1 {1{1'b0}};
+       int_all_proc <= {1{1'b0}};
      else
-       int_all_proc <= #1 int_all_proc_pre;
+       int_all_proc <= int_all_proc_pre;
 
    
    always @(*)
@@ -1054,19 +1054,19 @@ dma_axi64_reg_core0 dma_axi64_reg_core0(
    
    always @(posedge clk or posedge reset)
      if (reset)
-       prdata <= #1 {32{1'b0}};
+       prdata <= {32{1'b0}};
      else if (gpread & pclken)
-       prdata <= #1 prdata_pre; 
+       prdata <= prdata_pre; 
      else if (pclken) //zero to allow or in apb_mux
-       prdata <= #1 {32{1'b0}};
+       prdata <= {32{1'b0}};
 
    always @(posedge clk or posedge reset)
      if (reset)
-       pslverr <= #1 1'b0;
+       pslverr <= 1'b0;
      else if ((gpread | gpwrite) & pclken)
-       pslverr <= #1 pslverr_pre;
+       pslverr <= pslverr_pre;
      else if (pclken)
-       pslverr <= #1 1'b0;
+       pslverr <= 1'b0;
    
    
 endmodule
@@ -1404,53 +1404,53 @@ module dma_axi64_core0_ch (clk,reset,scan_en,pclk,clken,pclken,psel,penable,padd
    
    always @(posedge clk or posedge reset)
      if (reset)
-       rd_joint_not_in_prog <= #1 1'b0;
+       rd_joint_not_in_prog <= 1'b0;
      else if (ch_update)
-       rd_joint_not_in_prog <= #1 1'b0;
+       rd_joint_not_in_prog <= 1'b0;
      else if (rd_burst_start)
-       rd_joint_not_in_prog <= #1 (~joint_req);
+       rd_joint_not_in_prog <= (~joint_req);
      else if (rd_outs_empty & rd_clr_outs_d)
-       rd_joint_not_in_prog <= #1 1'b0;
+       rd_joint_not_in_prog <= 1'b0;
    
    always @(posedge clk or posedge reset)
      if (reset)
-       wr_joint_not_in_prog <= #1 1'b0;
+       wr_joint_not_in_prog <= 1'b0;
      else if (ch_update)
-       wr_joint_not_in_prog <= #1 1'b0;
+       wr_joint_not_in_prog <= 1'b0;
      else if (wr_burst_start)
-       wr_joint_not_in_prog <= #1 (~joint_req);
+       wr_joint_not_in_prog <= (~joint_req);
      else if (wr_outs_empty & wr_clr_outs_d)
-       wr_joint_not_in_prog <= #1 1'b0;
+       wr_joint_not_in_prog <= 1'b0;
    
    always @(posedge clk or posedge reset)
      if (reset)
-       rd_joint_in_prog <= #1 1'b0;
+       rd_joint_in_prog <= 1'b0;
      else if (ch_update)
-       rd_joint_in_prog <= #1 1'b0;
+       rd_joint_in_prog <= 1'b0;
      else if (rd_burst_start)
-       rd_joint_in_prog <= #1 joint_req;
+       rd_joint_in_prog <= joint_req;
      else if (rd_outs_empty & rd_clr_outs_d)
-       rd_joint_in_prog <= #1 1'b0;
+       rd_joint_in_prog <= 1'b0;
    
    always @(posedge clk or posedge reset)
      if (reset)
-       wr_joint_in_prog <= #1 1'b0;
+       wr_joint_in_prog <= 1'b0;
      else if (ch_update)
-       wr_joint_in_prog <= #1 1'b0;
+       wr_joint_in_prog <= 1'b0;
      else if (wr_burst_start)
-       wr_joint_in_prog <= #1 joint_req;
+       wr_joint_in_prog <= joint_req;
      else if (wr_outs_empty & wr_clr_outs_d)
-       wr_joint_in_prog <= #1 1'b0;
+       wr_joint_in_prog <= 1'b0;
    
    always @(posedge clk or posedge reset)
      if (reset)
-       joint_cross_reg <= #1 1'b0;
+       joint_cross_reg <= 1'b0;
      else if (ch_update)
-       joint_cross_reg <= #1 1'b0;
+       joint_cross_reg <= 1'b0;
      else if (page_cross & joint)
-       joint_cross_reg <= #1 1'b1;
+       joint_cross_reg <= 1'b1;
      else if (joint_not_in_prog & outs_empty)
-       joint_cross_reg <= #1 1'b0;
+       joint_cross_reg <= 1'b0;
 
    assign             joint_cross       = joint_cross_reg;
    assign             page_cross        = rd_page_cross | wr_page_cross;
@@ -2157,29 +2157,29 @@ module dma_axi64_core0_ch_fifo_ptr(clk,reset,joint_in_prog,wr_outstanding,ch_upd
 
    always @(posedge clk or posedge reset)
      if (reset)
-       wr_ptr <= #1 {5{1'b0}};
+       wr_ptr <= {5{1'b0}};
      else if (ch_update)
-       wr_ptr <= #1 {5{1'b0}};
+       wr_ptr <= {5{1'b0}};
      else if (slice_wr)
-       wr_ptr <= #1 wr_ptr_pre;
+       wr_ptr <= wr_ptr_pre;
    
    always @(posedge clk or posedge reset)
      if (reset)
-       rd_ptr <= #1 {5{1'b0}};
+       rd_ptr <= {5{1'b0}};
      else if (ch_update)
-       rd_ptr <= #1 {5{1'b0}};
+       rd_ptr <= {5{1'b0}};
      else if (slice_rd)
-       rd_ptr <= #1 rd_ptr_pre;
+       rd_ptr <= rd_ptr_pre;
    
    always @(posedge clk or posedge reset)
      if (reset)
-       rd_line_remain <= #1 4'd8;
+       rd_line_remain <= 4'd8;
      else if (ch_update | wr_clr_line)
-       rd_line_remain <= #1 4'd8;
+       rd_line_remain <= 4'd8;
      else if (slice_rd & (rd_line_remain == slice_rsize))
-       rd_line_remain <= #1 4'd8;
+       rd_line_remain <= 4'd8;
      else if (slice_rd)
-       rd_line_remain <= #1 rd_line_remain - slice_rsize;
+       rd_line_remain <= rd_line_remain - slice_rsize;
        
      
    assign               fullness_pre = fullness + 
@@ -2189,11 +2189,11 @@ module dma_axi64_core0_ch_fifo_ptr(clk,reset,joint_in_prog,wr_outstanding,ch_upd
    
    always @(posedge clk or posedge reset)
      if (reset)
-       fullness <= #1 {5+2{1'b0}};
+       fullness <= {5+2{1'b0}};
      else if (ch_update)
-       fullness <= #1 {5+2{1'b0}};
+       fullness <= {5+2{1'b0}};
      else if (fifo_rd | slice_wr)
-       fullness <= #1 fullness_pre;
+       fullness <= fullness_pre;
 
    
    
@@ -2201,21 +2201,21 @@ module dma_axi64_core0_ch_fifo_ptr(clk,reset,joint_in_prog,wr_outstanding,ch_upd
    
    always @(posedge clk or posedge reset)
      if (reset)
-       joint_delay_reg <= #1 1'b0;
+       joint_delay_reg <= 1'b0;
      else if (joint_in_prog & (~joint_in_prog_d))
-       joint_delay_reg <= #1 fullness > 32 - 4'd8;
+       joint_delay_reg <= fullness > 32 - 4'd8;
      else if (~joint_in_prog)
-       joint_delay_reg <= #1 1'b0;
+       joint_delay_reg <= 1'b0;
 
    assign               joint_delay = joint_delay_reg;
    
    always @(posedge clk or posedge reset)
      if (reset)
-       fifo_wr_ready <= #1 1'b0;
+       fifo_wr_ready <= 1'b0;
      else if (joint_in_prog)
-       fifo_wr_ready <= #1 1'b0;
+       fifo_wr_ready <= 1'b0;
      else if (|wr_next_size)
-       fifo_wr_ready <= #1 fullness_pre >= wr_next_size;
+       fifo_wr_ready <= fullness_pre >= wr_next_size;
 
    assign               fifo_underflow_pre = 
                               fullness[5+1];
@@ -2225,18 +2225,18 @@ module dma_axi64_core0_ch_fifo_ptr(clk,reset,joint_in_prog,wr_outstanding,ch_upd
    always @(posedge clk or posedge reset)
      if (reset)
        begin
-      fifo_overflow  <= #1 1'b0;
-      fifo_underflow <= #1 1'b0;
+      fifo_overflow  <= 1'b0;
+      fifo_underflow <= 1'b0;
        end
      else if (ch_update)
        begin
-      fifo_overflow  <= #1 1'b0;
-      fifo_underflow <= #1 1'b0;
+      fifo_overflow  <= 1'b0;
+      fifo_underflow <= 1'b0;
        end
      else if ((!fifo_overflow) & (!fifo_underflow))
        begin
-      fifo_overflow  <= #1 fifo_overflow_pre;
-      fifo_underflow <= #1 fifo_underflow_pre;
+      fifo_overflow  <= fifo_overflow_pre;
+      fifo_underflow <= fifo_underflow_pre;
        end
 
           
@@ -2610,9 +2610,9 @@ module dma_axi64_core0_ch_reg_size(clk,reset,update,start_addr,burst_max_size_re
    
    always @(posedge clk or posedge reset)
      if (reset)
-       burst_max_size <= #1 {8{1'b0}};
+       burst_max_size <= {8{1'b0}};
      else if (update)
-       burst_max_size <= #1 burst_max_size_pre > MAX_BURST ? MAX_BURST : burst_max_size_pre;
+       burst_max_size <= burst_max_size_pre > MAX_BURST ? MAX_BURST : burst_max_size_pre;
 
    
 endmodule
@@ -2680,11 +2680,11 @@ module  dma_axi64_core0_channels_apb_mux (clk,reset,pclken,psel,penable,paddr,pr
    
    always @(posedge clk or posedge reset)
      if (reset)
-       paddr_sel_d <= #1 3'b000;
+       paddr_sel_d <= 3'b000;
      else if (psel & (~penable))
-       paddr_sel_d <= #1 paddr_sel;
+       paddr_sel_d <= paddr_sel;
      else if ((~psel) & pclken) //release for empty channels after error
-       paddr_sel_d <= #1 3'b000;
+       paddr_sel_d <= 3'b000;
    
    
    
@@ -2826,11 +2826,11 @@ module dma_axi64_core0_ctrl(clk,reset,ch_go,cmd_full,cmd_pending,joint_req,ch_nu
 
    always @(posedge clk or posedge reset)
      if (reset)
-       joint_ctrl_reg <= #1 1'b0;
+       joint_ctrl_reg <= 1'b0;
      else if (finish)
-       joint_ctrl_reg <= #1 1'b0;
+       joint_ctrl_reg <= 1'b0;
      else if (ch_go)
-       joint_ctrl_reg <= #1 joint_req;
+       joint_ctrl_reg <= joint_req;
 
    assign             joint_ctrl = joint_ctrl_reg;
    
@@ -2840,19 +2840,19 @@ module dma_axi64_core0_ctrl(clk,reset,ch_go,cmd_full,cmd_pending,joint_req,ch_nu
    
    always @(posedge clk or posedge reset)
      if (reset)
-       tokens_counter <= #1 {6{1'b0}};
+       tokens_counter <= {6{1'b0}};
      else if (ch_go)
-       tokens_counter <= #1 tokens;
+       tokens_counter <= tokens;
      else if (burst_start & (|tokens_counter))
-       tokens_counter <= #1 tokens_counter - 1'b1;
+       tokens_counter <= tokens_counter - 1'b1;
    
    always @(posedge clk or posedge reset)
      if (reset)
-       delay_counter <= #1 {3{1'b0}};
+       delay_counter <= {3{1'b0}};
      else if (periph_clr_ch)
-       delay_counter <= #1 periph_delay;
+       delay_counter <= periph_delay;
      else if (|delay_counter)
-       delay_counter <= #1 delay_counter - 1'b1;
+       delay_counter <= delay_counter - 1'b1;
 
    
    assign             stall  = cmd_pending | cmd_full | go_next_line_d;
@@ -2977,9 +2977,9 @@ module dma_axi64_core0_ctrl(clk,reset,ch_go,cmd_full,cmd_pending,joint_req,ch_nu
    
    always @(posedge clk or posedge reset)
      if (reset)
-       ps <= #1 IDLE;
+       ps <= IDLE;
      else
-       ps <= #1 ns;
+       ps <= ns;
    
 
 endmodule
@@ -3086,13 +3086,13 @@ module  dma_axi64_core0_ch_wr_slicer (clk,reset,ch_update,rd_clr_line,fifo_wr,fi
 
    always @(posedge clk or posedge reset)
      if (reset)
-       line_remain <= #1 4'd8;
+       line_remain <= 4'd8;
      else if (ch_update |  rd_clr_line)
-       line_remain <= #1 4'd8;
+       line_remain <= 4'd8;
      else if (slice_wr_pre & (line_remain == slice_wsize_pre))
-       line_remain <= #1 4'd8;
+       line_remain <= 4'd8;
      else if (slice_wr_pre)
-       line_remain <= #1 line_remain - slice_wsize_pre;
+       line_remain <= line_remain - slice_wsize_pre;
    
    assign               join_wsize = next_size + fifo_wsize;
 
@@ -3111,32 +3111,32 @@ module  dma_axi64_core0_ch_wr_slicer (clk,reset,ch_update,rd_clr_line,fifo_wr,fi
    
    always @(posedge clk or posedge reset)
      if (reset)
-       append  <= #1 1'b0;
+       append  <= 1'b0;
      else if (next_wr)
-       append  <= #1 1'b0;
+       append  <= 1'b0;
      else if (fifo_wr & (slice_wsize_pre == join_wsize))
-       append  <= #1 1'b0;
+       append  <= 1'b0;
      else if (fifo_wr)
-       append  <= #1 1'b1;
+       append  <= 1'b1;
 
    
    always @(posedge clk or posedge reset)
      if (reset)
-       next_size  <= #1 {4{1'b0}};
+       next_size  <= {4{1'b0}};
      else if (next_wr)
-       next_size  <= #1 {4{1'b0}};
+       next_size  <= {4{1'b0}};
      else if (fifo_wr & append)
-       next_size  <= #1 join_wsize - append_wsize;
+       next_size  <= join_wsize - append_wsize;
      else if (fifo_wr)
-       next_size  <= #1 join_wsize - direct_wsize;
+       next_size  <= join_wsize - direct_wsize;
 
    
    //WDATA
    always @(posedge clk or posedge reset)
      if (reset)
-       align_wdata_d <= #1 {64{1'b0}};
+       align_wdata_d <= {64{1'b0}};
      else if (fifo_wr)
-       align_wdata_d <= #1 align_wdata;
+       align_wdata_d <= align_wdata;
 
    
    assign               wr_align_valid = 
@@ -3225,13 +3225,13 @@ module  dma_axi64_core0_ch_wr_slicer (clk,reset,ch_update,rd_clr_line,fifo_wr,fi
    always @(posedge clk or posedge reset)
      if (reset)
        begin
-      slice_wsize       <= #1 {4{1'b0}};
-      slice_wdata_pre_d <= #1 {64{1'b0}};
+      slice_wsize       <= {4{1'b0}};
+      slice_wdata_pre_d <= {64{1'b0}};
        end
      else if (slice_wr_pre)
        begin
-      slice_wsize       <= #1 slice_wsize_pre;
-      slice_wdata_pre_d <= #1 slice_wdata_pre;
+      slice_wsize       <= slice_wsize_pre;
+      slice_wdata_pre_d <= slice_wdata_pre;
        end
 
    
@@ -3246,15 +3246,15 @@ module  dma_axi64_core0_ch_wr_slicer (clk,reset,ch_update,rd_clr_line,fifo_wr,fi
    always @(posedge clk or posedge reset)
      if (reset)
        begin
-      slice_wdata   <= #1 {64{1'b0}};
-      slice_wr_ptr  <= #1 {5{1'b0}};
-      slice_bsel    <= #1 {8{1'b0}};
+      slice_wdata   <= {64{1'b0}};
+      slice_wr_ptr  <= {5{1'b0}};
+      slice_bsel    <= {8{1'b0}};
        end
      else if (slice_wr)
        begin
-      slice_wdata   <= #1 slice_wdata_swap;
-      slice_wr_ptr  <= #1 slice_wr_ptr_pre;
-      slice_bsel    <= #1 slice_bsel_swap;
+      slice_wdata   <= slice_wdata_swap;
+      slice_wr_ptr  <= slice_wr_ptr_pre;
+      slice_bsel    <= slice_bsel_swap;
        end
    
 endmodule
@@ -3397,31 +3397,31 @@ module dma_axi64_core0_axim_cmd(clk,reset,ch_num,burst_start,burst_addr,burst_si
    
    always @(posedge clk or posedge reset)
      if (reset)
-       burst_reach <= #1 {9{1'b0}};
+       burst_reach <= {9{1'b0}};
      else if (high_addr_pre)
-       burst_reach <= #1 burst_reach_pre;
+       burst_reach <= burst_reach_pre;
    
    always @(posedge clk or posedge reset)
      if (reset)
-       next_burst <= #1 1'b0;
+       next_burst <= 1'b0;
      else if (next_burst_start)
-       next_burst <= #1 1'b0;
+       next_burst <= 1'b0;
      else if (cross_start)
-       next_burst <= #1 1'b1;
+       next_burst <= 1'b1;
           
    always @(posedge clk or posedge reset)
      if (reset)
-       max_burst_d <= #1 {9{1'b0}};
+       max_burst_d <= {9{1'b0}};
      else if (cross_start)
-       max_burst_d <= #1 max_burst;
+       max_burst_d <= max_burst;
    
    always @(posedge clk or posedge reset)
      if (reset)
-       next_burst_size <= #1 {8{1'b0}};
+       next_burst_size <= {8{1'b0}};
      else if (cross_start)
-       next_burst_size <= #1 burst_size;
+       next_burst_size <= burst_size;
      else if (cross_start_d)
-       next_burst_size <= #1 next_burst_size - max_burst_d;
+       next_burst_size <= next_burst_size - max_burst_d;
    
    assign               cmd_split       = cross_start_d;
    
@@ -3433,11 +3433,11 @@ module dma_axi64_core0_axim_cmd(clk,reset,ch_num,burst_start,burst_addr,burst_si
    
    always @(posedge clk or posedge reset)
      if (reset)
-       cmd_pending <= #1 1'b0;
+       cmd_pending <= 1'b0;
      else if (burst_start)
-       cmd_pending <= #1 1'b1;
+       cmd_pending <= 1'b1;
      else if (cmd & (~next_burst))
-       cmd_pending <= #1 1'b0;
+       cmd_pending <= 1'b0;
    
    
    prgen_delay #(1) delay_cmd_line (.clk(clk), .reset(reset), .din(cmd_line_pre), .dout(cmd_line));
@@ -3469,20 +3469,20 @@ module dma_axi64_core0_axim_cmd(clk,reset,ch_num,burst_start,burst_addr,burst_si
    always @(posedge clk or posedge reset)
      if (reset)
        begin
-      ASIZE  <= #1 {2{1'b0}};
-      AJOINT <= #1 1'b0;
+      ASIZE  <= {2{1'b0}};
+      AJOINT <= 1'b0;
        end
      else if (burst_start)
        begin
-      ASIZE  <= #1 ASIZE_pre;
-      AJOINT <= #1 joint_req;
+      ASIZE  <= ASIZE_pre;
+      AJOINT <= joint_req;
        end
 
    always @(posedge clk or posedge reset)
      if (reset)
-       AID_reg <= #1 {7{1'b0}};
+       AID_reg <= {7{1'b0}};
      else if (burst_start)
-       AID_reg <= #1 AID_pre;
+       AID_reg <= AID_pre;
 
    always @(AID_reg or next_burst)
      begin
@@ -3493,31 +3493,31 @@ module dma_axi64_core0_axim_cmd(clk,reset,ch_num,burst_start,burst_addr,burst_si
    
    always @(posedge clk or posedge reset)
      if (reset)
-       AADDR  <= #1 {32{1'b0}};
+       AADDR  <= {32{1'b0}};
      else if (next_burst_start)
-       AADDR  <= #1 {AADDR[32-1:12], {12{1'b1}}} + 1'b1;
+       AADDR  <= {AADDR[32-1:12], {12{1'b1}}} + 1'b1;
      else if (burst_start)
-       AADDR  <= #1 AADDR_pre;
+       AADDR  <= AADDR_pre;
 
    always @(posedge clk or posedge reset)
      if (reset)
-       APORT <= #1 1'b0;
+       APORT <= 1'b0;
      else if (burst_start)
-       APORT <= #1 cmd_port;
+       APORT <= cmd_port;
    
    always @(posedge clk or posedge reset)
      if (reset)
-       ALEN   <= #1 {4{1'b0}};
+       ALEN   <= {4{1'b0}};
      else if (burst_start | next_burst_start)
-       ALEN   <= #1 ALEN_pre;
+       ALEN   <= ALEN_pre;
 
    always @(posedge clk or posedge reset)
      if (reset)
-       AVALID_reg <= #1 1'b0;
+       AVALID_reg <= 1'b0;
      else if (AVALID & AREADY)
-       AVALID_reg <= #1 1'b0;
+       AVALID_reg <= 1'b0;
      else if ((burst_start & (burst_size > 'd0)) | next_burst_start)
-       AVALID_reg <= #1 1'b1;
+       AVALID_reg <= 1'b1;
 
    assign AVALID = AJOINT ? AVALID_reg & (~AWVALID) : AVALID_reg;
    
@@ -3624,19 +3624,19 @@ module dma_axi64_core0_ch_remain(clk,reset,ch_update,wr_outstanding,rd_outstandi
    
    always @(posedge clk or posedge reset)
      if (reset)
-       rd_burst_size_valid <= #1 {8{1'b0}};
+       rd_burst_size_valid <= {8{1'b0}};
      else if (rd_burst_qual)
-       rd_burst_size_valid <= #1 rd_burst_size;
+       rd_burst_size_valid <= rd_burst_size;
      else
-       rd_burst_size_valid <= #1 {8{1'b0}};
+       rd_burst_size_valid <= {8{1'b0}};
    
    always @(posedge clk or posedge reset)
      if (reset)
-       wr_burst_size_valid <= #1 {8{1'b0}};
+       wr_burst_size_valid <= {8{1'b0}};
      else if (wr_burst_qual)
-       wr_burst_size_valid <= #1 wr_burst_size;
+       wr_burst_size_valid <= wr_burst_size;
      else
-       wr_burst_size_valid <= #1 {8{1'b0}};
+       wr_burst_size_valid <= {8{1'b0}};
    
    assign             rd_transfer_size_valid = {4{rd_transfer}} & rd_transfer_size;
    assign             wr_transfer_size_valid = {4{wr_transfer}} & wr_transfer_size;
@@ -3645,11 +3645,11 @@ module dma_axi64_core0_ch_remain(clk,reset,ch_update,wr_outstanding,rd_outstandi
    //for rd bursts
    always @(posedge clk or posedge reset)
      if (reset)
-       rd_gap_reg <= #1 {1'b0, 1'b1, {5{1'b0}}};
+       rd_gap_reg <= {1'b0, 1'b1, {5{1'b0}}};
      else if (ch_update)
-       rd_gap_reg <= #1 {1'b0, 1'b1, {5{1'b0}}};
+       rd_gap_reg <= {1'b0, 1'b1, {5{1'b0}}};
      else
-       rd_gap_reg <= #1 rd_gap_reg - 
+       rd_gap_reg <= rd_gap_reg - 
              rd_burst_size_valid +
              wr_transfer_size_valid;
    
@@ -3660,11 +3660,11 @@ module dma_axi64_core0_ch_remain(clk,reset,ch_update,wr_outstanding,rd_outstandi
    //for wr bursts
    always @(posedge clk or posedge reset)
      if (reset)
-       wr_fullness_reg <= #1 {5+1{1'b0}};
+       wr_fullness_reg <= {5+1{1'b0}};
      else if (ch_update)
-       wr_fullness_reg <= #1 {5+1{1'b0}};
+       wr_fullness_reg <= {5+1{1'b0}};
      else
-       wr_fullness_reg <= #1 wr_fullness_reg -
+       wr_fullness_reg <= wr_fullness_reg -
               wr_burst_size_valid +
               rd_transfer_size_valid; 
 
@@ -3902,31 +3902,31 @@ module  dma_axi64_core0_ch_calc_size (clk,reset,ch_update,ch_update_d,ch_update_
   
    always @(posedge clk or posedge reset)
      if (reset)
-       burst_ready <= #1 1'b0;
+       burst_ready <= 1'b0;
      else if (ch_update | ch_update_d | ch_update_d2 | ch_update_d3)
-       burst_ready <= #1 1'b0;
+       burst_ready <= 1'b0;
      else if (load_req_in_prog)
-       burst_ready <= #1 1'b1;
+       burst_ready <= 1'b1;
      else if (|joint_burst_req)
-       burst_ready <= #1 1'b1;
+       burst_ready <= 1'b1;
      else if (joint_line_req & (~joint_buffer_small))
-       burst_ready <= #1 1'b1;
+       burst_ready <= 1'b1;
      else if (load_in_prog | fifo_not_ready_pre | joint_wait | (page_cross & (burst_size != burst_size_pre2)))
-       burst_ready <= #1 1'b0;
+       burst_ready <= 1'b0;
      else
-       burst_ready <= #1 |burst_size_pre2;
+       burst_ready <= |burst_size_pre2;
 
    always @(posedge clk or posedge reset)
      if (reset)
-       burst_size  <= #1 {8{1'b0}};
+       burst_size  <= {8{1'b0}};
      else if (load_req_in_prog)
-       burst_size  <= #1 CMD_SIZE;
+       burst_size  <= CMD_SIZE;
      else if (|joint_burst_req)
-       burst_size  <= #1 joint_burst_req_size;
+       burst_size  <= joint_burst_req_size;
      else if (joint_line_req & (~joint_buffer_small))
-       burst_size  <= #1 joint_line_req_size;
+       burst_size  <= joint_line_req_size;
      else
-       burst_size  <= #1 burst_size_pre2;
+       burst_size  <= burst_size_pre2;
 
    
 
@@ -3934,25 +3934,25 @@ module  dma_axi64_core0_ch_calc_size (clk,reset,ch_update,ch_update_d,ch_update_
    
    always @(posedge clk or posedge reset)
      if (reset)
-       joint_burst_req_reg <= #1 2'b00;
+       joint_burst_req_reg <= 2'b00;
      else if (joint_update | joint_flush | joint_flush_in)
-       joint_burst_req_reg <= #1 2'b00;
+       joint_burst_req_reg <= 2'b00;
      else if (joint_burst_req_reg & burst_start)
-       joint_burst_req_reg <= #1 2'b00;
+       joint_burst_req_reg <= 2'b00;
      else if (joint_burst_req_in)
-       joint_burst_req_reg <= #1 joint_burst_req_reg[0] ? 2'b11 : 2'b01;
+       joint_burst_req_reg <= joint_burst_req_reg[0] ? 2'b11 : 2'b01;
 
    assign            joint_burst_req = joint_burst_req_reg;
    
    always @(posedge clk or posedge reset)
      if (reset)
-       joint_line_req_reg <= #1 1'b0;
+       joint_line_req_reg <= 1'b0;
      else if (joint_update | joint_flush | joint_flush_in)
-       joint_line_req_reg <= #1 1'b0;
+       joint_line_req_reg <= 1'b0;
      else if (joint_line_req_reg & burst_start)
-       joint_line_req_reg <= #1 1'b0;
+       joint_line_req_reg <= 1'b0;
      else if (joint_line_req_in)
-       joint_line_req_reg <= #1 1'b1;
+       joint_line_req_reg <= 1'b1;
 
    assign            joint_line_req = joint_line_req_reg;
    
@@ -4528,13 +4528,13 @@ module prgen_min3(clk,reset,a,b,c,min);
    always @(posedge clk or posedge reset)
      if (reset)
        begin
-      min_ab <= #1 {WIDTH{1'b0}};
-      min_c  <= #1 {WIDTH{1'b0}};
+      min_ab <= {WIDTH{1'b0}};
+      min_c  <= {WIDTH{1'b0}};
        end
      else
        begin
-      min_ab <= #1 min_ab_pre;
-      min_c  <= #1 c;
+      min_ab <= min_ab_pre;
+      min_c  <= c;
        end
    
 endmodule
@@ -4652,11 +4652,11 @@ module dma_axi64_core0_ch_calc_joint(clk,reset,joint_update,ch_end,ch_end_flush,
    
    always @(posedge clk or posedge reset)
      if (reset)
-       joint_ready_out <= #1 1'b0;
+       joint_ready_out <= 1'b0;
      else if ((page_cross | ch_end_flush | joint_flush | joint_wait) & (~ch_end))
-       joint_ready_out <= #1 1'b0;
+       joint_ready_out <= 1'b0;
      else if ((~ch_end) & (~wr_cmd_pending))
-       joint_ready_out <= #1 joint_ready_out_pre;
+       joint_ready_out <= joint_ready_out_pre;
    
    
    always @(/*AUTOSENSE*/ch_end_flush or fifo_not_ready or fifo_remain
@@ -4803,11 +4803,11 @@ module dma_axi64_core0_ch_calc_joint(clk,reset,joint_update,ch_end,ch_end_flush,
    
    always @(posedge clk or posedge reset)
      if (reset)
-       ps <= #1 IDLE;
+       ps <= IDLE;
      else if (joint_update)
-       ps <= #1 IDLE;
+       ps <= IDLE;
      else
-       ps <= #1 ns;
+       ps <= ns;
 
    
 endmodule
@@ -4904,9 +4904,9 @@ module prgen_delay(clk,reset,din,dout);
    
    always @(posedge clk or posedge reset)
      if (reset)
-       shift_reg <= #1 {DELAY+1{1'b0}};
+       shift_reg <= {DELAY+1{1'b0}};
      else
-       shift_reg <= #1 {shift_reg[DELAY-1:0], din};
+       shift_reg <= {shift_reg[DELAY-1:0], din};
 
    assign               dout = shift_reg[DELAY-1];
    
@@ -4985,16 +4985,16 @@ module dma_axi64_core0_ch_outs(clk,reset,cmd,clr,outs_max,outs,outs_empty,stall,
    
    always @(posedge clk or posedge reset)
      if (reset)
-       outs <= #1 'd0;
+       outs <= 'd0;
      else if (cmd | clr)
-       outs <= #1 outs_pre;
+       outs <= outs_pre;
 
    
    always @(posedge clk or posedge reset)
      if (reset)
-       stall <= #1 1'b0;
+       stall <= 1'b0;
      else if (|outs_max)
-       stall <= #1 outs >= outs_max;
+       stall <= outs >= outs_max;
    
 
    
@@ -5002,11 +5002,11 @@ module dma_axi64_core0_ch_outs(clk,reset,cmd,clr,outs_max,outs,outs_empty,stall,
    
    always @(posedge clk or posedge reset)
      if (reset)
-       counter <= #1 {10{1'b1}};
+       counter <= {10{1'b1}};
      else if (clr)
-       counter <= #1 {10{1'b1}};
+       counter <= {10{1'b1}};
      else if (|outs)
-       counter <= #1 counter - 1'b1;
+       counter <= counter - 1'b1;
    
              
 endmodule
@@ -5205,15 +5205,15 @@ module dma_axi64_core0_axim_rd(clk,reset,load_wr,load_wr_num,load_wr_cycle,load_
    always @(posedge clk or posedge reset)
      if (reset)
        begin
-      RRESP_d <= #1 2'b00;
-      RDATA_d <= #1 {64{1'b0}};
-      RLAST_d <= #1 1'b0;
+      RRESP_d <= 2'b00;
+      RDATA_d <= {64{1'b0}};
+      RLAST_d <= 1'b0;
        end
      else if (RVALID)
        begin
-      RRESP_d <= #1 RRESP;
-      RDATA_d <= #1 RDATA;
-      RLAST_d <= #1 RLAST;
+      RRESP_d <= RRESP;
+      RDATA_d <= RDATA;
+      RLAST_d <= RLAST;
        end
    
    always @(/*AUTOSENSE*/RID)
@@ -7076,81 +7076,81 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
    always @(posedge clk or posedge reset)
      if (reset)
        begin
-      rd_start_addr <= #1 {32{1'b0}};
+      rd_start_addr <= {32{1'b0}};
        end
      else if (wr_cmd_line0)
        begin
-      rd_start_addr <= #1 pwdata[32-1:0];
+      rd_start_addr <= pwdata[32-1:0];
        end
      else if (load_wr0)
        begin
-      rd_start_addr <= #1 load_wdata[32-1:0];
+      rd_start_addr <= load_wdata[32-1:0];
        end
    
    always @(posedge clk or posedge reset)
      if (reset)
        begin
-      wr_start_addr <= #1 {32{1'b0}};
+      wr_start_addr <= {32{1'b0}};
        end
      else if (wr_cmd_line1)
        begin
-      wr_start_addr <= #1 pwdata[32-1:0];
+      wr_start_addr <= pwdata[32-1:0];
        end
      else if (load_wr1)
        begin
-      wr_start_addr <= #1 load_wdata[32+32-DATA_SHIFT-1:32-DATA_SHIFT];
+      wr_start_addr <= load_wdata[32+32-DATA_SHIFT-1:32-DATA_SHIFT];
        end
 
    always @(posedge clk or posedge reset)
      if (reset)
        begin
-      buff_size <= #1 {10{1'b0}};
+      buff_size <= {10{1'b0}};
        end
      else if (wr_cmd_line2)
        begin
-      buff_size <= #1 pwdata[10-1:0];
+      buff_size <= pwdata[10-1:0];
        end
      else if (load_wr2)
        begin
-      buff_size <= #1 load_wdata[10-1:0];
+      buff_size <= load_wdata[10-1:0];
        end
 
    always @(posedge clk or posedge reset)
      if (reset)
        begin
-     cmd_set_int_reg   <= #1 1'b0;
-     cmd_last_reg      <= #1 1'b0;
-     cmd_next_addr_reg <= #1 {30{1'b0}};
+     cmd_set_int_reg   <= 1'b0;
+     cmd_last_reg      <= 1'b0;
+     cmd_next_addr_reg <= {30{1'b0}};
        end
      else if (wr_cmd_line3)
        begin
-      cmd_set_int_reg   <= #1 pwdata[0];
-      cmd_last_reg      <= #1 pwdata[1];
-      cmd_next_addr_reg <= #1 pwdata[32-1:2];
+      cmd_set_int_reg   <= pwdata[0];
+      cmd_last_reg      <= pwdata[1];
+      cmd_next_addr_reg <= pwdata[32-1:2];
        end
      else if (load_wr3)
        begin
-      cmd_set_int_reg   <= #1 load_wdata[32-DATA_SHIFT];
-      cmd_last_reg      <= #1 load_wdata[33-DATA_SHIFT];
-      cmd_next_addr_reg <= #1 load_wdata[32+32-DATA_SHIFT-1:34-DATA_SHIFT];
+      cmd_set_int_reg   <= load_wdata[32-DATA_SHIFT];
+      cmd_last_reg      <= load_wdata[33-DATA_SHIFT];
+      cmd_next_addr_reg <= load_wdata[32+32-DATA_SHIFT-1:34-DATA_SHIFT];
        end
 
    always @(posedge clk or posedge reset)
      if (reset)
-       cmd_counter_reg <= #1 {12{1'b0}};
+       cmd_counter_reg <= {12{1'b0}};
      else if (wr_ch_start)
-       cmd_counter_reg <= #1 {12{1'b0}};
+       cmd_counter_reg <= {12{1'b0}};
      else if (ch_end & clken)
-       cmd_counter_reg <= #1 cmd_counter_reg + 1'b1;
+       cmd_counter_reg <= cmd_counter_reg + 1'b1;
   
    
    always @(posedge clk or posedge reset)
      if (reset)
-       int_counter_reg <= #1 {4{1'b0}};
+       int_counter_reg <= {4{1'b0}};
      else if (wr_ch_start)
-       int_counter_reg <= #1 {4{1'b0}};
+       int_counter_reg <= {4{1'b0}};
      else if ((ch_end_int & clken) | ch_end_clear)
-       int_counter_reg <= #1 int_counter_reg + (ch_end_int & clken) - ch_end_clear;
+       int_counter_reg <= int_counter_reg + (ch_end_int & clken) - ch_end_clear;
 
    assign cmd_set_int   = cmd_set_int_reg;
    assign cmd_last      = cmd_last_reg;
@@ -7167,34 +7167,34 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
    always @(posedge clk or posedge reset)
      if (reset)
        begin
-            rd_burst_max_size_reg <= #1 'd0;
-   rd_tokens_reg         <= #1 'd1; 
-    rd_outs_max_reg       <= #1 {4{1'b0}}; 
-            rd_incr_reg           <= #1 'd1;
+            rd_burst_max_size_reg <= 'd0;
+   rd_tokens_reg         <= 'd1; 
+    rd_outs_max_reg       <= {4{1'b0}}; 
+            rd_incr_reg           <= 'd1;
        end
      else if (wr_static_line0)
        begin
-            rd_burst_max_size_reg <= #1 pwdata[8-1:0];
-  rd_tokens_reg         <= #1 pwdata[6+16-1:16]; 
-     rd_outs_max_reg       <= #1 pwdata[4+24-1:24]; 
-            rd_incr_reg           <= #1 pwdata[31];
+            rd_burst_max_size_reg <= pwdata[8-1:0];
+  rd_tokens_reg         <= pwdata[6+16-1:16]; 
+     rd_outs_max_reg       <= pwdata[4+24-1:24]; 
+            rd_incr_reg           <= pwdata[31];
        end
    
    
    always @(posedge clk or posedge reset)
      if (reset)
        begin
-            wr_burst_max_size_reg <= #1 'd0;
-  wr_tokens_reg         <= #1 'd1; 
-     wr_outs_max_reg       <= #1 {4{1'b0}}; 
-      wr_incr_reg           <= #1 'd1;
+            wr_burst_max_size_reg <= 'd0;
+  wr_tokens_reg         <= 'd1; 
+     wr_outs_max_reg       <= {4{1'b0}}; 
+      wr_incr_reg           <= 'd1;
        end
      else if (wr_static_line1)
        begin
-      wr_burst_max_size_reg <= #1 pwdata[8-1:0];
-  wr_tokens_reg         <= #1 pwdata[6+16-1:16]; 
-     wr_outs_max_reg       <= #1 pwdata[4+24-1:24]; 
-      wr_incr_reg           <= #1 pwdata[31];
+      wr_burst_max_size_reg <= pwdata[8-1:0];
+  wr_tokens_reg         <= pwdata[6+16-1:16]; 
+     wr_outs_max_reg       <= pwdata[4+24-1:24]; 
+      wr_incr_reg           <= pwdata[31];
        end
 
    assign rd_incr = rd_incr_reg;
@@ -7261,21 +7261,21 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
    always @(posedge clk or posedge reset)
      if (reset)
        begin
-                 joint_reg        <= #1 1'b1;
-         end_swap_reg     <= #1 2'b00; 
+                 joint_reg        <= 1'b1;
+         end_swap_reg     <= 2'b00; 
        end
      else if (wr_static_line2)
        begin
-                 joint_reg        <= #1 pwdata[16];
-         end_swap_reg     <= #1 pwdata[29:28]; 
+                 joint_reg        <= pwdata[16];
+         end_swap_reg     <= pwdata[29:28]; 
        end
 
    
    always @(posedge clk or posedge reset)
      if (reset)
-       simple_mem <= #1 1'b0;
+       simple_mem <= 1'b0;
      else if (ch_update)
-       simple_mem <= #1 (rd_periph_num == 'd0) & (wr_periph_num == 'd0) & (~allow_line_cmd);
+       simple_mem <= (rd_periph_num == 'd0) & (wr_periph_num == 'd0) & (~allow_line_cmd);
 
    assign joint     = joint_mode & joint_reg & simple_mem & 1'b1;
    
@@ -7303,17 +7303,17 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
    always @(posedge clk or posedge reset)
      if (reset)
        begin
-          rd_periph_num_reg   <= #1 'd0; //0 is memory
-          rd_periph_delay_reg <= #1 'd0; //0 is memory
-            wr_periph_num_reg   <= #1 'd0; //0 is memory
-          wr_periph_delay_reg <= #1 'd0; //0 is memory
+          rd_periph_num_reg   <= 'd0; //0 is memory
+          rd_periph_delay_reg <= 'd0; //0 is memory
+            wr_periph_num_reg   <= 'd0; //0 is memory
+          wr_periph_delay_reg <= 'd0; //0 is memory
        end
      else if (wr_static_line4)
        begin
-          rd_periph_num_reg   <= #1 pwdata[4:0];
-          rd_periph_delay_reg <= #1 pwdata[3+8-1:8];
-          wr_periph_num_reg   <= #1 pwdata[20:16];
-          wr_periph_delay_reg <= #1 pwdata[3+24-1:24];
+          rd_periph_num_reg   <= pwdata[4:0];
+          rd_periph_delay_reg <= pwdata[3+8-1:8];
+          wr_periph_num_reg   <= pwdata[20:16];
+          wr_periph_delay_reg <= pwdata[3+24-1:24];
        end
 
    assign rd_periph_num   = rd_periph_num_reg;
@@ -7329,56 +7329,56 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
    always @(posedge clk or posedge reset)
      if (reset)
        begin
-      ch_enable <= #1 1'b1;
+      ch_enable <= 1'b1;
        end
      else if (wr_ch_enable)
        begin
-      ch_enable <= #1 pwdata[0];
+      ch_enable <= pwdata[0];
        end
    
    always @(posedge clk or posedge reset)
      if (reset)
-       ch_in_prog <= #1 1'b0;
+       ch_in_prog <= 1'b0;
      else if (ch_update)
-       ch_in_prog <= #1 1'b1;
+       ch_in_prog <= 1'b1;
      else if (ch_end & clken)
-       ch_in_prog <= #1 1'b0;
+       ch_in_prog <= 1'b0;
    
    always @(posedge clk or posedge reset)
      if (reset)
-       rd_ch_in_prog <= #1 1'b0;
+       rd_ch_in_prog <= 1'b0;
      else if (ch_update)
-       rd_ch_in_prog <= #1 1'b1;
+       rd_ch_in_prog <= 1'b1;
      else if (fifo_underflow | fifo_overflow)
-       rd_ch_in_prog <= #1 1'b0;
+       rd_ch_in_prog <= 1'b0;
      else if (rd_ch_end & clken)
-       rd_ch_in_prog <= #1 1'b0;
+       rd_ch_in_prog <= 1'b0;
    
    always @(posedge clk or posedge reset)
      if (reset)
-       wr_ch_in_prog <= #1 1'b0;
+       wr_ch_in_prog <= 1'b0;
      else if (ch_update)
-       wr_ch_in_prog <= #1 1'b1;
+       wr_ch_in_prog <= 1'b1;
      else if (fifo_underflow | fifo_overflow)
-       wr_ch_in_prog <= #1 1'b0;
+       wr_ch_in_prog <= 1'b0;
      else if (wr_ch_end & clken)
-       wr_ch_in_prog <= #1 1'b0;
+       wr_ch_in_prog <= 1'b0;
 
    always @(posedge clk or posedge reset)
      if (reset)
-       load_in_prog_reg <= #1 1'b0;
+       load_in_prog_reg <= 1'b0;
      else if (load_req & clken)
-       load_in_prog_reg <= #1 1'b1;
+       load_in_prog_reg <= 1'b1;
      else if (ch_update & clken)
-       load_in_prog_reg <= #1 1'b0;
+       load_in_prog_reg <= 1'b0;
    
    always @(posedge clk or posedge reset)
      if (reset)
-       load_req_in_prog_reg <= #1 1'b0;
+       load_req_in_prog_reg <= 1'b0;
      else if (load_req & clken)
-       load_req_in_prog_reg <= #1 1'b1;
+       load_req_in_prog_reg <= 1'b1;
      else if (load_cmd & clken)
-       load_req_in_prog_reg <= #1 1'b0;
+       load_req_in_prog_reg <= 1'b0;
 
    assign load_in_prog     = load_in_prog_reg;
    assign load_req_in_prog = load_req_in_prog_reg;
@@ -7391,11 +7391,11 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
 
    always @(posedge clk or posedge reset)
      if (reset)
-       ch_update <= #1 1'b0;
+       ch_update <= 1'b0;
      else if (ch_update_pre)
-       ch_update <= #1 1'b1;
+       ch_update <= 1'b1;
      else if (clken)
-       ch_update <= #1 1'b0;
+       ch_update <= 1'b0;
    
    prgen_delay #(1) delay_ch_update (.clk(clk), .reset(reset), .din(ch_update), .dout(ch_update_d));
 
@@ -7448,9 +7448,9 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
    
    always @(posedge clk or posedge reset)
      if (reset)
-       int_enable <= #1 {13{1'b1}};
+       int_enable <= {13{1'b1}};
      else if (wr_int_enable)
-       int_enable <= #1 pwdata[13-1:0];
+       int_enable <= pwdata[13-1:0];
 
    assign int_status = int_rawstat & int_enable;
 
@@ -7668,19 +7668,19 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
 
    always @(posedge clk or posedge reset)
      if (reset)
-       prdata <= #1 {32{1'b0}};
+       prdata <= {32{1'b0}};
      else if (gpread & pclken)
-       prdata <= #1 prdata_pre;
+       prdata <= prdata_pre;
      else if (pclken)
-       prdata <= #1 {32{1'b0}};
+       prdata <= {32{1'b0}};
    
    always @(posedge clk or posedge reset)
      if (reset)
-       pslverr <= #1 1'b0;
+       pslverr <= 1'b0;
      else if ((gpread | gpwrite) & pclken)
-       pslverr <= #1 pslverr_pre;
+       pslverr <= pslverr_pre;
      else if (pclken)
-       pslverr <= #1 1'b0;
+       pslverr <= 1'b0;
 
 
    
@@ -7771,9 +7771,9 @@ module  dma_axi64_apb_mux (clk,reset,pclken,psel,penable,pwrite,paddr,prdata,psl
 
    always @(posedge clk or posedge reset)
      if (reset)
-       pready <= #1 1'b0;
+       pready <= 1'b0;
      else if (pclken)
-       pready <= #1 psel & (~penable);
+       pready <= psel & (~penable);
        
    
 endmodule
@@ -7989,9 +7989,9 @@ module dma_axi64_core0_axim_resp(clk,reset,slverr,decerr,clr,clr_last,ch_num_res
    
    always @(posedge clk or posedge reset)
      if (reset)
-       ch_num_resp <= #1 3'b000;
+       ch_num_resp <= 3'b000;
      else if (clr_pre)
-       ch_num_resp <= #1 ch_num_resp_pre;
+       ch_num_resp <= ch_num_resp_pre;
    
 
 
@@ -8174,10 +8174,6 @@ module dma_axi64(clk,reset,scan_en,idle,INT,periph_tx_req,periph_tx_clr,periph_r
    wire                 slv_rd_port_num1;
    wire                 slv_wr_port_num1;
    
-   assign M0_AWID = 1'b0;
-   assign M0_WID  = 1'b0;
-   assign M0_ARID = 1'b0;
-
    wire [1-1:0]                  M0_AWID;
    wire [32-1:0]           M0_AWADDR;
    wire [4-1:0]                 M0_AWLEN;
@@ -8220,7 +8216,9 @@ module dma_axi64(clk,reset,scan_en,idle,INT,periph_tx_req,periph_tx_clr,periph_r
    
    
 
-
+   assign M0_AWID = 1'b0;
+   assign M0_WID  = 1'b0;
+   assign M0_ARID = 1'b0;
    assign                               AWID0  = M0_AWID;
    assign                               AWADDR0  = M0_AWADDR;
    assign                               AWLEN0  = M0_AWLEN;
@@ -8388,15 +8386,15 @@ module dma_axi64_core0_ch_calc_addr(clk,reset,ch_update_d,load_in_prog,load_addr
    
    always @(posedge clk or posedge reset)
      if (reset)
-       burst_addr <= #1 {32{1'b0}};
+       burst_addr <= {32{1'b0}};
      else if (load_in_prog)
-       burst_addr <= #1 load_addr;
+       burst_addr <= load_addr;
      else if (ch_update_d)
-       burst_addr <= #1 start_addr;
+       burst_addr <= start_addr;
      else if (burst_start & incr)
-       burst_addr <= #1 burst_addr + burst_size;
+       burst_addr <= burst_addr + burst_size;
      else if (go_next_line_d & incr)
-       burst_addr <= #1 burst_addr + frame_width_diff;
+       burst_addr <= burst_addr + frame_width_diff;
    
    
 endmodule
@@ -8488,9 +8486,9 @@ module prgen_joint_stall(clk,reset,joint_req_out,rd_transfer,rd_transfer_size,ch
    //count fullness of channel's fifo
    always @(posedge clk or posedge reset)
      if (reset)
-       count_ch_fifo <= #1 3'd0;
+       count_ch_fifo <= 3'd0;
      else if (joint_req_out & (rd_transfer_joint | ch_fifo_rd))
-       count_ch_fifo <= #1 count_ch_fifo_pre;
+       count_ch_fifo <= count_ch_fifo_pre;
 
    //prevent read channel to overflow the channel's fifo
    assign               joint_stall_pre     = joint_req_out & ((count_ch_fifo_pre > 'd2) | ((count_ch_fifo_pre == 'd2) & (data_fullness_pre > 'd1)) | HOLD);
@@ -8501,11 +8499,11 @@ module prgen_joint_stall(clk,reset,joint_req_out,rd_transfer,rd_transfer_size,ch
    
    always @(posedge clk or posedge reset)
      if (reset)
-       joint_stall_reg <= #1 1'b0;
+       joint_stall_reg <= 1'b0;
      else if (joint_stall_pre)
-       joint_stall_reg <= #1 1'b1;
+       joint_stall_reg <= 1'b1;
      else if (count_ch_fifo_pre == 'd0)
-       joint_stall_reg <= #1 1'b0;
+       joint_stall_reg <= 1'b0;
 
    assign               joint_stall = joint_stall_reg | (joint_req_out & HOLD);
       
@@ -8601,9 +8599,9 @@ module  prgen_rawstat (clk,reset,clear,write,pwdata,int_bus,rawstat);
    
    always @(posedge clk or posedge reset)
      if (reset) 
-       rawstat <= #1 {SIZE{1'b0}};
+       rawstat <= {SIZE{1'b0}};
      else 
-       rawstat <= #1 (rawstat | int_bus | write_bus) & (~clear_bus);
+       rawstat <= (rawstat | int_bus | write_bus) & (~clear_bus);
    
 endmodule
    
@@ -9828,11 +9826,11 @@ module dma_axi64_core0_axim_timeout(clk,reset,VALID,READY,ID,axim_timeout_num,ax
    
    always @(posedge clk or posedge reset)
      if (reset)
-       counter <= #1 {10{1'b1}};
+       counter <= {10{1'b1}};
      else if (VALID & READY)
-       counter <= #1 {10{1'b1}};
+       counter <= {10{1'b1}};
      else if (VALID)
-       counter <= #1 counter - 1'b1;
+       counter <= counter - 1'b1;
 
    
    
@@ -9964,11 +9962,11 @@ module dma_axi64_core0_axim_wr(clk,reset,wr_cmd_port,wr_last_cmd,wr_line_cmd,wr_
    always @(posedge clk or posedge reset)
      if (reset)
        begin
-      BRESP_d <= #1 2'b00;
+      BRESP_d <= 2'b00;
        end
      else if (BVALID)
        begin
-      BRESP_d <= #1 BRESP;
+      BRESP_d <= BRESP;
        end
 
    
@@ -10228,13 +10226,13 @@ module  dma_axi64_core0_ch_rd_slicer (clk,reset,fifo_rd,fifo_rdata,fifo_rsize,rd
    always @(posedge clk or posedge reset)
      if (reset)
        begin
-      rd_align_valid <= #1 {3{1'b0}};
-      rd_align_d     <= #1 {3{1'b0}};
+      rd_align_valid <= {3{1'b0}};
+      rd_align_d     <= {3{1'b0}};
        end
      else
        begin
-      rd_align_valid <= #1 rd_align_valid_pre;
-      rd_align_d     <= #1 rd_align_valid;
+      rd_align_valid <= rd_align_valid_pre;
+      rd_align_d     <= rd_align_valid;
        end
    
    always @(/*AUTOSENSE*/fifo_rdata or next_rdata or rd_align_d)
@@ -10270,9 +10268,9 @@ module  dma_axi64_core0_ch_rd_slicer (clk,reset,fifo_rd,fifo_rdata,fifo_rsize,rd
    
    always @(posedge clk or posedge reset)
      if (reset)
-       next_rdata <= #1 {64{1'b0}};
+       next_rdata <= {64{1'b0}};
      else if (slice_rd_d)
-       next_rdata <= #1 next_rdata_pre;
+       next_rdata <= next_rdata_pre;
    
    
    //RSIZE
@@ -10280,9 +10278,9 @@ module  dma_axi64_core0_ch_rd_slicer (clk,reset,fifo_rd,fifo_rdata,fifo_rsize,rd
 
    always @(posedge clk or posedge reset)
      if (reset)
-       actual_rsize <= #1 {4{1'b0}};
+       actual_rsize <= {4{1'b0}};
      else if (fifo_rd | (|next_rsize))
-       actual_rsize <= #1 actual_rsize_pre;
+       actual_rsize <= actual_rsize_pre;
    
    prgen_min2 #(4) min_rsize(
                    .a(rd_line_remain),
@@ -10293,11 +10291,11 @@ module  dma_axi64_core0_ch_rd_slicer (clk,reset,fifo_rd,fifo_rdata,fifo_rsize,rd
 
    always @(posedge clk or posedge reset)
      if (reset)
-       next_rsize_reg <= #1 {4{1'b0}};
+       next_rsize_reg <= {4{1'b0}};
      else if (next_rd)
-       next_rsize_reg <= #1 {4{1'b0}};
+       next_rsize_reg <= {4{1'b0}};
      else if (fifo_rd | slice_rd)
-       next_rsize_reg <= #1 next_rsize + ({4{fifo_rd}} & fifo_rsize);
+       next_rsize_reg <= next_rsize + ({4{fifo_rd}} & fifo_rsize);
 
    assign next_rsize = next_rsize_reg - ({4{fifo_rd_d}} & slice_rsize);
    
@@ -10427,9 +10425,9 @@ module dma_axi64_core0_ch_calc(clk,reset,load_in_prog,load_req_in_prog,load_addr
    
    always @(posedge clk or posedge reset)
      if (reset)
-       single <= #1 1'b0;
+       single <= 1'b0;
      else if (burst_start)
-       single <= #1 (burst_size <= SINGLE_SIZE);
+       single <= (burst_size <= SINGLE_SIZE);
 
            
    dma_axi64_core0_ch_calc_addr
@@ -10574,9 +10572,9 @@ module dma_axi64_core0_wdt(clk,reset,ch_active,rd_burst_start,rd_ch_num,wr_burst
 
    always @(posedge clk or posedge reset)
      if (reset)
-       wdt_ch_num <= #1 3'd0;
+       wdt_ch_num <= 3'd0;
      else if (advance)
-       wdt_ch_num <= #1 wdt_ch_num + 1'b1;
+       wdt_ch_num <= wdt_ch_num + 1'b1;
 
    
 
@@ -10586,11 +10584,11 @@ module dma_axi64_core0_wdt(clk,reset,ch_active,rd_burst_start,rd_ch_num,wr_burst
    
    always @(posedge clk or posedge reset)
      if (reset)
-       counter <= #1 {11{1'b1}};
+       counter <= {11{1'b1}};
      else if (advance | idle)
-       counter <= #1 {11{1'b1}};
+       counter <= {11{1'b1}};
      else
-       counter <= #1 counter - 1'b1;
+       counter <= counter - 1'b1;
 
    
 endmodule
@@ -10664,12 +10662,12 @@ module dma_axi64_core0_ch_fifo (CLK,WR,RD,WR_ADDR,RD_ADDR,DIN,BSEL,DOUT);
    
    always @(posedge CLK)
      if (WR)
-       Mem[WR_ADDR] <= #1 DIN_BitSEL;
+       Mem[WR_ADDR] <= DIN_BitSEL;
 
    
    always @(posedge CLK)
      if (RD)
-       DOUT <= #1 Mem[RD_ADDR];
+       DOUT <= Mem[RD_ADDR];
 
    
 endmodule
@@ -10829,9 +10827,9 @@ module dma_axi64_core0_axim_wdata(clk,reset,rd_transfer,rd_transfer_size,ch_fifo
    
    always @(posedge clk or posedge reset)
      if (reset)
-       data_fullness <= #1 3'd0;
+       data_fullness <= 3'd0;
      else if (data_ready | wr_transfer_pre)
-       data_fullness <= #1 data_fullness_pre;
+       data_fullness <= data_fullness_pre;
 
    prgen_joint_stall #(4)
      gen_joint_stall (
@@ -10889,9 +10887,9 @@ module dma_axi64_core0_axim_wdata(clk,reset,rd_transfer,rd_transfer_size,ch_fifo
    
    always @(posedge clk or posedge reset)
      if (reset)
-       last_channel <= #1 3'b000;
+       last_channel <= 3'b000;
      else if (cmd_push)
-       last_channel <= #1 WID_pre[2:0];
+       last_channel <= WID_pre[2:0];
       
    
    //update pointers in channel
@@ -10909,13 +10907,13 @@ module dma_axi64_core0_axim_wdata(clk,reset,rd_transfer,rd_transfer_size,ch_fifo
    always @(posedge clk or posedge reset)
      if (reset)
        begin
-      wr_transfer_num  <= #1 3'd0;
-      wr_transfer_size <= #1 3'd0;
+      wr_transfer_num  <= 3'd0;
+      wr_transfer_size <= 3'd0;
        end
      else if (wr_transfer_pre)
        begin
-      wr_transfer_num  <= #1 wr_transfer_num_pre;
-      wr_transfer_size <= #1 wr_transfer_size_pre;
+      wr_transfer_num  <= wr_transfer_num_pre;
+      wr_transfer_size <= wr_transfer_size_pre;
        end
    
    
@@ -10925,9 +10923,9 @@ module dma_axi64_core0_axim_wdata(clk,reset,rd_transfer,rd_transfer_size,ch_fifo
    
    always @(posedge clk or posedge reset)
      if (reset)
-       wr_clr_line_num <= #1 3'd0;
+       wr_clr_line_num <= 3'd0;
      else if (wr_clr_line_pre)
-       wr_clr_line_num <= #1 line_end_num;
+       wr_clr_line_num <= line_end_num;
 
    assign wr_clr_line_stall_pre = wr_clr_line_pre & (ch_fifo_rd_num == line_end_num);
 
@@ -11015,11 +11013,11 @@ module dma_axi64_core0_axim_wdata(clk,reset,rd_transfer,rd_transfer_size,ch_fifo
    
    always @(posedge clk or posedge reset)
      if (reset)
-       rd_out_count <= #1 {4{1'b0}};
+       rd_out_count <= {4{1'b0}};
      else if (cmd_pop)
-       rd_out_count <= #1 {4{1'b0}};
+       rd_out_count <= {4{1'b0}};
      else if (ch_fifo_rd)
-       rd_out_count <= #1 rd_out_count + 1'b1;
+       rd_out_count <= rd_out_count + 1'b1;
 
    
    //data phase
@@ -11055,11 +11053,11 @@ module dma_axi64_core0_axim_wdata(clk,reset,rd_transfer,rd_transfer_size,ch_fifo
    
    always @(posedge clk or posedge reset)
      if (reset)
-       rd_in_count <= #1 {4{1'b0}};
+       rd_in_count <= {4{1'b0}};
      else if (cmd_data_pop)
-       rd_in_count <= #1 {4{1'b0}};
+       rd_in_count <= {4{1'b0}};
      else if (wr_transfer_pre)
-       rd_in_count <= #1 rd_in_count + 1'b1;
+       rd_in_count <= rd_in_count + 1'b1;
 
 
    
@@ -11257,11 +11255,11 @@ module dma_axi64_reg_core0(clk,reset,wr_joint,wr_clkdiv,wr_start,wr_prio,pwdata,
    always @(posedge clk or posedge reset)
      if (reset)
        begin
-      joint_mode <= #1 1'b0;
+      joint_mode <= 1'b0;
        end
      else if (wr_joint)
        begin
-      joint_mode <= #1 pwdata[0];
+      joint_mode <= pwdata[0];
        end
 
    
@@ -11397,15 +11395,15 @@ module dma_axi64_core0_axim_rdata(clk,reset,joint_stall,ch_fifo_wr,ch_fifo_wdata
    
    always @(posedge clk or posedge reset)
      if (reset)
-       ch_fifo_wr_num_d <= #1 3'b000;
+       ch_fifo_wr_num_d <= 3'b000;
      else if (rd_clr_line_pre)
-       ch_fifo_wr_num_d <= #1 ch_fifo_wr_num;
+       ch_fifo_wr_num_d <= ch_fifo_wr_num;
 
    always @(posedge clk or posedge reset)
      if (reset)
-       rd_clr_line_num <= #1 3'b000;
+       rd_clr_line_num <= 3'b000;
      else if (rd_clr_line_pre_d)
-       rd_clr_line_num <= #1 ch_fifo_wr_num_d;
+       rd_clr_line_num <= ch_fifo_wr_num_d;
    
    assign               load_wr         = RVALID & RREADY & load_cmd_id;
 
@@ -11416,11 +11414,11 @@ module dma_axi64_core0_axim_rdata(clk,reset,joint_stall,ch_fifo_wr,ch_fifo_wdata
    
    always @(posedge clk or posedge reset)
      if (reset)
-       load_wr_cycle <= #1 2'b00;
+       load_wr_cycle <= 2'b00;
      else if (load_wr & load_wr_cycle[0] & 1'b1)
-       load_wr_cycle <= #1 2'b00;
+       load_wr_cycle <= 2'b00;
      else if (load_wr)
-       load_wr_cycle <= #1 load_wr_cycle + 1'b1;
+       load_wr_cycle <= load_wr_cycle + 1'b1;
 
 
    

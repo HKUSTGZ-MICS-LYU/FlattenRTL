@@ -90,9 +90,9 @@ def formatter_file(design, outputpath):
             parameter_visitor = self.myParameterVisitor()
             parameter_visitor.visit(ctx)
             self.non_port_parameter = parameter_visitor.parameter
-
-            self._visit_module_declaration(ctx)
             self.module = ctx
+            self._visit_module_declaration(ctx)
+            
                
          # visit module declaration
          def _visit_module_declaration(self,ctx:VerilogParser.Module_declarationContext):  
@@ -134,16 +134,24 @@ def formatter_file(design, outputpath):
                      self._visit_block_declaration(child)
 
                   # Delete duplicate wire
-                  # if isinstance(child, VerilogParser.Net_declarationContext):
-                  #    for i in range(0,child.list_of_net_identifiers().getChildCount()):
-                  #       name = child.list_of_net_identifiers().getChild(i).getText()
-                  #       index_of_child = child.parentCtx.children.index(child)
-                  #       if self.module_port.get(name) != None:
-                  #          del child.parentCtx.children[index_of_child]
-                  #          if index_of_child == 0 and child.list_of_net_identifiers().getChildCount()!=1:
-                  #             del child.parentCtx.children[index_of_child+1]
-                  #          elif index_of_child != 0:
-                  #             del child.parentCtx.children[index_of_child-1]
+                  if isinstance(child, VerilogParser.Net_declarationContext):
+                     if child.list_of_net_identifiers() is not None:
+                        for i in range(0,child.list_of_net_identifiers().getChildCount()):
+                           is_multiple_identifier = child.list_of_net_identifiers().getChildCount() > 1
+                           name = child.list_of_net_identifiers().getChild(i).getText()
+                           if self.module_port.get(name) is not None:
+                              if not is_multiple_identifier:
+                                 child.parentCtx.start.text = '//'+child.parentCtx.start.text
+                              else:
+                                 
+                                 print("[WARNING Multi-wire Definition Module]:",self.module.module_identifier().getText())
+                                 # print("[Problematic Line]:",child.list_of_net_identifiers().getChild(i).start.line)
+                                 print("[WARNING Possible duplicate wire with port]: ",name)
+                  #             # del child.parentCtx.children[index_of_child]
+                  #             # if index_of_child == 0 and child.list_of_net_identifiers().getChildCount()!=1:
+                  #             #    del child.parentCtx.children[index_of_child+1]
+                  #             # elif index_of_child != 0:
+                  #             #    del child.parentCtx.children[index_of_child-1]
                            
                self._visit_port_declaration(child)
 
@@ -346,11 +354,13 @@ def formatter_file(design, outputpath):
          def visitModule_item(self, ctx: VerilogParser.Module_itemContext):
             self._traverse_children(ctx)
          
+      # 3. Visitor for module item
       visitor = MyModuleItemModifier()
       visitor.visitModule_item(tree)
 
 
 
+      # 4. Port Modify Visitor
       "This function is used to remove the port and define the port in the list"
       class PortModifyVisitor(VerilogParserVisitor):
          def __init__(self):
@@ -471,19 +481,21 @@ def formatter_file(design, outputpath):
             if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
                pass
             else:
-               for child in list(ctx.children):
-                  if isinstance(child, VerilogParser.Block_item_declarationContext):
-                     index_of_child = child.parentCtx.children.index(child)
-                     del child.parentCtx.children[index_of_child]
-                  else:
-                     self._remove_block_content(child)
+               if ctx.children is not None:
+                  for child in list(ctx.children):
+                     if isinstance(child, VerilogParser.Block_item_declarationContext):
+                        index_of_child = child.parentCtx.children.index(child)
+                        del child.parentCtx.children[index_of_child]
+                     else:
+                        self._remove_block_content(child)
 
-
+      # 4. Port Modify Visitor
       visitor = PortModifyVisitor()
       visitor.modifyModule_declaration(tree)
       module = visitor.module
 
 
+      # 5. Format Visitor
       class FormatVisitor(VerilogParserVisitor):
          def __init__(self):
             super().__init__()
@@ -651,6 +663,7 @@ def formatter_file(design, outputpath):
             self.module_node = ctx
             self.formatProcess(self.module_node)
 
+      # 4. Port Modify Visitor
       visitor = FormatVisitor()
       visitor.visit(module)
       module_design = visitor.text

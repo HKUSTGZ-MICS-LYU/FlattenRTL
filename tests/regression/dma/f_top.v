@@ -1,166 +1,4 @@
-module dma_axi64_core0_top #(
-parameter dma_axi64_core0_dma_axi64_core0_arbiter_rd_CH_LAST=1-1,
-parameter dma_axi64_core0_dma_axi64_core0_arbiter_wr_CH_LAST=1-1,
-parameter dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE=3'd0,
-parameter dma_axi64_core0_dma_axi64_core0_ctrl_rd_CMD=3'd1,
-parameter dma_axi64_core0_dma_axi64_core0_ctrl_rd_WAIT_CLR=3'd2,
-parameter dma_axi64_core0_dma_axi64_core0_ctrl_rd_WAIT_DELAY=3'd3,
-parameter dma_axi64_core0_dma_axi64_core0_ctrl_rd_STALL=3'd4,
-parameter dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE=3'd0,
-parameter dma_axi64_core0_dma_axi64_core0_ctrl_wr_CMD=3'd1,
-parameter dma_axi64_core0_dma_axi64_core0_ctrl_wr_WAIT_CLR=3'd2,
-parameter dma_axi64_core0_dma_axi64_core0_ctrl_wr_WAIT_DELAY=3'd3,
-parameter dma_axi64_core0_dma_axi64_core0_ctrl_wr_STALL=3'd4,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AXI_WORD_SIZE=0?2'b10:2'b11,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AXI_3=0?2:3,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_SIZE_BITS=4,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_DELAY=2,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_DELAY=2,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_WIDTH=dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_SIZE_BITS,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_DEPTH_FULL=dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_SIZE_BITS,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_SINGLE=dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_SIZE_BITS,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_DEPTH=dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_SIZE_BITS,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_DEPTH_BITS=dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_SIZE_BITS,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_LAST_LINE=dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_SIZE_BITS,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_WIDTH=7+4+2+1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_DEPTH_FULL=7+4+2+1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_SINGLE=7+4+2+1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_DEPTH=7+4+2+1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_DEPTH_BITS=7+4+2+1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_LAST_LINE=7+4+2+1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_WIDTH=8+4+7+2,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_DEPTH_FULL=8+4+7+2,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_SINGLE=8+4+7+2,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_DEPTH=8+4+7+2,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_DEPTH_BITS=8+4+7+2,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_LAST_LINE=8+4+7+2,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_WIDTH=64,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_DEPTH_FULL=64,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_SINGLE=64,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_DEPTH=64,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_DEPTH_BITS=64,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_LAST_LINE=64,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_DEPTH=3,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_CMD_DEPTH=4,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_RESP_SLVERR=2'b10,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_RESP_DECERR=2'b11,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_WIDTH=7,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_DEPTH_FULL=7,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_SINGLE=7,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_DEPTH=7,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_DEPTH_BITS=7,
-parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_LAST_LINE=7,
-parameter dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AXI_WORD_SIZE=0?2'b10:2'b11,
-parameter dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AXI_3=0?2:3,
-parameter dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_CMD_DEPTH=4,
-parameter dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_RESP_SLVERR=2'b10,
-parameter dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_RESP_DECERR=2'b11,
-parameter dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_WIDTH=7,
-parameter dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_DEPTH_FULL=7,
-parameter dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_SINGLE=7,
-parameter dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_DEPTH=7,
-parameter dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_DEPTH_BITS=7,
-parameter dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_LAST_LINE=7,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH=32,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH=64,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH=31,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH=31,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH=3,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH=3,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH=32,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH=8,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH=6,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH=6,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH=32,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH=8,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_DATA_SHIFT=0?32:0,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CMD_LINE0=8'h00,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CMD_LINE1=8'h04,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CMD_LINE2=8'h08,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CMD_LINE3=8'h0C,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_STATIC_LINE0=8'h10,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_STATIC_LINE1=8'h14,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_STATIC_LINE2=8'h18,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_STATIC_LINE3=8'h1C,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_STATIC_LINE4=8'h20,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_RESTRICT=8'h2C,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_RD_OFFSETS=8'h30,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_WR_OFFSETS=8'h34,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_FIFO_FULLNESS=8'h38,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CMD_OUTS=8'h3C,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CH_ENABLE=8'h40,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CH_START=8'h44,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CH_ACTIVE=8'h48,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CH_CMD_COUNTER=8'h50,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_INT_RAWSTAT=8'hA0,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_INT_CLEAR=8'hA4,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_INT_ENABLE=8'hA8,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_INT_STATUS=8'hAC,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_DELAY=1,
-parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_DELAY=1) (
+module dma_axi64_core0_top (
   input clk,
   input reset,
   input scan_en,
@@ -267,6597 +105,7 @@ parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64
   assign slow_RRESP=RRESP; 
   assign slow_RLAST=RLAST; 
   assign slow_RVALID=RVALID; 
-  
-wire  dma_axi64_core0_clk;
-wire  dma_axi64_core0_reset;
-wire  dma_axi64_core0_scan_en;
-wire  dma_axi64_core0_idle;
-wire [8*1-1:0] dma_axi64_core0_ch_int_all_proc;
-wire [7:0] dma_axi64_core0_ch_start;
-wire [31:1] dma_axi64_core0_periph_tx_req;
-wire [31:1] dma_axi64_core0_periph_tx_clr;
-wire [31:1] dma_axi64_core0_periph_rx_req;
-wire [31:1] dma_axi64_core0_periph_rx_clr;
-wire  dma_axi64_core0_pclk;
-wire  dma_axi64_core0_clken;
-wire  dma_axi64_core0_pclken;
-wire  dma_axi64_core0_psel;
-wire  dma_axi64_core0_penable;
-wire [10:0] dma_axi64_core0_paddr;
-wire  dma_axi64_core0_pwrite;
-wire [31:0] dma_axi64_core0_pwdata;
-wire [31:0] dma_axi64_core0_prdata;
-wire  dma_axi64_core0_pslverr;
-wire  dma_axi64_core0_rd_port_num;
-wire  dma_axi64_core0_wr_port_num;
-wire  dma_axi64_core0_joint_mode_in;
-wire  dma_axi64_core0_joint_remote;
-wire  dma_axi64_core0_rd_prio_top;
-wire  dma_axi64_core0_rd_prio_high;
-wire [2:0] dma_axi64_core0_rd_prio_top_num;
-wire [2:0] dma_axi64_core0_rd_prio_high_num;
-wire  dma_axi64_core0_wr_prio_top;
-wire  dma_axi64_core0_wr_prio_high;
-wire [2:0] dma_axi64_core0_wr_prio_top_num;
-wire [2:0] dma_axi64_core0_wr_prio_high_num;
-wire [31:0] dma_axi64_core0_AWADDR;
-wire [4-1:0] dma_axi64_core0_AWLEN;
-wire [2-1:0] dma_axi64_core0_AWSIZE;
-wire  dma_axi64_core0_AWVALID;
-wire  dma_axi64_core0_AWREADY;
-wire [63:0] dma_axi64_core0_WDATA;
-wire [64/8-1:0] dma_axi64_core0_WSTRB;
-wire  dma_axi64_core0_WLAST;
-wire  dma_axi64_core0_WVALID;
-wire  dma_axi64_core0_WREADY;
-wire [1:0] dma_axi64_core0_BRESP;
-wire  dma_axi64_core0_BVALID;
-wire  dma_axi64_core0_BREADY;
-wire [31:0] dma_axi64_core0_ARADDR;
-wire [4-1:0] dma_axi64_core0_ARLEN;
-wire [2-1:0] dma_axi64_core0_ARSIZE;
-wire  dma_axi64_core0_ARVALID;
-wire  dma_axi64_core0_ARREADY;
-wire [63:0] dma_axi64_core0_RDATA;
-wire [1:0] dma_axi64_core0_RRESP;
-wire  dma_axi64_core0_RLAST;
-wire  dma_axi64_core0_RVALID;
-wire  dma_axi64_core0_RREADY;
- 
-   wire  dma_axi64_core0_wdt_timeout  ; 
-   wire[2:0]  dma_axi64_core0_wdt_ch_num  ; 
-   wire  dma_axi64_core0_rd_ch_go_joint  ; 
-   wire  dma_axi64_core0_rd_ch_go_null  ; 
-   wire  dma_axi64_core0_rd_ch_go  ; 
-   wire[2:0]  dma_axi64_core0_rd_ch_num  ; 
-   wire  dma_axi64_core0_rd_ch_last  ; 
-   wire  dma_axi64_core0_wr_ch_go_joint  ; 
-   wire  dma_axi64_core0_wr_ch_go  ; 
-   wire[2:0]  dma_axi64_core0_wr_ch_num_joint  ; 
-   wire[2:0]  dma_axi64_core0_wr_ch_num  ; 
-   wire  dma_axi64_core0_wr_ch_last  ; 
-   wire  dma_axi64_core0_wr_ch_last_joint  ; 
-   wire[31:0]  dma_axi64_core0_prdata  ; 
-   wire  dma_axi64_core0_pslverr  ; 
-   wire  dma_axi64_core0_load_req_in_prog  ; 
-   wire[7:0]  dma_axi64_core0_ch_idle  ; 
-   wire[7:0]  dma_axi64_core0_ch_active  ; 
-   wire[7:0]  dma_axi64_core0_ch_active_joint  ; 
-   wire[7:0]  dma_axi64_core0_ch_rd_active  ; 
-   wire[7:0]  dma_axi64_core0_ch_wr_active  ; 
-   wire  dma_axi64_core0_wr_last_cmd  ; 
-   wire  dma_axi64_core0_rd_line_cmd  ; 
-   wire  dma_axi64_core0_wr_line_cmd  ; 
-   wire  dma_axi64_core0_rd_go_next_line  ; 
-   wire  dma_axi64_core0_wr_go_next_line  ; 
-   wire[7:0]  dma_axi64_core0_ch_rd_ready_joint  ; 
-   wire[7:0]  dma_axi64_core0_ch_rd_ready  ; 
-   wire  dma_axi64_core0_rd_ready  ; 
-   wire  dma_axi64_core0_rd_ready_joint  ; 
-   wire[32-1:0]  dma_axi64_core0_rd_burst_addr  ; 
-   wire[8-1:0]  dma_axi64_core0_rd_burst_size  ; 
-   wire[6-1:0]  dma_axi64_core0_rd_tokens  ; 
-   wire  dma_axi64_core0_rd_port_num  ; 
-   wire[3-1:0]  dma_axi64_core0_rd_periph_delay  ; 
-   wire  dma_axi64_core0_rd_clr_valid  ; 
-   wire[2:0]  dma_axi64_core0_rd_transfer_num  ; 
-   wire  dma_axi64_core0_rd_transfer  ; 
-   wire[4-1:0]  dma_axi64_core0_rd_transfer_size  ; 
-   wire  dma_axi64_core0_rd_clr_stall  ; 
-   wire[7:0]  dma_axi64_core0_ch_wr_ready  ; 
-   wire  dma_axi64_core0_wr_ready  ; 
-   wire  dma_axi64_core0_wr_ready_joint  ; 
-   wire[32-1:0]  dma_axi64_core0_wr_burst_addr  ; 
-   wire[8-1:0]  dma_axi64_core0_wr_burst_size  ; 
-   wire[6-1:0]  dma_axi64_core0_wr_tokens  ; 
-   wire  dma_axi64_core0_wr_port_num  ; 
-   wire[3-1:0]  dma_axi64_core0_wr_periph_delay  ; 
-   wire  dma_axi64_core0_wr_clr_valid  ; 
-   wire  dma_axi64_core0_wr_clr_stall  ; 
-   wire[7:0]  dma_axi64_core0_ch_joint_req  ; 
-   wire  dma_axi64_core0_joint_req  ; 
-   wire  dma_axi64_core0_joint_mode  ; 
-   wire  dma_axi64_core0_joint_ch_go  ; 
-   wire  dma_axi64_core0_joint_stall  ; 
-   wire  dma_axi64_core0_rd_burst_start  ; 
-   wire  dma_axi64_core0_rd_finish_joint  ; 
-   wire  dma_axi64_core0_rd_finish  ; 
-   wire  dma_axi64_core0_rd_ctrl_busy  ; 
-   wire  dma_axi64_core0_wr_burst_start_joint  ; 
-   wire  dma_axi64_core0_wr_burst_start  ; 
-   wire  dma_axi64_core0_wr_finish  ; 
-   wire  dma_axi64_core0_wr_ctrl_busy  ; 
-   wire  dma_axi64_core0_wr_cmd_split  ; 
-   wire[2:0]  dma_axi64_core0_wr_cmd_num  ; 
-   wire  dma_axi64_core0_wr_cmd_pending_joint  ; 
-   wire  dma_axi64_core0_wr_cmd_pending  ; 
-   wire  dma_axi64_core0_wr_cmd_full_joint  ; 
-   wire  dma_axi64_core0_ch_fifo_rd  ; 
-   wire[4-1:0]  dma_axi64_core0_ch_fifo_rsize  ; 
-   wire[2:0]  dma_axi64_core0_ch_fifo_rd_num  ; 
-   wire[2:0]  dma_axi64_core0_wr_transfer_num  ; 
-   wire  dma_axi64_core0_wr_transfer  ; 
-   wire[4-1:0]  dma_axi64_core0_wr_transfer_size  ; 
-   wire[4-1:0]  dma_axi64_core0_wr_next_size  ; 
-   wire  dma_axi64_core0_wr_clr_line  ; 
-   wire[2:0]  dma_axi64_core0_wr_clr_line_num  ; 
-   wire  dma_axi64_core0_wr_cmd_full  ; 
-   wire  dma_axi64_core0_wr_slverr  ; 
-   wire  dma_axi64_core0_wr_decerr  ; 
-   wire  dma_axi64_core0_wr_clr  ; 
-   wire  dma_axi64_core0_wr_clr_last  ; 
-   wire[2:0]  dma_axi64_core0_wr_ch_num_resp  ; 
-   wire  dma_axi64_core0_timeout_aw  ; 
-   wire  dma_axi64_core0_timeout_w  ; 
-   wire[2:0]  dma_axi64_core0_timeout_num_aw  ; 
-   wire[2:0]  dma_axi64_core0_timeout_num_w  ; 
-   wire  dma_axi64_core0_wr_hold_ctrl  ; 
-   wire  dma_axi64_core0_wr_hold  ; 
-   wire  dma_axi64_core0_joint_in_prog  ; 
-   wire  dma_axi64_core0_joint_not_in_prog  ; 
-   wire  dma_axi64_core0_joint_mux_in_prog  ; 
-   wire  dma_axi64_core0_wr_page_cross  ; 
-   wire  dma_axi64_core0_load_wr  ; 
-   wire[2:0]  dma_axi64_core0_load_wr_num  ; 
-   wire[1:0]  dma_axi64_core0_load_wr_cycle  ; 
-   wire[64-1:0]  dma_axi64_core0_load_wdata  ; 
-   wire  dma_axi64_core0_rd_cmd_split  ; 
-   wire  dma_axi64_core0_rd_cmd_line  ; 
-   wire[2:0]  dma_axi64_core0_rd_cmd_num  ; 
-   wire  dma_axi64_core0_rd_cmd_pending_joint  ; 
-   wire  dma_axi64_core0_rd_cmd_pending  ; 
-   wire  dma_axi64_core0_rd_cmd_full_joint  ; 
-   wire  dma_axi64_core0_ch_fifo_wr  ; 
-   wire[64-1:0]  dma_axi64_core0_ch_fifo_wdata  ; 
-   wire[4-1:0]  dma_axi64_core0_ch_fifo_wsize  ; 
-   wire[2:0]  dma_axi64_core0_ch_fifo_wr_num  ; 
-   wire  dma_axi64_core0_rd_clr_line  ; 
-   wire[2:0]  dma_axi64_core0_rd_clr_line_num  ; 
-   wire  dma_axi64_core0_rd_burst_cmd  ; 
-   wire  dma_axi64_core0_rd_cmd_full  ; 
-   wire  dma_axi64_core0_rd_slverr  ; 
-   wire  dma_axi64_core0_rd_decerr  ; 
-   wire  dma_axi64_core0_rd_clr  ; 
-   wire  dma_axi64_core0_rd_clr_last  ; 
-   wire  dma_axi64_core0_rd_clr_load  ; 
-   wire[2:0]  dma_axi64_core0_rd_ch_num_resp  ; 
-   wire  dma_axi64_core0_timeout_ar  ; 
-   wire[2:0]  dma_axi64_core0_timeout_num_ar  ; 
-   wire  dma_axi64_core0_rd_hold_joint  ; 
-   wire  dma_axi64_core0_rd_hold_ctrl  ; 
-   wire  dma_axi64_core0_rd_hold  ; 
-   wire  dma_axi64_core0_joint_hold  ; 
-   wire  dma_axi64_core0_rd_page_cross  ; 
-   wire  dma_axi64_core0_joint_page_cross  ; 
-   wire  dma_axi64_core0_rd_arbiter_en  ; 
-   wire  dma_axi64_core0_wr_arbiter_en  ; 
-   wire  dma_axi64_core0_rd_cmd_port  ; 
-   wire  dma_axi64_core0_wr_cmd_port  ; 
-   wire[64-1:0]  dma_axi64_core0_ch_fifo_rdata  ; 
-   wire  dma_axi64_core0_ch_fifo_rd_valid  ; 
-   wire  dma_axi64_core0_ch_fifo_wr_ready  ; 
-   wire  dma_axi64_core0_FIFO_WR  ; 
-   wire  dma_axi64_core0_FIFO_RD  ; 
-   wire[3+5-3-1:0]  dma_axi64_core0_FIFO_WR_ADDR  ; 
-   wire[3+5-3-1:0]  dma_axi64_core0_FIFO_RD_ADDR  ; 
-   wire[64-1:0]  dma_axi64_core0_FIFO_DIN  ; 
-   wire[8-1:0]  dma_axi64_core0_FIFO_BSEL  ; 
-   wire[64-1:0]  dma_axi64_core0_FIFO_DOUT  ; 
-   wire  dma_axi64_core0_clk_en  ; 
-   wire  dma_axi64_core0_gclk  ; 
-  assign   dma_axi64_core0_joint_mode  =  dma_axi64_core0_joint_mode_in  &1'b1; 
-  assign   dma_axi64_core0_rd_arbiter_en  =1'b1; 
-  assign   dma_axi64_core0_wr_arbiter_en  =!  dma_axi64_core0_joint_mode  ; 
-  assign   dma_axi64_core0_rd_ready  =  dma_axi64_core0_ch_rd_ready  [  dma_axi64_core0_rd_ch_num  ]; 
-  assign   dma_axi64_core0_wr_ready  =  dma_axi64_core0_ch_wr_ready  [  dma_axi64_core0_wr_ch_num_joint  ]; 
-  assign   dma_axi64_core0_rd_ready_joint  =  dma_axi64_core0_joint_mode  &  dma_axi64_core0_joint_req   ?   dma_axi64_core0_rd_ready  &  dma_axi64_core0_wr_ready  :  dma_axi64_core0_rd_ready  ; 
-  assign   dma_axi64_core0_wr_ready_joint  =  dma_axi64_core0_joint_mode  &  dma_axi64_core0_joint_req   ?   dma_axi64_core0_rd_ready  &  dma_axi64_core0_wr_ready  :  dma_axi64_core0_wr_ready  ; 
-  assign   dma_axi64_core0_ch_active_joint  =  dma_axi64_core0_joint_mode   ?   dma_axi64_core0_ch_rd_active  |  dma_axi64_core0_ch_wr_active  :  dma_axi64_core0_ch_rd_active  ; 
-  assign   dma_axi64_core0_joint_page_cross  =(  dma_axi64_core0_rd_page_cross  &  dma_axi64_core0_rd_ready  )|(  dma_axi64_core0_wr_page_cross  &  dma_axi64_core0_wr_ready  ); 
-  assign   dma_axi64_core0_joint_req  =  dma_axi64_core0_ch_joint_req  [  dma_axi64_core0_rd_ch_num  ]; 
-  assign   dma_axi64_core0_ch_rd_ready_joint  =  dma_axi64_core0_joint_mode   ? (  dma_axi64_core0_ch_joint_req  &  dma_axi64_core0_ch_rd_ready  &  dma_axi64_core0_ch_wr_ready  )|((~  dma_axi64_core0_ch_joint_req  )&(  dma_axi64_core0_ch_rd_ready  |  dma_axi64_core0_ch_wr_ready  )):  dma_axi64_core0_ch_rd_ready  ; 
-  assign   dma_axi64_core0_wr_burst_start_joint  =  dma_axi64_core0_joint_mode  &  dma_axi64_core0_joint_req   ?   dma_axi64_core0_rd_burst_start  :  dma_axi64_core0_wr_burst_start  ; 
-  assign   dma_axi64_core0_joint_hold  =  dma_axi64_core0_joint_mux_in_prog  |(  dma_axi64_core0_joint_in_prog  &(~  dma_axi64_core0_joint_req  ))|(  dma_axi64_core0_joint_not_in_prog  &  dma_axi64_core0_joint_req  )|  dma_axi64_core0_joint_stall  |(  dma_axi64_core0_joint_req  &  dma_axi64_core0_joint_page_cross  ); 
-  assign   dma_axi64_core0_rd_hold_ctrl  =  dma_axi64_core0_joint_mode   ?   dma_axi64_core0_rd_hold  |  dma_axi64_core0_joint_hold  |(  dma_axi64_core0_joint_in_prog  &  dma_axi64_core0_wr_hold  ):  dma_axi64_core0_rd_hold  ; 
-  assign   dma_axi64_core0_rd_hold_joint  =  dma_axi64_core0_joint_mode  &(  dma_axi64_core0_rd_hold_ctrl  |  dma_axi64_core0_rd_ctrl_busy  |  dma_axi64_core0_wr_ctrl_busy  ); 
-  assign   dma_axi64_core0_wr_hold_ctrl  =  dma_axi64_core0_joint_mode  &(  dma_axi64_core0_joint_req  |  dma_axi64_core0_joint_in_prog  ) ?   dma_axi64_core0_wr_hold  |  dma_axi64_core0_joint_hold  :  dma_axi64_core0_wr_hold  ; 
-  assign   dma_axi64_core0_rd_ch_go_joint  =  dma_axi64_core0_rd_ch_go  &  dma_axi64_core0_ch_rd_ready  [  dma_axi64_core0_rd_ch_num  ]&(~  dma_axi64_core0_rd_ctrl_busy  ); 
-  assign   dma_axi64_core0_wr_ch_go_joint  =  dma_axi64_core0_joint_mode   ? (  dma_axi64_core0_wr_ready  &(~  dma_axi64_core0_wr_ctrl_busy  )&(  dma_axi64_core0_joint_req   ?   dma_axi64_core0_rd_ch_go_joint  :  dma_axi64_core0_rd_ch_go  &(~  dma_axi64_core0_rd_ch_go_joint  ))):  dma_axi64_core0_wr_ch_go  ; 
-  assign   dma_axi64_core0_rd_ch_go_null  =  dma_axi64_core0_rd_ch_go  &(~  dma_axi64_core0_rd_ch_go_joint  )&(  dma_axi64_core0_joint_mode   ? (~  dma_axi64_core0_wr_ch_go_joint  ):1'b1); 
-  assign   dma_axi64_core0_wr_ch_num_joint  =  dma_axi64_core0_joint_mode   ?   dma_axi64_core0_rd_ch_num  :  dma_axi64_core0_wr_ch_num  ; 
-  assign   dma_axi64_core0_wr_ch_last_joint  =  dma_axi64_core0_joint_mode   ?   dma_axi64_core0_rd_ch_last  :  dma_axi64_core0_wr_ch_last  ; 
-  assign   dma_axi64_core0_rd_finish_joint  =  dma_axi64_core0_joint_mode   ?   dma_axi64_core0_rd_finish  |  dma_axi64_core0_wr_finish  |  dma_axi64_core0_rd_ch_go_null  :  dma_axi64_core0_rd_finish  |  dma_axi64_core0_rd_ch_go_null  ; 
-  assign   dma_axi64_core0_rd_cmd_full_joint  =  dma_axi64_core0_joint_mode  &  dma_axi64_core0_joint_req   ?   dma_axi64_core0_wr_cmd_full  |  dma_axi64_core0_rd_cmd_full  :  dma_axi64_core0_rd_cmd_full  ; 
-  assign   dma_axi64_core0_wr_cmd_full_joint  =  dma_axi64_core0_joint_mode  &  dma_axi64_core0_joint_req   ?   dma_axi64_core0_wr_cmd_full  |  dma_axi64_core0_rd_cmd_full  :  dma_axi64_core0_wr_cmd_full  ; 
-  assign   dma_axi64_core0_rd_cmd_pending_joint  =  dma_axi64_core0_joint_mode   ?   dma_axi64_core0_rd_cmd_pending  |  dma_axi64_core0_wr_cmd_pending  :  dma_axi64_core0_rd_cmd_pending  ; 
-  assign   dma_axi64_core0_wr_cmd_pending_joint  =  dma_axi64_core0_joint_mode  &  dma_axi64_core0_joint_req   ?   dma_axi64_core0_rd_cmd_pending  |  dma_axi64_core0_wr_cmd_pending  :  dma_axi64_core0_wr_cmd_pending  ; 
-  assign   dma_axi64_core0_idle  =&  dma_axi64_core0_ch_idle  ; 
-  assign   dma_axi64_core0_gclk  =  dma_axi64_core0_clk  ;  
-  
-wire  dma_axi64_core0_dma_axi64_core0_wdt_clk;
-wire  dma_axi64_core0_dma_axi64_core0_wdt_reset;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_wdt_ch_active;
-wire  dma_axi64_core0_dma_axi64_core0_wdt_rd_burst_start;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_wdt_rd_ch_num;
-wire  dma_axi64_core0_dma_axi64_core0_wdt_wr_burst_start;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_wdt_wr_ch_num;
-wire  dma_axi64_core0_dma_axi64_core0_wdt_wdt_timeout;
-reg [2:0] dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num = dma_axi64_core0_wdt_ch_num;
- 
-   reg[11-1:0]  dma_axi64_core0_dma_axi64_core0_wdt_counter  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_wdt_current_ch_active  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_wdt_current_burst_start  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_wdt_advance  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_wdt_idle  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_wdt_idle  =  dma_axi64_core0_dma_axi64_core0_wdt_ch_active  ==8'd0; 
-  assign   dma_axi64_core0_dma_axi64_core0_wdt_current_ch_active  =  dma_axi64_core0_dma_axi64_core0_wdt_ch_active  [  dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num  ]; 
-  assign   dma_axi64_core0_dma_axi64_core0_wdt_current_burst_start  =(  dma_axi64_core0_dma_axi64_core0_wdt_rd_burst_start  &(  dma_axi64_core0_dma_axi64_core0_wdt_rd_ch_num  ==  dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num  ))|(  dma_axi64_core0_dma_axi64_core0_wdt_wr_burst_start  &(  dma_axi64_core0_dma_axi64_core0_wdt_wr_ch_num  ==  dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num  )); 
-  assign   dma_axi64_core0_dma_axi64_core0_wdt_advance  =(!  dma_axi64_core0_dma_axi64_core0_wdt_current_ch_active  )|  dma_axi64_core0_dma_axi64_core0_wdt_current_burst_start  |  dma_axi64_core0_dma_axi64_core0_wdt_wdt_timeout  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_wdt_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_wdt_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_wdt_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num   <=#13'd0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_wdt_advance  ) 
-              dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num   <=#1  dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num  +1'b1;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_wdt_wdt_timeout  =(  dma_axi64_core0_dma_axi64_core0_wdt_counter  =='d0); 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_wdt_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_wdt_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_wdt_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_wdt_counter   <=#1{11{1'b1}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_wdt_advance  |  dma_axi64_core0_dma_axi64_core0_wdt_idle  ) 
-              dma_axi64_core0_dma_axi64_core0_wdt_counter   <=#1{11{1'b1}};
-           else  
-              dma_axi64_core0_dma_axi64_core0_wdt_counter   <=#1  dma_axi64_core0_dma_axi64_core0_wdt_counter  -1'b1;
-
-assign dma_axi64_core0_dma_axi64_core0_wdt_clk = dma_axi64_core0_gclk;
-assign dma_axi64_core0_dma_axi64_core0_wdt_reset = dma_axi64_core0_reset;
-assign dma_axi64_core0_dma_axi64_core0_wdt_ch_active = dma_axi64_core0_ch_active;
-assign dma_axi64_core0_dma_axi64_core0_wdt_rd_burst_start = dma_axi64_core0_rd_burst_start;
-assign dma_axi64_core0_dma_axi64_core0_wdt_rd_ch_num = dma_axi64_core0_rd_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_wdt_wr_burst_start = dma_axi64_core0_wr_burst_start_joint;
-assign dma_axi64_core0_dma_axi64_core0_wdt_wr_ch_num = dma_axi64_core0_wr_ch_num_joint;
-assign dma_axi64_core0_wdt_timeout = dma_axi64_core0_dma_axi64_core0_wdt_wdt_timeout;
-  
-  
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_clk;
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_reset;
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_enable;
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_joint_mode;
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_page_cross;
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_joint_req;
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_prio_top;
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_prio_high;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_arbiter_rd_prio_top_num;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_arbiter_rd_prio_high_num;
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_hold;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_ready;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_active;
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_finish;
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go_out;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_num;
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_last;
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_clk;
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_reset;
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_enable;
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_joint_mode;
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_page_cross;
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_joint_req;
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_prio_top;
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_prio_high;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_arbiter_wr_prio_top_num;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_arbiter_wr_prio_high_num;
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_hold;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_ready;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_active;
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_finish;
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go_out;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_num;
-wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_last;
- 
-   reg[7:0]  dma_axi64_core0_dma_axi64_core0_arbiter_rd_current_active  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_current_ready_only  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_last_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_last  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ready  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_next_ready  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_next_ready0  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_next_ready1  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_prio_top_ready  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_prio_high_ready  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_arbiter_rd_in_prog  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go_pre_d  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go_top_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go_high_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go_d  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go_top  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go_high  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go_next  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_hold_d  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_advance_next  ; 
-   wire[2:0]  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_num_pre  ; 
-   wire[3:0]  dma_axi64_core0_dma_axi64_core0_arbiter_rd_next_ch_num0_pre  ; 
-   wire[3:0]  dma_axi64_core0_dma_axi64_core0_arbiter_rd_next_ch_num0_pre2  ; 
-   wire[2:0]  dma_axi64_core0_dma_axi64_core0_arbiter_rd_next_ch_num0  ; 
-   wire[3:0]  dma_axi64_core0_dma_axi64_core0_arbiter_rd_next_ch_num1_pre  ; 
-   wire[3:0]  dma_axi64_core0_dma_axi64_core0_arbiter_rd_next_ch_num1_pre2  ; 
-   wire[2:0]  dma_axi64_core0_dma_axi64_core0_arbiter_rd_next_ch_num1  ; 
-   wire[2:0]  dma_axi64_core0_dma_axi64_core0_arbiter_rd_next_ch_num_pre  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go_out  ='d1; 
-  assign   dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_num  ='d0; 
-  assign   dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_last  ='d1;
-  
-  
- 
-   reg[7:0]  dma_axi64_core0_dma_axi64_core0_arbiter_wr_current_active  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_current_ready_only  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_last_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_last  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ready  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_next_ready  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_next_ready0  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_next_ready1  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_prio_top_ready  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_prio_high_ready  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_arbiter_wr_in_prog  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go_pre_d  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go_top_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go_high_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go_d  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go_top  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go_high  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go_next  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_hold_d  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_advance_next  ; 
-   wire[2:0]  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_num_pre  ; 
-   wire[3:0]  dma_axi64_core0_dma_axi64_core0_arbiter_wr_next_ch_num0_pre  ; 
-   wire[3:0]  dma_axi64_core0_dma_axi64_core0_arbiter_wr_next_ch_num0_pre2  ; 
-   wire[2:0]  dma_axi64_core0_dma_axi64_core0_arbiter_wr_next_ch_num0  ; 
-   wire[3:0]  dma_axi64_core0_dma_axi64_core0_arbiter_wr_next_ch_num1_pre  ; 
-   wire[3:0]  dma_axi64_core0_dma_axi64_core0_arbiter_wr_next_ch_num1_pre2  ; 
-   wire[2:0]  dma_axi64_core0_dma_axi64_core0_arbiter_wr_next_ch_num1  ; 
-   wire[2:0]  dma_axi64_core0_dma_axi64_core0_arbiter_wr_next_ch_num_pre  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go_out  ='d1; 
-  assign   dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_num  ='d0; 
-  assign   dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_last  ='d1;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_clk = dma_axi64_core0_gclk;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_reset = dma_axi64_core0_reset;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_enable = dma_axi64_core0_rd_arbiter_en;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_joint_mode = dma_axi64_core0_joint_mode;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_page_cross = dma_axi64_core0_joint_page_cross;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_joint_req = dma_axi64_core0_joint_req;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_prio_top = dma_axi64_core0_rd_prio_top;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_prio_high = dma_axi64_core0_rd_prio_high;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_prio_top_num = dma_axi64_core0_rd_prio_top_num;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_prio_high_num = dma_axi64_core0_rd_prio_high_num;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_hold = dma_axi64_core0_rd_hold_joint;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_ready = dma_axi64_core0_ch_rd_ready_joint;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_active = dma_axi64_core0_ch_active_joint;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_finish = dma_axi64_core0_rd_finish_joint;
-assign dma_axi64_core0_rd_ch_go = dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go_out;
-assign dma_axi64_core0_rd_ch_num = dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_num;
-assign dma_axi64_core0_rd_ch_last = dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_last;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_clk = dma_axi64_core0_gclk;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_reset = dma_axi64_core0_reset;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_enable = dma_axi64_core0_wr_arbiter_en;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_joint_mode = dma_axi64_core0_joint_mode;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_page_cross = 1'b0;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_joint_req = dma_axi64_core0_joint_req;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_prio_top = dma_axi64_core0_wr_prio_top;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_prio_high = dma_axi64_core0_wr_prio_high;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_prio_top_num = dma_axi64_core0_wr_prio_top_num;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_prio_high_num = dma_axi64_core0_wr_prio_high_num;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_hold = 1'b0;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_ready = dma_axi64_core0_ch_wr_ready;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_active = dma_axi64_core0_ch_wr_active;
-assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_finish = dma_axi64_core0_wr_finish;
-assign dma_axi64_core0_wr_ch_go = dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go_out;
-assign dma_axi64_core0_wr_ch_num = dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_num;
-assign dma_axi64_core0_wr_ch_last = dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_last;
-  
-  
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_clk;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_go;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_cmd_full;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_cmd_pending;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_req;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_num;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_num_resp;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_go_next_line;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_valid;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_last;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_delay;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_clr_stall;
-wire [6-1:0] dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_ready;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_last;
-reg  dma_axi64_core0_dma_axi64_core0_ctrl_rd_burst_start = dma_axi64_core0_rd_burst_start;
-reg  dma_axi64_core0_dma_axi64_core0_ctrl_rd_finish = dma_axi64_core0_rd_finish;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_busy;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_hold;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_clk;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_go;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_cmd_full;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_cmd_pending;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_req;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_num;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_num_resp;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_go_next_line;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_valid;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_last;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_delay;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_clr_stall;
-wire [6-1:0] dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_ready;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_last;
-reg  dma_axi64_core0_dma_axi64_core0_ctrl_wr_burst_start = dma_axi64_core0_wr_burst_start;
-reg  dma_axi64_core0_dma_axi64_core0_ctrl_wr_finish = dma_axi64_core0_wr_finish;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_busy;
-wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_hold;
- 
-   wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_remain  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_remain_reg  ; 
-   reg[6-1:0]  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_stall  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl_reg  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl  ; 
-   reg[3-1:0]  dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_ch  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_last_ch  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_go_next_line_d  ; 
-   reg[2:0]  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ps  ; 
-   reg[2:0]  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_ctrl_rd_busy  =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ps  !=  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_ch  =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_valid  &  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr  &(  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_num  ==  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_num_resp  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_last_ch  =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_valid  &  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_last  &(  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_num  ==  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_num_resp  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_ctrl_rd_go_next_line_d  =1'b0; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl_reg   <=#11'b0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_finish  ) 
-              dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl_reg   <=#11'b0;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_go  ) 
-                 dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl_reg   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_req  ;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl  =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl_reg  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_remain  =(|  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter  )|  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_last  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter   <=#1{6{1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_go  ) 
-              dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens  ;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_burst_start  &(|  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter  )) 
-                 dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter  -1'b1;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter   <=#1{3{1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_ch  ) 
-              dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_delay  ;
-           else 
-             if (|  dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter  ) 
-                 dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter  -1'b1;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_ctrl_rd_stall  =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_cmd_pending  |  dma_axi64_core0_dma_axi64_core0_ctrl_rd_cmd_full  |  dma_axi64_core0_dma_axi64_core0_ctrl_rd_go_next_line_d  ; 
-  always @(                  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_go                                        or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_last                        or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_ready                       or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_clr_stall                      or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter                     or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_go_next_line_d                    or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_hold                   or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl                  or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_req                 or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_ch                or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_last_ch               or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_valid              or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_delay             or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_ps            or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_stall           or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_remain   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ; 
-          dma_axi64_core0_dma_axi64_core0_ctrl_rd_burst_start   =1'b0; 
-          dma_axi64_core0_dma_axi64_core0_ctrl_rd_finish   =1'b0;
-         case (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ps  ) 
-           dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE   :
-             begin 
-               if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_go  )
-                  begin 
-                    if (!  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_ready  )
-                       begin  
-                          dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ; 
-                          dma_axi64_core0_dma_axi64_core0_ctrl_rd_finish   =1'b1;
-                       end 
-                     else 
-                       if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_stall  ) 
-                           dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_STALL  ;
-                        else  
-                           dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_CMD  ;
-                  end 
-                else  
-                   dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ;
-             end  
-           dma_axi64_core0_dma_axi64_core0_ctrl_rd_CMD   :
-             begin 
-               if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_req  ^  dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl  )
-                  begin  
-                     dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ; 
-                     dma_axi64_core0_dma_axi64_core0_ctrl_rd_finish   =1'b1;
-                  end 
-                else 
-                  if ((  dma_axi64_core0_dma_axi64_core0_ctrl_rd_clr_stall  |  dma_axi64_core0_dma_axi64_core0_ctrl_rd_hold  )&  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_remain  ) 
-                      dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_CMD  ;
-                   else 
-                     if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_ready  &  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_remain  )
-                        begin 
-                          if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_stall  ) 
-                              dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_STALL  ;
-                           else 
-                             begin  
-                                dma_axi64_core0_dma_axi64_core0_ctrl_rd_burst_start   =1'b1; 
-                                dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_WAIT_CLR  ;
-                             end 
-                        end 
-                      else 
-                        if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_last  &(~  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_ready  )) 
-                            dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_CMD  ;
-                         else 
-                           begin  
-                              dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ; 
-                              dma_axi64_core0_dma_axi64_core0_ctrl_rd_finish   =1'b1;
-                           end 
-             end  
-           dma_axi64_core0_dma_axi64_core0_ctrl_rd_WAIT_CLR   :
-             begin 
-               if ((|  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_delay  )&  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_valid  )
-                  begin 
-                    if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_last_ch  )
-                       begin  
-                          dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ; 
-                          dma_axi64_core0_dma_axi64_core0_ctrl_rd_finish   =1'b1;
-                       end 
-                     else 
-                       if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_ch  ) 
-                           dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_WAIT_DELAY  ;
-                        else  
-                           dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_WAIT_CLR  ;
-                  end 
-                else 
-                  if (!  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_remain  )
-                     begin  
-                        dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ; 
-                        dma_axi64_core0_dma_axi64_core0_ctrl_rd_finish   =1'b1;
-                     end 
-                   else  
-                      dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_WAIT_DELAY  ;
-             end  
-           dma_axi64_core0_dma_axi64_core0_ctrl_rd_WAIT_DELAY   :
-             begin 
-               if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_go_next_line_d  ) 
-                   dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_WAIT_DELAY  ;
-                else 
-                  if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter  =='d0) 
-                      dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_STALL  ;
-                   else  
-                      dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_WAIT_DELAY  ;
-             end  
-           dma_axi64_core0_dma_axi64_core0_ctrl_rd_STALL   :
-             begin 
-               if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_ready  &  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_remain  )
-                  begin 
-                    if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_stall  ) 
-                        dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_STALL  ;
-                     else  
-                        dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_CMD  ;
-                  end 
-                else 
-                  if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_last  &(~  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_ready  )) 
-                      dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_CMD  ;
-                   else 
-                     begin  
-                        dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ; 
-                        dma_axi64_core0_dma_axi64_core0_ctrl_rd_finish   =1'b1;
-                     end 
-             end 
-          default :
-             begin  
-                dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ;
-             end 
-         endcase 
-       end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_ctrl_rd_ps   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ;
-        else  
-           dma_axi64_core0_dma_axi64_core0_ctrl_rd_ps   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns  ;
-
-  
-  
- 
-   wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_remain  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_remain_reg  ; 
-   reg[6-1:0]  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_stall  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl_reg  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl  ; 
-   reg[3-1:0]  dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_ch  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_last_ch  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_go_next_line_d  ; 
-   reg[2:0]  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ps  ; 
-   reg[2:0]  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_ctrl_wr_busy  =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ps  !=  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_ch  =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_valid  &  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr  &(  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_num  ==  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_num_resp  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_last_ch  =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_valid  &  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_last  &(  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_num  ==  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_num_resp  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_ctrl_wr_go_next_line_d  =1'b0; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_wr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl_reg   <=#11'b0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_finish  ) 
-              dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl_reg   <=#11'b0;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_go  ) 
-                 dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl_reg   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_req  ;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl  =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl_reg  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_remain  =(|  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter  )|  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_last  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_wr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter   <=#1{6{1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_go  ) 
-              dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens  ;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_burst_start  &(|  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter  )) 
-                 dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter  -1'b1;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_wr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter   <=#1{3{1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_ch  ) 
-              dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_delay  ;
-           else 
-             if (|  dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter  ) 
-                 dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter  -1'b1;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_ctrl_wr_stall  =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_cmd_pending  |  dma_axi64_core0_dma_axi64_core0_ctrl_wr_cmd_full  |  dma_axi64_core0_dma_axi64_core0_ctrl_wr_go_next_line_d  ; 
-  always @(                  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_go                                        or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_last                        or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_ready                       or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_clr_stall                      or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter                     or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_go_next_line_d                    or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_hold                   or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl                  or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_req                 or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_ch                or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_last_ch               or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_valid              or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_delay             or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_ps            or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_stall           or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_remain   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ; 
-          dma_axi64_core0_dma_axi64_core0_ctrl_wr_burst_start   =1'b0; 
-          dma_axi64_core0_dma_axi64_core0_ctrl_wr_finish   =1'b0;
-         case (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ps  ) 
-           dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE   :
-             begin 
-               if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_go  )
-                  begin 
-                    if (!  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_ready  )
-                       begin  
-                          dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ; 
-                          dma_axi64_core0_dma_axi64_core0_ctrl_wr_finish   =1'b1;
-                       end 
-                     else 
-                       if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_stall  ) 
-                           dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_STALL  ;
-                        else  
-                           dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_CMD  ;
-                  end 
-                else  
-                   dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ;
-             end  
-           dma_axi64_core0_dma_axi64_core0_ctrl_wr_CMD   :
-             begin 
-               if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_req  ^  dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl  )
-                  begin  
-                     dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ; 
-                     dma_axi64_core0_dma_axi64_core0_ctrl_wr_finish   =1'b1;
-                  end 
-                else 
-                  if ((  dma_axi64_core0_dma_axi64_core0_ctrl_wr_clr_stall  |  dma_axi64_core0_dma_axi64_core0_ctrl_wr_hold  )&  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_remain  ) 
-                      dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_CMD  ;
-                   else 
-                     if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_ready  &  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_remain  )
-                        begin 
-                          if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_stall  ) 
-                              dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_STALL  ;
-                           else 
-                             begin  
-                                dma_axi64_core0_dma_axi64_core0_ctrl_wr_burst_start   =1'b1; 
-                                dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_WAIT_CLR  ;
-                             end 
-                        end 
-                      else 
-                        if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_last  &(~  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_ready  )) 
-                            dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_CMD  ;
-                         else 
-                           begin  
-                              dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ; 
-                              dma_axi64_core0_dma_axi64_core0_ctrl_wr_finish   =1'b1;
-                           end 
-             end  
-           dma_axi64_core0_dma_axi64_core0_ctrl_wr_WAIT_CLR   :
-             begin 
-               if ((|  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_delay  )&  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_valid  )
-                  begin 
-                    if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_last_ch  )
-                       begin  
-                          dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ; 
-                          dma_axi64_core0_dma_axi64_core0_ctrl_wr_finish   =1'b1;
-                       end 
-                     else 
-                       if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_ch  ) 
-                           dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_WAIT_DELAY  ;
-                        else  
-                           dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_WAIT_CLR  ;
-                  end 
-                else 
-                  if (!  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_remain  )
-                     begin  
-                        dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ; 
-                        dma_axi64_core0_dma_axi64_core0_ctrl_wr_finish   =1'b1;
-                     end 
-                   else  
-                      dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_WAIT_DELAY  ;
-             end  
-           dma_axi64_core0_dma_axi64_core0_ctrl_wr_WAIT_DELAY   :
-             begin 
-               if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_go_next_line_d  ) 
-                   dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_WAIT_DELAY  ;
-                else 
-                  if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter  =='d0) 
-                      dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_STALL  ;
-                   else  
-                      dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_WAIT_DELAY  ;
-             end  
-           dma_axi64_core0_dma_axi64_core0_ctrl_wr_STALL   :
-             begin 
-               if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_ready  &  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_remain  )
-                  begin 
-                    if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_stall  ) 
-                        dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_STALL  ;
-                     else  
-                        dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_CMD  ;
-                  end 
-                else 
-                  if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_last  &(~  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_ready  )) 
-                      dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_CMD  ;
-                   else 
-                     begin  
-                        dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ; 
-                        dma_axi64_core0_dma_axi64_core0_ctrl_wr_finish   =1'b1;
-                     end 
-             end 
-          default :
-             begin  
-                dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ;
-             end 
-         endcase 
-       end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_wr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_ctrl_wr_ps   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ;
-        else  
-           dma_axi64_core0_dma_axi64_core0_ctrl_wr_ps   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns  ;
-
-assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_clk = dma_axi64_core0_gclk;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset = dma_axi64_core0_reset;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_go = dma_axi64_core0_rd_ch_go_joint;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_cmd_full = dma_axi64_core0_rd_cmd_full_joint;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_cmd_pending = dma_axi64_core0_rd_cmd_pending_joint;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_req = dma_axi64_core0_joint_req;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_num = dma_axi64_core0_rd_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_num_resp = dma_axi64_core0_rd_ch_num_resp;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_go_next_line = dma_axi64_core0_rd_go_next_line;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_valid = dma_axi64_core0_rd_clr_valid;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr = dma_axi64_core0_rd_clr;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_last = dma_axi64_core0_rd_clr_last;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_delay = dma_axi64_core0_rd_periph_delay;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_clr_stall = dma_axi64_core0_rd_clr_stall;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens = dma_axi64_core0_rd_tokens;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_ready = dma_axi64_core0_rd_ready_joint;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_last = dma_axi64_core0_rd_ch_last;
-assign dma_axi64_core0_rd_ctrl_busy = dma_axi64_core0_dma_axi64_core0_ctrl_rd_busy;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_hold = dma_axi64_core0_rd_hold_ctrl;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_clk = dma_axi64_core0_gclk;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset = dma_axi64_core0_reset;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_go = dma_axi64_core0_wr_ch_go_joint;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_cmd_full = dma_axi64_core0_wr_cmd_full_joint;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_cmd_pending = dma_axi64_core0_wr_cmd_pending_joint;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_req = dma_axi64_core0_joint_req;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_num = dma_axi64_core0_wr_ch_num_joint;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_num_resp = dma_axi64_core0_wr_ch_num_resp;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_go_next_line = dma_axi64_core0_wr_go_next_line;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_valid = dma_axi64_core0_wr_clr_valid;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr = dma_axi64_core0_wr_clr;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_last = dma_axi64_core0_wr_clr_last;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_delay = dma_axi64_core0_wr_periph_delay;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_clr_stall = dma_axi64_core0_wr_clr_stall;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens = dma_axi64_core0_wr_tokens;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_ready = dma_axi64_core0_wr_ready_joint;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_last = dma_axi64_core0_wr_ch_last_joint;
-assign dma_axi64_core0_wr_ctrl_busy = dma_axi64_core0_dma_axi64_core0_ctrl_wr_busy;
-assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_hold = dma_axi64_core0_wr_hold_ctrl;
-  
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_port;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_last_cmd;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_line_cmd;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_wr_ch_num;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_burst_start;
-wire [32-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_wr_burst_addr;
-wire [8-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_wr_burst_size;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_pending;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_split;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_num;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_rd_transfer;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_rd_transfer_size;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rd;
-wire [64-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rdata;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rd_valid;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rsize;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_wr_ready;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rd_num;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_wr_transfer_num;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_transfer;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_wr_transfer_size;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_wr_next_size;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_full;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr_line;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr_line_num;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_slverr;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_decerr;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr_last;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_wr_ch_num_resp;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_page_cross;
-wire [32-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_AWADDR;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_AWPORT;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_AWLEN;
-wire [1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_AWSIZE;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_AWVALID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_AWREADY;
-wire [64-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_WDATA;
-wire [8-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_WSTRB;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_WLAST;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_WVALID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_WREADY;
-wire [1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_BRESP;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_BVALID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_BREADY;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_joint_req;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_joint_stall;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_aw;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_w;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_num_aw;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_num_w;
- 
-   wire[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_AWID  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_AJOINT  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_BVALID_d  ; 
-   wire[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_BID  ; 
-   reg[1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_BRESP_d  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_resp_full  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_BREADY  =1'b1;  
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_dout;
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_DELAY  -1];
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_din = dma_axi64_core0_dma_axi64_core0_axim_wr_BVALID;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_BVALID_d = dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_dout;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_reset  )
-          begin  
-             dma_axi64_core0_dma_axi64_core0_axim_wr_BRESP_d   <=#12'b00;
-          end 
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_BVALID  )
-             begin  
-                dma_axi64_core0_dma_axi64_core0_axim_wr_BRESP_d   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_BRESP  ;
-             end
-   
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ch_num;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start;
-wire [32-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_addr;
-wire [8-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_size;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_end_line_cmd;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_extra_bit;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_port;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_joint_req;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_joint_pending;
-reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_pending = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_pending;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_full;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_split;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_num;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_line;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_page_cross;
-reg [7-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID = dma_axi64_core0_dma_axi64_core0_axim_wr_AWID;
-reg [32-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR = dma_axi64_core0_dma_axi64_core0_axim_wr_AWADDR;
-reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_APORT = dma_axi64_core0_dma_axi64_core0_axim_wr_AWPORT;
-reg [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ALEN = dma_axi64_core0_dma_axi64_core0_axim_wr_AWLEN;
-reg [1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE = dma_axi64_core0_dma_axi64_core0_axim_wr_AWSIZE;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AREADY;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AWVALID;
-reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AJOINT = dma_axi64_core0_dma_axi64_core0_axim_wr_AJOINT;
- 
-   reg[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_reg  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID_reg  ; 
-   wire[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_pre  ; 
-   wire[32-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR_pre  ; 
-   wire[1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE_pre  ; 
-   wire[4-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ALEN_pre  ; 
-   wire[8-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_length  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_line_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_line  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_high_addr_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_high_addr  ; 
-   wire[8:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_reach_pre  ; 
-   reg[8:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_reach  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_joint_cross  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_page_cross_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_page_cross  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start_d  ; 
-   wire[8:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst  ; 
-   reg[8:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst_d  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst  ; 
-   reg[8-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_size  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_start  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_high_addr_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_addr  [11:8]==4'hf; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_reach_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_addr  [7:0]+  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_size  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_page_cross  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_high_addr  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_reach  >{1'b1,{8{1'b0}}}); 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst  ={1'b1,{8{1'b0}}}-  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_addr  [7:0]; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_start  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID_reg  )&(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_full  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_page_cross  ;  
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_dout;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_dout;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_dout;
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_DELAY  -1];
-  
-  
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_DELAY  -1];
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_reach   <=#1{9{1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_high_addr_pre  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_reach   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_reach_pre  ;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst   <=#11'b0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_start  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst   <=#11'b0;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start  ) 
-                 dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst   <=#11'b1;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst_d   <=#1{9{1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst_d   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst  ;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_size   <=#1{8{1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_size   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_size  ;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start_d  ) 
-                 dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_size   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_size  -  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst_d  ;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_split  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start_d  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AREADY  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_num  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID  [2:0]; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_line_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID  [6]; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_joint_pending  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AREADY  )&  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AJOINT  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_pending   <=#11'b0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_pending   <=#11'b1;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst  )) 
-                 dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_pending   <=#11'b0;
-  
-  
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_DELAY  -1];
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_high_addr_pre;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_high_addr = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_dout;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start_d = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_dout;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_line_pre;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_line = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_dout;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_pre  ={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_end_line_cmd  ,  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE_pre  [1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_extra_bit  ,  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ch_num  [2:0]}; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_addr  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_size  =='d1 ? 2'b00:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_size  =='d2 ? 2'b01:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_size  =='d4 ? 2'b10:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AXI_WORD_SIZE  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_length  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst   ?   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_size  :  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_page_cross   ?   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst  :  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_size  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ALEN_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_length  [8-1:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AXI_3  ]=='d0 ? {4{1'b0}}:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_length  [8-1:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AXI_3  ]-1'b1; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
-          begin  
-             dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE   <=#1{2{1'b0}}; 
-             dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AJOINT   <=#11'b0;
-          end 
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start  )
-             begin  
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE_pre  ; 
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AJOINT   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_joint_req  ;
-             end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_reg   <=#1{7{1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_reg   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_pre  ;
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_reg            or    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID   =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_reg  ; 
-          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID   [6]=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_reg  [6]&(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst  ); 
-          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID   [3]=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_reg  [3]&(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst  );
-       end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR   <=#1{32{1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_start  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR  [32-1:12],{12{1'b1}}}+1'b1;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start  ) 
-                 dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR_pre  ;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_APORT   <=#11'b0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_APORT   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_port  ;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ALEN   <=#1{4{1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_start  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ALEN   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ALEN_pre  ;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID_reg   <=#11'b0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AREADY  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID_reg   <=#11'b0;
-           else 
-             if ((  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_size  >'d0))|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_start  ) 
-                 dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID_reg   <=#11'b1;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AJOINT   ?   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID_reg  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AWVALID  ):  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID_reg  ;  
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_VALID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_READY;
-wire [7-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_ID;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_axim_timeout_num;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_axim_timeout;
- 
-   reg[10-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_counter  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_axim_timeout_num  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_ID  [2:0]; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_axim_timeout  =(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_counter  =='d0); 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_counter   <=#1{10{1'b1}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_VALID  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_READY  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_counter   <=#1{10{1'b1}};
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_VALID  ) 
-                 dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_counter   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_counter  -1'b1;
-
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_VALID = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_READY = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AREADY;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_ID = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_axim_timeout_num = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_axim_timeout_num;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_axim_timeout = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_axim_timeout;
-
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ch_num = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_burst_start;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_addr = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_burst_addr;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_size = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_burst_size;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_end_line_cmd = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_line_cmd;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_extra_bit = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_last_cmd;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_port = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_port;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_joint_req = dma_axi64_core0_dma_axi64_core0_axim_wr_joint_req;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_pending = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_joint_pending;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_full = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_full;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_split = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_split;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_num = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_num;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_AWID = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_line;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_page_cross = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_page_cross;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_AWVALID = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AREADY = dma_axi64_core0_dma_axi64_core0_axim_wr_AWREADY;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AWVALID = 1'b0;
-  
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer_size;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rsize;
-wire [64-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rdata;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd_valid;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_wr_ready;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd_num;
-reg [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_num = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_transfer_num;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer;
-reg [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_size = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_transfer_size;
-reg [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_next_size = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_next_size;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_resp_full;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_cmd_full;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line;
-reg [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_num = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr_line_num;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_stall;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_axim_timeout_num;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_axim_timeout;
-wire [7-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWID;
-wire [32-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWADDR;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWLEN;
-wire [1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWSIZE;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWVALID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWREADY;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AJOINT;
-wire [64-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WDATA;
-wire [8-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLAST;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WVALID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WREADY;
- 
-   wire[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID  ; 
-   wire[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_pre  ; 
-   reg[8-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre  ; 
-   wire[1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSIZE_pre  ; 
-   wire[4-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_pre  ; 
-   wire[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_data  ; 
-   wire[8-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_data  ; 
-   wire[1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSIZE_data  ; 
-   wire[4-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_data  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WVALID  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLAST  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_valid_last  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_stall_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_stall  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_pre  ; 
-   wire[2:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_num_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_pre  ; 
-   wire[4-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_size_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer  ; 
-   reg[2:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_last_channel  ; 
-   wire[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_cmd  ; 
-   wire[1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSIZE_cmd  ; 
-   wire[4-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_cmd  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_ready  ; 
-   wire[2:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness_pre  ; 
-   reg[2:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_fifo_rd_valid  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_req_out  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_stall  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer_joint  ; 
-   wire[4-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer_size_joint  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer_full  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_push  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_pop  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_pop_d  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_empty  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_full  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_push  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_pop  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_empty  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_full  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_push  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_pop  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_empty  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_full  ; 
-   reg[4-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_out_count  ; 
-   reg[4-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_in_count  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_pending_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_pending  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_line_end  ; 
-   wire[2:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_line_end_num  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_ready  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd_valid  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness  +  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_ready  -  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_pre  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness   <=#13'd0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_ready  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_pre  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness_pre  ;
-  
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_req_out;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer;
-wire [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_SIZE_BITS -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_size;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_ch_fifo_rd;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_data_fullness_pre;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_HOLD;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_fifo_rd_valid;
-wire [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_SIZE_BITS -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_size_joint;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_full;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall;
- 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_joint  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_fifo_rd  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_fifo_rd_valid  ; 
-   wire[2:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo_pre  ; 
-   reg[2:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_pre  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_reg  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_not_ready_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_not_ready  ; 
-   wire[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_SIZE_BITS  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_size_joint  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_full  ; 
-   reg[2:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_rd_stall_num  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_rd_stall  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_joint  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_req_out  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer  ;  
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_dout;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_dout;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_dout;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_dout;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_dout;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_dout;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_dout;
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_DELAY  -1];
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo  +  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_joint  -  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_ch_fifo_rd  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo   <=#13'd0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_req_out  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_joint  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_ch_fifo_rd  )) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo_pre  ;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_req_out  &((  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo_pre  >'d2)|((  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo_pre  =='d2)&(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_data_fullness_pre  >'d1))|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_HOLD  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_not_ready_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_req_out  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_data_fullness_pre  >'d1)&(~(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_joint  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_pre  )); 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_reg   <=#11'b0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_pre  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_reg   <=#11'b1;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo_pre  =='d0) 
-                 dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_reg   <=#11'b0;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_reg  |(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_req_out  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_HOLD  );  
-  
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_DELAY  -1];
-  
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_push;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_pop;
-wire [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_din;
-reg [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_size_joint;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_empty;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_full;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_push;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_pop;
-wire [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_din;
-reg [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout = {dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_cmd,dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSIZE_cmd,dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_cmd,dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_req_out};
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_empty;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_full;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_push;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_pop;
-wire [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_din;
-reg [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WDATA;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_empty;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_full;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_push;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_pop;
- 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reg_push  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reg_pop  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_push  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_pop  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_DEPTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness_in  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_DEPTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness_out  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_DEPTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_WIDTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_DEPTH  -1:0]; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_empty  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_next  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout_empty  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_DEPTH_BITS  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_in  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_DEPTH_BITS  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_out  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reg_push  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_push  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_empty  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout_empty  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_pop  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reg_pop  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_pop  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_empty  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_push  =!  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_SINGLE  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_push  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reg_push  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_pop  =!  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_SINGLE  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_pop  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reg_pop  ); 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reset  )
-          begin  
-             dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_WIDTH  {1'b0}}; 
-             dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout_empty   <=#11'b1;
-          end 
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reg_push  )
-             begin  
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_din  ; 
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout_empty   <=#11'b0;
-             end 
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reg_pop  )
-                begin  
-                   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_WIDTH  {1'b0}}; 
-                   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout_empty   <=#11'b1;
-                end 
-              else 
-                if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_pop  )
-                   begin  
-                      dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_out  ]; 
-                      dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout_empty   <=#11'b0;
-                   end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_in   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_DEPTH_BITS  {1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_push  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_in   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_in  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_in  +1'b1;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_out   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_DEPTH_BITS  {1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_pop  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_out   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_out  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_out  +1'b1;
- 
-  always @( posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_clk  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_push  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_in  ]<=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_din  ;
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_push            or    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_in   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness_in   ={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_DEPTH  {1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness_in   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_in  ]=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_push  ;
-       end
-  
-  always @(    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_pop            or    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_out   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness_out   ={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_DEPTH  {1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness_out   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_out  ]=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_pop  ;
-       end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_DEPTH  {1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_push  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_pop  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness   <=#1(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness_out  ))|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness_in  ;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_next  =|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_empty  =~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_next  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_empty  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_empty  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout_empty  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_full  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_SINGLE   ? !  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout_empty  :&  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness  ;
-  
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_stall;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_dout;
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_DEPTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_count  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_pend  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_count   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_DEPTH  {1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_pend  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_stall  )) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_count   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_count  -1'b1;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_din  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_stall  ) 
-                 dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_count   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_count  +1'b1;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_pend  =(|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_count  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_dout  =(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_din  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_pend  )&(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_stall  );
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_fifo_rd;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_stall = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_not_ready;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_fifo_rd_valid = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_dout;
-
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_req_out = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_req_out;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_size = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer_size;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_ch_fifo_rd = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_data_fullness_pre = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness_pre;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_HOLD = 1'b0;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_fifo_rd_valid = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_fifo_rd_valid;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer_size_joint = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_size_joint;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer_full = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_full;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_stall = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_pending_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WVALID  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WREADY  );  
-  
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_DELAY  -1];
- 
-  always @(   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSIZE_cmd   )
-       begin 
-         case (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSIZE_cmd  )
-          2 'b00: 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_next_size   =4'd1;
-          2 'b01: 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_next_size   =4'd2;
-          2 'b10: 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_next_size   =4'd4;
-          2 'b11: 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_next_size   =4'd8;
-         endcase 
-       end
-  
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_fifo_rd_valid  |((~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_empty  )&(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_pending  )&(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_stall  )&  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_wr_ready  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rsize  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_fifo_rd_valid   ?   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer_size_joint  :  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_cmd  [5:4]==2'b00 ? 4'd1:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_cmd  [5:4]==2'b01 ? 4'd2:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_cmd  [5:4]==2'b10 ? 4'd4:4'd8; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd_num  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_cmd  [2:0];  
-  
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_DELAY  -1];
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_last_channel   <=#13'b000;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_push  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_last_channel   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_pre  [2:0];
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_num_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_data  [2:0]; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WVALID  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WREADY  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_size_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_data  [5:4]==2'b00 ? 4'd1:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_data  [5:4]==2'b01 ? 4'd2:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_data  [5:4]==2'b10 ? 4'd4:4'd8;  
-  
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_DELAY  -1];
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
-          begin  
-             dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_num   <=#13'd0; 
-             dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_size   <=#13'd0;
-          end 
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_pre  )
-             begin  
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_num   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_num_pre  ; 
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_size   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_size_pre  ;
-             end
-  
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_valid_last  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_out_count  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_cmd  )&(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_empty  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_valid_last  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_line_end  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_num   <=#13'd0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_pre  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_num   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_line_end_num  ;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_stall_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_pre  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd_num  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_line_end_num  );  
-  
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_DELAY  -1];
-  
-  
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_DELAY  -1];
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_joint;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_fifo_rd = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_dout;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_not_ready_pre;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_not_ready = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_dout;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_pending_pre;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_pending = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_dout;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_pop;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_pop_d = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_dout;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_pre;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_dout;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_stall_pre;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_stall = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_dout;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_pre;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_dout;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_cmd_full  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_full  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_full  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_resp_full  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_push  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWVALID  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWREADY  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_pop  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_valid_last  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWID  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWLEN  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSIZE_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWSIZE  ; 
-  always @(    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWADDR            or    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWSIZE   )
-       begin 
-         case ({  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWSIZE  [1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWADDR  [2:0]})
-          { 2'b00,3'b000}: 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b0000_0001;
-          { 2'b00,3'b001}: 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b0000_0010;
-          { 2'b00,3'b010}: 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b0000_0100;
-          { 2'b00,3'b011}: 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b0000_1000;
-          { 2'b00,3'b100}: 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b0001_0000;
-          { 2'b00,3'b101}: 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b0010_0000;
-          { 2'b00,3'b110}: 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b0100_0000;
-          { 2'b00,3'b111}: 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b1000_0000;
-          { 2'b01,3'b000}: 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b0000_0011;
-          { 2'b01,3'b010}: 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b0000_1100;
-          { 2'b01,3'b100}: 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b0011_0000;
-          { 2'b01,3'b110}: 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b1100_0000;
-          { 2'b10,3'b000}: 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b0000_1111;
-          { 2'b10,3'b100}: 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b1111_0000;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b1111_1111;
-         endcase 
-       end
-   
-  
- 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reg_push  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reg_pop  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_push  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_pop  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_DEPTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness_in  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_DEPTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness_out  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_DEPTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_WIDTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_DEPTH  -1:0]; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_empty  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_next  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout_empty  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_DEPTH_BITS  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_in  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_DEPTH_BITS  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_out  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reg_push  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_push  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_empty  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout_empty  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_pop  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reg_pop  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_pop  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_empty  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_push  =!  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_SINGLE  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_push  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reg_push  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_pop  =!  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_SINGLE  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_pop  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reg_pop  ); 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reset  )
-          begin  
-             dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_WIDTH  {1'b0}}; 
-             dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout_empty   <=#11'b1;
-          end 
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reg_push  )
-             begin  
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_din  ; 
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout_empty   <=#11'b0;
-             end 
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reg_pop  )
-                begin  
-                   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_WIDTH  {1'b0}}; 
-                   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout_empty   <=#11'b1;
-                end 
-              else 
-                if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_pop  )
-                   begin  
-                      dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_out  ]; 
-                      dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout_empty   <=#11'b0;
-                   end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_in   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_DEPTH_BITS  {1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_push  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_in   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_in  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_in  +1'b1;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_out   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_DEPTH_BITS  {1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_pop  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_out   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_out  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_out  +1'b1;
- 
-  always @( posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_clk  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_push  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_in  ]<=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_din  ;
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_push            or    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_in   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness_in   ={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_DEPTH  {1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness_in   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_in  ]=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_push  ;
-       end
-  
-  always @(    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_pop            or    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_out   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness_out   ={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_DEPTH  {1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness_out   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_out  ]=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_pop  ;
-       end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_DEPTH  {1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_push  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_pop  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness   <=#1(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness_out  ))|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness_in  ;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_next  =|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_empty  =~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_next  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_empty  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_empty  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout_empty  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_full  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_SINGLE   ? !  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout_empty  :&  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness  ;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_line_end  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_cmd  [6]; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_line_end_num  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_cmd  [2:0]; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_out_count   <=#1{4{1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_pop  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_out_count   <=#1{4{1'b0}};
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd  ) 
-                 dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_out_count   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_out_count  +1'b1;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_push  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_push  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_pop  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WVALID  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WREADY  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLAST  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB  =(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_in_count  [0] ? {  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_data  [3:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_data  [7:4]}:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_data  )&{8{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WVALID  }}; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_data  ;  
-  
- 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reg_push  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reg_pop  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_push  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_pop  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_DEPTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness_in  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_DEPTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness_out  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_DEPTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_WIDTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_DEPTH  -1:0]; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_empty  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_next  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout_empty  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_DEPTH_BITS  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_in  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_DEPTH_BITS  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_out  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reg_push  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_push  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_empty  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout_empty  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_pop  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reg_pop  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_pop  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_empty  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_push  =!  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_SINGLE  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_push  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reg_push  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_pop  =!  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_SINGLE  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_pop  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reg_pop  ); 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reset  )
-          begin  
-             dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_WIDTH  {1'b0}}; 
-             dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout_empty   <=#11'b1;
-          end 
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reg_push  )
-             begin  
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_din  ; 
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout_empty   <=#11'b0;
-             end 
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reg_pop  )
-                begin  
-                   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_WIDTH  {1'b0}}; 
-                   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout_empty   <=#11'b1;
-                end 
-              else 
-                if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_pop  )
-                   begin  
-                      dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_out  ]; 
-                      dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout_empty   <=#11'b0;
-                   end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_in   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_DEPTH_BITS  {1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_push  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_in   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_in  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_in  +1'b1;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_out   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_DEPTH_BITS  {1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_pop  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_out   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_out  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_out  +1'b1;
- 
-  always @( posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_clk  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_push  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_in  ]<=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_din  ;
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_push            or    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_in   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness_in   ={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_DEPTH  {1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness_in   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_in  ]=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_push  ;
-       end
-  
-  always @(    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_pop            or    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_out   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness_out   ={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_DEPTH  {1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness_out   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_out  ]=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_pop  ;
-       end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_DEPTH  {1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_push  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_pop  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness   <=#1(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness_out  ))|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness_in  ;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_next  =|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_empty  =~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_next  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_empty  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_empty  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout_empty  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_full  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_SINGLE   ? !  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout_empty  :&  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness  ;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_in_count   <=#1{4{1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_pop  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_in_count   <=#1{4{1'b0}};
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_pre  ) 
-                 dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_in_count   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_in_count  +1'b1;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_push  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd_valid  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_pop  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_pre  ;  
-  
- 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reg_push  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reg_pop  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_push  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_pop  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_DEPTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness_in  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_DEPTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness_out  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_DEPTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_WIDTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_DEPTH  -1:0]; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_empty  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_next  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout_empty  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_DEPTH_BITS  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_in  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_DEPTH_BITS  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_out  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reg_push  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_push  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_empty  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout_empty  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_pop  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reg_pop  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_pop  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_empty  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_push  =!  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_SINGLE  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_push  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reg_push  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_pop  =!  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_SINGLE  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_pop  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reg_pop  ); 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reset  )
-          begin  
-             dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_WIDTH  {1'b0}}; 
-             dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout_empty   <=#11'b1;
-          end 
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reg_push  )
-             begin  
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_din  ; 
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout_empty   <=#11'b0;
-             end 
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reg_pop  )
-                begin  
-                   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_WIDTH  {1'b0}}; 
-                   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout_empty   <=#11'b1;
-                end 
-              else 
-                if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_pop  )
-                   begin  
-                      dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_out  ]; 
-                      dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout_empty   <=#11'b0;
-                   end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_in   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_DEPTH_BITS  {1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_push  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_in   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_in  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_in  +1'b1;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_out   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_DEPTH_BITS  {1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_pop  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_out   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_out  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_out  +1'b1;
- 
-  always @( posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_clk  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_push  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_in  ]<=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_din  ;
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_push            or    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_in   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness_in   ={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_DEPTH  {1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness_in   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_in  ]=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_push  ;
-       end
-  
-  always @(    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_pop            or    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_out   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness_out   ={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_DEPTH  {1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness_out   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_out  ]=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_pop  ;
-       end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_DEPTH  {1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_push  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_pop  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness   <=#1(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness_out  ))|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness_in  ;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_next  =|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_empty  =~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_next  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_empty  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_empty  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout_empty  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_full  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_SINGLE   ? !  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout_empty  :&  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness  ;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_push = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_joint;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_pop = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_fifo_rd_valid;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_size;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_full = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_empty;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_full = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_full;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_push = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_push;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_pop = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_pop;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_din = {dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_pre,dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSIZE_pre,dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_pre,dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AJOINT};
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_empty = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_empty;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_full = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_full;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_push = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_push;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_pop = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_pop;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_din = {dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_pre,dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSIZE_pre,dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre,dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_pre};
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_empty = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_empty;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_full = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_full;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_push = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_push;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_pop = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_pop;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WVALID  =~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_empty  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLAST  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WVALID  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_in_count  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_data  )&(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_empty  );  
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_VALID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_READY;
-wire [7-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_ID;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_axim_timeout_num;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_axim_timeout;
- 
-   reg[10-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_counter  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_axim_timeout_num  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_ID  [2:0]; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_axim_timeout  =(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_counter  =='d0); 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_counter   <=#1{10{1'b1}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_VALID  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_READY  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_counter   <=#1{10{1'b1}};
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_VALID  ) 
-                 dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_counter   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_counter  -1'b1;
-
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_VALID = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WVALID;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_READY = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WREADY;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_ID = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_axim_timeout_num = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_axim_timeout_num;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_axim_timeout = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_axim_timeout;
-
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer = dma_axi64_core0_dma_axi64_core0_axim_wr_rd_transfer;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer_size = dma_axi64_core0_dma_axi64_core0_axim_wr_rd_transfer_size;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rd = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rsize = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rsize;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rdata = dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rdata;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd_valid = dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rd_valid;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_wr_ready = dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_wr_ready;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rd_num = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd_num;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_transfer = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_resp_full = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_resp_full;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_full = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_cmd_full;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr_line = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_joint_stall = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_stall;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_num_w = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_axim_timeout_num;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_w = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_axim_timeout;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWID = dma_axi64_core0_dma_axi64_core0_axim_wr_AWID;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWADDR = dma_axi64_core0_dma_axi64_core0_axim_wr_AWADDR;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWLEN = dma_axi64_core0_dma_axi64_core0_axim_wr_AWLEN;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWSIZE = dma_axi64_core0_dma_axi64_core0_axim_wr_AWSIZE;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWVALID = dma_axi64_core0_dma_axi64_core0_axim_wr_AWVALID;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWREADY = dma_axi64_core0_dma_axi64_core0_axim_wr_AWREADY;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AJOINT = dma_axi64_core0_dma_axi64_core0_axim_wr_AJOINT;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_WDATA = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WDATA;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_WSTRB = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_WLAST = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLAST;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_WVALID = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WVALID;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WREADY = dma_axi64_core0_dma_axi64_core0_axim_wr_WREADY;
-  
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_slverr;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_decerr;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clr;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clr_last;
-reg [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_ch_num_resp = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_ch_num_resp;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_full;
-wire [7-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_AID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_AVALID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_AREADY;
-wire [1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_RESP;
-wire [7-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_ID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_VALID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_READY;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_LAST;
- 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clr_pre  ; 
-   wire[2:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_ch_num_resp_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clr_last_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_slverr_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_decerr_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_push  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_pop  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_empty  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_full  ; 
-   wire[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_ID  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_push  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_AVALID  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_AREADY  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_pop  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_VALID  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_READY  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_LAST  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clr_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_pop  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_ch_num_resp_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_ID  [2:0]; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_slverr_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clr_pre  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_RESP  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_RESP_SLVERR  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_decerr_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clr_pre  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_RESP  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_RESP_DECERR  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clr_last_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clr_pre  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_ID  [3];  
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_dout;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_dout;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_dout;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_dout;
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_DELAY  -1];
-  
-  
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_DELAY  -1];
-  
-  
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_DELAY  -1];
-  
-  
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_DELAY  -1];
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clr_pre;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clr = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_dout;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clr_last_pre;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clr_last = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_dout;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_slverr_pre;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_slverr = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_dout;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_decerr_pre;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_decerr = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_dout;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_ch_num_resp   <=#13'b000;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clr_pre  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_ch_num_resp   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_ch_num_resp_pre  ;
-  
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_push;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_pop;
-wire [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_din;
-reg [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_ID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_empty;
-wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_full;
- 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reg_push  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reg_pop  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_push  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_pop  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_DEPTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness_in  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_DEPTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness_out  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_DEPTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_WIDTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_DEPTH  -1:0]; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_empty  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_next  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout_empty  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_DEPTH_BITS  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_in  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_DEPTH_BITS  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_out  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reg_push  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_push  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_empty  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout_empty  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_pop  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reg_pop  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_pop  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_empty  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_push  =!  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_SINGLE  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_push  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reg_push  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_pop  =!  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_SINGLE  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_pop  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reg_pop  ); 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reset  )
-          begin  
-             dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_WIDTH  {1'b0}}; 
-             dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout_empty   <=#11'b1;
-          end 
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reg_push  )
-             begin  
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_din  ; 
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout_empty   <=#11'b0;
-             end 
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reg_pop  )
-                begin  
-                   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_WIDTH  {1'b0}}; 
-                   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout_empty   <=#11'b1;
-                end 
-              else 
-                if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_pop  )
-                   begin  
-                      dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_out  ]; 
-                      dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout_empty   <=#11'b0;
-                   end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_in   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_DEPTH_BITS  {1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_push  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_in   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_in  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_in  +1'b1;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_out   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_DEPTH_BITS  {1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_pop  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_out   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_out  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_out  +1'b1;
- 
-  always @( posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_clk  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_push  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_in  ]<=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_din  ;
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_push            or    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_in   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness_in   ={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_DEPTH  {1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness_in   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_in  ]=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_push  ;
-       end
-  
-  always @(    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_pop            or    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_out   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness_out   ={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_DEPTH  {1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness_out   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_out  ]=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_pop  ;
-       end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_DEPTH  {1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_push  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_pop  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness   <=#1(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness_out  ))|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness_in  ;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_next  =|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_empty  =~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_next  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_empty  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_empty  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout_empty  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_full  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_SINGLE   ? !  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout_empty  :&  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness  ;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_push = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_push;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_pop = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_pop;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_AID;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_empty = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_empty;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_full = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_full;
-
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_slverr = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_slverr;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_decerr = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_decerr;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clr;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr_last = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clr_last;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_resp_full = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_full;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_AID = dma_axi64_core0_dma_axi64_core0_axim_wr_AWID;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_AVALID = dma_axi64_core0_dma_axi64_core0_axim_wr_AWVALID;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_AREADY = dma_axi64_core0_dma_axi64_core0_axim_wr_AWREADY;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_RESP = dma_axi64_core0_dma_axi64_core0_axim_wr_BRESP_d;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_BID = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_ID;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_VALID = dma_axi64_core0_dma_axi64_core0_axim_wr_BVALID_d;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_READY = dma_axi64_core0_dma_axi64_core0_axim_wr_BREADY;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_LAST = 1'b1;
-
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_clk = dma_axi64_core0_gclk;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_reset = dma_axi64_core0_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_port = dma_axi64_core0_wr_cmd_port;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_last_cmd = dma_axi64_core0_wr_last_cmd;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_line_cmd = dma_axi64_core0_wr_line_cmd;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_ch_num = dma_axi64_core0_wr_ch_num_joint;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_burst_start = dma_axi64_core0_wr_burst_start_joint;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_burst_addr = dma_axi64_core0_wr_burst_addr;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_burst_size = dma_axi64_core0_wr_burst_size;
-assign dma_axi64_core0_wr_cmd_pending = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_pending;
-assign dma_axi64_core0_wr_cmd_split = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_split;
-assign dma_axi64_core0_wr_cmd_num = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_num;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_rd_transfer = dma_axi64_core0_rd_transfer;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_rd_transfer_size = dma_axi64_core0_rd_transfer_size;
-assign dma_axi64_core0_ch_fifo_rd = dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rd;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rdata = dma_axi64_core0_ch_fifo_rdata;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rd_valid = dma_axi64_core0_ch_fifo_rd_valid;
-assign dma_axi64_core0_ch_fifo_rsize = dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rsize;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_wr_ready = dma_axi64_core0_ch_fifo_wr_ready;
-assign dma_axi64_core0_ch_fifo_rd_num = dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rd_num;
-assign dma_axi64_core0_wr_transfer_num = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_transfer_num;
-assign dma_axi64_core0_wr_transfer = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_transfer;
-assign dma_axi64_core0_wr_transfer_size = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_transfer_size;
-assign dma_axi64_core0_wr_next_size = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_next_size;
-assign dma_axi64_core0_wr_cmd_full = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_full;
-assign dma_axi64_core0_wr_clr_line = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr_line;
-assign dma_axi64_core0_wr_clr_line_num = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr_line_num;
-assign dma_axi64_core0_wr_slverr = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_slverr;
-assign dma_axi64_core0_wr_decerr = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_decerr;
-assign dma_axi64_core0_wr_clr = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr;
-assign dma_axi64_core0_wr_clr_last = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr_last;
-assign dma_axi64_core0_wr_ch_num_resp = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_ch_num_resp;
-assign dma_axi64_core0_wr_page_cross = dma_axi64_core0_dma_axi64_core0_axim_wr_page_cross;
-assign dma_axi64_core0_AWADDR = dma_axi64_core0_dma_axi64_core0_axim_wr_AWADDR;
-assign dma_axi64_core0_wr_port_num = dma_axi64_core0_dma_axi64_core0_axim_wr_AWPORT;
-assign dma_axi64_core0_AWLEN = dma_axi64_core0_dma_axi64_core0_axim_wr_AWLEN;
-assign dma_axi64_core0_AWSIZE = dma_axi64_core0_dma_axi64_core0_axim_wr_AWSIZE;
-assign dma_axi64_core0_AWVALID = dma_axi64_core0_dma_axi64_core0_axim_wr_AWVALID;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_AWREADY = dma_axi64_core0_AWREADY;
-assign dma_axi64_core0_WDATA = dma_axi64_core0_dma_axi64_core0_axim_wr_WDATA;
-assign dma_axi64_core0_WSTRB = dma_axi64_core0_dma_axi64_core0_axim_wr_WSTRB;
-assign dma_axi64_core0_WLAST = dma_axi64_core0_dma_axi64_core0_axim_wr_WLAST;
-assign dma_axi64_core0_WVALID = dma_axi64_core0_dma_axi64_core0_axim_wr_WVALID;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_WREADY = dma_axi64_core0_WREADY;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_BRESP = dma_axi64_core0_BRESP;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_BVALID = dma_axi64_core0_BVALID;
-assign dma_axi64_core0_BREADY = dma_axi64_core0_dma_axi64_core0_axim_wr_BREADY;
-assign dma_axi64_core0_dma_axi64_core0_axim_wr_joint_req = dma_axi64_core0_joint_req;
-assign dma_axi64_core0_joint_stall = dma_axi64_core0_dma_axi64_core0_axim_wr_joint_stall;
-assign dma_axi64_core0_timeout_aw = dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_aw;
-assign dma_axi64_core0_timeout_w = dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_w;
-assign dma_axi64_core0_timeout_num_aw = dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_num_aw;
-assign dma_axi64_core0_timeout_num_w = dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_num_w;
-  
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_load_wr;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_load_wr_num;
-wire [1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_load_wr_cycle;
-wire [64-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_load_wdata;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_joint_stall;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_joint_req;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_rd_line_cmd;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_load_req_in_prog;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_port;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_rd_ch_num;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_rd_burst_start;
-wire [32-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_rd_burst_addr;
-wire [8-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_rd_burst_size;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_pending;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_split;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_line;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_num;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_full;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_ch_fifo_wr;
-wire [64-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_ch_fifo_wdata;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_ch_fifo_wsize;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_ch_fifo_wr_num;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_rd_transfer_num;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_rd_transfer;
-reg [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_rd_transfer_size = dma_axi64_core0_rd_transfer_size;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_rd_burst_cmd;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_line;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_line_num;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_rd_slverr;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_rd_decerr;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_load;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_last;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_rd_ch_num_resp;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_page_cross;
-wire [32-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_ARADDR;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_ARPORT;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_ARLEN;
-wire [1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_ARSIZE;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_ARVALID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_ARREADY;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_AWVALID;
-wire [64-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_RDATA;
-wire [1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_RRESP;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_RLAST;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_RVALID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_RREADY_out;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_axim_timeout_ar;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_axim_timeout_num_ar;
- 
-   wire[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_ARID  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_RVALID_d  ; 
-   wire[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_RID  ; 
-   reg[64-1:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_RDATA_d  ; 
-   reg[1:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_RRESP_d  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_axim_rd_RLAST_d  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_RREADY  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr  =  dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_pre  &(~  dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_last  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_load  =  dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_pre  &  dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_last  ;  
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_dout;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_dout;
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_dout  =  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_DELAY  -1];
-  
-  
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_dout  =  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_DELAY  -1];
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_clk = dma_axi64_core0_dma_axi64_core0_axim_rd_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_reset = dma_axi64_core0_dma_axi64_core0_axim_rd_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_din = dma_axi64_core0_dma_axi64_core0_axim_rd_RREADY_out;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_RREADY = dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_dout;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_clk = dma_axi64_core0_dma_axi64_core0_axim_rd_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_reset = dma_axi64_core0_dma_axi64_core0_axim_rd_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_din = dma_axi64_core0_dma_axi64_core0_axim_rd_RVALID;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_RVALID_d = dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_dout;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_reset  )
-          begin  
-             dma_axi64_core0_dma_axi64_core0_axim_rd_RRESP_d   <=#12'b00; 
-             dma_axi64_core0_dma_axi64_core0_axim_rd_RDATA_d   <=#1{64{1'b0}}; 
-             dma_axi64_core0_dma_axi64_core0_axim_rd_RLAST_d   <=#11'b0;
-          end 
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_rd_RVALID  )
-             begin  
-                dma_axi64_core0_dma_axi64_core0_axim_rd_RRESP_d   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_RRESP  ; 
-                dma_axi64_core0_dma_axi64_core0_axim_rd_RDATA_d   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_RDATA  ; 
-                dma_axi64_core0_dma_axi64_core0_axim_rd_RLAST_d   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_RLAST  ;
-             end
-  
-  always @(   dma_axi64_core0_dma_axi64_core0_axim_rd_RID   )
-       begin 
-         case (  dma_axi64_core0_dma_axi64_core0_axim_rd_RID  [5:4])
-          2 'b00: 
-              dma_axi64_core0_dma_axi64_core0_axim_rd_rd_transfer_size   =4'd1;
-          2 'b01: 
-              dma_axi64_core0_dma_axi64_core0_axim_rd_rd_transfer_size   =4'd2;
-          2 'b10: 
-              dma_axi64_core0_dma_axi64_core0_axim_rd_rd_transfer_size   =4'd4;
-          2 'b11: 
-              dma_axi64_core0_dma_axi64_core0_axim_rd_rd_transfer_size   =4'd8;
-         endcase 
-       end
-   
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ch_num;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_start;
-wire [32-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_addr;
-wire [8-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_size;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_end_line_cmd;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_extra_bit;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_port;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_joint_req;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_joint_pending;
-reg  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_pending = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_pending;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_full;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_split;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_num;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_line;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_page_cross;
-reg [7-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID = dma_axi64_core0_dma_axi64_core0_axim_rd_ARID;
-reg [32-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AADDR = dma_axi64_core0_dma_axi64_core0_axim_rd_ARADDR;
-reg  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_APORT = dma_axi64_core0_dma_axi64_core0_axim_rd_ARPORT;
-reg [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ALEN = dma_axi64_core0_dma_axi64_core0_axim_rd_ARLEN;
-reg [1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ASIZE = dma_axi64_core0_dma_axi64_core0_axim_rd_ARSIZE;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AREADY;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AWVALID;
-reg  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AJOINT = dma_axi64_core0_dma_axi64_core0_axim_rd_axim_timeout_ar;
- 
-   reg[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID_reg  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID_reg  ; 
-   wire[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID_pre  ; 
-   wire[32-1:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AADDR_pre  ; 
-   wire[1:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ASIZE_pre  ; 
-   wire[4-1:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ALEN_pre  ; 
-   wire[8-1:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_length  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_line_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_line  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_high_addr_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_high_addr  ; 
-   wire[8:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_reach_pre  ; 
-   reg[8:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_reach  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_joint_cross  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_page_cross_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_page_cross  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cross_start  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cross_start_d  ; 
-   wire[8:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_max_burst  ; 
-   reg[8:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_max_burst_d  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst  ; 
-   reg[8-1:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_size  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_start  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_high_addr_pre  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_addr  [11:8]==4'hf; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_reach_pre  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_addr  [7:0]+  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_size  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_page_cross  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_high_addr  &(  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_reach  >{1'b1,{8{1'b0}}}); 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_max_burst  ={1'b1,{8{1'b0}}}-  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_addr  [7:0]; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_start  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst  &(~  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID_reg  )&(~  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_full  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cross_start  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_start  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_page_cross  ;  
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_dout;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_dout;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_dout;
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_dout  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_DELAY  -1];
-  
-  
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_dout  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_DELAY  -1];
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_reach   <=#1{9{1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_high_addr_pre  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_reach   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_reach_pre  ;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst   <=#11'b0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_start  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst   <=#11'b0;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cross_start  ) 
-                 dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst   <=#11'b1;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_max_burst_d   <=#1{9{1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cross_start  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_max_burst_d   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_max_burst  ;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_size   <=#1{8{1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cross_start  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_size   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_size  ;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cross_start_d  ) 
-                 dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_size   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_size  -  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_max_burst_d  ;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_split  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cross_start_d  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AREADY  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_num  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID  [2:0]; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_line_pre  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID  [6]; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_joint_pending  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID  &(~  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AREADY  )&  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AJOINT  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_pending   <=#11'b0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_start  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_pending   <=#11'b1;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd  &(~  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst  )) 
-                 dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_pending   <=#11'b0;
-  
-  
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_dout  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_DELAY  -1];
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_clk = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_reset = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_din = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_high_addr_pre;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_high_addr = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_dout;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_clk = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_reset = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_din = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cross_start;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cross_start_d = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_dout;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_clk = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_reset = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_din = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_line_pre;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_line = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_dout;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID_pre  ={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_end_line_cmd  ,  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ASIZE_pre  [1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_extra_bit  ,  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ch_num  [2:0]}; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AADDR_pre  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_addr  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ASIZE_pre  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_size  =='d1 ? 2'b00:  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_size  =='d2 ? 2'b01:  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_size  =='d4 ? 2'b10:  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AXI_WORD_SIZE  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_length  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst   ?   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_size  :  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_page_cross   ?   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_max_burst  :  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_size  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ALEN_pre  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_length  [8-1:  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AXI_3  ]=='d0 ? {4{1'b0}}:  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_length  [8-1:  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AXI_3  ]-1'b1; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
-          begin  
-             dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ASIZE   <=#1{2{1'b0}}; 
-             dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AJOINT   <=#11'b0;
-          end 
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_start  )
-             begin  
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ASIZE   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ASIZE_pre  ; 
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AJOINT   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_joint_req  ;
-             end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID_reg   <=#1{7{1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_start  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID_reg   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID_pre  ;
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID_reg            or    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID   =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID_reg  ; 
-          dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID   [6]=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID_reg  [6]&(~  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst  ); 
-          dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID   [3]=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID_reg  [3]&(~  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst  );
-       end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AADDR   <=#1{32{1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_start  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AADDR   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AADDR  [32-1:12],{12{1'b1}}}+1'b1;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_start  ) 
-                 dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AADDR   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AADDR_pre  ;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_APORT   <=#11'b0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_start  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_APORT   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_port  ;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ALEN   <=#1{4{1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_start  |  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_start  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ALEN   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ALEN_pre  ;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID_reg   <=#11'b0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AREADY  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID_reg   <=#11'b0;
-           else 
-             if ((  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_start  &(  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_size  >'d0))|  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_start  ) 
-                 dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID_reg   <=#11'b1;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AJOINT   ?   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID_reg  &(~  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AWVALID  ):  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID_reg  ;  
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_VALID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_READY;
-wire [7-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_ID;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_axim_timeout_num;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_axim_timeout;
- 
-   reg[10-1:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_counter  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_axim_timeout_num  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_ID  [2:0]; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_axim_timeout  =(  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_counter  =='d0); 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_counter   <=#1{10{1'b1}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_VALID  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_READY  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_counter   <=#1{10{1'b1}};
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_VALID  ) 
-                 dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_counter   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_counter  -1'b1;
-
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_clk = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_reset = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_VALID = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_READY = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AREADY;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_ID = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_axim_timeout_num = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_axim_timeout_num;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_axim_timeout = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_axim_timeout;
-
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk = dma_axi64_core0_dma_axi64_core0_axim_rd_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset = dma_axi64_core0_dma_axi64_core0_axim_rd_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ch_num = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_start = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_burst_start;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_addr = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_burst_addr;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_size = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_burst_size;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_end_line_cmd = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_line_cmd;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_extra_bit = dma_axi64_core0_dma_axi64_core0_axim_rd_load_req_in_prog;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_port = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_port;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_joint_req = dma_axi64_core0_dma_axi64_core0_axim_rd_joint_req;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_pending = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_joint_pending;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_full = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_full;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_split = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_split;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_num = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_num;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_line = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_line;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_page_cross = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_page_cross;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_ARVALID = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AREADY = dma_axi64_core0_dma_axi64_core0_axim_rd_ARREADY;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AWVALID = dma_axi64_core0_dma_axi64_core0_axim_rd_AWVALID;
-  
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_joint_stall;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wr;
-wire [64-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wdata;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wsize;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wr_num;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_transfer_num;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_transfer;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_transfer_size;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_burst_cmd;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_num;
-reg [1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_cycle = dma_axi64_core0_dma_axi64_core0_axim_rd_load_wr_cycle;
-wire [64-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wdata;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line;
-reg [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line_num = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_line_num;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ARVALID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ARREADY;
-wire [7-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ARID;
-wire [7-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RID;
-wire [64-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RDATA;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RLAST;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RVALID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RREADY;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RREADY_out;
- 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_cmd_id  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line_pre_d  ; 
-   reg[2:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wr_num_d  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_cmd_id  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RID  [3]; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RREADY_out  =(~  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line_pre  )&(~  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line_pre_d  )&(~  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_joint_stall  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_transfer_num  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RID  [2:0]; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_transfer  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RVALID  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RREADY  &(~  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_cmd_id  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_burst_cmd  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_transfer  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RID  [5]; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wr  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_transfer  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wdata  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RDATA  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wsize  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_transfer_size  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wr_num  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RID  [2:0]; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line_pre  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RVALID  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RREADY  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RLAST  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RID  [6]&(~  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RID  [3]);  
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_dout;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_dout;
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_dout  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_DELAY  -1];
-  
-  
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_dout  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_DELAY  -1];
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_clk = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_reset = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_din = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line_pre;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line_pre_d = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_dout;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_clk = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_reset = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_din = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line_pre_d;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_dout;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wr_num_d   <=#13'b000;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line_pre  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wr_num_d   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wr_num  ;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line_num   <=#13'b000;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line_pre_d  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line_num   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wr_num_d  ;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RVALID  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RREADY  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_cmd_id  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_num  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RID  [2:0]; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wdata  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RDATA  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_cycle   <=#12'b00;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_cycle  [0]&1'b1) 
-              dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_cycle   <=#12'b00;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr  ) 
-                 dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_cycle   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_cycle  +1'b1;
-
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_clk = dma_axi64_core0_dma_axi64_core0_axim_rd_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_reset = dma_axi64_core0_dma_axi64_core0_axim_rd_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_joint_stall = dma_axi64_core0_dma_axi64_core0_axim_rd_joint_stall;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_ch_fifo_wr = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wr;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_ch_fifo_wdata = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wdata;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_ch_fifo_wsize = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wsize;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_ch_fifo_wr_num = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wr_num;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_transfer_num = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_transfer_num;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_transfer = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_transfer;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_transfer_size = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_transfer_size;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_burst_cmd = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_burst_cmd;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_load_wr = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_load_wr_num = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_num;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_load_wdata = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wdata;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_line = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ARVALID = dma_axi64_core0_dma_axi64_core0_axim_rd_ARVALID;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ARREADY = dma_axi64_core0_dma_axi64_core0_axim_rd_ARREADY;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ARID = dma_axi64_core0_dma_axi64_core0_axim_rd_ARID;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RID = dma_axi64_core0_dma_axi64_core0_axim_rd_RID;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RDATA = dma_axi64_core0_dma_axi64_core0_axim_rd_RDATA_d;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RLAST = dma_axi64_core0_dma_axi64_core0_axim_rd_RLAST_d;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RVALID = dma_axi64_core0_dma_axi64_core0_axim_rd_RVALID_d;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RREADY = dma_axi64_core0_dma_axi64_core0_axim_rd_RREADY;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_RREADY_out = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RREADY_out;
-  
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_slverr;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_decerr;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clr;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clr_last;
-reg [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_ch_num_resp = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_ch_num_resp;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_full;
-wire [7-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_AID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_AVALID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_AREADY;
-wire [1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_RESP;
-wire [7-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_ID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_VALID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_READY;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_LAST;
- 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clr_pre  ; 
-   wire[2:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_ch_num_resp_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clr_last_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_slverr_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_decerr_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_push  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_pop  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_empty  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_full  ; 
-   wire[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_ID  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_push  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_AVALID  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_AREADY  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_pop  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_VALID  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_READY  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_LAST  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clr_pre  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_pop  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_ch_num_resp_pre  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_ID  [2:0]; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_slverr_pre  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clr_pre  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_RESP  ==  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_RESP_SLVERR  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_decerr_pre  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clr_pre  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_RESP  ==  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_RESP_DECERR  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clr_last_pre  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clr_pre  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_ID  [3];  
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_dout;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_dout;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_dout;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_din;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_dout;
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_dout  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_DELAY  -1];
-  
-  
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_dout  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_DELAY  -1];
-  
-  
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_dout  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_DELAY  -1];
-  
-  
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_dout  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_DELAY  -1];
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_clk = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_reset = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_din = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clr_pre;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clr = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_dout;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_clk = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_reset = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_din = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clr_last_pre;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clr_last = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_dout;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_clk = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_reset = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_din = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_slverr_pre;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_slverr = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_dout;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_clk = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_reset = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_din = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_decerr_pre;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_decerr = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_dout;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_ch_num_resp   <=#13'b000;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clr_pre  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_ch_num_resp   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_ch_num_resp_pre  ;
-  
-  
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_clk;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reset;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_push;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_pop;
-wire [ dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_din;
-reg [ dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_ID;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_empty;
-wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_full;
- 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reg_push  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reg_pop  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_push  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_pop  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_DEPTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness_in  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_DEPTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness_out  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_DEPTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_WIDTH  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_DEPTH  -1:0]; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_empty  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_next  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout_empty  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_DEPTH_BITS  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_in  ; 
-   reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_DEPTH_BITS  -1:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_out  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reg_push  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_push  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_empty  &(  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout_empty  |  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_pop  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reg_pop  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_pop  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_empty  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_push  =!  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_SINGLE  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_push  &(~  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reg_push  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_pop  =!  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_SINGLE  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_pop  &(~  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reg_pop  ); 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reset  )
-          begin  
-             dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_WIDTH  {1'b0}}; 
-             dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout_empty   <=#11'b1;
-          end 
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reg_push  )
-             begin  
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_din  ; 
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout_empty   <=#11'b0;
-             end 
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reg_pop  )
-                begin  
-                   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_WIDTH  {1'b0}}; 
-                   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout_empty   <=#11'b1;
-                end 
-              else 
-                if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_pop  )
-                   begin  
-                      dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_out  ]; 
-                      dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout_empty   <=#11'b0;
-                   end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_in   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_DEPTH_BITS  {1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_push  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_in   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_in  ==  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_in  +1'b1;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_out   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_DEPTH_BITS  {1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_pop  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_out   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_out  ==  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_out  +1'b1;
- 
-  always @( posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_clk  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_push  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo   [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_in  ]<=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_din  ;
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_push            or    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_in   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness_in   ={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_DEPTH  {1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness_in   [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_in  ]=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_push  ;
-       end
-  
-  always @(    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_pop            or    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_out   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness_out   ={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_DEPTH  {1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness_out   [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_out  ]=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_pop  ;
-       end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_DEPTH  {1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_push  |  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_pop  ) 
-              dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness   <=#1(  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness  &(~  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness_out  ))|  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness_in  ;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_next  =|  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_empty  =~  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_next  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_empty  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_empty  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout_empty  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_full  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_SINGLE   ? !  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout_empty  :&  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness  ;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_clk = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reset = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_push = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_push;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_pop = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_pop;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_din = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_AID;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_empty = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_empty;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_full = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_full;
-
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clk = dma_axi64_core0_dma_axi64_core0_axim_rd_clk;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_reset = dma_axi64_core0_dma_axi64_core0_axim_rd_reset;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_slverr = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_slverr;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_decerr = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_decerr;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_pre = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clr;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_last = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clr_last;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_full = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_full;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_AID = dma_axi64_core0_dma_axi64_core0_axim_rd_ARID;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_AVALID = dma_axi64_core0_dma_axi64_core0_axim_rd_ARVALID;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_AREADY = dma_axi64_core0_dma_axi64_core0_axim_rd_ARREADY;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_RESP = dma_axi64_core0_dma_axi64_core0_axim_rd_RRESP_d;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_RID = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_ID;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_VALID = dma_axi64_core0_dma_axi64_core0_axim_rd_RVALID_d;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_READY = dma_axi64_core0_dma_axi64_core0_axim_rd_RREADY;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_LAST = dma_axi64_core0_dma_axi64_core0_axim_rd_RLAST_d;
-
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_clk = dma_axi64_core0_gclk;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_reset = dma_axi64_core0_reset;
-assign dma_axi64_core0_load_wr = dma_axi64_core0_dma_axi64_core0_axim_rd_load_wr;
-assign dma_axi64_core0_load_wr_num = dma_axi64_core0_dma_axi64_core0_axim_rd_load_wr_num;
-assign dma_axi64_core0_load_wr_cycle = dma_axi64_core0_dma_axi64_core0_axim_rd_load_wr_cycle;
-assign dma_axi64_core0_load_wdata = dma_axi64_core0_dma_axi64_core0_axim_rd_load_wdata;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_joint_stall = dma_axi64_core0_joint_stall;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_joint_req = dma_axi64_core0_joint_req;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_line_cmd = dma_axi64_core0_rd_line_cmd;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_load_req_in_prog = dma_axi64_core0_load_req_in_prog;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_port = dma_axi64_core0_rd_cmd_port;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_ch_num = dma_axi64_core0_rd_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_burst_start = dma_axi64_core0_rd_burst_start;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_burst_addr = dma_axi64_core0_rd_burst_addr;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_burst_size = dma_axi64_core0_rd_burst_size;
-assign dma_axi64_core0_rd_cmd_pending = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_pending;
-assign dma_axi64_core0_rd_cmd_split = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_split;
-assign dma_axi64_core0_rd_cmd_line = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_line;
-assign dma_axi64_core0_rd_cmd_num = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_num;
-assign dma_axi64_core0_rd_cmd_full = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_full;
-assign dma_axi64_core0_ch_fifo_wr = dma_axi64_core0_dma_axi64_core0_axim_rd_ch_fifo_wr;
-assign dma_axi64_core0_ch_fifo_wdata = dma_axi64_core0_dma_axi64_core0_axim_rd_ch_fifo_wdata;
-assign dma_axi64_core0_ch_fifo_wsize = dma_axi64_core0_dma_axi64_core0_axim_rd_ch_fifo_wsize;
-assign dma_axi64_core0_ch_fifo_wr_num = dma_axi64_core0_dma_axi64_core0_axim_rd_ch_fifo_wr_num;
-assign dma_axi64_core0_rd_transfer_num = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_transfer_num;
-assign dma_axi64_core0_rd_transfer = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_transfer;
-assign dma_axi64_core0_rd_burst_cmd = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_burst_cmd;
-assign dma_axi64_core0_rd_clr_line = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_line;
-assign dma_axi64_core0_rd_clr_line_num = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_line_num;
-assign dma_axi64_core0_rd_slverr = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_slverr;
-assign dma_axi64_core0_rd_decerr = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_decerr;
-assign dma_axi64_core0_rd_clr = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr;
-assign dma_axi64_core0_rd_clr_load = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_load;
-assign dma_axi64_core0_rd_clr_last = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_last;
-assign dma_axi64_core0_rd_ch_num_resp = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_ch_num_resp;
-assign dma_axi64_core0_rd_page_cross = dma_axi64_core0_dma_axi64_core0_axim_rd_page_cross;
-assign dma_axi64_core0_ARADDR = dma_axi64_core0_dma_axi64_core0_axim_rd_ARADDR;
-assign dma_axi64_core0_rd_port_num = dma_axi64_core0_dma_axi64_core0_axim_rd_ARPORT;
-assign dma_axi64_core0_ARLEN = dma_axi64_core0_dma_axi64_core0_axim_rd_ARLEN;
-assign dma_axi64_core0_ARSIZE = dma_axi64_core0_dma_axi64_core0_axim_rd_ARSIZE;
-assign dma_axi64_core0_ARVALID = dma_axi64_core0_dma_axi64_core0_axim_rd_ARVALID;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_ARREADY = dma_axi64_core0_ARREADY;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_AWVALID = dma_axi64_core0_AWVALID;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_RDATA = dma_axi64_core0_RDATA;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_RRESP = dma_axi64_core0_RRESP;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_RLAST = dma_axi64_core0_RLAST;
-assign dma_axi64_core0_dma_axi64_core0_axim_rd_RVALID = dma_axi64_core0_RVALID;
-assign dma_axi64_core0_RREADY = dma_axi64_core0_dma_axi64_core0_axim_rd_RREADY_out;
-assign dma_axi64_core0_timeout_ar = dma_axi64_core0_dma_axi64_core0_axim_rd_axim_timeout_ar;
-assign dma_axi64_core0_timeout_num_ar = dma_axi64_core0_dma_axi64_core0_axim_rd_axim_timeout_num_ar;
- 
-  assign   dma_axi64_core0_rd_hold  =1'b0; 
-  assign   dma_axi64_core0_wr_hold  =1'b0;  
-  
-wire  dma_axi64_core0_dma_axi64_core0_channels_clk;
-wire  dma_axi64_core0_dma_axi64_core0_channels_reset;
-wire  dma_axi64_core0_dma_axi64_core0_channels_scan_en;
-wire  dma_axi64_core0_dma_axi64_core0_channels_pclk;
-wire  dma_axi64_core0_dma_axi64_core0_channels_clken;
-wire  dma_axi64_core0_dma_axi64_core0_channels_pclken;
-wire  dma_axi64_core0_dma_axi64_core0_channels_psel;
-wire  dma_axi64_core0_dma_axi64_core0_channels_penable;
-wire [10:0] dma_axi64_core0_dma_axi64_core0_channels_paddr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_pwrite;
-wire [31:0] dma_axi64_core0_dma_axi64_core0_channels_pwdata;
-wire [31:0] dma_axi64_core0_dma_axi64_core0_channels_prdata;
-wire  dma_axi64_core0_dma_axi64_core0_channels_pslverr;
-wire [31:1] dma_axi64_core0_dma_axi64_core0_channels_periph_tx_req;
-wire [31:1] dma_axi64_core0_dma_axi64_core0_channels_periph_tx_clr;
-wire [31:1] dma_axi64_core0_dma_axi64_core0_channels_periph_rx_req;
-wire [31:1] dma_axi64_core0_dma_axi64_core0_channels_periph_rx_clr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_rd_clr_valid;
-wire  dma_axi64_core0_dma_axi64_core0_channels_wr_clr_valid;
-wire  dma_axi64_core0_dma_axi64_core0_channels_rd_clr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_rd_clr_load;
-wire  dma_axi64_core0_dma_axi64_core0_channels_wr_clr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_rd_cmd_split;
-wire  dma_axi64_core0_dma_axi64_core0_channels_rd_cmd_line;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_rd_cmd_num;
-wire  dma_axi64_core0_dma_axi64_core0_channels_wr_cmd_split;
-wire  dma_axi64_core0_dma_axi64_core0_channels_wr_cmd_pending;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_wr_cmd_num;
-wire  dma_axi64_core0_dma_axi64_core0_channels_rd_clr_stall;
-wire  dma_axi64_core0_dma_axi64_core0_channels_wr_clr_stall;
-wire  dma_axi64_core0_dma_axi64_core0_channels_load_wr;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_load_wr_num;
-wire [1:0] dma_axi64_core0_dma_axi64_core0_channels_load_wr_cycle;
-wire [64-1:0] dma_axi64_core0_dma_axi64_core0_channels_load_wdata;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_rd_ch_num;
-wire  dma_axi64_core0_dma_axi64_core0_channels_load_req_in_prog;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_wr_ch_num;
-wire  dma_axi64_core0_dma_axi64_core0_channels_wr_last_cmd;
-wire  dma_axi64_core0_dma_axi64_core0_channels_rd_slverr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_rd_decerr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_wr_slverr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_wr_decerr;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_rd_ch_num_resp;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_wr_ch_num_resp;
-wire  dma_axi64_core0_dma_axi64_core0_channels_wr_clr_last;
-wire [8*1-1:0] dma_axi64_core0_dma_axi64_core0_channels_ch_int_all_proc;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_ch_start;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_ch_idle;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_ch_active;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_ch_rd_active;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_ch_wr_active;
-wire  dma_axi64_core0_dma_axi64_core0_channels_rd_line_cmd;
-wire  dma_axi64_core0_dma_axi64_core0_channels_wr_line_cmd;
-wire  dma_axi64_core0_dma_axi64_core0_channels_rd_go_next_line;
-wire  dma_axi64_core0_dma_axi64_core0_channels_wr_go_next_line;
-wire  dma_axi64_core0_dma_axi64_core0_channels_timeout_aw;
-wire  dma_axi64_core0_dma_axi64_core0_channels_timeout_w;
-wire  dma_axi64_core0_dma_axi64_core0_channels_timeout_ar;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_timeout_num_aw;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_timeout_num_w;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_timeout_num_ar;
-wire  dma_axi64_core0_dma_axi64_core0_channels_wdt_timeout;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_wdt_ch_num;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_wr_num;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_rd_transfer_num;
-wire  dma_axi64_core0_dma_axi64_core0_channels_rd_burst_start;
-wire  dma_axi64_core0_dma_axi64_core0_channels_rd_transfer;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_rd_transfer_size;
-wire  dma_axi64_core0_dma_axi64_core0_channels_rd_clr_line;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_rd_clr_line_num;
-wire  dma_axi64_core0_dma_axi64_core0_channels_fifo_rd;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_fifo_rsize;
-wire  dma_axi64_core0_dma_axi64_core0_channels_fifo_rd_valid;
-wire [64-1:0] dma_axi64_core0_dma_axi64_core0_channels_fifo_rdata;
-wire  dma_axi64_core0_dma_axi64_core0_channels_fifo_wr_ready;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_ch_rd_ready;
-wire [32-1:0] dma_axi64_core0_dma_axi64_core0_channels_rd_burst_addr;
-wire [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_rd_burst_size;
-wire [6-1:0] dma_axi64_core0_dma_axi64_core0_channels_rd_tokens;
-wire  dma_axi64_core0_dma_axi64_core0_channels_rd_cmd_port;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_rd_periph_delay;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd_num;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_wr_transfer_num;
-wire  dma_axi64_core0_dma_axi64_core0_channels_wr_burst_start;
-wire  dma_axi64_core0_dma_axi64_core0_channels_wr_transfer;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_wr_transfer_size;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_wr_next_size;
-wire  dma_axi64_core0_dma_axi64_core0_channels_wr_clr_line;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_wr_clr_line_num;
-wire  dma_axi64_core0_dma_axi64_core0_channels_fifo_wr;
-wire [64-1:0] dma_axi64_core0_dma_axi64_core0_channels_fifo_wdata;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_fifo_wsize;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_ch_wr_ready;
-wire [32-1:0] dma_axi64_core0_dma_axi64_core0_channels_wr_burst_addr;
-wire [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_wr_burst_size;
-wire [6-1:0] dma_axi64_core0_dma_axi64_core0_channels_wr_tokens;
-wire  dma_axi64_core0_dma_axi64_core0_channels_wr_cmd_port;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_wr_periph_delay;
-wire  dma_axi64_core0_dma_axi64_core0_channels_joint_mode;
-wire  dma_axi64_core0_dma_axi64_core0_channels_joint_remote;
-wire  dma_axi64_core0_dma_axi64_core0_channels_rd_page_cross;
-wire  dma_axi64_core0_dma_axi64_core0_channels_wr_page_cross;
-wire  dma_axi64_core0_dma_axi64_core0_channels_joint_in_prog;
-wire  dma_axi64_core0_dma_axi64_core0_channels_joint_not_in_prog;
-wire  dma_axi64_core0_dma_axi64_core0_channels_joint_mux_in_prog;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_ch_joint_req;
- 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_psel  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_pslverr  ; 
-   wire[32*8-1:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_prdata  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_end  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_in_prog  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_not_in_prog  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_mux_in_prog  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_page_cross  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_page_cross  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_load_wr  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_line  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_slverr  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_decerr  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_load  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_transfer  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_stall  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_cmd_split  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_cmd_line  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_line  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_slverr  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_decerr  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_last  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_load_req_in_prog  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_last_cmd  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_line_cmd  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_line_cmd  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_go_next_line  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_go_next_line  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_transfer  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_stall  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_cmd_split  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_aw  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_w  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_ar  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_wdt_timeout  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_start  ; 
-   wire[8*32-1:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_addr  ; 
-   wire[8*8-1:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_size  ; 
-   wire[8*6-1:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_tokens  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_port_num  ; 
-   wire[8*3-1:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_periph_delay  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_valid  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_start  ; 
-   wire[8*32-1:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_addr  ; 
-   wire[8*8-1:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_size  ; 
-   wire[8*6-1:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_tokens  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_port_num  ; 
-   wire[8*3-1:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_periph_delay  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_valid  ; 
-   wire[8*31-1:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_periph_rx_clr  ; 
-   wire[8*31-1:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_periph_tx_clr  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_wr  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd_valid  ; 
-   wire[8*64-1:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rdata  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_wr_ready  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_cmd_pending  ;  
-  
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_clk;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_reset;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_pclken;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_psel;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_penable;
-wire [10:8] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr;
-wire [31:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_prdata;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_pslverr;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_ch_psel;
-wire [32*8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_ch_prdata;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_ch_pslverr;
- 
-   wire[2:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr_sel  ; 
-   reg[2:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr_sel_d  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr_sel_d   <=#13'b000;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_psel  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_penable  )) 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr_sel_d   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr_sel  ;
-           else 
-             if ((~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_psel  )&  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_pclken  ) 
-                 dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr_sel_d   <=#13'b000;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr_sel  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr  [10:8];  
-  
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_ch_psel;
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_x  ;
-         endcase 
-       end
- 
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr_sel;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_psel;
-  
-  
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_sel;
-wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_ch_x;
-reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_prdata;
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_ch_x            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_sel   )
-       begin 
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  *0];
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  *1];
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  *2];
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  *3];
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  *4];
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  *5];
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  *6];
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  *7];
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH  -1:0];
-         endcase 
-       end
- 
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr_sel_d;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_ch_prdata;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_pslverr  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_ch_pslverr  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr_sel_d  ];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_clk = dma_axi64_core0_dma_axi64_core0_channels_pclk;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_reset = dma_axi64_core0_dma_axi64_core0_channels_reset;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_pclken = dma_axi64_core0_dma_axi64_core0_channels_pclken;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_psel = dma_axi64_core0_dma_axi64_core0_channels_psel;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_penable = dma_axi64_core0_dma_axi64_core0_channels_penable;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr = dma_axi64_core0_dma_axi64_core0_channels_paddr[10:8];
-assign dma_axi64_core0_dma_axi64_core0_channels_prdata = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_prdata;
-assign dma_axi64_core0_dma_axi64_core0_channels_pslverr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_pslverr;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_psel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_ch_psel;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_ch_prdata = dma_axi64_core0_dma_axi64_core0_channels_ch_prdata;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_ch_pslverr = dma_axi64_core0_dma_axi64_core0_channels_ch_pslverr;
-  
-  
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_rd_valid;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_fifo_rd_valid;
-wire [8*64-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_rdata;
-wire [64-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_fifo_rdata;
-wire [8*31-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_periph_rx_clr;
-wire [30:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_periph_rx_clr;
-wire [8*31-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_periph_tx_clr;
-wire [30:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_periph_tx_clr;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_page_cross;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_page_cross;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_page_cross;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_page_cross;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_aw;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_w;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_ar;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_num_aw;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_num_w;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_num_ar;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wdt_timeout;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wdt_ch_num;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_timeout_aw;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_timeout_w;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_timeout_ar;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wdt_timeout;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_joint_in_prog;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_joint_not_in_prog;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_joint_mux_in_prog;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_joint_in_prog;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_joint_not_in_prog;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_joint_mux_in_prog;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_cmd_pending;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_cmd_pending;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_cmd_num;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_load_req_in_prog;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_line_cmd;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_go_next_line;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_burst_start;
-wire [32-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_burst_addr;
-wire [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_burst_size;
-wire [6-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_tokens;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_cmd_port;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_periph_delay;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_clr_valid;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_cmd_split;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_cmd_line;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_clr_stall;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_load_req_in_prog;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_line_cmd;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_go_next_line;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_burst_start;
-wire [8*32-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_burst_addr;
-wire [8*8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_burst_size;
-wire [8*6-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_tokens;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_port_num;
-wire [8*3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_periph_delay;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_clr_valid;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_cmd_split;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_cmd_line;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_clr_stall;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_load_wr_num;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_load_wr;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_load_wr;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_wr_num;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_transfer_num;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_clr_line_num;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_transfer;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_clr_line;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_fifo_wr;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_transfer;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_clr_line;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_wr;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num_resp;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_slverr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_decerr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_clr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_clr_load;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_slverr;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_decerr;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_clr;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_clr_load;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_cmd_num;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_last_cmd;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_line_cmd;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_go_next_line;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_burst_start;
-wire [32-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_burst_addr;
-wire [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_burst_size;
-wire [6-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_tokens;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_cmd_port;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_periph_delay;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_clr_valid;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_cmd_split;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_clr_stall;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_last_cmd;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_line_cmd;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_go_next_line;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_burst_start;
-wire [8*32-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_burst_addr;
-wire [8*8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_burst_size;
-wire [8*6-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_tokens;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_port_num;
-wire [8*3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_periph_delay;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_clr_valid;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_cmd_split;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_clr_stall;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_rd_num;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_transfer_num;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_clr_line_num;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_transfer;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_clr_line;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_fifo_rd;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_wr_ready;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_transfer;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_clr_line;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_rd;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_fifo_wr_ready;
-wire [2:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num_resp;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_slverr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_decerr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_clr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_clr_last;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_slverr;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_decerr;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_clr_last;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_clr;
-  
-  
-wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_ch_x;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_x;
-wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_ch_x;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_x;
-wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_ch_x;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_x;
-wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_ch_x;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_x;
-wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_ch_x;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_x;
-wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_ch_x;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_x;
-wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_ch_x;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_x;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_x  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  *0]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  *1]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  *2]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  *3]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  *4]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  *5]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  *6]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_WIDTH  *7];
-  
-  
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_x  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  *0]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  *1]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  *2]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  *3]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  *4]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  *5]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  *6]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_WIDTH  *7];
-  
-  
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_x  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  *0]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  *1]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  *2]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  *3]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  *4]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  *5]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  *6]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_WIDTH  *7];
-  
-  
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_x  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  *0]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  *1]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  *2]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  *3]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  *4]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  *5]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  *6]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_WIDTH  *7];
-  
-  
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_sel;
-wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_ch_x;
-reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_periph_delay;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_sel;
-wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_ch_x;
-reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_periph_delay;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_sel;
-wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_ch_x;
-reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_clr_valid;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_sel;
-wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_ch_x;
-reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_clr_valid;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_sel;
-wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_ch_x;
-reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_load_req_in_prog;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_sel;
-wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_ch_x;
-reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_burst_addr;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_sel;
-wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_ch_x;
-reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_burst_size;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_sel;
-wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_ch_x;
-reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_tokens;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_sel;
-wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_ch_x;
-reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_tokens;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_sel;
-wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_ch_x;
-reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_fifo_wr_ready;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_sel;
-wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_ch_x;
-reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_last_cmd;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_sel;
-wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_ch_x;
-reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_burst_addr;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_sel;
-wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_ch_x;
-reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_burst_size;
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_ch_x            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_sel   )
-       begin 
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  *0];
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  *1];
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  *2];
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  *3];
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  *4];
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  *5];
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  *6];
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  *7];
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH  -1:0];
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_ch_x            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_sel   )
-       begin 
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  *0];
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  *1];
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  *2];
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  *3];
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  *4];
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  *5];
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  *6];
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  *7];
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH  -1:0];
-         endcase 
-       end
- 
-  
-  
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_timeout_aw;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_timeout_w;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_timeout_ar;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wdt_timeout;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_cmd_pending;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_burst_start;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_load_wr;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_transfer;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_slverr;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_decerr;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_decerr;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_cmd_split;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_cmd_split;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_page_cross;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_page_cross;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_clr;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_clr_load;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_rd;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_burst_start;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_transfer;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_slverr;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_clr;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_clr_last;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_sel;
-wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_x;
-reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_wr;
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_x  ;
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_x  ;
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_x  ;
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_x  ;
-         endcase 
-       end
- 
-  
-  
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_x  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  *0]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  *1]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  *2]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  *3]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  *4]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  *5]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  *6]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_WIDTH  *7];
-  
-  
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_x  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  *0]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  *1]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  *2]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  *3]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  *4]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  *5]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  *6]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_WIDTH  *7];
-  
-  
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_x  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  *0]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  *1]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  *2]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  *3]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  *4]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  *5]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  *6]|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_WIDTH  *7];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_rd_valid;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_fifo_rd_valid = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_2_x;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_rdata;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_fifo_rdata = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_3_x;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_periph_rx_clr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_periph_rx_clr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_4_x;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_periph_tx_clr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_periph_tx_clr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_5_x;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_joint_in_prog;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_joint_in_prog = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_55_x;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_joint_not_in_prog;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_joint_not_in_prog = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_56_x;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_joint_mux_in_prog;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_joint_mux_in_prog = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_57_x;
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_x  ;
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_x  ;
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_x  ;
-         endcase 
-       end
- 
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_clr_line  ='d0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_cmd_line  ='d0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_line_cmd  ='d0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_go_next_line  ='d0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_clr_stall  ='d0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_clr_stall  ='d0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_clr_line  ='d0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_line_cmd  ='d0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_go_next_line  ='d0;  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_ch_x            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_sel   )
-       begin 
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  *0];
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  *1];
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  *2];
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  *3];
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  *4];
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  *5];
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  *6];
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  *7];
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH  -1:0];
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_ch_x            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_sel   )
-       begin 
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  *0];
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  *1];
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  *2];
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  *3];
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  *4];
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  *5];
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  *6];
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  *7];
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH  -1:0];
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_x  ;
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_x  ;
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_x  ;
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_x  ;
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_x  ;
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_x  ;
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_x  ;
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_x  ;
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_x  ;
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_x  ;
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_x  ;
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_ch_x            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_sel   )
-       begin 
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  *0];
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  *1];
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  *2];
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  *3];
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  *4];
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  *5];
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  *6];
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  *7];
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH  -1:0];
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_ch_x            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_sel   )
-       begin 
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  *0];
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  *1];
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  *2];
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  *3];
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  *4];
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  *5];
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  *6];
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  *7];
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH  -1:0];
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_ch_x            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_sel   )
-       begin 
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  *0];
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  *1];
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  *2];
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  *3];
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  *4];
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  *5];
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  *6];
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  *7];
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH  -1:0];
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_ch_x            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_sel   )
-       begin 
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  *0];
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  *1];
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  *2];
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  *3];
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  *4];
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  *5];
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  *6];
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  *7];
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH  -1:0];
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_ch_x            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_sel   )
-       begin 
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  *0];
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  *1];
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  *2];
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  *3];
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  *4];
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  *5];
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  *6];
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  *7];
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH  -1:0];
-         endcase 
-       end
- 
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_cmd_port  ='d0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_cmd_port  ='d0;  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_ch_x            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_sel   )
-       begin 
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  *0];
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  *1];
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  *2];
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  *3];
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  *4];
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  *5];
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  *6];
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  *7];
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH  -1:0];
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_x  ;
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_x  ;
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_x  ;
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_x  ;
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_x  ;
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_x   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_ch_x   ={8*  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  {1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  *0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_x  ;
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  *1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_x  ;
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  *2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_x  ;
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  *3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_x  ;
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  *4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_x  ;
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  *5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_x  ;
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  *6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_x  ;
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  *7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_x  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_ch_x   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH  -1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_x  ;
-         endcase 
-       end
- 
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_num_aw;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_aw;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_num_w;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_w;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_num_ar;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_ar;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wdt_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wdt_timeout;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_cmd_pending;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_burst_start;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_load_wr_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_load_wr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_transfer_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_transfer;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num_resp;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_slverr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num_resp;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_decerr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num_resp;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_decerr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_cmd_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_cmd_split;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_cmd_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_cmd_split;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_page_cross;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_page_cross;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num_resp;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_clr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num_resp;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_clr_load;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_rd_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_fifo_rd;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_burst_start;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_transfer_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_transfer;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num_resp;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_slverr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num_resp;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_clr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num_resp;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_clr_last;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_wr_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_fifo_wr;
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_ch_x            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_sel   )
-       begin 
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  *0];
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  *1];
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  *2];
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  *3];
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  *4];
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  *5];
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  *6];
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  *7];
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH  -1:0];
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_ch_x            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_sel   )
-       begin 
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  *0];
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  *1];
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  *2];
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  *3];
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  *4];
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  *5];
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  *6];
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  *7];
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH  -1:0];
-         endcase 
-       end
- 
-  
-  
- 
-  always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_ch_x            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_sel   )
-       begin 
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_sel  )
-          3 'd0: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  *0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  *0];
-          3 'd1: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  *1:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  *1];
-          3 'd2: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  *2:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  *2];
-          3 'd3: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  *3:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  *3];
-          3 'd4: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  *4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  *4];
-          3 'd5: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  *5:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  *5];
-          3 'd6: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  *6:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  *6];
-          3 'd7: 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  -1+  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  *7:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  *7];
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_x   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_ch_x  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH  -1:0];
-         endcase 
-       end
- 
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_periph_delay;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_periph_delay;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_clr_valid;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_clr_valid;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_load_req_in_prog;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_burst_addr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_burst_size;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_tokens;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_tokens;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_rd_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_wr_ready;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_last_cmd;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_burst_addr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_burst_size;
-
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_rd_valid = dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd_valid;
-assign dma_axi64_core0_dma_axi64_core0_channels_fifo_rd_valid = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_fifo_rd_valid;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_rdata = dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rdata;
-assign dma_axi64_core0_dma_axi64_core0_channels_fifo_rdata = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_fifo_rdata;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_periph_rx_clr = dma_axi64_core0_dma_axi64_core0_channels_ch_periph_rx_clr;
-assign dma_axi64_core0_dma_axi64_core0_channels_periph_rx_clr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_periph_rx_clr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_periph_tx_clr = dma_axi64_core0_dma_axi64_core0_channels_ch_periph_tx_clr;
-assign dma_axi64_core0_dma_axi64_core0_channels_periph_tx_clr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_periph_tx_clr;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_rd_page_cross = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_page_cross;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wr_page_cross = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_page_cross;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_page_cross = dma_axi64_core0_dma_axi64_core0_channels_rd_page_cross;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_page_cross = dma_axi64_core0_dma_axi64_core0_channels_wr_page_cross;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_aw = dma_axi64_core0_dma_axi64_core0_channels_timeout_aw;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_w = dma_axi64_core0_dma_axi64_core0_channels_timeout_w;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_ar = dma_axi64_core0_dma_axi64_core0_channels_timeout_ar;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_num_aw = dma_axi64_core0_dma_axi64_core0_channels_timeout_num_aw;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_num_w = dma_axi64_core0_dma_axi64_core0_channels_timeout_num_w;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_num_ar = dma_axi64_core0_dma_axi64_core0_channels_timeout_num_ar;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wdt_timeout = dma_axi64_core0_dma_axi64_core0_channels_wdt_timeout;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wdt_ch_num = dma_axi64_core0_dma_axi64_core0_channels_wdt_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_aw = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_timeout_aw;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_w = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_timeout_w;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_ar = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_timeout_ar;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wdt_timeout = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wdt_timeout;
-assign dma_axi64_core0_dma_axi64_core0_channels_joint_in_prog = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_joint_in_prog;
-assign dma_axi64_core0_dma_axi64_core0_channels_joint_not_in_prog = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_joint_not_in_prog;
-assign dma_axi64_core0_dma_axi64_core0_channels_joint_mux_in_prog = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_joint_mux_in_prog;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_joint_in_prog = dma_axi64_core0_dma_axi64_core0_channels_ch_joint_in_prog;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_joint_not_in_prog = dma_axi64_core0_dma_axi64_core0_channels_ch_joint_not_in_prog;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_joint_mux_in_prog = dma_axi64_core0_dma_axi64_core0_channels_ch_joint_mux_in_prog;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_cmd_pending = dma_axi64_core0_dma_axi64_core0_channels_wr_cmd_pending;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wr_cmd_pending = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_cmd_pending;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num = dma_axi64_core0_dma_axi64_core0_channels_rd_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_cmd_num = dma_axi64_core0_dma_axi64_core0_channels_rd_cmd_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_load_req_in_prog = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_load_req_in_prog;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_line_cmd = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_line_cmd;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_go_next_line = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_go_next_line;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_burst_start = dma_axi64_core0_dma_axi64_core0_channels_rd_burst_start;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_burst_addr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_burst_addr;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_burst_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_burst_size;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_tokens = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_tokens;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_cmd_port = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_cmd_port;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_periph_delay = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_periph_delay;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_clr_valid = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_clr_valid;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_cmd_split = dma_axi64_core0_dma_axi64_core0_channels_rd_cmd_split;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_cmd_line = dma_axi64_core0_dma_axi64_core0_channels_rd_cmd_line;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_clr_stall = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_clr_stall;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_load_req_in_prog = dma_axi64_core0_dma_axi64_core0_channels_ch_load_req_in_prog;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_line_cmd = dma_axi64_core0_dma_axi64_core0_channels_ch_rd_line_cmd;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_go_next_line = dma_axi64_core0_dma_axi64_core0_channels_ch_rd_go_next_line;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_start = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_burst_start;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_burst_addr = dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_addr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_burst_size = dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_size;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_tokens = dma_axi64_core0_dma_axi64_core0_channels_ch_rd_tokens;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_port_num = dma_axi64_core0_dma_axi64_core0_channels_ch_rd_port_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_periph_delay = dma_axi64_core0_dma_axi64_core0_channels_ch_rd_periph_delay;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_clr_valid = dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_valid;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_rd_cmd_split = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_cmd_split;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_rd_cmd_line = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_cmd_line;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_clr_stall = dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_stall;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_load_wr_num = dma_axi64_core0_dma_axi64_core0_channels_load_wr_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_load_wr = dma_axi64_core0_dma_axi64_core0_channels_load_wr;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_load_wr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_load_wr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_wr_num = dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_wr_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_transfer_num = dma_axi64_core0_dma_axi64_core0_channels_rd_transfer_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_clr_line_num = dma_axi64_core0_dma_axi64_core0_channels_rd_clr_line_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_transfer = dma_axi64_core0_dma_axi64_core0_channels_rd_transfer;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_clr_line = dma_axi64_core0_dma_axi64_core0_channels_rd_clr_line;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_fifo_wr = dma_axi64_core0_dma_axi64_core0_channels_fifo_wr;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_rd_transfer = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_transfer;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_line = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_clr_line;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_wr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_wr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num_resp = dma_axi64_core0_dma_axi64_core0_channels_rd_ch_num_resp;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_slverr = dma_axi64_core0_dma_axi64_core0_channels_rd_slverr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_decerr = dma_axi64_core0_dma_axi64_core0_channels_rd_decerr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_clr = dma_axi64_core0_dma_axi64_core0_channels_rd_clr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_clr_load = dma_axi64_core0_dma_axi64_core0_channels_rd_clr_load;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_rd_slverr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_slverr;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_rd_decerr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_decerr;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_clr;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_load = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_clr_load;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num = dma_axi64_core0_dma_axi64_core0_channels_wr_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_cmd_num = dma_axi64_core0_dma_axi64_core0_channels_wr_cmd_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_last_cmd = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_last_cmd;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_line_cmd = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_line_cmd;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_go_next_line = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_go_next_line;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_burst_start = dma_axi64_core0_dma_axi64_core0_channels_wr_burst_start;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_burst_addr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_burst_addr;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_burst_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_burst_size;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_tokens = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_tokens;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_cmd_port = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_cmd_port;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_periph_delay = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_periph_delay;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_clr_valid = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_clr_valid;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_cmd_split = dma_axi64_core0_dma_axi64_core0_channels_wr_cmd_split;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_clr_stall = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_clr_stall;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_last_cmd = dma_axi64_core0_dma_axi64_core0_channels_ch_wr_last_cmd;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_line_cmd = dma_axi64_core0_dma_axi64_core0_channels_ch_wr_line_cmd;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_go_next_line = dma_axi64_core0_dma_axi64_core0_channels_ch_wr_go_next_line;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_start = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_burst_start;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_burst_addr = dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_addr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_burst_size = dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_size;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_tokens = dma_axi64_core0_dma_axi64_core0_channels_ch_wr_tokens;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_port_num = dma_axi64_core0_dma_axi64_core0_channels_ch_wr_port_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_periph_delay = dma_axi64_core0_dma_axi64_core0_channels_ch_wr_periph_delay;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_clr_valid = dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_valid;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wr_cmd_split = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_cmd_split;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_clr_stall = dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_stall;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_rd_num = dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_transfer_num = dma_axi64_core0_dma_axi64_core0_channels_wr_transfer_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_clr_line_num = dma_axi64_core0_dma_axi64_core0_channels_wr_clr_line_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_transfer = dma_axi64_core0_dma_axi64_core0_channels_wr_transfer;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_clr_line = dma_axi64_core0_dma_axi64_core0_channels_wr_clr_line;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_fifo_rd = dma_axi64_core0_dma_axi64_core0_channels_fifo_rd;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_wr_ready = dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_wr_ready;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wr_transfer = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_transfer;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_line = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_clr_line;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_rd;
-assign dma_axi64_core0_dma_axi64_core0_channels_fifo_wr_ready = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_fifo_wr_ready;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num_resp = dma_axi64_core0_dma_axi64_core0_channels_wr_ch_num_resp;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_slverr = dma_axi64_core0_dma_axi64_core0_channels_wr_slverr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_decerr = dma_axi64_core0_dma_axi64_core0_channels_wr_decerr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_clr = dma_axi64_core0_dma_axi64_core0_channels_wr_clr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_clr_last = dma_axi64_core0_dma_axi64_core0_channels_wr_clr_last;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wr_slverr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_slverr;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wr_decerr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_decerr;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_last = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_clr_last;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_clr;
-  
-  
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_scan_en;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_pclk;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clken;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_pclken;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_psel;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_penable;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_paddr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_pwrite;
-wire [31:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_pwdata;
-wire [31:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_prdata;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_pslverr;
-wire [31:1] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_periph_tx_req;
-wire [31:1] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_periph_tx_clr;
-wire [31:1] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_periph_rx_req;
-wire [31:1] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_periph_rx_clr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_cmd_split;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_cmd_line;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_line;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_load;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_slverr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_decerr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_cmd_split;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_cmd_pending;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_line;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_last;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_slverr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_decerr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_wr;
-wire [1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_wr_cycle;
-wire [64-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_wdata;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_req_in_prog;
-wire [1-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_int_all_proc;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_start;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_idle;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_active;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_rd_active;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_wr_active;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_last_cmd;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_line_cmd;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_line_cmd;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_go_next_line;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_go_next_line;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_ready;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_start;
-wire [32-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_addr;
-wire [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_size;
-wire [6-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_tokens;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_port_num;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_periph_delay;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_valid;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_transfer;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_transfer_size;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_stall;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_ready;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_start;
-wire [32-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_addr;
-wire [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_size;
-wire [6-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_tokens;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_port_num;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_periph_delay;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_valid;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_transfer;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_transfer_size;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_next_size;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_stall;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_incr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_timeout_aw;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_timeout_w;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_timeout_ar;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wdt_timeout;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_wr;
-wire [64-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_wdata;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_wsize;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_rd;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_rsize;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_rd_valid;
-wire [64-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_rdata;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_wr_ready;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_mode;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_remote;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_page_cross;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_page_cross;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_in_prog;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_not_in_prog;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_mux_in_prog;
- 
-   wire[32-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_addr  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_in_prog  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_req_in_prog  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_update  ; 
-   wire[32-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_start_addr  ; 
-   wire[32-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_start_addr  ; 
-   wire[10-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_x_size  ; 
-   wire[10-8-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_y_size  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_block  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint  ; 
-   wire[12-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_frame_width  ; 
-   wire[3-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_width_align  ; 
-   wire[3-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_periph_delay  ; 
-   wire[3-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_periph_delay  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_periph_block  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_periph_block  ; 
-   wire[6-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_tokens  ; 
-   wire[6-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_tokens  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_port_num  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_port_num  ; 
-   wire[4-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_outs_max  ; 
-   wire[4-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_outs_max  ; 
-   wire[12-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_wait_limit  ; 
-   wire[12-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_wait_limit  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_incr  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_incr  ; 
-   wire[8-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_max_size  ; 
-   wire[8-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_max_size  ; 
-   wire[4:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_periph_num  ; 
-   wire[4:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_periph_num  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_outstanding  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_outstanding  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_retry_wait  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_rd_active  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_wr_active  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_in_prog  ; 
-   wire[1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_end_swap  ; 
-   wire[10-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_x_offset  ; 
-   wire[10-8-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_y_offset  ; 
-   wire[10-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_x_remain  ; 
-   wire[10-8-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_remain  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_ch_end  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_go_next_line  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_line_empty  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_empty  ; 
-   wire[3-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_align  ; 
-   wire[10-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_x_offset  ; 
-   wire[10-8-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_y_offset  ; 
-   wire[10-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_x_remain  ; 
-   wire[10-8-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_remain  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_ch_end  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_go_next_line  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_line_empty  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_empty  ; 
-   wire[3-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_align  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_ch_end_pre  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_ch_end_reg  ; 
-   wire[5:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_gap  ; 
-   wire[5:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_fullness  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_cmd_outs  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_outs  ; 
-   wire[4-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_outs  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_outs_empty  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_outs_empty  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_stall  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_timeout_rresp  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_cmd_outs  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_outs  ; 
-   wire[4-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_outs  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_outs_empty  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_stall  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_stall_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_timeout_wresp  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_last  ; 
-   wire[32-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_addr  ; 
-   wire[8-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_size  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_ready  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_ready  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_flush  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_burst_req  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_last  ; 
-   wire[32-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_addr  ; 
-   wire[8-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_size  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_ready  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_single  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_ready  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_flush  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_line_req  ; 
-   wire[31:1]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_periph_rx_clr  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_periph_ready  ; 
-   wire[31:1]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_periph_tx_clr  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_periph_ready  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_wait_ready  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_wait_ready  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_wr_ready  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_overflow  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_underflow  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_block_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_block  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_valid  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_block_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_block  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_valid  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_mux  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_cmd_line_d  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_stall  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_stall  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_allow_line_cmd  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_cmd  ; 
-   wire[4:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_timeout_bus  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_flush  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_page_cross  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_cross_reg  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_cross  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_not_in_prog  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_not_in_prog  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_not_in_prog  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_in_prog  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_in_prog  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_in_prog  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_outs_d_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_outs_d  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_outs_d_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_outs_d  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_d  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_d  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_access_port0_mux  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_access_port1_mux  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_idle_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk_en  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_gclk  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_active  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_in_prog  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_in_prog  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_outs_empty  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_outs_empty  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_outs_empty  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_outs_d_pre  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_outs  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_start  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_outs_d_pre  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_outs  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_start  );  
-  
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_clk;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_reset;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_din;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_dout;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_clk;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_reset;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_din;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_dout;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_clk;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_reset;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_din;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_dout;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_clk;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_reset;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_din;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_dout;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_clk;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_reset;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_din;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_dout;
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_DELAY  -1];
-  
-  
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_DELAY  -1];
-  
-  
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_DELAY  -1];
-  
-  
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_DELAY  -1];
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_not_in_prog   <=#11'b0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_update  ) 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_not_in_prog   <=#11'b0;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_start  ) 
-                 dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_not_in_prog   <=#1(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_req  );
-              else 
-                if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_outs_empty  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_outs_d  ) 
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_not_in_prog   <=#11'b0;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_not_in_prog   <=#11'b0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_update  ) 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_not_in_prog   <=#11'b0;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_start  ) 
-                 dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_not_in_prog   <=#1(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_req  );
-              else 
-                if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_outs_empty  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_outs_d  ) 
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_not_in_prog   <=#11'b0;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_in_prog   <=#11'b0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_update  ) 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_in_prog   <=#11'b0;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_start  ) 
-                 dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_in_prog   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_req  ;
-              else 
-                if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_outs_empty  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_outs_d  ) 
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_in_prog   <=#11'b0;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_in_prog   <=#11'b0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_update  ) 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_in_prog   <=#11'b0;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_start  ) 
-                 dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_in_prog   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_req  ;
-              else 
-                if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_outs_empty  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_outs_d  ) 
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_in_prog   <=#11'b0;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_cross_reg   <=#11'b0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_update  ) 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_cross_reg   <=#11'b0;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_page_cross  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint  ) 
-                 dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_cross_reg   <=#11'b1;
-              else 
-                if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_not_in_prog  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_outs_empty  ) 
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_cross_reg   <=#11'b0;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_cross  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_cross_reg  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_page_cross  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_page_cross  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_page_cross  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_in_prog  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_in_prog  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_in_prog  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_not_in_prog  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_not_in_prog  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_not_in_prog  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_access_port0_mux  =((  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_port_num  ==1'b0)|((  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_port_num  ==1'b0)))&0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_access_port1_mux  =((  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_port_num  ==1'b1)|((  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_port_num  ==1'b1)))&0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_mux_in_prog  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_in_prog  &(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_access_port0_mux  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_access_port1_mux  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_req  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_ready  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_ready  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_cross  )&(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_req_in_prog  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_flush  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_flush  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_flush  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_block  =1'b1; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_block  =1'b1; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_mux  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_stall  =1'b0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_stall  =1'b0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_allow_line_cmd  =1'b0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_line_cmd  =1'b0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_line_cmd  =1'b0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_valid  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_block  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_retry_wait  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_valid  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_block  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_retry_wait  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_ready  =(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_stall  )&(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_stall  )&  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_rd_active  &(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_periph_ready  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_req_in_prog  )&  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_wait_ready  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_ready  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_ready  =(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_stall  )&(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_stall  )&  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_wr_active  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_periph_ready  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_wait_ready  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_ready  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_last_cmd  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_empty  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_cmd  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_req_in_prog  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_start  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_cmd_outs  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_start  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_cmd_split  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_cmd_outs  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_start  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_cmd_split  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_outs  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_load  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_outs  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_timeout_bus  ={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_timeout_aw  ,  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_timeout_w  ,{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_timeout_wresp  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_timeout_aw  )},  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_timeout_ar  ,{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_timeout_rresp  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_timeout_ar  )}}; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk_en  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_active  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_update  |(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_outs_empty  )|(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_wait_ready  )|(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_wait_ready  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_idle_pre  =!  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk_en  ;  
-  
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_DELAY  -1];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_reset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_din = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_outs_d_pre;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_outs_d = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_dout;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_reset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_din = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_outs_d_pre;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_outs_d = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_dout;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_reset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_din = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_d = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_dout;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_reset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_din = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_d = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_dout;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_reset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_din = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_idle_pre;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_idle = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_dout;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_gclk  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk  ;  
-  
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pclken;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_psel;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_penable;
-wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_paddr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwrite;
-wire [31:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata;
-reg [31:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_prdata;
-reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_pslverr;
-wire [4:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_timeout_bus;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wdt_timeout;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_start;
-wire [32-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_addr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_in_prog;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_req_in_prog;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr;
-wire [1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_cycle;
-wire [64-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wdata;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_cmd;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_end;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_end;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_clr_last;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_slverr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_decerr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_slverr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_decerr;
-wire [1-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_all_proc;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_rd_active;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_wr_active;
-reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_in_prog = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_in_prog;
-wire [10-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_x_offset;
-wire [10-8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_y_offset;
-wire [10-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_x_offset;
-wire [10-8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_y_offset;
-wire [5:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_fullness;
-wire [5:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_gap;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_fifo_overflow;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_fifo_underflow;
-reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_update;
-reg [32-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_start_addr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_start_addr;
-reg [32-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_start_addr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_start_addr;
-wire [10-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_x_size;
-wire [10-8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_y_size;
-wire [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size;
-wire [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_burst_max_size;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_block;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_line_cmd;
-wire [12-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_frame_width;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_width_align;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_delay;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_block;
-wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_delay;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_block;
-wire [6-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_tokens;
-wire [6-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_tokens;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_port_num;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_port_num;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outs_max;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outs_max;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outs;
-wire [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outs;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_outs_empty;
-wire [12-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_wait_limit;
-wire [12-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_wait_limit;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_incr;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_incr;
-wire [4:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_num;
-wire [4:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_num;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outstanding;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outstanding;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_retry_wait;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_mode;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_remote;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_cross;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_page_cross;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_flush;
-wire [1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_end_swap;
- 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpaddr  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpread  ; 
-   reg[31:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_enable  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_in_prog  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_in_prog  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_in_prog_reg  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_req_in_prog_reg  ; 
-   reg[10-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_buff_size  ; 
-   wire[10-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_x_size  ; 
-   wire[10-8-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_y_size  ; 
-   reg[12-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_frame_width_reg  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_block_reg  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_reg  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_simple_mem  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_mux  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_auto_retry_reg  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_auto_retry  ; 
-   reg[1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_end_swap_reg  ; 
-   wire[8-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size_rd  ; 
-   wire[8-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size_pre  ; 
-   reg[8-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size_reg  ; 
-   reg[3-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_delay_reg  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_block_reg  ; 
-   reg[6-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_tokens_reg  ; 
-   reg[4-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outs_max_reg  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_port_num_reg  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_port_num_reg  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_port_num_cfg  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_port_num  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outstanding_reg  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outstanding_cfg  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_incr_reg  ; 
-   reg[4:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_num_reg  ; 
-   reg[12-1:4]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_wait_limit_reg  ; 
-   wire[8-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_burst_max_size_rd  ; 
-   wire[8-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_burst_max_size_pre  ; 
-   reg[8-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_burst_max_size_reg  ; 
-   reg[3-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_delay_reg  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_block_reg  ; 
-   reg[6-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_tokens_reg  ; 
-   reg[4-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outs_max_reg  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_port_num_reg  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outstanding_reg  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outstanding_cfg  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_incr_reg  ; 
-   reg[4:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_num_reg  ; 
-   reg[12-1:4]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_wait_limit_reg  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_allow_full_fifo  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_allow_full_fifo  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_full_fifo  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_full_burst  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_joint_burst  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_burst_max_size_update_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_burst_max_size_update  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_set_int_reg  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_last_reg  ; 
-   reg[32-1:2]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_next_addr_reg  ; 
-   reg[12-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_counter_reg  ; 
-   reg[4-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_counter_reg  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_set_int  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_last  ; 
-   wire[32-1:2]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_next_addr  ; 
-   wire[12-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_counter  ; 
-   wire[4-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_counter  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end_set  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end_clear  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end_int  ; 
-   wire[2:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_proc_num  ; 
-   reg[2:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_proc_num_reg  ; 
-   wire[13-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_bus  ; 
-   wire[13-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_rawstat  ; 
-   reg[13-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_enable  ; 
-   wire[13-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_status  ; 
-   wire[7:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_all_proc_bus  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_cmd_line0  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_cmd_line1  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_cmd_line2  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_cmd_line3  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_static_line0  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_static_line1  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_static_line2  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_static_line3  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_static_line4  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_enable  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_start  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_int_rawstat  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_int_clear  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_int_enable  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_frame_width  ; 
-   reg[31:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_line0  ; 
-   reg[31:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_line1  ; 
-   reg[31:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_line2  ; 
-   reg[31:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_line3  ; 
-   reg[31:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line0  ; 
-   reg[31:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line1  ; 
-   reg[31:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line2  ; 
-   reg[31:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line3  ; 
-   reg[31:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line4  ; 
-   reg[31:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_restrict  ; 
-   reg[31:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_rd_offsets  ; 
-   reg[31:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_wr_offsets  ; 
-   reg[31:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_fifo_fullness  ; 
-   reg[31:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_outs  ; 
-   reg[31:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_enable  ; 
-   reg[31:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_active  ; 
-   reg[31:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_counter  ; 
-   reg[31:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_int_rawstat  ; 
-   reg[31:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_int_enable  ; 
-   reg[31:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_int_status  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_cycle0  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_cycle1  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_cycle2  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_cycle3  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr0  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr1  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr2  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr3  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_last  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_req  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_timeout_aw  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_timeout_w  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_timeout_b  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_timeout_ar  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_timeout_r  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_retry_wait_pre  ; 
-   reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_retry_wait_reg  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_retry_wait  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_retry  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update_pre  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update_d  ; 
-   wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_int  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpaddr  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_paddr  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_psel  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_penable  )&  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwrite  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpread  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_psel  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_penable  )&(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwrite  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_cmd_line0  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpaddr  ==  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CMD_LINE0  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_cmd_line1  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpaddr  ==  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CMD_LINE1  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_cmd_line2  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpaddr  ==  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CMD_LINE2  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_cmd_line3  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpaddr  ==  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CMD_LINE3  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_static_line0  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpaddr  ==  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_STATIC_LINE0  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_static_line1  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpaddr  ==  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_STATIC_LINE1  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_static_line2  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpaddr  ==  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_STATIC_LINE2  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_static_line3  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpaddr  ==  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_STATIC_LINE3  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_static_line4  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpaddr  ==  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_STATIC_LINE4  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_enable  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpaddr  ==  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CH_ENABLE  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_start  =(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpaddr  ==  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CH_START  )|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_start  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_int_rawstat  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpaddr  ==  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_INT_RAWSTAT  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_int_clear  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpaddr  ==  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_INT_CLEAR  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_int_enable  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpaddr  ==  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_INT_ENABLE  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_cycle0  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_cycle  ==2'd0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_cycle1  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_cycle  ==2'd1; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_cycle2  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_cycle  ==2'd2; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_cycle3  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_cycle  ==2'd3; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr0  =0 ?   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_cycle0  :  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_cycle0  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr1  =0 ?   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_cycle1  :  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_cycle0  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr2  =0 ?   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_cycle2  :  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_cycle1  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr3  =0 ?   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_cycle3  :  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_cycle1  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_last  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr3  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-          begin  
-             dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_start_addr   <=#1{32{1'b0}};
-          end 
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_cmd_line0  )
-             begin  
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_start_addr   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [32-1:0];
-             end 
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr0  )
-                begin  
-                   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_start_addr   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wdata  [32-1:0];
-                end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-          begin  
-             dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_start_addr   <=#1{32{1'b0}};
-          end 
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_cmd_line1  )
-             begin  
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_start_addr   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [32-1:0];
-             end 
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr1  )
-                begin  
-                   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_start_addr   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wdata  [32+32-  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_DATA_SHIFT  -1:32-  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_DATA_SHIFT  ];
-                end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-          begin  
-             dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_buff_size   <=#1{10{1'b0}};
-          end 
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_cmd_line2  )
-             begin  
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_buff_size   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [10-1:0];
-             end 
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr2  )
-                begin  
-                   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_buff_size   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wdata  [10-1:0];
-                end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-          begin  
-             dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_set_int_reg   <=#11'b0; 
-             dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_last_reg   <=#11'b0; 
-             dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_next_addr_reg   <=#1{30{1'b0}};
-          end 
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_cmd_line3  )
-             begin  
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_set_int_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [0]; 
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_last_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [1]; 
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_next_addr_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [32-1:2];
-             end 
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr3  )
-                begin  
-                   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_set_int_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wdata  [32-  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_DATA_SHIFT  ]; 
-                   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_last_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wdata  [33-  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_DATA_SHIFT  ]; 
-                   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_next_addr_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wdata  [32+32-  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_DATA_SHIFT  -1:34-  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_DATA_SHIFT  ];
-                end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_counter_reg   <=#1{12{1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_start  ) 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_counter_reg   <=#1{12{1'b0}};
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  ) 
-                 dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_counter_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_counter_reg  +1'b1;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_counter_reg   <=#1{4{1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_start  ) 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_counter_reg   <=#1{4{1'b0}};
-           else 
-             if ((  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end_int  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  )|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end_clear  ) 
-                 dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_counter_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_counter_reg  +(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end_int  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  )-  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end_clear  ;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_set_int  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_set_int_reg  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_last  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_last_reg  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_next_addr  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_next_addr_reg  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_counter  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_counter_reg  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_counter  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_counter_reg  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_x_size  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_block   ? {{10-8{1'b0}},  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_buff_size  [8-1:0]}:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_buff_size  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_y_size  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_block   ?   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_buff_size  [10-1:8]:'d1; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-          begin  
-             dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size_reg   <=#1'd0; 
-             dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_tokens_reg   <=#1'd1; 
-             dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outs_max_reg   <=#1{4{1'b0}}; 
-             dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_incr_reg   <=#1'd1;
-          end 
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_static_line0  )
-             begin  
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [8-1:0]; 
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_tokens_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [6+16-1:16]; 
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outs_max_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [4+24-1:24]; 
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_incr_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [31];
-             end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-          begin  
-             dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_burst_max_size_reg   <=#1'd0; 
-             dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_tokens_reg   <=#1'd1; 
-             dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outs_max_reg   <=#1{4{1'b0}}; 
-             dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_incr_reg   <=#1'd1;
-          end 
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_static_line1  )
-             begin  
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_burst_max_size_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [8-1:0]; 
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_tokens_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [6+16-1:16]; 
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outs_max_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [4+24-1:24]; 
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_incr_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [31];
-             end
-  
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_incr  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_incr_reg  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_incr  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_incr_reg  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outstanding_cfg  =1'b0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outstanding_cfg  =1'b0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outstanding  =1'b0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outstanding  =1'b0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_tokens  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_tokens_reg  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_tokens  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_mux   ?   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_tokens_reg  :  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_tokens_reg  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outs_max  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outs_max_reg  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outs_max  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_mux   ?   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outs_max_reg  :  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outs_max_reg  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_allow_full_fifo  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_start_addr  [5-1:0]=='d0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_allow_full_fifo  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_start_addr  [5-1:0]=='d0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_full_fifo  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_allow_full_fifo  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_allow_full_fifo  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size_pre  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_burst_max_size  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_mux   ?   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size_pre  :  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_burst_max_size_pre  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_joint_burst  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_flush  )&(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_page_cross  )&(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_cross  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_full_burst  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_joint_burst  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_burst_max_size_update_pre  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update_d  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint  ;  
-  
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_clk;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_reset;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_din;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_dout;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_clk;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_reset;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_din;
-wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_dout;
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_DELAY  -1];
-  
-  dma_axi64_core0_ch_reg_size    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd  (. clk (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk  ),. reset (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  ),. update (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_burst_max_size_update  ),. start_addr (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_start_addr  ),. burst_max_size_reg (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size_reg  ),. burst_max_size_other (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_burst_max_size_rd  ),. allow_full_burst (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_full_burst  ),. allow_full_fifo (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_full_fifo  ),. joint_flush (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_flush  ),. burst_max_size (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size_pre  ));  
-  dma_axi64_core0_ch_reg_size    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr  (. clk (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk  ),. reset (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  ),. update (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_burst_max_size_update  ),. start_addr (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_start_addr  ),. burst_max_size_reg (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_burst_max_size_reg  ),. burst_max_size_other (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size_reg  ),. allow_full_burst (1'b0),. allow_full_fifo (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_full_fifo  ),. joint_flush (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_flush  ),. burst_max_size (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_burst_max_size_pre  )); 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-          begin  
-             dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_reg   <=#11'b1; 
-             dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_end_swap_reg   <=#12'b00;
-          end 
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_static_line2  )
-             begin  
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [16]; 
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_end_swap_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [29:28];
-             end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_simple_mem   <=#11'b0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update  ) 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_simple_mem   <=#1(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_num  =='d0)&(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_num  =='d0)&(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_line_cmd  );
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_mode  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_reg  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_simple_mem  &1'b1; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_mux  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_port_num  =1'b0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_port_num_cfg  =1'b0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_port_num  =1'b0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_port_num  =1'b0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_frame_width  ={12{1'b0}}; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_block  =1'b0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_width_align  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_frame_width  [3-1:0]; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_wait_limit  ={12-4{1'b0}}; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_wait_limit  ={12-4{1'b0}}; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-          begin  
-             dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_num_reg   <=#1'd0; 
-             dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_delay_reg   <=#1'd0; 
-             dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_num_reg   <=#1'd0; 
-             dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_delay_reg   <=#1'd0;
-          end 
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_static_line4  )
-             begin  
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_num_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [4:0]; 
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_delay_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [3+8-1:8]; 
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_num_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [20:16]; 
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_delay_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [3+24-1:24];
-             end
-  
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_num  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_num_reg  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_num  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_num_reg  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_delay  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_delay_reg  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_delay  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_delay_reg  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_block  =1'b0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_block  =1'b0; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-          begin  
-             dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_enable   <=#11'b1;
-          end 
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_enable  )
-             begin  
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_enable   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [0];
-             end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_in_prog   <=#11'b0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update  ) 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_in_prog   <=#11'b1;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  ) 
-                 dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_in_prog   <=#11'b0;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_in_prog   <=#11'b0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update  ) 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_in_prog   <=#11'b1;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_fifo_underflow  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_fifo_overflow  ) 
-                 dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_in_prog   <=#11'b0;
-              else 
-                if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_end  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  ) 
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_in_prog   <=#11'b0;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_in_prog   <=#11'b0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update  ) 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_in_prog   <=#11'b1;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_fifo_underflow  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_fifo_overflow  ) 
-                 dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_in_prog   <=#11'b0;
-              else 
-                if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_end  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  ) 
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_in_prog   <=#11'b0;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_in_prog_reg   <=#11'b0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_req  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  ) 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_in_prog_reg   <=#11'b1;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  ) 
-                 dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_in_prog_reg   <=#11'b0;
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_req_in_prog_reg   <=#11'b0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_req  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  ) 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_req_in_prog_reg   <=#11'b1;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_cmd  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  ) 
-                 dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_req_in_prog_reg   <=#11'b0;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_in_prog  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_in_prog_reg  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_req_in_prog  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_req_in_prog_reg  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_auto_retry  =1'b0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_retry_wait  =1'b0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_retry  =1'b0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update_pre  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_start  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_last  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_retry  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update   <=#11'b0;
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update_pre  ) 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update   <=#11'b1;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  ) 
-                 dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update   <=#11'b0;
-  
-  
- 
-   reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_shift_reg  ; 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_DELAY  +1{1'b0}};
-        else  
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_din  };
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_DELAY  -1];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_reset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_din = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_burst_max_size_update_pre;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_burst_max_size_update = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_dout;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_reset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_din = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update_d = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_dout;
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_req  =(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_enable  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_last  ))|(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update  &(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_x_size  =='d0)); 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_addr  ={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_next_addr  [32-1:2],2'b00}; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_end  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_end  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_clr_last  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_retry_wait  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end_int  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_enable  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_set_int  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_rd_active  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_enable  &(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_in_prog  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_req_in_prog  ); 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_wr_active  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_enable  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_in_prog  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end_set  =|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_counter  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end_clear  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_int_clear  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [0]; 
-  assign {  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_timeout_aw  ,  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_timeout_w  ,  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_timeout_b  ,  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_timeout_ar  ,  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_timeout_r  }=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_timeout_bus  [4:0]; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_bus  ={13{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  }}&{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wdt_timeout  ,  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_timeout_aw  ,  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_timeout_w  ,  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_timeout_b  ,  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_timeout_ar  ,  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_timeout_r  ,  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_fifo_underflow  ,  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_fifo_overflow  ,  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_decerr  ,  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_decerr  ,  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_slverr  ,  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_slverr  ,  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end_set  };  
-  prgen_rawstat  #(13)  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat  (. clk (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk  ),. reset (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  ),. clear (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_int_clear  ),. write (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_int_rawstat  ),. pwdata (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [13-1:0]),. int_bus (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_bus  ),. rawstat (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_rawstat  )); 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_enable   <=#1{13{1'b1}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_int_enable  ) 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_enable   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [13-1:0];
- 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_status  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_rawstat  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_enable  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_int  =|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_status  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_proc_num  =3'd0; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_all_proc  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_int  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_end_swap  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_end_swap_reg  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size_rd  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size_reg  ; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_burst_max_size_rd  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_burst_max_size_reg  ; 
-  always @(                                                            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_full_burst                                                                                                                            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_full_fifo                                                                  or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_joint_burst                                                                 or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_line_cmd                                                                or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_auto_retry                                                               or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_block                                                              or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_buff_size                                                             or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_enable                                                            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_rd_active                                                           or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_wr_active                                                          or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_counter                                                         or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_last                                                        or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_next_addr                                                       or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_port_num                                                      or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_set_int                                                     or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_end_swap                                                    or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_frame_width                                                   or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_counter                                                  or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_enable                                                 or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_proc_num                                                or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_rawstat                                               or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_status                                              or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_reg                                             or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_allow_full_fifo                                            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size_rd                                           or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_gap                                          or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_incr                                         or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outs                                        or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outs_max                                       or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outstanding                                      or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outstanding_cfg                                     or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_block_reg                                    or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_delay                                   or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_num                                  or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_port_num_cfg                                 or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_start_addr                                or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_tokens                               or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_wait_limit                              or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_x_offset                             or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_y_offset                            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_simple_mem                           or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_allow_full_fifo                          or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_burst_max_size_rd                         or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_fullness                        or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_incr                       or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outs                      or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outs_max                     or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outstanding                    or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outstanding_cfg                   or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_block_reg                  or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_delay                 or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_num                or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_port_num               or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_start_addr              or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_tokens             or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_wait_limit            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_x_offset           or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_y_offset   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_line0   ={32{1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_line1   ={32{1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_line2   ={32{1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_line3   ={32{1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line0   ={32{1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line1   ={32{1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line2   ={32{1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line3   ={32{1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line4   ={32{1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_restrict   ={32{1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_rd_offsets   ={32{1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_wr_offsets   ={32{1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_fifo_fullness   ={32{1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_outs   ={32{1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_enable   ={32{1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_active   ={32{1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_counter   ={32{1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_int_rawstat   ={32{1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_int_enable   ={32{1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_int_status   ={32{1'b0}}; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_line0   [32-1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_start_addr  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_line1   [32-1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_start_addr  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_line2   [10-1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_buff_size  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_line3   [0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_set_int  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_line3   [1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_last  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_line3   [32-1:2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_next_addr  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line0   [8-1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size_rd  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line0   [6+16-1:16]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_tokens  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line0   [4+24-1:24]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outs_max  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line0   [30]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outstanding_cfg  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line0   [31]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_incr  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line1   [8-1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_burst_max_size_rd  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line1   [6+16-1:16]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_tokens  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line1   [4+24-1:24]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outs_max  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line1   [30]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outstanding_cfg  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line1   [31]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_incr  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line2   [12-1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_frame_width  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line2   [15]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_block  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line2   [16]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_reg  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line2   [17]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_auto_retry  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line2   [20]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_port_num  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line2   [21]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_port_num_cfg  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line2   [22]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_port_num  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line2   [26:24]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_proc_num  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line2   [29:28]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_end_swap  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line4   [4:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_num  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line4   [3+8-1:8]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_delay  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line4   [20:16]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_num  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line4   [3+24-1:24]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_delay  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_restrict   [0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_allow_full_fifo  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_restrict   [1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_allow_full_fifo  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_restrict   [2]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_full_fifo  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_restrict   [3]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_full_burst  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_restrict   [4]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_joint_burst  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_restrict   [5]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outstanding  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_restrict   [6]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outstanding  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_restrict   [7]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_line_cmd  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_restrict   [8]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_simple_mem  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_rd_offsets   [10-1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_x_offset  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_rd_offsets   [10-8+16-1:16]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_y_offset  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_wr_offsets   [10-1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_x_offset  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_wr_offsets   [10-8+16-1:16]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_y_offset  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_fifo_fullness   [5:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_gap  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_fifo_fullness   [5+16:16]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_fullness  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_outs   [4-1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outs  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_outs   [4-1+8:8]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outs  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_enable   [0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_enable  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_active   [0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_rd_active  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_active   [1]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_wr_active  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_counter   [12-1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_counter  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_counter   [4-1+16:16]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_counter  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_int_rawstat   [13-1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_rawstat  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_int_enable   [13-1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_enable  ; 
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_int_status   [13-1:0]=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_status  ;
-       end
-  
-  always @(                       dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpaddr                                                  or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_active                             or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_enable                            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_counter                           or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_line0                          or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_line1                         or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_line2                        or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_line3                       or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_outs                      or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_fifo_fullness                     or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_int_enable                    or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_int_rawstat                   or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_int_status                  or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_rd_offsets                 or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_restrict                or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line0               or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line1              or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line2             or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line3            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line4           or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_wr_offsets   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   ={32{1'b0}};
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpaddr  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CMD_LINE0   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_line0  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CMD_LINE1   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_line1  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CMD_LINE2   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_line2  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CMD_LINE3   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_line3  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_STATIC_LINE0   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line0  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_STATIC_LINE1   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line1  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_STATIC_LINE2   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line2  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_STATIC_LINE3   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line3  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_STATIC_LINE4   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_static_line4  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_RESTRICT   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_restrict  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_RD_OFFSETS   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_rd_offsets  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_WR_OFFSETS   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_wr_offsets  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_FIFO_FULLNESS   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_fifo_fullness  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CMD_OUTS   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_outs  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CH_ENABLE   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_enable  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CH_START   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   ={32{1'b0}}; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CH_ACTIVE   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_active  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CH_CMD_COUNTER   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_cmd_counter  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_INT_RAWSTAT   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_int_rawstat  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_INT_CLEAR   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   ={32{1'b0}}; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_INT_ENABLE   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_int_enable  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_INT_STATUS   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_int_status  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre   ={32{1'b0}};
-         endcase 
-       end
-  
-  always @(      dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpaddr                or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpread            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite           or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_psel   )
-       begin  
-          dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =1'b0;
-         case (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpaddr  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CMD_LINE0   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =1'b0; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CMD_LINE1   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =1'b0; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CMD_LINE2   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =1'b0; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CMD_LINE3   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =1'b0; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_STATIC_LINE0   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =1'b0; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_STATIC_LINE1   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =1'b0; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_STATIC_LINE2   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =1'b0; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_STATIC_LINE3   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =1'b0; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_STATIC_LINE4   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =1'b0; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_RESTRICT   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_RD_OFFSETS   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_WR_OFFSETS   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_FIFO_FULLNESS   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CMD_OUTS   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CH_ENABLE   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =1'b0; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CH_START   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpread  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CH_ACTIVE   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_CH_CMD_COUNTER   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_INT_RAWSTAT   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =1'b0; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_INT_CLEAR   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpread  ; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_INT_ENABLE   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =1'b0; 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_INT_STATUS   : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  ;
-          default : 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre   =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_psel  ;
-         endcase 
-       end
-  
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata   <=#1{32{1'b0}};
-        else 
-          if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpread  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pclken  ) 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre  ;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pclken  ) 
-                 dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata   <=#1{32{1'b0}};
- 
-  always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-       if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  ) 
-           dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr   <=#11'b0;
-        else 
-          if ((  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpread  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  )&  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pclken  ) 
-              dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre  ;
-           else 
-             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pclken  ) 
-                 dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr   <=#11'b0;
-
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_pclk;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clken;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pclken = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_pclken;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_psel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_psel;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_penable = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_penable;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_paddr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_paddr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwrite = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_pwrite;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_pwdata;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_timeout_bus = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_timeout_bus;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wdt_timeout = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wdt_timeout;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_start = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_start;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_addr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_addr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_in_prog = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_in_prog;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_req_in_prog = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_req_in_prog;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_wr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_cycle = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_wr_cycle;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wdata = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_wdata;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_cmd = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_cmd;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_end = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_ch_end;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_end = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_ch_end;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_clr_last = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_last;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_slverr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_slverr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_decerr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_decerr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_slverr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_slverr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_decerr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_decerr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_int_all_proc = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_all_proc;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_rd_active = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_rd_active;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_wr_active = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_wr_active;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_x_offset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_x_offset;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_y_offset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_y_offset;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_x_offset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_x_offset;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_y_offset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_y_offset;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_fullness = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_fullness;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_gap = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_gap;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_fifo_overflow = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_overflow;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_fifo_underflow = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_underflow;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_x_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_x_size;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_y_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_y_size;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_max_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_max_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_burst_max_size;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_block = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_block;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_line_cmd = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_allow_line_cmd;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_frame_width = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_frame_width;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_width_align = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_width_align;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_periph_delay = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_delay;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_periph_block = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_block;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_periph_delay = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_delay;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_periph_block = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_block;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_tokens = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_tokens;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_tokens = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_tokens;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_port_num = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_port_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_port_num = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_port_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_outs_max = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outs_max;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_outs_max = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outs_max;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outs = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_outs;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outs = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_outs;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_outs_empty = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_outs_empty;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_wait_limit = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_wait_limit;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_wait_limit = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_wait_limit;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_incr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_incr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_incr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_incr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_periph_num = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_periph_num = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_outstanding = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outstanding;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_outstanding = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outstanding;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_retry_wait = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_retry_wait;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_mode = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_mode;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_remote = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_remote;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_cross = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_cross;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_page_cross = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_page_cross;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_flush = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_flush;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_end_swap = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_end_swap;
-  
-  dma_axi64_core0_ch_offsets    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd  (. clk (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_gclk  ),. reset (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  ),. ch_update (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_update  ),. burst_start (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_start  ),. burst_last (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_last  ),. burst_size (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_size  ),. load_req_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_req_in_prog  ),. x_size (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_x_size  ),. y_size (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_y_size  ),. x_offset (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_x_offset  ),. y_offset (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_y_offset  ),. x_remain (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_x_remain  ),. clr_remain (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_remain  ),. ch_end (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_ch_end  ),. go_next_line (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_go_next_line  ),. incr (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_incr  ),. clr_line (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_line  ),. line_empty (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_line_empty  ),. empty (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_empty  ),. start_align (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_start_addr  [3-1:0]),. width_align (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_width_align  ),. align (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_align  ));  
-  dma_axi64_core0_ch_offsets    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr  (. clk (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_gclk  ),. reset (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  ),. ch_update (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_update  ),. burst_start (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_start  ),. burst_last (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_last  ),. burst_size (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_size  ),. load_req_in_prog (1'b0),. x_size (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_x_size  ),. y_size (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_y_size  ),. x_offset (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_x_offset  ),. y_offset (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_y_offset  ),. x_remain (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_x_remain  ),. clr_remain (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_remain  ),. ch_end (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_ch_end  ),. go_next_line (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_go_next_line  ),. incr (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_incr  ),. clr_line (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_line  ),. line_empty (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_line_empty  ),. empty (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_empty  ),. start_align (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_start_addr  [3-1:0]),. width_align (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_width_align  ),. align (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_align  ));  
-  dma_axi64_core0_ch_remain    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain  (. clk (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_gclk  ),. reset (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  ),. ch_update (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_update  ),. wr_outstanding (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_outstanding  ),. rd_outstanding (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_outstanding  ),. load_req_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_req_in_prog  ),. rd_line_cmd (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_line_cmd  ),. rd_burst_start (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_start  ),. rd_burst_size (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_size  ),. rd_transfer (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_transfer  ),. rd_transfer_size (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_transfer_size  ),. wr_clr_line (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_line  ),. wr_burst_start (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_start  ),. wr_burst_size (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_size  ),. wr_transfer (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_transfer  ),. wr_transfer_size (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_transfer_size  ),. rd_gap (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_gap  ),. wr_fullness (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_fullness  ));  
-  dma_axi64_core0_ch_outs    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd  (. clk (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_gclk  ),. reset (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  ),. cmd (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_cmd_outs  ),. clr (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_outs  ),. outs_max (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_outs_max  ),. outs (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_outs  ),. outs_empty (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_outs_empty  ),. stall (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_stall  ),. timeout (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_timeout_rresp  ));  
-  dma_axi64_core0_ch_outs    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr  (. clk (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_gclk  ),. reset (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  ),. cmd (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_cmd_outs  ),. clr (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_outs  ),. outs_max (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_outs_max  ),. outs (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_outs  ),. outs_empty (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_outs_empty  ),. stall (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_stall_pre  ),. timeout (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_timeout_wresp  )); 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_stall  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_stall_pre  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_req  );  
-  dma_axi64_core0_ch_calc  #(. READ (1))  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd  (. clk (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_gclk  ),. reset (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  ),. wr_cmd_pending (1'b0),. outs_empty (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_outs_empty  ),. load_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_in_prog  ),. load_req_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_req_in_prog  ),. load_addr (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_addr  ),. ch_update (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_update  ),. ch_end (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_ch_end  ),. ch_end_flush (1'b0),. go_next_line (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_go_next_line  ),. burst_start (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_start  ),. burst_last (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_last  ),. burst_max_size (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_max_size  ),. start_addr (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_start_addr  ),. incr (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_incr  ),. frame_width (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_frame_width  ),. x_size (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_x_size  [8-1:0]),. x_remain (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_x_remain  ),. fifo_remain (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_gap  ),. fifo_wr_ready (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_wr_ready  ),. burst_addr (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_addr  ),. burst_size (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_size  ),. burst_ready (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_ready  ),. single (),. joint_ready_out (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_ready  ),. joint_ready_in (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_ready  ),. joint_line_req_in (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_line_req  ),. joint_line_req_out (),. joint_burst_req_in (1'b0),. joint_burst_req_out (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_burst_req  ),. joint_line_req_clr (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_d  ),. joint (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint  ),. page_cross (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_page_cross  ),. joint_cross (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_cross  ),. joint_flush (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_flush  ),. joint_flush_in (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_flush  ));  
-  dma_axi64_core0_ch_calc  #(. READ (0))  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr  (. clk (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_gclk  ),. reset (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  ),. wr_cmd_pending (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_cmd_pending  ),. outs_empty (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_outs_empty  ),. load_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_in_prog  ),. load_req_in_prog (1'b0),. load_addr ({32{1'b0}}),. ch_update (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_update  ),. ch_end (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_ch_end  ),. ch_end_flush (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_ch_end  ),. go_next_line (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_go_next_line  ),. burst_start (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_start  ),. burst_last (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_last  ),. burst_max_size (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_max_size  ),. start_addr (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_start_addr  ),. incr (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_incr  ),. frame_width (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_frame_width  ),. x_size (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_x_size  [8-1:0]),. x_remain (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_x_remain  ),. fifo_wr_ready (1'b0),. fifo_remain (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_fullness  ),. burst_addr (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_addr  ),. burst_size (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_size  ),. burst_ready (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_ready  ),. single (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_single  ),. joint_ready_out (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_ready  ),. joint_ready_in (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_ready  ),. joint_line_req_in (1'b0),. joint_line_req_out (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_line_req  ),. joint_burst_req_in (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_burst_req  ),. joint_burst_req_out (),. joint_line_req_clr (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_d  ),. joint (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint  ),. page_cross (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_page_cross  ),. joint_cross (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_cross  ),. joint_flush (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_flush  ),. joint_flush_in (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_flush  )); 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_wait_ready  =1'b1; 
-  assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_wait_ready  =1'b1;  
-  dma_axi64_core0_ch_periph_mux    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd  (. clk (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_gclk  ),. reset (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  ),. clken (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clken  ),. periph_req (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_periph_rx_req  ),. periph_clr (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_periph_rx_clr  ),. periph_ready (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_periph_ready  ),. periph_num (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_periph_num  ),. clr_valid (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_valid  ),. clr (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr  ));  
-  dma_axi64_core0_ch_periph_mux    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr  (. clk (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_gclk  ),. reset (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  ),. clken (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clken  ),. periph_req (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_periph_tx_req  ),. periph_clr (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_periph_tx_clr  ),. periph_ready (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_periph_ready  ),. periph_num (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_periph_num  ),. clr_valid (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_valid  ),. clr (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_mux  ));  
-  dma_axi64_core0_ch_fifo_ctrl    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl  (. clk (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk  ),. reset (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  ),. end_swap (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_end_swap  ),. joint_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_in_prog  ),. wr_outstanding (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_outstanding  ),. ch_update (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_update  ),. fifo_wr (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_wr  ),. fifo_wdata (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_wdata  ),. fifo_wsize (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_wsize  ),. wr_align (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_align  ),. wr_single (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_single  ),. rd_incr (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_incr  ),. fifo_rd (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_rd  ),. fifo_rsize (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_rsize  ),. rd_align (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_align  ),. wr_incr (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_incr  ),. wr_burst_size (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_size  ),. rd_clr_line (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_line  ),. wr_clr_line (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_line  ),. wr_next_size (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_next_size  ),. fifo_rd_valid (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_rd_valid  ),. fifo_rdata (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_rdata  ),. fifo_wr_ready (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_wr_ready  ),. fifo_overflow (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_overflow  ),. fifo_underflow (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_underflow  ));
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk = dma_axi64_core0_dma_axi64_core0_channels_clk;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset = dma_axi64_core0_dma_axi64_core0_channels_reset;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_scan_en = dma_axi64_core0_dma_axi64_core0_channels_scan_en;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_pclk = dma_axi64_core0_dma_axi64_core0_channels_pclk;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clken = dma_axi64_core0_dma_axi64_core0_channels_clken;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_pclken = dma_axi64_core0_dma_axi64_core0_channels_pclken;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_psel = dma_axi64_core0_dma_axi64_core0_channels_ch_psel[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_penable = dma_axi64_core0_dma_axi64_core0_channels_penable;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_paddr = dma_axi64_core0_dma_axi64_core0_channels_paddr[7:0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_pwrite = dma_axi64_core0_dma_axi64_core0_channels_pwrite;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_pwdata = dma_axi64_core0_dma_axi64_core0_channels_pwdata;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_prdata[31+32*0:32*0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_prdata;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_pslverr[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_pslverr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_periph_tx_req = dma_axi64_core0_dma_axi64_core0_channels_periph_tx_req;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_periph_tx_clr[31*0+31-1:31*0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_periph_tx_clr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_periph_rx_req = dma_axi64_core0_dma_axi64_core0_channels_periph_rx_req;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_periph_rx_clr[31*0+31-1:31*0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_periph_rx_clr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_cmd_split = dma_axi64_core0_dma_axi64_core0_channels_ch_rd_cmd_split[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_cmd_line = dma_axi64_core0_dma_axi64_core0_channels_ch_rd_cmd_line[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_line = dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_line[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr = dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_load = dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_load[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_slverr = dma_axi64_core0_dma_axi64_core0_channels_ch_rd_slverr[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_decerr = dma_axi64_core0_dma_axi64_core0_channels_ch_rd_decerr[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_cmd_split = dma_axi64_core0_dma_axi64_core0_channels_ch_wr_cmd_split[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_cmd_pending = dma_axi64_core0_dma_axi64_core0_channels_ch_wr_cmd_pending[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_line = dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_line[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr = dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_last = dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_last[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_slverr = dma_axi64_core0_dma_axi64_core0_channels_ch_wr_slverr[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_decerr = dma_axi64_core0_dma_axi64_core0_channels_ch_wr_decerr[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_wr = dma_axi64_core0_dma_axi64_core0_channels_ch_load_wr[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_wr_cycle = dma_axi64_core0_dma_axi64_core0_channels_load_wr_cycle;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_wdata = dma_axi64_core0_dma_axi64_core0_channels_load_wdata;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_load_req_in_prog[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_load_req_in_prog;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_int_all_proc[1-1+(1*0):1*0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_int_all_proc;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_start = dma_axi64_core0_dma_axi64_core0_channels_ch_start[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_idle[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_idle;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_active[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_active;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_rd_active[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_rd_active;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wr_active[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_wr_active;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wr_last_cmd[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_last_cmd;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_rd_line_cmd[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_line_cmd;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wr_line_cmd[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_line_cmd;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_rd_go_next_line[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_go_next_line;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wr_go_next_line[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_go_next_line;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_rd_ready[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_ready;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_start = dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_start[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_addr[32-1+32*0:32*0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_addr;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_size[8-1+8*0:8*0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_size;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_rd_tokens[6-1+6*0:6*0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_tokens;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_rd_port_num[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_port_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_rd_periph_delay[3-1+3*0:3*0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_periph_delay;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_valid[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_valid;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_transfer = dma_axi64_core0_dma_axi64_core0_channels_ch_rd_transfer[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_transfer_size = dma_axi64_core0_dma_axi64_core0_channels_rd_transfer_size;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_stall[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_stall;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wr_ready[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_ready;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_start = dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_start[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_addr[32-1+32*0:32*0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_addr;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_size[8-1+8*0:8*0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_size;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wr_tokens[6-1+6*0:6*0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_tokens;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wr_port_num[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_port_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wr_periph_delay[3-1+3*0:3*0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_periph_delay;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_valid[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_valid;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_transfer = dma_axi64_core0_dma_axi64_core0_channels_ch_wr_transfer[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_transfer_size = dma_axi64_core0_dma_axi64_core0_channels_wr_transfer_size;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_next_size = dma_axi64_core0_dma_axi64_core0_channels_wr_next_size;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_stall[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_stall;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_wr_periph_delay[3-1+3*0:3*0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_incr;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_timeout_aw = dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_aw[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_timeout_w = dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_w[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_timeout_ar = dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_ar[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wdt_timeout = dma_axi64_core0_dma_axi64_core0_channels_ch_wdt_timeout[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_wr = dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_wr[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_wdata = dma_axi64_core0_dma_axi64_core0_channels_fifo_wdata;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_wsize = dma_axi64_core0_dma_axi64_core0_channels_fifo_wsize;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_rd = dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_rsize = dma_axi64_core0_dma_axi64_core0_channels_fifo_rsize;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd_valid[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_rd_valid;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rdata[(64-1)+64*0:64*0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_rdata;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_wr_ready[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_wr_ready;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_mode = dma_axi64_core0_dma_axi64_core0_channels_joint_mode;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_remote = dma_axi64_core0_dma_axi64_core0_channels_joint_remote;
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_page_cross = dma_axi64_core0_dma_axi64_core0_channels_ch_rd_page_cross[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_page_cross = dma_axi64_core0_dma_axi64_core0_channels_ch_wr_page_cross[0];
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_joint_in_prog[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_in_prog;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_joint_not_in_prog[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_not_in_prog;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_joint_mux_in_prog[0] = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_mux_in_prog;
-  
-  dma_axi64_core0_ch_empty    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch_empty1  (. clk (  dma_axi64_core0_dma_axi64_core0_channels_clk  ),. reset (  dma_axi64_core0_dma_axi64_core0_channels_reset  ),. scan_en (  dma_axi64_core0_dma_axi64_core0_channels_scan_en  ),. idle (  dma_axi64_core0_dma_axi64_core0_channels_ch_idle  [1]),. pclk (  dma_axi64_core0_dma_axi64_core0_channels_pclk  ),. clken (  dma_axi64_core0_dma_axi64_core0_channels_clken  ),. pclken (  dma_axi64_core0_dma_axi64_core0_channels_pclken  ),. psel (  dma_axi64_core0_dma_axi64_core0_channels_ch_psel  [1]),. penable (  dma_axi64_core0_dma_axi64_core0_channels_penable  ),. paddr (  dma_axi64_core0_dma_axi64_core0_channels_paddr  [7:0]),. pwrite (  dma_axi64_core0_dma_axi64_core0_channels_pwrite  ),. pwdata (  dma_axi64_core0_dma_axi64_core0_channels_pwdata  ),. prdata (  dma_axi64_core0_dma_axi64_core0_channels_ch_prdata  [31+32*1:32*1]),. pslverr (  dma_axi64_core0_dma_axi64_core0_channels_ch_pslverr  [1]),. periph_tx_req (  dma_axi64_core0_dma_axi64_core0_channels_periph_tx_req  ),. periph_tx_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_periph_tx_clr  [31*1+31-1:31*1]),. periph_rx_req (  dma_axi64_core0_dma_axi64_core0_channels_periph_rx_req  ),. periph_rx_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_periph_rx_clr  [31*1+31-1:31*1]),. rd_cmd_split (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_cmd_split  [1]),. rd_cmd_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_cmd_line  [1]),. rd_clr_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_line  [1]),. rd_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr  [1]),. rd_clr_load (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_load  [1]),. rd_slverr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_slverr  [1]),. rd_decerr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_decerr  [1]),. rd_line_cmd (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_line_cmd  [1]),. rd_go_next_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_go_next_line  [1]),. rd_transfer (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_transfer  [1]),. rd_transfer_size (  dma_axi64_core0_dma_axi64_core0_channels_rd_transfer_size  ),. rd_clr_stall (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_stall  [1]),. wr_cmd_split (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_cmd_split  [1]),. wr_cmd_pending (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_cmd_pending  [1]),. wr_clr_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_line  [1]),. wr_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr  [1]),. wr_clr_last (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_last  [1]),. wr_slverr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_slverr  [1]),. wr_decerr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_decerr  [1]),. wr_last_cmd (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_last_cmd  [1]),. wr_line_cmd (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_line_cmd  [1]),. wr_go_next_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_go_next_line  [1]),. wr_transfer (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_transfer  [1]),. wr_transfer_size (  dma_axi64_core0_dma_axi64_core0_channels_wr_transfer_size  ),. wr_next_size (  dma_axi64_core0_dma_axi64_core0_channels_wr_next_size  ),. wr_clr_stall (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_stall  [1]),. timeout_aw (  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_aw  [1]),. timeout_w (  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_w  [1]),. timeout_ar (  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_ar  [1]),. wdt_timeout (  dma_axi64_core0_dma_axi64_core0_channels_ch_wdt_timeout  [1]),. load_wr (  dma_axi64_core0_dma_axi64_core0_channels_ch_load_wr  [1]),. load_wr_cycle (  dma_axi64_core0_dma_axi64_core0_channels_load_wr_cycle  ),. load_wdata (  dma_axi64_core0_dma_axi64_core0_channels_load_wdata  ),. load_req_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_load_req_in_prog  [1]),. ch_active (  dma_axi64_core0_dma_axi64_core0_channels_ch_active  [1]),. ch_rd_active (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_active  [1]),. ch_wr_active (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_active  [1]),. rd_burst_start (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_start  [1]),. rd_ready (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_ready  [1]),. rd_burst_addr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_addr  [32-1+32*1:32*1]),. rd_burst_size (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_size  [8-1+8*1:8*1]),. rd_tokens (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_tokens  [6-1+6*1:6*1]),. rd_port_num (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_port_num  [1]),. rd_periph_delay (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_periph_delay  [3-1+3*1:3*1]),. rd_clr_valid (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_valid  [1]),. wr_burst_start (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_start  [1]),. wr_ready (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_ready  [1]),. wr_burst_addr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_addr  [32-1+32*1:32*1]),. wr_burst_size (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_size  [8-1+8*1:8*1]),. wr_tokens (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_tokens  [6-1+6*1:6*1]),. wr_port_num (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_port_num  [1]),. wr_periph_delay (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_periph_delay  [3-1+3*1:3*1]),. wr_clr_valid (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_valid  [1]),. fifo_wr (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_wr  [1]),. fifo_wdata (  dma_axi64_core0_dma_axi64_core0_channels_fifo_wdata  ),. fifo_wsize (  dma_axi64_core0_dma_axi64_core0_channels_fifo_wsize  ),. fifo_rd (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd  [1]),. fifo_rsize (  dma_axi64_core0_dma_axi64_core0_channels_fifo_rsize  ),. fifo_rd_valid (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd_valid  [1]),. fifo_rdata (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rdata  [(64-1)+64*1:64*1]),. fifo_wr_ready (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_wr_ready  [1]),. joint_mode (  dma_axi64_core0_dma_axi64_core0_channels_joint_mode  ),. joint_remote (  dma_axi64_core0_dma_axi64_core0_channels_joint_remote  ),. rd_page_cross (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_page_cross  [1]),. wr_page_cross (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_page_cross  [1]),. joint_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_in_prog  [1]),. joint_not_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_not_in_prog  [1]),. joint_mux_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_mux_in_prog  [1]),. joint_req (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_req  [1]),. ch_start (  dma_axi64_core0_dma_axi64_core0_channels_ch_start  [1]),. int_all_proc (  dma_axi64_core0_dma_axi64_core0_channels_ch_int_all_proc  [1-1+(1*1):1*1]));  
-  dma_axi64_core0_ch_empty    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch_empty2  (. clk (  dma_axi64_core0_dma_axi64_core0_channels_clk  ),. reset (  dma_axi64_core0_dma_axi64_core0_channels_reset  ),. scan_en (  dma_axi64_core0_dma_axi64_core0_channels_scan_en  ),. idle (  dma_axi64_core0_dma_axi64_core0_channels_ch_idle  [2]),. pclk (  dma_axi64_core0_dma_axi64_core0_channels_pclk  ),. clken (  dma_axi64_core0_dma_axi64_core0_channels_clken  ),. pclken (  dma_axi64_core0_dma_axi64_core0_channels_pclken  ),. psel (  dma_axi64_core0_dma_axi64_core0_channels_ch_psel  [2]),. penable (  dma_axi64_core0_dma_axi64_core0_channels_penable  ),. paddr (  dma_axi64_core0_dma_axi64_core0_channels_paddr  [7:0]),. pwrite (  dma_axi64_core0_dma_axi64_core0_channels_pwrite  ),. pwdata (  dma_axi64_core0_dma_axi64_core0_channels_pwdata  ),. prdata (  dma_axi64_core0_dma_axi64_core0_channels_ch_prdata  [31+32*2:32*2]),. pslverr (  dma_axi64_core0_dma_axi64_core0_channels_ch_pslverr  [2]),. periph_tx_req (  dma_axi64_core0_dma_axi64_core0_channels_periph_tx_req  ),. periph_tx_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_periph_tx_clr  [31*2+31-1:31*2]),. periph_rx_req (  dma_axi64_core0_dma_axi64_core0_channels_periph_rx_req  ),. periph_rx_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_periph_rx_clr  [31*2+31-1:31*2]),. rd_cmd_split (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_cmd_split  [2]),. rd_cmd_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_cmd_line  [2]),. rd_clr_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_line  [2]),. rd_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr  [2]),. rd_clr_load (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_load  [2]),. rd_slverr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_slverr  [2]),. rd_decerr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_decerr  [2]),. rd_line_cmd (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_line_cmd  [2]),. rd_go_next_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_go_next_line  [2]),. rd_transfer (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_transfer  [2]),. rd_transfer_size (  dma_axi64_core0_dma_axi64_core0_channels_rd_transfer_size  ),. rd_clr_stall (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_stall  [2]),. wr_cmd_split (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_cmd_split  [2]),. wr_cmd_pending (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_cmd_pending  [2]),. wr_clr_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_line  [2]),. wr_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr  [2]),. wr_clr_last (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_last  [2]),. wr_slverr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_slverr  [2]),. wr_decerr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_decerr  [2]),. wr_last_cmd (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_last_cmd  [2]),. wr_line_cmd (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_line_cmd  [2]),. wr_go_next_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_go_next_line  [2]),. wr_transfer (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_transfer  [2]),. wr_transfer_size (  dma_axi64_core0_dma_axi64_core0_channels_wr_transfer_size  ),. wr_next_size (  dma_axi64_core0_dma_axi64_core0_channels_wr_next_size  ),. wr_clr_stall (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_stall  [2]),. timeout_aw (  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_aw  [2]),. timeout_w (  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_w  [2]),. timeout_ar (  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_ar  [2]),. wdt_timeout (  dma_axi64_core0_dma_axi64_core0_channels_ch_wdt_timeout  [2]),. load_wr (  dma_axi64_core0_dma_axi64_core0_channels_ch_load_wr  [2]),. load_wr_cycle (  dma_axi64_core0_dma_axi64_core0_channels_load_wr_cycle  ),. load_wdata (  dma_axi64_core0_dma_axi64_core0_channels_load_wdata  ),. load_req_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_load_req_in_prog  [2]),. ch_active (  dma_axi64_core0_dma_axi64_core0_channels_ch_active  [2]),. ch_rd_active (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_active  [2]),. ch_wr_active (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_active  [2]),. rd_burst_start (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_start  [2]),. rd_ready (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_ready  [2]),. rd_burst_addr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_addr  [32-1+32*2:32*2]),. rd_burst_size (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_size  [8-1+8*2:8*2]),. rd_tokens (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_tokens  [6-1+6*2:6*2]),. rd_port_num (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_port_num  [2]),. rd_periph_delay (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_periph_delay  [3-1+3*2:3*2]),. rd_clr_valid (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_valid  [2]),. wr_burst_start (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_start  [2]),. wr_ready (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_ready  [2]),. wr_burst_addr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_addr  [32-1+32*2:32*2]),. wr_burst_size (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_size  [8-1+8*2:8*2]),. wr_tokens (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_tokens  [6-1+6*2:6*2]),. wr_port_num (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_port_num  [2]),. wr_periph_delay (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_periph_delay  [3-1+3*2:3*2]),. wr_clr_valid (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_valid  [2]),. fifo_wr (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_wr  [2]),. fifo_wdata (  dma_axi64_core0_dma_axi64_core0_channels_fifo_wdata  ),. fifo_wsize (  dma_axi64_core0_dma_axi64_core0_channels_fifo_wsize  ),. fifo_rd (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd  [2]),. fifo_rsize (  dma_axi64_core0_dma_axi64_core0_channels_fifo_rsize  ),. fifo_rd_valid (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd_valid  [2]),. fifo_rdata (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rdata  [(64-1)+64*2:64*2]),. fifo_wr_ready (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_wr_ready  [2]),. joint_mode (  dma_axi64_core0_dma_axi64_core0_channels_joint_mode  ),. joint_remote (  dma_axi64_core0_dma_axi64_core0_channels_joint_remote  ),. rd_page_cross (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_page_cross  [2]),. wr_page_cross (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_page_cross  [2]),. joint_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_in_prog  [2]),. joint_not_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_not_in_prog  [2]),. joint_mux_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_mux_in_prog  [2]),. joint_req (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_req  [2]),. ch_start (  dma_axi64_core0_dma_axi64_core0_channels_ch_start  [2]),. int_all_proc (  dma_axi64_core0_dma_axi64_core0_channels_ch_int_all_proc  [1-1+(1*2):1*2]));  
-  dma_axi64_core0_ch_empty    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch_empty3  (. clk (  dma_axi64_core0_dma_axi64_core0_channels_clk  ),. reset (  dma_axi64_core0_dma_axi64_core0_channels_reset  ),. scan_en (  dma_axi64_core0_dma_axi64_core0_channels_scan_en  ),. idle (  dma_axi64_core0_dma_axi64_core0_channels_ch_idle  [3]),. pclk (  dma_axi64_core0_dma_axi64_core0_channels_pclk  ),. clken (  dma_axi64_core0_dma_axi64_core0_channels_clken  ),. pclken (  dma_axi64_core0_dma_axi64_core0_channels_pclken  ),. psel (  dma_axi64_core0_dma_axi64_core0_channels_ch_psel  [3]),. penable (  dma_axi64_core0_dma_axi64_core0_channels_penable  ),. paddr (  dma_axi64_core0_dma_axi64_core0_channels_paddr  [7:0]),. pwrite (  dma_axi64_core0_dma_axi64_core0_channels_pwrite  ),. pwdata (  dma_axi64_core0_dma_axi64_core0_channels_pwdata  ),. prdata (  dma_axi64_core0_dma_axi64_core0_channels_ch_prdata  [31+32*3:32*3]),. pslverr (  dma_axi64_core0_dma_axi64_core0_channels_ch_pslverr  [3]),. periph_tx_req (  dma_axi64_core0_dma_axi64_core0_channels_periph_tx_req  ),. periph_tx_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_periph_tx_clr  [31*3+31-1:31*3]),. periph_rx_req (  dma_axi64_core0_dma_axi64_core0_channels_periph_rx_req  ),. periph_rx_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_periph_rx_clr  [31*3+31-1:31*3]),. rd_cmd_split (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_cmd_split  [3]),. rd_cmd_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_cmd_line  [3]),. rd_clr_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_line  [3]),. rd_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr  [3]),. rd_clr_load (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_load  [3]),. rd_slverr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_slverr  [3]),. rd_decerr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_decerr  [3]),. rd_line_cmd (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_line_cmd  [3]),. rd_go_next_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_go_next_line  [3]),. rd_transfer (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_transfer  [3]),. rd_transfer_size (  dma_axi64_core0_dma_axi64_core0_channels_rd_transfer_size  ),. rd_clr_stall (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_stall  [3]),. wr_cmd_split (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_cmd_split  [3]),. wr_cmd_pending (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_cmd_pending  [3]),. wr_clr_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_line  [3]),. wr_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr  [3]),. wr_clr_last (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_last  [3]),. wr_slverr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_slverr  [3]),. wr_decerr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_decerr  [3]),. wr_last_cmd (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_last_cmd  [3]),. wr_line_cmd (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_line_cmd  [3]),. wr_go_next_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_go_next_line  [3]),. wr_transfer (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_transfer  [3]),. wr_transfer_size (  dma_axi64_core0_dma_axi64_core0_channels_wr_transfer_size  ),. wr_next_size (  dma_axi64_core0_dma_axi64_core0_channels_wr_next_size  ),. wr_clr_stall (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_stall  [3]),. timeout_aw (  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_aw  [3]),. timeout_w (  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_w  [3]),. timeout_ar (  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_ar  [3]),. wdt_timeout (  dma_axi64_core0_dma_axi64_core0_channels_ch_wdt_timeout  [3]),. load_wr (  dma_axi64_core0_dma_axi64_core0_channels_ch_load_wr  [3]),. load_wr_cycle (  dma_axi64_core0_dma_axi64_core0_channels_load_wr_cycle  ),. load_wdata (  dma_axi64_core0_dma_axi64_core0_channels_load_wdata  ),. load_req_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_load_req_in_prog  [3]),. ch_active (  dma_axi64_core0_dma_axi64_core0_channels_ch_active  [3]),. ch_rd_active (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_active  [3]),. ch_wr_active (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_active  [3]),. rd_burst_start (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_start  [3]),. rd_ready (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_ready  [3]),. rd_burst_addr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_addr  [32-1+32*3:32*3]),. rd_burst_size (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_size  [8-1+8*3:8*3]),. rd_tokens (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_tokens  [6-1+6*3:6*3]),. rd_port_num (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_port_num  [3]),. rd_periph_delay (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_periph_delay  [3-1+3*3:3*3]),. rd_clr_valid (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_valid  [3]),. wr_burst_start (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_start  [3]),. wr_ready (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_ready  [3]),. wr_burst_addr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_addr  [32-1+32*3:32*3]),. wr_burst_size (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_size  [8-1+8*3:8*3]),. wr_tokens (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_tokens  [6-1+6*3:6*3]),. wr_port_num (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_port_num  [3]),. wr_periph_delay (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_periph_delay  [3-1+3*3:3*3]),. wr_clr_valid (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_valid  [3]),. fifo_wr (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_wr  [3]),. fifo_wdata (  dma_axi64_core0_dma_axi64_core0_channels_fifo_wdata  ),. fifo_wsize (  dma_axi64_core0_dma_axi64_core0_channels_fifo_wsize  ),. fifo_rd (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd  [3]),. fifo_rsize (  dma_axi64_core0_dma_axi64_core0_channels_fifo_rsize  ),. fifo_rd_valid (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd_valid  [3]),. fifo_rdata (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rdata  [(64-1)+64*3:64*3]),. fifo_wr_ready (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_wr_ready  [3]),. joint_mode (  dma_axi64_core0_dma_axi64_core0_channels_joint_mode  ),. joint_remote (  dma_axi64_core0_dma_axi64_core0_channels_joint_remote  ),. rd_page_cross (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_page_cross  [3]),. wr_page_cross (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_page_cross  [3]),. joint_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_in_prog  [3]),. joint_not_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_not_in_prog  [3]),. joint_mux_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_mux_in_prog  [3]),. joint_req (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_req  [3]),. ch_start (  dma_axi64_core0_dma_axi64_core0_channels_ch_start  [3]),. int_all_proc (  dma_axi64_core0_dma_axi64_core0_channels_ch_int_all_proc  [1-1+(1*3):1*3]));  
-  dma_axi64_core0_ch_empty    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch_empty4  (. clk (  dma_axi64_core0_dma_axi64_core0_channels_clk  ),. reset (  dma_axi64_core0_dma_axi64_core0_channels_reset  ),. scan_en (  dma_axi64_core0_dma_axi64_core0_channels_scan_en  ),. idle (  dma_axi64_core0_dma_axi64_core0_channels_ch_idle  [4]),. pclk (  dma_axi64_core0_dma_axi64_core0_channels_pclk  ),. clken (  dma_axi64_core0_dma_axi64_core0_channels_clken  ),. pclken (  dma_axi64_core0_dma_axi64_core0_channels_pclken  ),. psel (  dma_axi64_core0_dma_axi64_core0_channels_ch_psel  [4]),. penable (  dma_axi64_core0_dma_axi64_core0_channels_penable  ),. paddr (  dma_axi64_core0_dma_axi64_core0_channels_paddr  [7:0]),. pwrite (  dma_axi64_core0_dma_axi64_core0_channels_pwrite  ),. pwdata (  dma_axi64_core0_dma_axi64_core0_channels_pwdata  ),. prdata (  dma_axi64_core0_dma_axi64_core0_channels_ch_prdata  [31+32*4:32*4]),. pslverr (  dma_axi64_core0_dma_axi64_core0_channels_ch_pslverr  [4]),. periph_tx_req (  dma_axi64_core0_dma_axi64_core0_channels_periph_tx_req  ),. periph_tx_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_periph_tx_clr  [31*4+31-1:31*4]),. periph_rx_req (  dma_axi64_core0_dma_axi64_core0_channels_periph_rx_req  ),. periph_rx_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_periph_rx_clr  [31*4+31-1:31*4]),. rd_cmd_split (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_cmd_split  [4]),. rd_cmd_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_cmd_line  [4]),. rd_clr_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_line  [4]),. rd_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr  [4]),. rd_clr_load (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_load  [4]),. rd_slverr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_slverr  [4]),. rd_decerr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_decerr  [4]),. rd_line_cmd (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_line_cmd  [4]),. rd_go_next_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_go_next_line  [4]),. rd_transfer (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_transfer  [4]),. rd_transfer_size (  dma_axi64_core0_dma_axi64_core0_channels_rd_transfer_size  ),. rd_clr_stall (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_stall  [4]),. wr_cmd_split (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_cmd_split  [4]),. wr_cmd_pending (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_cmd_pending  [4]),. wr_clr_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_line  [4]),. wr_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr  [4]),. wr_clr_last (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_last  [4]),. wr_slverr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_slverr  [4]),. wr_decerr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_decerr  [4]),. wr_last_cmd (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_last_cmd  [4]),. wr_line_cmd (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_line_cmd  [4]),. wr_go_next_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_go_next_line  [4]),. wr_transfer (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_transfer  [4]),. wr_transfer_size (  dma_axi64_core0_dma_axi64_core0_channels_wr_transfer_size  ),. wr_next_size (  dma_axi64_core0_dma_axi64_core0_channels_wr_next_size  ),. wr_clr_stall (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_stall  [4]),. timeout_aw (  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_aw  [4]),. timeout_w (  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_w  [4]),. timeout_ar (  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_ar  [4]),. wdt_timeout (  dma_axi64_core0_dma_axi64_core0_channels_ch_wdt_timeout  [4]),. load_wr (  dma_axi64_core0_dma_axi64_core0_channels_ch_load_wr  [4]),. load_wr_cycle (  dma_axi64_core0_dma_axi64_core0_channels_load_wr_cycle  ),. load_wdata (  dma_axi64_core0_dma_axi64_core0_channels_load_wdata  ),. load_req_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_load_req_in_prog  [4]),. ch_active (  dma_axi64_core0_dma_axi64_core0_channels_ch_active  [4]),. ch_rd_active (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_active  [4]),. ch_wr_active (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_active  [4]),. rd_burst_start (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_start  [4]),. rd_ready (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_ready  [4]),. rd_burst_addr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_addr  [32-1+32*4:32*4]),. rd_burst_size (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_size  [8-1+8*4:8*4]),. rd_tokens (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_tokens  [6-1+6*4:6*4]),. rd_port_num (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_port_num  [4]),. rd_periph_delay (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_periph_delay  [3-1+3*4:3*4]),. rd_clr_valid (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_valid  [4]),. wr_burst_start (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_start  [4]),. wr_ready (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_ready  [4]),. wr_burst_addr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_addr  [32-1+32*4:32*4]),. wr_burst_size (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_size  [8-1+8*4:8*4]),. wr_tokens (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_tokens  [6-1+6*4:6*4]),. wr_port_num (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_port_num  [4]),. wr_periph_delay (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_periph_delay  [3-1+3*4:3*4]),. wr_clr_valid (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_valid  [4]),. fifo_wr (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_wr  [4]),. fifo_wdata (  dma_axi64_core0_dma_axi64_core0_channels_fifo_wdata  ),. fifo_wsize (  dma_axi64_core0_dma_axi64_core0_channels_fifo_wsize  ),. fifo_rd (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd  [4]),. fifo_rsize (  dma_axi64_core0_dma_axi64_core0_channels_fifo_rsize  ),. fifo_rd_valid (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd_valid  [4]),. fifo_rdata (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rdata  [(64-1)+64*4:64*4]),. fifo_wr_ready (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_wr_ready  [4]),. joint_mode (  dma_axi64_core0_dma_axi64_core0_channels_joint_mode  ),. joint_remote (  dma_axi64_core0_dma_axi64_core0_channels_joint_remote  ),. rd_page_cross (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_page_cross  [4]),. wr_page_cross (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_page_cross  [4]),. joint_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_in_prog  [4]),. joint_not_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_not_in_prog  [4]),. joint_mux_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_mux_in_prog  [4]),. joint_req (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_req  [4]),. ch_start (  dma_axi64_core0_dma_axi64_core0_channels_ch_start  [4]),. int_all_proc (  dma_axi64_core0_dma_axi64_core0_channels_ch_int_all_proc  [1-1+(1*4):1*4]));  
-  dma_axi64_core0_ch_empty    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch_empty5  (. clk (  dma_axi64_core0_dma_axi64_core0_channels_clk  ),. reset (  dma_axi64_core0_dma_axi64_core0_channels_reset  ),. scan_en (  dma_axi64_core0_dma_axi64_core0_channels_scan_en  ),. idle (  dma_axi64_core0_dma_axi64_core0_channels_ch_idle  [5]),. pclk (  dma_axi64_core0_dma_axi64_core0_channels_pclk  ),. clken (  dma_axi64_core0_dma_axi64_core0_channels_clken  ),. pclken (  dma_axi64_core0_dma_axi64_core0_channels_pclken  ),. psel (  dma_axi64_core0_dma_axi64_core0_channels_ch_psel  [5]),. penable (  dma_axi64_core0_dma_axi64_core0_channels_penable  ),. paddr (  dma_axi64_core0_dma_axi64_core0_channels_paddr  [7:0]),. pwrite (  dma_axi64_core0_dma_axi64_core0_channels_pwrite  ),. pwdata (  dma_axi64_core0_dma_axi64_core0_channels_pwdata  ),. prdata (  dma_axi64_core0_dma_axi64_core0_channels_ch_prdata  [31+32*5:32*5]),. pslverr (  dma_axi64_core0_dma_axi64_core0_channels_ch_pslverr  [5]),. periph_tx_req (  dma_axi64_core0_dma_axi64_core0_channels_periph_tx_req  ),. periph_tx_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_periph_tx_clr  [31*5+31-1:31*5]),. periph_rx_req (  dma_axi64_core0_dma_axi64_core0_channels_periph_rx_req  ),. periph_rx_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_periph_rx_clr  [31*5+31-1:31*5]),. rd_cmd_split (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_cmd_split  [5]),. rd_cmd_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_cmd_line  [5]),. rd_clr_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_line  [5]),. rd_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr  [5]),. rd_clr_load (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_load  [5]),. rd_slverr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_slverr  [5]),. rd_decerr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_decerr  [5]),. rd_line_cmd (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_line_cmd  [5]),. rd_go_next_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_go_next_line  [5]),. rd_transfer (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_transfer  [5]),. rd_transfer_size (  dma_axi64_core0_dma_axi64_core0_channels_rd_transfer_size  ),. rd_clr_stall (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_stall  [5]),. wr_cmd_split (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_cmd_split  [5]),. wr_cmd_pending (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_cmd_pending  [5]),. wr_clr_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_line  [5]),. wr_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr  [5]),. wr_clr_last (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_last  [5]),. wr_slverr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_slverr  [5]),. wr_decerr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_decerr  [5]),. wr_last_cmd (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_last_cmd  [5]),. wr_line_cmd (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_line_cmd  [5]),. wr_go_next_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_go_next_line  [5]),. wr_transfer (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_transfer  [5]),. wr_transfer_size (  dma_axi64_core0_dma_axi64_core0_channels_wr_transfer_size  ),. wr_next_size (  dma_axi64_core0_dma_axi64_core0_channels_wr_next_size  ),. wr_clr_stall (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_stall  [5]),. timeout_aw (  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_aw  [5]),. timeout_w (  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_w  [5]),. timeout_ar (  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_ar  [5]),. wdt_timeout (  dma_axi64_core0_dma_axi64_core0_channels_ch_wdt_timeout  [5]),. load_wr (  dma_axi64_core0_dma_axi64_core0_channels_ch_load_wr  [5]),. load_wr_cycle (  dma_axi64_core0_dma_axi64_core0_channels_load_wr_cycle  ),. load_wdata (  dma_axi64_core0_dma_axi64_core0_channels_load_wdata  ),. load_req_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_load_req_in_prog  [5]),. ch_active (  dma_axi64_core0_dma_axi64_core0_channels_ch_active  [5]),. ch_rd_active (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_active  [5]),. ch_wr_active (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_active  [5]),. rd_burst_start (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_start  [5]),. rd_ready (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_ready  [5]),. rd_burst_addr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_addr  [32-1+32*5:32*5]),. rd_burst_size (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_size  [8-1+8*5:8*5]),. rd_tokens (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_tokens  [6-1+6*5:6*5]),. rd_port_num (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_port_num  [5]),. rd_periph_delay (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_periph_delay  [3-1+3*5:3*5]),. rd_clr_valid (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_valid  [5]),. wr_burst_start (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_start  [5]),. wr_ready (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_ready  [5]),. wr_burst_addr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_addr  [32-1+32*5:32*5]),. wr_burst_size (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_size  [8-1+8*5:8*5]),. wr_tokens (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_tokens  [6-1+6*5:6*5]),. wr_port_num (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_port_num  [5]),. wr_periph_delay (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_periph_delay  [3-1+3*5:3*5]),. wr_clr_valid (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_valid  [5]),. fifo_wr (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_wr  [5]),. fifo_wdata (  dma_axi64_core0_dma_axi64_core0_channels_fifo_wdata  ),. fifo_wsize (  dma_axi64_core0_dma_axi64_core0_channels_fifo_wsize  ),. fifo_rd (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd  [5]),. fifo_rsize (  dma_axi64_core0_dma_axi64_core0_channels_fifo_rsize  ),. fifo_rd_valid (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd_valid  [5]),. fifo_rdata (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rdata  [(64-1)+64*5:64*5]),. fifo_wr_ready (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_wr_ready  [5]),. joint_mode (  dma_axi64_core0_dma_axi64_core0_channels_joint_mode  ),. joint_remote (  dma_axi64_core0_dma_axi64_core0_channels_joint_remote  ),. rd_page_cross (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_page_cross  [5]),. wr_page_cross (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_page_cross  [5]),. joint_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_in_prog  [5]),. joint_not_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_not_in_prog  [5]),. joint_mux_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_mux_in_prog  [5]),. joint_req (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_req  [5]),. ch_start (  dma_axi64_core0_dma_axi64_core0_channels_ch_start  [5]),. int_all_proc (  dma_axi64_core0_dma_axi64_core0_channels_ch_int_all_proc  [1-1+(1*5):1*5]));  
-  dma_axi64_core0_ch_empty    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch_empty6  (. clk (  dma_axi64_core0_dma_axi64_core0_channels_clk  ),. reset (  dma_axi64_core0_dma_axi64_core0_channels_reset  ),. scan_en (  dma_axi64_core0_dma_axi64_core0_channels_scan_en  ),. idle (  dma_axi64_core0_dma_axi64_core0_channels_ch_idle  [6]),. pclk (  dma_axi64_core0_dma_axi64_core0_channels_pclk  ),. clken (  dma_axi64_core0_dma_axi64_core0_channels_clken  ),. pclken (  dma_axi64_core0_dma_axi64_core0_channels_pclken  ),. psel (  dma_axi64_core0_dma_axi64_core0_channels_ch_psel  [6]),. penable (  dma_axi64_core0_dma_axi64_core0_channels_penable  ),. paddr (  dma_axi64_core0_dma_axi64_core0_channels_paddr  [7:0]),. pwrite (  dma_axi64_core0_dma_axi64_core0_channels_pwrite  ),. pwdata (  dma_axi64_core0_dma_axi64_core0_channels_pwdata  ),. prdata (  dma_axi64_core0_dma_axi64_core0_channels_ch_prdata  [31+32*6:32*6]),. pslverr (  dma_axi64_core0_dma_axi64_core0_channels_ch_pslverr  [6]),. periph_tx_req (  dma_axi64_core0_dma_axi64_core0_channels_periph_tx_req  ),. periph_tx_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_periph_tx_clr  [31*6+31-1:31*6]),. periph_rx_req (  dma_axi64_core0_dma_axi64_core0_channels_periph_rx_req  ),. periph_rx_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_periph_rx_clr  [31*6+31-1:31*6]),. rd_cmd_split (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_cmd_split  [6]),. rd_cmd_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_cmd_line  [6]),. rd_clr_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_line  [6]),. rd_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr  [6]),. rd_clr_load (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_load  [6]),. rd_slverr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_slverr  [6]),. rd_decerr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_decerr  [6]),. rd_line_cmd (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_line_cmd  [6]),. rd_go_next_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_go_next_line  [6]),. rd_transfer (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_transfer  [6]),. rd_transfer_size (  dma_axi64_core0_dma_axi64_core0_channels_rd_transfer_size  ),. rd_clr_stall (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_stall  [6]),. wr_cmd_split (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_cmd_split  [6]),. wr_cmd_pending (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_cmd_pending  [6]),. wr_clr_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_line  [6]),. wr_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr  [6]),. wr_clr_last (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_last  [6]),. wr_slverr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_slverr  [6]),. wr_decerr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_decerr  [6]),. wr_last_cmd (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_last_cmd  [6]),. wr_line_cmd (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_line_cmd  [6]),. wr_go_next_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_go_next_line  [6]),. wr_transfer (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_transfer  [6]),. wr_transfer_size (  dma_axi64_core0_dma_axi64_core0_channels_wr_transfer_size  ),. wr_next_size (  dma_axi64_core0_dma_axi64_core0_channels_wr_next_size  ),. wr_clr_stall (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_stall  [6]),. timeout_aw (  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_aw  [6]),. timeout_w (  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_w  [6]),. timeout_ar (  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_ar  [6]),. wdt_timeout (  dma_axi64_core0_dma_axi64_core0_channels_ch_wdt_timeout  [6]),. load_wr (  dma_axi64_core0_dma_axi64_core0_channels_ch_load_wr  [6]),. load_wr_cycle (  dma_axi64_core0_dma_axi64_core0_channels_load_wr_cycle  ),. load_wdata (  dma_axi64_core0_dma_axi64_core0_channels_load_wdata  ),. load_req_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_load_req_in_prog  [6]),. ch_active (  dma_axi64_core0_dma_axi64_core0_channels_ch_active  [6]),. ch_rd_active (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_active  [6]),. ch_wr_active (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_active  [6]),. rd_burst_start (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_start  [6]),. rd_ready (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_ready  [6]),. rd_burst_addr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_addr  [32-1+32*6:32*6]),. rd_burst_size (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_size  [8-1+8*6:8*6]),. rd_tokens (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_tokens  [6-1+6*6:6*6]),. rd_port_num (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_port_num  [6]),. rd_periph_delay (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_periph_delay  [3-1+3*6:3*6]),. rd_clr_valid (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_valid  [6]),. wr_burst_start (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_start  [6]),. wr_ready (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_ready  [6]),. wr_burst_addr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_addr  [32-1+32*6:32*6]),. wr_burst_size (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_size  [8-1+8*6:8*6]),. wr_tokens (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_tokens  [6-1+6*6:6*6]),. wr_port_num (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_port_num  [6]),. wr_periph_delay (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_periph_delay  [3-1+3*6:3*6]),. wr_clr_valid (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_valid  [6]),. fifo_wr (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_wr  [6]),. fifo_wdata (  dma_axi64_core0_dma_axi64_core0_channels_fifo_wdata  ),. fifo_wsize (  dma_axi64_core0_dma_axi64_core0_channels_fifo_wsize  ),. fifo_rd (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd  [6]),. fifo_rsize (  dma_axi64_core0_dma_axi64_core0_channels_fifo_rsize  ),. fifo_rd_valid (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd_valid  [6]),. fifo_rdata (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rdata  [(64-1)+64*6:64*6]),. fifo_wr_ready (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_wr_ready  [6]),. joint_mode (  dma_axi64_core0_dma_axi64_core0_channels_joint_mode  ),. joint_remote (  dma_axi64_core0_dma_axi64_core0_channels_joint_remote  ),. rd_page_cross (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_page_cross  [6]),. wr_page_cross (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_page_cross  [6]),. joint_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_in_prog  [6]),. joint_not_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_not_in_prog  [6]),. joint_mux_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_mux_in_prog  [6]),. joint_req (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_req  [6]),. ch_start (  dma_axi64_core0_dma_axi64_core0_channels_ch_start  [6]),. int_all_proc (  dma_axi64_core0_dma_axi64_core0_channels_ch_int_all_proc  [1-1+(1*6):1*6]));  
-  dma_axi64_core0_ch_empty    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch_empty7  (. clk (  dma_axi64_core0_dma_axi64_core0_channels_clk  ),. reset (  dma_axi64_core0_dma_axi64_core0_channels_reset  ),. scan_en (  dma_axi64_core0_dma_axi64_core0_channels_scan_en  ),. idle (  dma_axi64_core0_dma_axi64_core0_channels_ch_idle  [7]),. pclk (  dma_axi64_core0_dma_axi64_core0_channels_pclk  ),. clken (  dma_axi64_core0_dma_axi64_core0_channels_clken  ),. pclken (  dma_axi64_core0_dma_axi64_core0_channels_pclken  ),. psel (  dma_axi64_core0_dma_axi64_core0_channels_ch_psel  [7]),. penable (  dma_axi64_core0_dma_axi64_core0_channels_penable  ),. paddr (  dma_axi64_core0_dma_axi64_core0_channels_paddr  [7:0]),. pwrite (  dma_axi64_core0_dma_axi64_core0_channels_pwrite  ),. pwdata (  dma_axi64_core0_dma_axi64_core0_channels_pwdata  ),. prdata (  dma_axi64_core0_dma_axi64_core0_channels_ch_prdata  [31+32*7:32*7]),. pslverr (  dma_axi64_core0_dma_axi64_core0_channels_ch_pslverr  [7]),. periph_tx_req (  dma_axi64_core0_dma_axi64_core0_channels_periph_tx_req  ),. periph_tx_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_periph_tx_clr  [31*7+31-1:31*7]),. periph_rx_req (  dma_axi64_core0_dma_axi64_core0_channels_periph_rx_req  ),. periph_rx_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_periph_rx_clr  [31*7+31-1:31*7]),. rd_cmd_split (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_cmd_split  [7]),. rd_cmd_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_cmd_line  [7]),. rd_clr_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_line  [7]),. rd_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr  [7]),. rd_clr_load (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_load  [7]),. rd_slverr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_slverr  [7]),. rd_decerr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_decerr  [7]),. rd_line_cmd (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_line_cmd  [7]),. rd_go_next_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_go_next_line  [7]),. rd_transfer (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_transfer  [7]),. rd_transfer_size (  dma_axi64_core0_dma_axi64_core0_channels_rd_transfer_size  ),. rd_clr_stall (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_stall  [7]),. wr_cmd_split (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_cmd_split  [7]),. wr_cmd_pending (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_cmd_pending  [7]),. wr_clr_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_line  [7]),. wr_clr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr  [7]),. wr_clr_last (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_last  [7]),. wr_slverr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_slverr  [7]),. wr_decerr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_decerr  [7]),. wr_last_cmd (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_last_cmd  [7]),. wr_line_cmd (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_line_cmd  [7]),. wr_go_next_line (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_go_next_line  [7]),. wr_transfer (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_transfer  [7]),. wr_transfer_size (  dma_axi64_core0_dma_axi64_core0_channels_wr_transfer_size  ),. wr_next_size (  dma_axi64_core0_dma_axi64_core0_channels_wr_next_size  ),. wr_clr_stall (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_stall  [7]),. timeout_aw (  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_aw  [7]),. timeout_w (  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_w  [7]),. timeout_ar (  dma_axi64_core0_dma_axi64_core0_channels_ch_timeout_ar  [7]),. wdt_timeout (  dma_axi64_core0_dma_axi64_core0_channels_ch_wdt_timeout  [7]),. load_wr (  dma_axi64_core0_dma_axi64_core0_channels_ch_load_wr  [7]),. load_wr_cycle (  dma_axi64_core0_dma_axi64_core0_channels_load_wr_cycle  ),. load_wdata (  dma_axi64_core0_dma_axi64_core0_channels_load_wdata  ),. load_req_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_load_req_in_prog  [7]),. ch_active (  dma_axi64_core0_dma_axi64_core0_channels_ch_active  [7]),. ch_rd_active (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_active  [7]),. ch_wr_active (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_active  [7]),. rd_burst_start (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_start  [7]),. rd_ready (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_ready  [7]),. rd_burst_addr (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_addr  [32-1+32*7:32*7]),. rd_burst_size (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_burst_size  [8-1+8*7:8*7]),. rd_tokens (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_tokens  [6-1+6*7:6*7]),. rd_port_num (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_port_num  [7]),. rd_periph_delay (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_periph_delay  [3-1+3*7:3*7]),. rd_clr_valid (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_clr_valid  [7]),. wr_burst_start (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_start  [7]),. wr_ready (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_ready  [7]),. wr_burst_addr (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_addr  [32-1+32*7:32*7]),. wr_burst_size (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_burst_size  [8-1+8*7:8*7]),. wr_tokens (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_tokens  [6-1+6*7:6*7]),. wr_port_num (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_port_num  [7]),. wr_periph_delay (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_periph_delay  [3-1+3*7:3*7]),. wr_clr_valid (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_clr_valid  [7]),. fifo_wr (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_wr  [7]),. fifo_wdata (  dma_axi64_core0_dma_axi64_core0_channels_fifo_wdata  ),. fifo_wsize (  dma_axi64_core0_dma_axi64_core0_channels_fifo_wsize  ),. fifo_rd (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd  [7]),. fifo_rsize (  dma_axi64_core0_dma_axi64_core0_channels_fifo_rsize  ),. fifo_rd_valid (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd_valid  [7]),. fifo_rdata (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rdata  [(64-1)+64*7:64*7]),. fifo_wr_ready (  dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_wr_ready  [7]),. joint_mode (  dma_axi64_core0_dma_axi64_core0_channels_joint_mode  ),. joint_remote (  dma_axi64_core0_dma_axi64_core0_channels_joint_remote  ),. rd_page_cross (  dma_axi64_core0_dma_axi64_core0_channels_ch_rd_page_cross  [7]),. wr_page_cross (  dma_axi64_core0_dma_axi64_core0_channels_ch_wr_page_cross  [7]),. joint_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_in_prog  [7]),. joint_not_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_not_in_prog  [7]),. joint_mux_in_prog (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_mux_in_prog  [7]),. joint_req (  dma_axi64_core0_dma_axi64_core0_channels_ch_joint_req  [7]),. ch_start (  dma_axi64_core0_dma_axi64_core0_channels_ch_start  [7]),. int_all_proc (  dma_axi64_core0_dma_axi64_core0_channels_ch_int_all_proc  [1-1+(1*7):1*7]));
-assign dma_axi64_core0_dma_axi64_core0_channels_clk = dma_axi64_core0_clk;
-assign dma_axi64_core0_dma_axi64_core0_channels_reset = dma_axi64_core0_reset;
-assign dma_axi64_core0_dma_axi64_core0_channels_scan_en = dma_axi64_core0_scan_en;
-assign dma_axi64_core0_dma_axi64_core0_channels_pclk = dma_axi64_core0_pclk;
-assign dma_axi64_core0_dma_axi64_core0_channels_clken = dma_axi64_core0_clken;
-assign dma_axi64_core0_dma_axi64_core0_channels_pclken = dma_axi64_core0_pclken;
-assign dma_axi64_core0_dma_axi64_core0_channels_psel = dma_axi64_core0_psel;
-assign dma_axi64_core0_dma_axi64_core0_channels_penable = dma_axi64_core0_penable;
-assign dma_axi64_core0_dma_axi64_core0_channels_paddr = dma_axi64_core0_paddr[10:0];
-assign dma_axi64_core0_dma_axi64_core0_channels_pwrite = dma_axi64_core0_pwrite;
-assign dma_axi64_core0_dma_axi64_core0_channels_pwdata = dma_axi64_core0_pwdata;
-assign dma_axi64_core0_prdata = dma_axi64_core0_dma_axi64_core0_channels_prdata;
-assign dma_axi64_core0_pslverr = dma_axi64_core0_dma_axi64_core0_channels_pslverr;
-assign dma_axi64_core0_dma_axi64_core0_channels_periph_tx_req = dma_axi64_core0_periph_tx_req;
-assign dma_axi64_core0_periph_tx_clr = dma_axi64_core0_dma_axi64_core0_channels_periph_tx_clr;
-assign dma_axi64_core0_dma_axi64_core0_channels_periph_rx_req = dma_axi64_core0_periph_rx_req;
-assign dma_axi64_core0_periph_rx_clr = dma_axi64_core0_dma_axi64_core0_channels_periph_rx_clr;
-assign dma_axi64_core0_rd_clr_valid = dma_axi64_core0_dma_axi64_core0_channels_rd_clr_valid;
-assign dma_axi64_core0_wr_clr_valid = dma_axi64_core0_dma_axi64_core0_channels_wr_clr_valid;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_clr = dma_axi64_core0_rd_clr;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_clr_load = dma_axi64_core0_rd_clr_load;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_clr = dma_axi64_core0_wr_clr;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_cmd_split = dma_axi64_core0_rd_cmd_split;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_cmd_line = dma_axi64_core0_rd_cmd_line;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_cmd_num = dma_axi64_core0_rd_cmd_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_cmd_split = dma_axi64_core0_wr_cmd_split;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_cmd_pending = dma_axi64_core0_wr_cmd_pending;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_cmd_num = dma_axi64_core0_wr_cmd_num;
-assign dma_axi64_core0_rd_clr_stall = dma_axi64_core0_dma_axi64_core0_channels_rd_clr_stall;
-assign dma_axi64_core0_wr_clr_stall = dma_axi64_core0_dma_axi64_core0_channels_wr_clr_stall;
-assign dma_axi64_core0_dma_axi64_core0_channels_load_wr = dma_axi64_core0_load_wr;
-assign dma_axi64_core0_dma_axi64_core0_channels_load_wr_num = dma_axi64_core0_load_wr_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_load_wr_cycle = dma_axi64_core0_load_wr_cycle;
-assign dma_axi64_core0_dma_axi64_core0_channels_load_wdata = dma_axi64_core0_load_wdata;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_ch_num = dma_axi64_core0_rd_ch_num;
-assign dma_axi64_core0_load_req_in_prog = dma_axi64_core0_dma_axi64_core0_channels_load_req_in_prog;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_ch_num = dma_axi64_core0_wr_ch_num_joint;
-assign dma_axi64_core0_wr_last_cmd = dma_axi64_core0_dma_axi64_core0_channels_wr_last_cmd;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_slverr = dma_axi64_core0_rd_slverr;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_decerr = dma_axi64_core0_rd_decerr;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_slverr = dma_axi64_core0_wr_slverr;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_decerr = dma_axi64_core0_wr_decerr;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_ch_num_resp = dma_axi64_core0_rd_ch_num_resp;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_ch_num_resp = dma_axi64_core0_wr_ch_num_resp;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_clr_last = dma_axi64_core0_wr_clr_last;
-assign dma_axi64_core0_ch_int_all_proc = dma_axi64_core0_dma_axi64_core0_channels_ch_int_all_proc;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_start = dma_axi64_core0_ch_start;
-assign dma_axi64_core0_ch_idle = dma_axi64_core0_dma_axi64_core0_channels_ch_idle;
-assign dma_axi64_core0_ch_active = dma_axi64_core0_dma_axi64_core0_channels_ch_active;
-assign dma_axi64_core0_ch_rd_active = dma_axi64_core0_dma_axi64_core0_channels_ch_rd_active;
-assign dma_axi64_core0_ch_wr_active = dma_axi64_core0_dma_axi64_core0_channels_ch_wr_active;
-assign dma_axi64_core0_rd_line_cmd = dma_axi64_core0_dma_axi64_core0_channels_rd_line_cmd;
-assign dma_axi64_core0_wr_line_cmd = dma_axi64_core0_dma_axi64_core0_channels_wr_line_cmd;
-assign dma_axi64_core0_rd_go_next_line = dma_axi64_core0_dma_axi64_core0_channels_rd_go_next_line;
-assign dma_axi64_core0_wr_go_next_line = dma_axi64_core0_dma_axi64_core0_channels_wr_go_next_line;
-assign dma_axi64_core0_dma_axi64_core0_channels_timeout_aw = dma_axi64_core0_timeout_aw;
-assign dma_axi64_core0_dma_axi64_core0_channels_timeout_w = dma_axi64_core0_timeout_w;
-assign dma_axi64_core0_dma_axi64_core0_channels_timeout_ar = dma_axi64_core0_timeout_ar;
-assign dma_axi64_core0_dma_axi64_core0_channels_timeout_num_aw = dma_axi64_core0_timeout_num_aw;
-assign dma_axi64_core0_dma_axi64_core0_channels_timeout_num_w = dma_axi64_core0_timeout_num_w;
-assign dma_axi64_core0_dma_axi64_core0_channels_timeout_num_ar = dma_axi64_core0_timeout_num_ar;
-assign dma_axi64_core0_dma_axi64_core0_channels_wdt_timeout = dma_axi64_core0_wdt_timeout;
-assign dma_axi64_core0_dma_axi64_core0_channels_wdt_ch_num = dma_axi64_core0_wdt_ch_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_wr_num = dma_axi64_core0_ch_fifo_wr_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_transfer_num = dma_axi64_core0_rd_transfer_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_burst_start = dma_axi64_core0_rd_burst_start;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_transfer = dma_axi64_core0_rd_transfer;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_transfer_size = dma_axi64_core0_rd_transfer_size;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_clr_line = dma_axi64_core0_rd_clr_line;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_clr_line_num = dma_axi64_core0_rd_clr_line_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_fifo_rd = dma_axi64_core0_ch_fifo_rd;
-assign dma_axi64_core0_dma_axi64_core0_channels_fifo_rsize = dma_axi64_core0_ch_fifo_rsize;
-assign dma_axi64_core0_ch_fifo_rd_valid = dma_axi64_core0_dma_axi64_core0_channels_fifo_rd_valid;
-assign dma_axi64_core0_ch_fifo_rdata = dma_axi64_core0_dma_axi64_core0_channels_fifo_rdata;
-assign dma_axi64_core0_ch_fifo_wr_ready = dma_axi64_core0_dma_axi64_core0_channels_fifo_wr_ready;
-assign dma_axi64_core0_ch_rd_ready = dma_axi64_core0_dma_axi64_core0_channels_ch_rd_ready;
-assign dma_axi64_core0_rd_burst_addr = dma_axi64_core0_dma_axi64_core0_channels_rd_burst_addr;
-assign dma_axi64_core0_rd_burst_size = dma_axi64_core0_dma_axi64_core0_channels_rd_burst_size;
-assign dma_axi64_core0_rd_tokens = dma_axi64_core0_dma_axi64_core0_channels_rd_tokens;
-assign dma_axi64_core0_rd_cmd_port = dma_axi64_core0_dma_axi64_core0_channels_rd_cmd_port;
-assign dma_axi64_core0_rd_periph_delay = dma_axi64_core0_dma_axi64_core0_channels_rd_periph_delay;
-assign dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd_num = dma_axi64_core0_ch_fifo_rd_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_transfer_num = dma_axi64_core0_wr_transfer_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_burst_start = dma_axi64_core0_wr_burst_start_joint;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_transfer = dma_axi64_core0_wr_transfer;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_transfer_size = dma_axi64_core0_wr_transfer_size;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_next_size = dma_axi64_core0_wr_next_size;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_clr_line = dma_axi64_core0_wr_clr_line;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_clr_line_num = dma_axi64_core0_wr_clr_line_num;
-assign dma_axi64_core0_dma_axi64_core0_channels_fifo_wr = dma_axi64_core0_ch_fifo_wr;
-assign dma_axi64_core0_dma_axi64_core0_channels_fifo_wdata = dma_axi64_core0_ch_fifo_wdata;
-assign dma_axi64_core0_dma_axi64_core0_channels_fifo_wsize = dma_axi64_core0_ch_fifo_wsize;
-assign dma_axi64_core0_ch_wr_ready = dma_axi64_core0_dma_axi64_core0_channels_ch_wr_ready;
-assign dma_axi64_core0_wr_burst_addr = dma_axi64_core0_dma_axi64_core0_channels_wr_burst_addr;
-assign dma_axi64_core0_wr_burst_size = dma_axi64_core0_dma_axi64_core0_channels_wr_burst_size;
-assign dma_axi64_core0_wr_tokens = dma_axi64_core0_dma_axi64_core0_channels_wr_tokens;
-assign dma_axi64_core0_wr_cmd_port = dma_axi64_core0_dma_axi64_core0_channels_wr_cmd_port;
-assign dma_axi64_core0_wr_periph_delay = dma_axi64_core0_dma_axi64_core0_channels_wr_periph_delay;
-assign dma_axi64_core0_dma_axi64_core0_channels_joint_mode = dma_axi64_core0_joint_mode;
-assign dma_axi64_core0_dma_axi64_core0_channels_joint_remote = dma_axi64_core0_joint_remote;
-assign dma_axi64_core0_dma_axi64_core0_channels_rd_page_cross = dma_axi64_core0_rd_page_cross;
-assign dma_axi64_core0_dma_axi64_core0_channels_wr_page_cross = dma_axi64_core0_wr_page_cross;
-assign dma_axi64_core0_joint_in_prog = dma_axi64_core0_dma_axi64_core0_channels_joint_in_prog;
-assign dma_axi64_core0_joint_not_in_prog = dma_axi64_core0_dma_axi64_core0_channels_joint_not_in_prog;
-assign dma_axi64_core0_joint_mux_in_prog = dma_axi64_core0_dma_axi64_core0_channels_joint_mux_in_prog;
-assign dma_axi64_core0_ch_joint_req = dma_axi64_core0_dma_axi64_core0_channels_ch_joint_req;
-
-assign dma_axi64_core0_clk = clk_out;
-assign dma_axi64_core0_reset = reset;
-assign dma_axi64_core0_scan_en = scan_en;
-assign idle = dma_axi64_core0_idle;
-assign ch_int_all_proc = dma_axi64_core0_ch_int_all_proc;
-assign dma_axi64_core0_ch_start = ch_start;
-assign dma_axi64_core0_periph_tx_req = periph_tx_req;
-assign periph_tx_clr = dma_axi64_core0_periph_tx_clr;
-assign dma_axi64_core0_periph_rx_req = periph_rx_req;
-assign periph_rx_clr = dma_axi64_core0_periph_rx_clr;
-assign dma_axi64_core0_pclk = clk;
-assign dma_axi64_core0_clken = clken;
-assign dma_axi64_core0_pclken = pclken;
-assign dma_axi64_core0_psel = psel;
-assign dma_axi64_core0_penable = penable;
-assign dma_axi64_core0_paddr = paddr[10:0];
-assign dma_axi64_core0_pwrite = pwrite;
-assign dma_axi64_core0_pwdata = pwdata;
-assign prdata = dma_axi64_core0_prdata;
-assign pslverr = dma_axi64_core0_pslverr;
-assign rd_port_num = dma_axi64_core0_rd_port_num;
-assign wr_port_num = dma_axi64_core0_wr_port_num;
-assign dma_axi64_core0_joint_mode_in = joint_mode;
-assign dma_axi64_core0_joint_remote = joint_remote;
-assign dma_axi64_core0_rd_prio_top = rd_prio_top;
-assign dma_axi64_core0_rd_prio_high = rd_prio_high;
-assign dma_axi64_core0_rd_prio_top_num = rd_prio_top_num;
-assign dma_axi64_core0_rd_prio_high_num = rd_prio_high_num;
-assign dma_axi64_core0_wr_prio_top = wr_prio_top;
-assign dma_axi64_core0_wr_prio_high = wr_prio_high;
-assign dma_axi64_core0_wr_prio_top_num = wr_prio_top_num;
-assign dma_axi64_core0_wr_prio_high_num = wr_prio_high_num;
-assign slow_AWADDR = dma_axi64_core0_AWADDR;
-assign slow_AWLEN = dma_axi64_core0_AWLEN;
-assign slow_AWSIZE = dma_axi64_core0_AWSIZE;
-assign slow_AWVALID = dma_axi64_core0_AWVALID;
-assign dma_axi64_core0_AWREADY = slow_AWREADY;
-assign slow_WDATA = dma_axi64_core0_WDATA;
-assign slow_WSTRB = dma_axi64_core0_WSTRB;
-assign slow_WLAST = dma_axi64_core0_WLAST;
-assign slow_WVALID = dma_axi64_core0_WVALID;
-assign dma_axi64_core0_WREADY = slow_WREADY;
-assign dma_axi64_core0_BRESP = slow_BRESP;
-assign dma_axi64_core0_BVALID = slow_BVALID;
-assign slow_BREADY = dma_axi64_core0_BREADY;
-assign slow_ARADDR = dma_axi64_core0_ARADDR;
-assign slow_ARLEN = dma_axi64_core0_ARLEN;
-assign slow_ARSIZE = dma_axi64_core0_ARSIZE;
-assign slow_ARVALID = dma_axi64_core0_ARVALID;
-assign dma_axi64_core0_ARREADY = slow_ARREADY;
-assign dma_axi64_core0_RDATA = slow_RDATA;
-assign dma_axi64_core0_RRESP = slow_RRESP;
-assign dma_axi64_core0_RLAST = slow_RLAST;
-assign dma_axi64_core0_RVALID = slow_RVALID;
-assign slow_RREADY = dma_axi64_core0_RREADY;
- 
+  dma_axi64_core0 dma_axi64_core0(.clk(clk_out),.reset(reset),.scan_en(scan_en),.idle(idle),.ch_int_all_proc(ch_int_all_proc),.ch_start(ch_start),.periph_tx_req(periph_tx_req),.periph_tx_clr(periph_tx_clr),.periph_rx_req(periph_rx_req),.periph_rx_clr(periph_rx_clr),.pclk(clk),.clken(clken),.pclken(pclken),.psel(psel),.penable(penable),.paddr(paddr[10:0]),.pwrite(pwrite),.pwdata(pwdata),.prdata(prdata),.pslverr(pslverr),.joint_mode_in(joint_mode),.joint_remote(joint_remote),.rd_prio_top(rd_prio_top),.rd_prio_high(rd_prio_high),.rd_prio_top_num(rd_prio_top_num),.rd_prio_high_num(rd_prio_high_num),.wr_prio_top(wr_prio_top),.wr_prio_high(wr_prio_high),.wr_prio_top_num(wr_prio_top_num),.wr_prio_high_num(wr_prio_high_num),.rd_port_num(rd_port_num),.wr_port_num(wr_port_num),.AWADDR(slow_AWADDR),.AWLEN(slow_AWLEN),.AWSIZE(slow_AWSIZE),.AWVALID(slow_AWVALID),.AWREADY(slow_AWREADY),.WDATA(slow_WDATA),.WSTRB(slow_WSTRB),.WLAST(slow_WLAST),.WVALID(slow_WVALID),.WREADY(slow_WREADY),.BRESP(slow_BRESP),.BVALID(slow_BVALID),.BREADY(slow_BREADY),.ARADDR(slow_ARADDR),.ARLEN(slow_ARLEN),.ARSIZE(slow_ARSIZE),.ARVALID(slow_ARVALID),.ARREADY(slow_ARREADY),.RDATA(slow_RDATA),.RRESP(slow_RRESP),.RLAST(slow_RLAST),.RVALID(slow_RVALID),.RREADY(slow_RREADY)); 
 endmodule
  
 module prgen_fifo #(
@@ -6901,45 +149,45 @@ module prgen_fifo #(
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            dout <=#1{WIDTH{1'b0}};
-            dout_empty <=#11'b1;
+            dout <={WIDTH{1'b0}};
+            dout_empty <=1'b1;
           end 
         else 
           if (reg_push)
              begin 
-               dout <=#1din;
-               dout_empty <=#11'b0;
+               dout <=din;
+               dout_empty <=1'b0;
              end 
            else 
              if (reg_pop)
                 begin 
-                  dout <=#1{WIDTH{1'b0}};
-                  dout_empty <=#11'b1;
+                  dout <={WIDTH{1'b0}};
+                  dout_empty <=1'b1;
                 end 
               else 
                 if (fifo_pop)
                    begin 
-                     dout <=#1fifo[ptr_out];
-                     dout_empty <=#11'b0;
+                     dout <=fifo[ptr_out];
+                     dout_empty <=1'b0;
                    end
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          ptr_in <=#1{DEPTH_BITS{1'b0}};
+          ptr_in <={DEPTH_BITS{1'b0}};
         else 
           if (fifo_push)
-             ptr_in <=#1ptr_in==LAST_LINE ? 0:ptr_in+1'b1;
+             ptr_in <=ptr_in==LAST_LINE ? 0:ptr_in+1'b1;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          ptr_out <=#1{DEPTH_BITS{1'b0}};
+          ptr_out <={DEPTH_BITS{1'b0}};
         else 
           if (fifo_pop)
-             ptr_out <=#1ptr_out==LAST_LINE ? 0:ptr_out+1'b1;
+             ptr_out <=ptr_out==LAST_LINE ? 0:ptr_out+1'b1;
  
   always @( posedge clk)
        if (fifo_push)
-          fifo [ptr_in]<=#1din;
+          fifo [ptr_in]<=din;
  
   always @(  fifo_push or  ptr_in)
        begin 
@@ -6955,10 +203,10 @@ module prgen_fifo #(
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          fullness <=#1{DEPTH{1'b0}};
+          fullness <={DEPTH{1'b0}};
         else 
           if (fifo_push|fifo_pop)
-             fullness <=#1(fullness&(~fullness_out))|fullness_in;
+             fullness <=(fullness&(~fullness_out))|fullness_in;
  
   assign next=|fullness; 
   assign fifo_empty=~next; 
@@ -6998,9 +246,9 @@ module dma_axi64_core0_ch_offsets (
   input [3-1:0] width_align,
   output [3-1:0] align) ; 
    wire update_line ;  
-   wire go_next_line ;  
+   //wire go_next_line ;  
    wire line_end_pre ;  
-   wire line_empty ;  
+   //wire line_empty ;  
    wire ch_end_pre ;  
    wire ch_update_d ;  
   assign ch_end_pre=burst_start&burst_last; 
@@ -7009,23 +257,23 @@ module dma_axi64_core0_ch_offsets (
   assign empty=ch_end_pre|ch_end; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          ch_end <=#11'b0;
+          ch_end <=1'b0;
         else 
           if (ch_update)
-             ch_end <=#11'b0;
+             ch_end <=1'b0;
            else 
              if (ch_end_pre)
-                ch_end <=#11'b1;
+                ch_end <=1'b1;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          x_remain <=#1{10{1'b0}};
+          x_remain <={10{1'b0}};
         else 
           if (ch_update|go_next_line)
-             x_remain <=#1x_size;
+             x_remain <=x_size;
            else 
              if (burst_start&(~load_req_in_prog))
-                x_remain <=#1x_remain-burst_size;
+                x_remain <=x_remain-burst_size;
  
   assign x_offset={10{1'b0}}; 
   assign y_offset={10-8{1'b0}}; 
@@ -7045,13 +293,13 @@ module prgen_stall #(
    wire pend ;  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          count <=#1{DEPTH{1'b0}};
+          count <={DEPTH{1'b0}};
         else 
           if (pend&(~stall))
-             count <=#1count-1'b1;
+             count <=count-1'b1;
            else 
              if (din&stall)
-                count <=#1count+1'b1;
+                count <=count+1'b1;
  
   assign pend=(|count); 
   assign dout=(din|pend)&(~stall); 
@@ -7181,26 +429,26 @@ module dma_axi64_reg #(
   assign wr_periph_tx=gpwrite&gpaddr==PERIPH_TX_CTRL; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          periph_rx_req_reg <=#1{31{1'b0}};
+          periph_rx_req_reg <={31{1'b0}};
         else 
           if (wr_periph_rx|(|periph_rx_clr))
-             periph_rx_req_reg <=#1({31{wr_periph_rx}}&pwdata[31:1])&(~periph_rx_clr);
+             periph_rx_req_reg <=({31{wr_periph_rx}}&pwdata[31:1])&(~periph_rx_clr);
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          periph_tx_req_reg <=#1{31{1'b0}};
+          periph_tx_req_reg <={31{1'b0}};
         else 
           if (wr_periph_tx|(|periph_tx_clr))
-             periph_tx_req_reg <=#1({31{wr_periph_tx}}&pwdata[31:1])&(~periph_tx_clr);
+             periph_tx_req_reg <=({31{wr_periph_tx}}&pwdata[31:1])&(~periph_tx_clr);
  
   assign proc0_int_stat={proc0_int_stat0}; 
   assign proc0_int=|proc0_int_stat; 
   assign int_all_proc_pre={proc0_int}; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          int_all_proc <=#1{1{1'b0}};
+          int_all_proc <={1{1'b0}};
         else 
-          int_all_proc <=#1int_all_proc_pre;
+          int_all_proc <=int_all_proc_pre;
  
   always @(*)
        begin 
@@ -7266,23 +514,23 @@ module dma_axi64_reg #(
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          prdata <=#1{32{1'b0}};
+          prdata <={32{1'b0}};
         else 
           if (gpread&pclken)
-             prdata <=#1prdata_pre;
+             prdata <=prdata_pre;
            else 
              if (pclken)
-                prdata <=#1{32{1'b0}};
+                prdata <={32{1'b0}};
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          pslverr <=#11'b0;
+          pslverr <=1'b0;
         else 
           if ((gpread|gpwrite)&pclken)
-             pslverr <=#1pslverr_pre;
+             pslverr <=pslverr_pre;
            else 
              if (pclken)
-                pslverr <=#11'b0;
+                pslverr <=1'b0;
  
 endmodule
  
@@ -7379,7 +627,7 @@ module dma_axi64_core0_ch (
   output joint_req) ; 
    wire [32-1:0] load_addr ;  
    wire load_in_prog ;  
-   wire load_req_in_prog ;  
+   //wire load_req_in_prog ;  
    wire ch_update ;  
    wire [32-1:0] rd_start_addr ;  
    wire [32-1:0] wr_start_addr ;  
@@ -7389,20 +637,20 @@ module dma_axi64_core0_ch (
    wire joint ;  
    wire [12-1:0] frame_width ;  
    wire [3-1:0] width_align ;  
-   wire [3-1:0] rd_periph_delay ;  
-   wire [3-1:0] wr_periph_delay ;  
+   //wire [3-1:0] rd_periph_delay ;  
+   //wire [3-1:0] wr_periph_delay ;  
    wire rd_periph_block ;  
    wire wr_periph_block ;  
-   wire [6-1:0] rd_tokens ;  
-   wire [6-1:0] wr_tokens ;  
-   wire rd_port_num ;  
-   wire wr_port_num ;  
+   //wire [6-1:0] rd_tokens ;  
+   //wire [6-1:0] wr_tokens ;  
+   //wire rd_port_num ;  
+   //wire wr_port_num ;  
    wire [4-1:0] rd_outs_max ;  
    wire [4-1:0] wr_outs_max ;  
    wire [12-1:0] rd_wait_limit ;  
    wire [12-1:0] wr_wait_limit ;  
    wire rd_incr ;  
-   wire wr_incr ;  
+   //wire wr_incr ;  
    wire [8-1:0] rd_burst_max_size ;  
    wire [8-1:0] wr_burst_max_size ;  
    wire [4:0] rd_periph_num ;  
@@ -7410,8 +658,8 @@ module dma_axi64_core0_ch (
    wire wr_outstanding ;  
    wire rd_outstanding ;  
    wire ch_retry_wait ;  
-   wire ch_rd_active ;  
-   wire ch_wr_active ;  
+   //wire ch_rd_active ;  
+   //wire ch_wr_active ;  
    wire ch_in_prog ;  
    wire [1:0] end_swap ;  
    wire [10-1:0] rd_x_offset ;  
@@ -7419,7 +667,7 @@ module dma_axi64_core0_ch (
    wire [10-1:0] rd_x_remain ;  
    wire [10-8-1:0] rd_clr_remain ;  
    wire rd_ch_end ;  
-   wire rd_go_next_line ;  
+   //wire rd_go_next_line ;  
    wire rd_line_empty ;  
    wire rd_empty ;  
    wire [3-1:0] rd_align ;  
@@ -7428,7 +676,7 @@ module dma_axi64_core0_ch (
    wire [10-1:0] wr_x_remain ;  
    wire [10-8-1:0] wr_clr_remain ;  
    wire wr_ch_end ;  
-   wire wr_go_next_line ;  
+   //wire wr_go_next_line ;  
    wire wr_line_empty ;  
    wire wr_empty ;  
    wire [3-1:0] wr_align ;  
@@ -7451,39 +699,39 @@ module dma_axi64_core0_ch (
    wire wr_stall_pre ;  
    wire timeout_wresp ;  
    wire rd_burst_last ;  
-   wire [32-1:0] rd_burst_addr ;  
-   wire [8-1:0] rd_burst_size ;  
+   //wire [32-1:0] rd_burst_addr ;  
+   //wire [8-1:0] rd_burst_size ;  
    wire rd_burst_ready ;  
    wire rd_joint_ready ;  
    wire rd_joint_flush ;  
    wire joint_burst_req ;  
    wire wr_burst_last ;  
-   wire [32-1:0] wr_burst_addr ;  
-   wire [8-1:0] wr_burst_size ;  
+   //wire [32-1:0] wr_burst_addr ;  
+   //wire [8-1:0] wr_burst_size ;  
    wire wr_burst_ready ;  
    wire wr_single ;  
    wire wr_joint_ready ;  
    wire wr_joint_flush ;  
    wire joint_line_req ;  
-   wire [31:1] periph_rx_clr ;  
+   //wire [31:1] periph_rx_clr ;  
    wire rd_periph_ready ;  
-   wire [31:1] periph_tx_clr ;  
+   //wire [31:1] periph_tx_clr ;  
    wire wr_periph_ready ;  
    wire rd_wait_ready ;  
    wire wr_wait_ready ;  
-   wire fifo_wr_ready ;  
+   //wire fifo_wr_ready ;  
    wire fifo_overflow ;  
    wire fifo_underflow ;  
    wire rd_clr_block_pre ;  
    wire rd_clr_block ;  
-   wire rd_clr_valid ;  
+   //wire rd_clr_valid ;  
    wire wr_clr_block_pre ;  
    wire wr_clr_block ;  
-   wire wr_clr_valid ;  
+   //wire wr_clr_valid ;  
    wire wr_clr_mux ;  
    wire rd_cmd_line_d ;  
-   wire rd_clr_stall ;  
-   wire wr_clr_stall ;  
+   //wire rd_clr_stall ;  
+   //wire wr_clr_stall ;  
    wire allow_line_cmd ;  
    wire load_cmd ;  
    wire [4:0] timeout_bus ;  
@@ -7493,10 +741,10 @@ module dma_axi64_core0_ch (
    wire joint_cross ;  
    reg rd_joint_not_in_prog ;  
    reg wr_joint_not_in_prog ;  
-   wire joint_not_in_prog ;  
+   //wire joint_not_in_prog ;  
    reg rd_joint_in_prog ;  
    reg wr_joint_in_prog ;  
-   wire joint_in_prog ;  
+   //wire joint_in_prog ;  
    wire rd_clr_outs_d_pre ;  
    wire rd_clr_outs_d ;  
    wire wr_clr_outs_d_pre ;  
@@ -7518,68 +766,68 @@ module dma_axi64_core0_ch (
   prgen_delay #(1)delay_wr_clr(.clk(clk),.reset(reset),.din(wr_clr),.dout(wr_clr_d)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          rd_joint_not_in_prog <=#11'b0;
+          rd_joint_not_in_prog <=1'b0;
         else 
           if (ch_update)
-             rd_joint_not_in_prog <=#11'b0;
+             rd_joint_not_in_prog <=1'b0;
            else 
              if (rd_burst_start)
-                rd_joint_not_in_prog <=#1(~joint_req);
+                rd_joint_not_in_prog <=(~joint_req);
               else 
                 if (rd_outs_empty&rd_clr_outs_d)
-                   rd_joint_not_in_prog <=#11'b0;
+                   rd_joint_not_in_prog <=1'b0;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          wr_joint_not_in_prog <=#11'b0;
+          wr_joint_not_in_prog <=1'b0;
         else 
           if (ch_update)
-             wr_joint_not_in_prog <=#11'b0;
+             wr_joint_not_in_prog <=1'b0;
            else 
              if (wr_burst_start)
-                wr_joint_not_in_prog <=#1(~joint_req);
+                wr_joint_not_in_prog <=(~joint_req);
               else 
                 if (wr_outs_empty&wr_clr_outs_d)
-                   wr_joint_not_in_prog <=#11'b0;
+                   wr_joint_not_in_prog <=1'b0;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          rd_joint_in_prog <=#11'b0;
+          rd_joint_in_prog <=1'b0;
         else 
           if (ch_update)
-             rd_joint_in_prog <=#11'b0;
+             rd_joint_in_prog <=1'b0;
            else 
              if (rd_burst_start)
-                rd_joint_in_prog <=#1joint_req;
+                rd_joint_in_prog <=joint_req;
               else 
                 if (rd_outs_empty&rd_clr_outs_d)
-                   rd_joint_in_prog <=#11'b0;
+                   rd_joint_in_prog <=1'b0;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          wr_joint_in_prog <=#11'b0;
+          wr_joint_in_prog <=1'b0;
         else 
           if (ch_update)
-             wr_joint_in_prog <=#11'b0;
+             wr_joint_in_prog <=1'b0;
            else 
              if (wr_burst_start)
-                wr_joint_in_prog <=#1joint_req;
+                wr_joint_in_prog <=joint_req;
               else 
                 if (wr_outs_empty&wr_clr_outs_d)
-                   wr_joint_in_prog <=#11'b0;
+                   wr_joint_in_prog <=1'b0;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          joint_cross_reg <=#11'b0;
+          joint_cross_reg <=1'b0;
         else 
           if (ch_update)
-             joint_cross_reg <=#11'b0;
+             joint_cross_reg <=1'b0;
            else 
              if (page_cross&joint)
-                joint_cross_reg <=#11'b1;
+                joint_cross_reg <=1'b1;
               else 
                 if (joint_not_in_prog&outs_empty)
-                   joint_cross_reg <=#11'b0;
+                   joint_cross_reg <=1'b0;
  
   assign joint_cross=joint_cross_reg; 
   assign page_cross=rd_page_cross|wr_page_cross; 
@@ -7670,9 +918,9 @@ module dma_axi64_core0_ch_fifo_ctrl (
    wire [5-1:0] wr_ptr ;  
    wire [4-1:0] rd_line_remain ;  
    wire joint_delay ;  
-   wire fifo_wr_ready ;  
-   wire fifo_overflow ;  
-   wire fifo_underflow ;  
+   //wire fifo_wr_ready ;  
+   //wire fifo_overflow ;  
+   //wire fifo_underflow ;  
    wire [64-1:0] DOUT ;  
    wire fifo_wr_d ;  
    reg [64-1:0] fifo_wdata_d ;  
@@ -7724,89 +972,89 @@ module dma_axi64_core0_ch_fifo_ptr (
   assign rd_ptr_pre=rd_ptr+({4{slice_rd}}&slice_rsize); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          wr_ptr <=#1{5{1'b0}};
+          wr_ptr <={5{1'b0}};
         else 
           if (ch_update)
-             wr_ptr <=#1{5{1'b0}};
+             wr_ptr <={5{1'b0}};
            else 
              if (slice_wr)
-                wr_ptr <=#1wr_ptr_pre;
+                wr_ptr <=wr_ptr_pre;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          rd_ptr <=#1{5{1'b0}};
+          rd_ptr <={5{1'b0}};
         else 
           if (ch_update)
-             rd_ptr <=#1{5{1'b0}};
+             rd_ptr <={5{1'b0}};
            else 
              if (slice_rd)
-                rd_ptr <=#1rd_ptr_pre;
+                rd_ptr <=rd_ptr_pre;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          rd_line_remain <=#14'd8;
+          rd_line_remain <=4'd8;
         else 
           if (ch_update|wr_clr_line)
-             rd_line_remain <=#14'd8;
+             rd_line_remain <=4'd8;
            else 
              if (slice_rd&(rd_line_remain==slice_rsize))
-                rd_line_remain <=#14'd8;
+                rd_line_remain <=4'd8;
               else 
                 if (slice_rd)
-                   rd_line_remain <=#1rd_line_remain-slice_rsize;
+                   rd_line_remain <=rd_line_remain-slice_rsize;
  
   assign fullness_pre=fullness+({4{slice_wr}}&slice_wsize)-({4{fifo_rd}}&fifo_rsize); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          fullness <=#1{5+2{1'b0}};
+          fullness <={5+2{1'b0}};
         else 
           if (ch_update)
-             fullness <=#1{5+2{1'b0}};
+             fullness <={5+2{1'b0}};
            else 
              if (fifo_rd|slice_wr)
-                fullness <=#1fullness_pre;
+                fullness <=fullness_pre;
  
   prgen_delay #(1)delay_joint_in_prog(.clk(clk),.reset(reset),.din(joint_in_prog),.dout(joint_in_prog_d)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          joint_delay_reg <=#11'b0;
+          joint_delay_reg <=1'b0;
         else 
           if (joint_in_prog&(~joint_in_prog_d))
-             joint_delay_reg <=#1fullness>32-4'd8;
+             joint_delay_reg <=fullness>32-4'd8;
            else 
              if (~joint_in_prog)
-                joint_delay_reg <=#11'b0;
+                joint_delay_reg <=1'b0;
  
   assign joint_delay=joint_delay_reg; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          fifo_wr_ready <=#11'b0;
+          fifo_wr_ready <=1'b0;
         else 
           if (joint_in_prog)
-             fifo_wr_ready <=#11'b0;
+             fifo_wr_ready <=1'b0;
            else 
              if (|wr_next_size)
-                fifo_wr_ready <=#1fullness_pre>=wr_next_size;
+                fifo_wr_ready <=fullness_pre>=wr_next_size;
  
   assign fifo_underflow_pre=fullness[5+1]; 
   assign fifo_overflow_pre=(~fullness[5+1])&(fullness[5:0]>32); 
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            fifo_overflow <=#11'b0;
-            fifo_underflow <=#11'b0;
+            fifo_overflow <=1'b0;
+            fifo_underflow <=1'b0;
           end 
         else 
           if (ch_update)
              begin 
-               fifo_overflow <=#11'b0;
-               fifo_underflow <=#11'b0;
+               fifo_overflow <=1'b0;
+               fifo_underflow <=1'b0;
              end 
            else 
              if ((!fifo_overflow)&(!fifo_underflow))
                 begin 
-                  fifo_overflow <=#1fifo_overflow_pre;
-                  fifo_underflow <=#1fifo_underflow_pre;
+                  fifo_overflow <=fifo_overflow_pre;
+                  fifo_underflow <=fifo_underflow_pre;
                 end
   
 endmodule
@@ -7992,10 +1240,10 @@ module dma_axi64_core0_ch_reg_size #(
   prgen_min2 #(8)min2_max(.a(burst_max_size_reg),.b(burst_max_size_fifo),.min(burst_max_size_pre)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          burst_max_size <=#1{8{1'b0}};
+          burst_max_size <={8{1'b0}};
         else 
           if (update)
-             burst_max_size <=#1burst_max_size_pre>MAX_BURST ? MAX_BURST:burst_max_size_pre;
+             burst_max_size <=burst_max_size_pre>MAX_BURST ? MAX_BURST:burst_max_size_pre;
  
 endmodule
  
@@ -8015,13 +1263,13 @@ module dma_axi64_core0_channels_apb_mux (
    reg [2:0] paddr_sel_d ;  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          paddr_sel_d <=#13'b000;
+          paddr_sel_d <=3'b000;
         else 
           if (psel&(~penable))
-             paddr_sel_d <=#1paddr_sel;
+             paddr_sel_d <=paddr_sel;
            else 
              if ((~psel)&pclken)
-                paddr_sel_d <=#13'b000;
+                paddr_sel_d <=3'b000;
  
   assign paddr_sel=paddr[10:8]; 
   prgen_demux8 #(1)mux_psel(.sel(paddr_sel),.x(psel),.ch_x(ch_psel)); 
@@ -8079,35 +1327,35 @@ module dma_axi64_core0_ctrl #(
   assign go_next_line_d=1'b0; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          joint_ctrl_reg <=#11'b0;
+          joint_ctrl_reg <=1'b0;
         else 
           if (finish)
-             joint_ctrl_reg <=#11'b0;
+             joint_ctrl_reg <=1'b0;
            else 
              if (ch_go)
-                joint_ctrl_reg <=#1joint_req;
+                joint_ctrl_reg <=joint_req;
  
   assign joint_ctrl=joint_ctrl_reg; 
   assign tokens_remain=(|tokens_counter)|ch_last; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          tokens_counter <=#1{6{1'b0}};
+          tokens_counter <={6{1'b0}};
         else 
           if (ch_go)
-             tokens_counter <=#1tokens;
+             tokens_counter <=tokens;
            else 
              if (burst_start&(|tokens_counter))
-                tokens_counter <=#1tokens_counter-1'b1;
+                tokens_counter <=tokens_counter-1'b1;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          delay_counter <=#1{3{1'b0}};
+          delay_counter <={3{1'b0}};
         else 
           if (periph_clr_ch)
-             delay_counter <=#1periph_delay;
+             delay_counter <=periph_delay;
            else 
              if (|delay_counter)
-                delay_counter <=#1delay_counter-1'b1;
+                delay_counter <=delay_counter-1'b1;
  
   assign stall=cmd_pending|cmd_full|go_next_line_d; 
   always @(                ch_go or  ch_last or  ch_ready or  clr_stall or  delay_counter or  go_next_line_d or  hold or  joint_ctrl or  joint_req or  periph_clr_ch or  periph_clr_last_ch or  periph_clr_valid or  periph_delay or  ps or  stall or  tokens_remain)
@@ -8225,9 +1473,9 @@ module dma_axi64_core0_ctrl #(
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          ps <=#1IDLE;
+          ps <=IDLE;
         else 
-          ps <=#1ns;
+          ps <=ns;
  
 endmodule
  
@@ -8270,56 +1518,56 @@ module dma_axi64_core0_ch_wr_slicer (
    reg [64-1:0] slice_wdata_pre_d ;  
    wire [64-1:0] slice_wdata_swap ;  
    wire [4-1:0] slice_wsize_pre ;  
-   wire slice_wr ;  
-   wire slice_wr_fifo ;  
+   //wire slice_wr ;  
+   //wire slice_wr_fifo ;  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          line_remain <=#14'd8;
+          line_remain <=4'd8;
         else 
           if (ch_update|rd_clr_line)
-             line_remain <=#14'd8;
+             line_remain <=4'd8;
            else 
              if (slice_wr_pre&(line_remain==slice_wsize_pre))
-                line_remain <=#14'd8;
+                line_remain <=4'd8;
               else 
                 if (slice_wr_pre)
-                   line_remain <=#1line_remain-slice_wsize_pre;
+                   line_remain <=line_remain-slice_wsize_pre;
  
   assign join_wsize=next_size+fifo_wsize; 
   prgen_min2 #(4)min2_append(.a(join_wsize),.b(4'd8),.min(append_wsize)); 
   prgen_min2 #(4)min2_direct(.a(line_remain),.b(fifo_wsize),.min(direct_wsize)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          append <=#11'b0;
+          append <=1'b0;
         else 
           if (next_wr)
-             append <=#11'b0;
+             append <=1'b0;
            else 
              if (fifo_wr&(slice_wsize_pre==join_wsize))
-                append <=#11'b0;
+                append <=1'b0;
               else 
                 if (fifo_wr)
-                   append <=#11'b1;
+                   append <=1'b1;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          next_size <=#1{4{1'b0}};
+          next_size <={4{1'b0}};
         else 
           if (next_wr)
-             next_size <=#1{4{1'b0}};
+             next_size <={4{1'b0}};
            else 
              if (fifo_wr&append)
-                next_size <=#1join_wsize-append_wsize;
+                next_size <=join_wsize-append_wsize;
               else 
                 if (fifo_wr)
-                   next_size <=#1join_wsize-direct_wsize;
+                   next_size <=join_wsize-direct_wsize;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          align_wdata_d <=#1{64{1'b0}};
+          align_wdata_d <={64{1'b0}};
         else 
           if (fifo_wr)
-             align_wdata_d <=#1align_wdata;
+             align_wdata_d <=align_wdata;
  
   assign wr_align_valid=rd_incr ? wr_align:wr_align-wr_ptr[3-1:0]; 
   always @(   fifo_wdata or  wr_align_valid or  fifo_wr)
@@ -8400,30 +1648,30 @@ module dma_axi64_core0_ch_wr_slicer (
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            slice_wsize <=#1{4{1'b0}};
-            slice_wdata_pre_d <=#1{64{1'b0}};
+            slice_wsize <={4{1'b0}};
+            slice_wdata_pre_d <={64{1'b0}};
           end 
         else 
           if (slice_wr_pre)
              begin 
-               slice_wsize <=#1slice_wsize_pre;
-               slice_wdata_pre_d <=#1slice_wdata_pre;
+               slice_wsize <=slice_wsize_pre;
+               slice_wdata_pre_d <=slice_wdata_pre;
              end
   
   prgen_swap64 swap64(.end_swap(end_swap),.data_in(slice_wdata_pre_d),.data_out(slice_wdata_swap),.bsel_in(slice_bsel_pre),.bsel_out(slice_bsel_swap)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            slice_wdata <=#1{64{1'b0}};
-            slice_wr_ptr <=#1{5{1'b0}};
-            slice_bsel <=#1{8{1'b0}};
+            slice_wdata <={64{1'b0}};
+            slice_wr_ptr <={5{1'b0}};
+            slice_bsel <={8{1'b0}};
           end 
         else 
           if (slice_wr)
              begin 
-               slice_wdata <=#1slice_wdata_swap;
-               slice_wr_ptr <=#1slice_wr_ptr_pre;
-               slice_bsel <=#1slice_bsel_swap;
+               slice_wdata <=slice_wdata_swap;
+               slice_wr_ptr <=slice_wr_ptr_pre;
+               slice_bsel <=slice_bsel_swap;
              end
   
 endmodule
@@ -8470,14 +1718,14 @@ module dma_axi64_core0_axim_cmd #(
    wire [8-1:0] burst_length ;  
    wire cmd ;  
    wire cmd_line_pre ;  
-   wire cmd_line ;  
+   //wire cmd_line ;  
    wire high_addr_pre ;  
    wire high_addr ;  
    wire [8:0] burst_reach_pre ;  
    reg [8:0] burst_reach ;  
    reg joint_cross ;  
    wire page_cross_pre ;  
-   wire page_cross ;  
+   //wire page_cross ;  
    wire cross_start ;  
    wire cross_start_d ;  
    wire [8:0] max_burst ;  
@@ -8495,37 +1743,37 @@ module dma_axi64_core0_axim_cmd #(
   prgen_delay #(1)delay_cross_start(.clk(clk),.reset(reset),.din(cross_start),.dout(cross_start_d)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          burst_reach <=#1{9{1'b0}};
+          burst_reach <={9{1'b0}};
         else 
           if (high_addr_pre)
-             burst_reach <=#1burst_reach_pre;
+             burst_reach <=burst_reach_pre;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          next_burst <=#11'b0;
+          next_burst <=1'b0;
         else 
           if (next_burst_start)
-             next_burst <=#11'b0;
+             next_burst <=1'b0;
            else 
              if (cross_start)
-                next_burst <=#11'b1;
+                next_burst <=1'b1;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          max_burst_d <=#1{9{1'b0}};
+          max_burst_d <={9{1'b0}};
         else 
           if (cross_start)
-             max_burst_d <=#1max_burst;
+             max_burst_d <=max_burst;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          next_burst_size <=#1{8{1'b0}};
+          next_burst_size <={8{1'b0}};
         else 
           if (cross_start)
-             next_burst_size <=#1burst_size;
+             next_burst_size <=burst_size;
            else 
              if (cross_start_d)
-                next_burst_size <=#1next_burst_size-max_burst_d;
+                next_burst_size <=next_burst_size-max_burst_d;
  
   assign cmd_split=cross_start_d; 
   assign cmd=AVALID&AREADY; 
@@ -8534,13 +1782,13 @@ module dma_axi64_core0_axim_cmd #(
   assign joint_pending=AVALID&(~AREADY)&AJOINT; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          cmd_pending <=#11'b0;
+          cmd_pending <=1'b0;
         else 
           if (burst_start)
-             cmd_pending <=#11'b1;
+             cmd_pending <=1'b1;
            else 
              if (cmd&(~next_burst))
-                cmd_pending <=#11'b0;
+                cmd_pending <=1'b0;
  
   prgen_delay #(1)delay_cmd_line(.clk(clk),.reset(reset),.din(cmd_line_pre),.dout(cmd_line)); 
   assign AID_pre={end_line_cmd,ASIZE_pre[1:0],extra_bit,ch_num[2:0]}; 
@@ -8551,22 +1799,22 @@ module dma_axi64_core0_axim_cmd #(
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            ASIZE <=#1{2{1'b0}};
-            AJOINT <=#11'b0;
+            ASIZE <={2{1'b0}};
+            AJOINT <=1'b0;
           end 
         else 
           if (burst_start)
              begin 
-               ASIZE <=#1ASIZE_pre;
-               AJOINT <=#1joint_req;
+               ASIZE <=ASIZE_pre;
+               AJOINT <=joint_req;
              end
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          AID_reg <=#1{7{1'b0}};
+          AID_reg <={7{1'b0}};
         else 
           if (burst_start)
-             AID_reg <=#1AID_pre;
+             AID_reg <=AID_pre;
  
   always @(  AID_reg or  next_burst)
        begin 
@@ -8577,37 +1825,37 @@ module dma_axi64_core0_axim_cmd #(
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          AADDR <=#1{32{1'b0}};
+          AADDR <={32{1'b0}};
         else 
           if (next_burst_start)
-             AADDR <=#1{AADDR[32-1:12],{12{1'b1}}}+1'b1;
+             AADDR <={AADDR[32-1:12],{12{1'b1}}}+1'b1;
            else 
              if (burst_start)
-                AADDR <=#1AADDR_pre;
+                AADDR <=AADDR_pre;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          APORT <=#11'b0;
+          APORT <=1'b0;
         else 
           if (burst_start)
-             APORT <=#1cmd_port;
+             APORT <=cmd_port;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          ALEN <=#1{4{1'b0}};
+          ALEN <={4{1'b0}};
         else 
           if (burst_start|next_burst_start)
-             ALEN <=#1ALEN_pre;
+             ALEN <=ALEN_pre;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          AVALID_reg <=#11'b0;
+          AVALID_reg <=1'b0;
         else 
           if (AVALID&AREADY)
-             AVALID_reg <=#11'b0;
+             AVALID_reg <=1'b0;
            else 
              if ((burst_start&(burst_size>'d0))|next_burst_start)
-                AVALID_reg <=#11'b1;
+                AVALID_reg <=1'b1;
  
   assign AVALID=AJOINT ? AVALID_reg&(~AWVALID):AVALID_reg; 
   dma_axi64_core0_axim_timeout dma_axi64_axim_timeout(.clk(clk),.reset(reset),.VALID(AVALID),.READY(AREADY),.ID(AID),.axim_timeout_num(axim_timeout_num),.axim_timeout(axim_timeout)); 
@@ -8646,42 +1894,42 @@ module dma_axi64_core0_ch_remain (
   assign wr_burst_qual=wr_burst_start; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          rd_burst_size_valid <=#1{8{1'b0}};
+          rd_burst_size_valid <={8{1'b0}};
         else 
           if (rd_burst_qual)
-             rd_burst_size_valid <=#1rd_burst_size;
+             rd_burst_size_valid <=rd_burst_size;
            else 
-             rd_burst_size_valid <=#1{8{1'b0}};
+             rd_burst_size_valid <={8{1'b0}};
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          wr_burst_size_valid <=#1{8{1'b0}};
+          wr_burst_size_valid <={8{1'b0}};
         else 
           if (wr_burst_qual)
-             wr_burst_size_valid <=#1wr_burst_size;
+             wr_burst_size_valid <=wr_burst_size;
            else 
-             wr_burst_size_valid <=#1{8{1'b0}};
+             wr_burst_size_valid <={8{1'b0}};
  
   assign rd_transfer_size_valid={4{rd_transfer}}&rd_transfer_size; 
   assign wr_transfer_size_valid={4{wr_transfer}}&wr_transfer_size; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          rd_gap_reg <=#1{1'b0,1'b1,{5{1'b0}}};
+          rd_gap_reg <={1'b0,1'b1,{5{1'b0}}};
         else 
           if (ch_update)
-             rd_gap_reg <=#1{1'b0,1'b1,{5{1'b0}}};
+             rd_gap_reg <={1'b0,1'b1,{5{1'b0}}};
            else 
-             rd_gap_reg <=#1rd_gap_reg-rd_burst_size_valid+wr_transfer_size_valid;
+             rd_gap_reg <=rd_gap_reg-rd_burst_size_valid+wr_transfer_size_valid;
  
   assign rd_gap=rd_gap_reg[5+1] ? 'd0:rd_gap_reg[5:0]; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          wr_fullness_reg <=#1{5+1{1'b0}};
+          wr_fullness_reg <={5+1{1'b0}};
         else 
           if (ch_update)
-             wr_fullness_reg <=#1{5+1{1'b0}};
+             wr_fullness_reg <={5+1{1'b0}};
            else 
-             wr_fullness_reg <=#1wr_fullness_reg-wr_burst_size_valid+rd_transfer_size_valid;
+             wr_fullness_reg <=wr_fullness_reg-wr_burst_size_valid+rd_transfer_size_valid;
  
   assign wr_fullness=wr_fullness_reg[5+1] ? 'd0:wr_fullness_reg[5:0]; 
 endmodule
@@ -8764,9 +2012,9 @@ module dma_axi64_core0_ch_calc_size #(
    wire fifo_not_ready_pre ;  
    wire fifo_not_ready ;  
    wire joint_update ;  
-   wire joint_ready_out ;  
-   wire joint_line_req_out ;  
-   wire joint_burst_req_out ;  
+   //wire joint_ready_out ;  
+   //wire joint_line_req_out ;  
+   //wire joint_burst_req_out ;  
    wire joint_wait ;  
    reg [1:0] joint_burst_req_reg ;  
    wire [1:0] joint_burst_req ;  
@@ -8785,67 +2033,67 @@ module dma_axi64_core0_ch_calc_size #(
   assign burst_last=burst_size==x_remain; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          burst_ready <=#11'b0;
+          burst_ready <=1'b0;
         else 
           if (ch_update|ch_update_d|ch_update_d2|ch_update_d3)
-             burst_ready <=#11'b0;
+             burst_ready <=1'b0;
            else 
              if (load_req_in_prog)
-                burst_ready <=#11'b1;
+                burst_ready <=1'b1;
               else 
                 if (|joint_burst_req)
-                   burst_ready <=#11'b1;
+                   burst_ready <=1'b1;
                  else 
                    if (joint_line_req&(~joint_buffer_small))
-                      burst_ready <=#11'b1;
+                      burst_ready <=1'b1;
                     else 
                       if (load_in_prog|fifo_not_ready_pre|joint_wait|(page_cross&(burst_size!=burst_size_pre2)))
-                         burst_ready <=#11'b0;
+                         burst_ready <=1'b0;
                        else 
-                         burst_ready <=#1|burst_size_pre2;
+                         burst_ready <=|burst_size_pre2;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          burst_size <=#1{8{1'b0}};
+          burst_size <={8{1'b0}};
         else 
           if (load_req_in_prog)
-             burst_size <=#1CMD_SIZE;
+             burst_size <=CMD_SIZE;
            else 
              if (|joint_burst_req)
-                burst_size <=#1joint_burst_req_size;
+                burst_size <=joint_burst_req_size;
               else 
                 if (joint_line_req&(~joint_buffer_small))
-                   burst_size <=#1joint_line_req_size;
+                   burst_size <=joint_line_req_size;
                  else 
-                   burst_size <=#1burst_size_pre2;
+                   burst_size <=burst_size_pre2;
  
   assign joint_update=ch_update|ch_update_d|ch_update_d2; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          joint_burst_req_reg <=#12'b00;
+          joint_burst_req_reg <=2'b00;
         else 
           if (joint_update|joint_flush|joint_flush_in)
-             joint_burst_req_reg <=#12'b00;
+             joint_burst_req_reg <=2'b00;
            else 
              if (joint_burst_req_reg&burst_start)
-                joint_burst_req_reg <=#12'b00;
+                joint_burst_req_reg <=2'b00;
               else 
                 if (joint_burst_req_in)
-                   joint_burst_req_reg <=#1joint_burst_req_reg[0] ? 2'b11:2'b01;
+                   joint_burst_req_reg <=joint_burst_req_reg[0] ? 2'b11:2'b01;
  
   assign joint_burst_req=joint_burst_req_reg; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          joint_line_req_reg <=#11'b0;
+          joint_line_req_reg <=1'b0;
         else 
           if (joint_update|joint_flush|joint_flush_in)
-             joint_line_req_reg <=#11'b0;
+             joint_line_req_reg <=1'b0;
            else 
              if (joint_line_req_reg&burst_start)
-                joint_line_req_reg <=#11'b0;
+                joint_line_req_reg <=1'b0;
               else 
                 if (joint_line_req_in)
-                   joint_line_req_reg <=#11'b1;
+                   joint_line_req_reg <=1'b1;
  
   assign joint_line_req=joint_line_req_reg; 
   assign joint_line_req_size=burst_addr[2:0]==3'd0 ? 4'd8:burst_addr[1:0]==2'd0 ? 'd4:burst_addr[0]==1'd0 ? 'd2:'d1; 
@@ -9035,13 +2283,13 @@ module prgen_min3 #(
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            min_ab <=#1{WIDTH{1'b0}};
-            min_c <=#1{WIDTH{1'b0}};
+            min_ab <={WIDTH{1'b0}};
+            min_c <={WIDTH{1'b0}};
           end 
         else 
           begin 
-            min_ab <=#1min_ab_pre;
-            min_c <=#1c;
+            min_ab <=min_ab_pre;
+            min_c <=c;
           end
   
 endmodule
@@ -9095,18 +2343,18 @@ module dma_axi64_core0_ch_calc_joint #(
    reg [2:0] ps ;  
    reg [2:0] ns ;  
    wire joint_ready_out_pre ;  
-   wire joint_buffer_small ;  
+   //wire joint_buffer_small ;  
   assign joint_ready_out_pre=joint&(burst_size_pre2==burst_max_size)&(|burst_max_size)&(~joint_line_req)&(~joint_burst_req); 
   assign joint_buffer_small=(burst_max_size>x_remain)|(x_remain<'d8); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          joint_ready_out <=#11'b0;
+          joint_ready_out <=1'b0;
         else 
           if ((page_cross|ch_end_flush|joint_flush|joint_wait)&(~ch_end))
-             joint_ready_out <=#11'b0;
+             joint_ready_out <=1'b0;
            else 
              if ((~ch_end)&(~wr_cmd_pending))
-                joint_ready_out <=#1joint_ready_out_pre;
+                joint_ready_out <=joint_ready_out_pre;
  
   always @(             ch_end_flush or  fifo_not_ready or  fifo_remain or  fifo_wr_ready or  joint_buffer_small or  joint_cross or  joint_flush_in or  joint_line_req_clr or  joint_ready_in or  joint_ready_out or  outs_empty or  page_cross or  ps)
        begin 
@@ -9245,12 +2493,12 @@ module dma_axi64_core0_ch_calc_joint #(
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          ps <=#1IDLE;
+          ps <=IDLE;
         else 
           if (joint_update)
-             ps <=#1IDLE;
+             ps <=IDLE;
            else 
-             ps <=#1ns;
+             ps <=ns;
  
 endmodule
  
@@ -9264,9 +2512,9 @@ module prgen_delay #(
    reg [DELAY:0] shift_reg ;  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          shift_reg <=#1{DELAY+1{1'b0}};
+          shift_reg <={DELAY+1{1'b0}};
         else 
-          shift_reg <=#1{shift_reg[DELAY-1:0],din};
+          shift_reg <={shift_reg[DELAY-1:0],din};
  
   assign dout=shift_reg[DELAY-1]; 
 endmodule
@@ -9287,28 +2535,28 @@ module dma_axi64_core0_ch_outs (
   assign outs_pre=outs+cmd-clr; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          outs <=#1'd0;
+          outs <='d0;
         else 
           if (cmd|clr)
-             outs <=#1outs_pre;
+             outs <=outs_pre;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          stall <=#11'b0;
+          stall <=1'b0;
         else 
           if (|outs_max)
-             stall <=#1outs>=outs_max;
+             stall <=outs>=outs_max;
  
   assign timeout=(counter=='d0); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          counter <=#1{10{1'b1}};
+          counter <={10{1'b1}};
         else 
           if (clr)
-             counter <=#1{10{1'b1}};
+             counter <={10{1'b1}};
            else 
              if (|outs)
-                counter <=#1counter-1'b1;
+                counter <=counter-1'b1;
  
 endmodule
  
@@ -9388,16 +2636,16 @@ module dma_axi64_core0_axim_rd (
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            RRESP_d <=#12'b00;
-            RDATA_d <=#1{64{1'b0}};
-            RLAST_d <=#11'b0;
+            RRESP_d <=2'b00;
+            RDATA_d <={64{1'b0}};
+            RLAST_d <=1'b0;
           end 
         else 
           if (RVALID)
              begin 
-               RRESP_d <=#1RRESP;
-               RDATA_d <=#1RDATA;
-               RLAST_d <=#1RLAST;
+               RRESP_d <=RRESP;
+               RDATA_d <=RDATA;
+               RLAST_d <=RLAST;
              end
   
   always @( RID)
@@ -9735,13 +2983,13 @@ module dma_axi64_core0_ch_reg #(
    reg load_in_prog_reg ;  
    reg load_req_in_prog_reg ;  
    reg [10-1:0] buff_size ;  
-   wire [10-1:0] x_size ;  
-   wire [10-8-1:0] y_size ;  
+   //wire [10-1:0] x_size ;  
+   //wire [10-8-1:0] y_size ;  
    reg [12-1:0] frame_width_reg ;  
    reg block_reg ;  
    reg joint_reg ;  
    reg simple_mem ;  
-   wire joint ;  
+   //wire joint ;  
    wire joint_mux ;  
    reg auto_retry_reg ;  
    wire auto_retry ;  
@@ -9855,7 +3103,7 @@ module dma_axi64_core0_ch_reg #(
    wire timeout_r ;  
    wire ch_retry_wait_pre ;  
    reg ch_retry_wait_reg ;  
-   wire ch_retry_wait ;  
+   //wire ch_retry_wait ;  
    wire ch_retry ;  
    wire ch_update_pre ;  
    wire ch_update_d ;  
@@ -9889,92 +3137,92 @@ module dma_axi64_core0_ch_reg #(
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            rd_start_addr <=#1{32{1'b0}};
+            rd_start_addr <={32{1'b0}};
           end 
         else 
           if (wr_cmd_line0)
              begin 
-               rd_start_addr <=#1pwdata[32-1:0];
+               rd_start_addr <=pwdata[32-1:0];
              end 
            else 
              if (load_wr0)
                 begin 
-                  rd_start_addr <=#1load_wdata[32-1:0];
+                  rd_start_addr <=load_wdata[32-1:0];
                 end
   
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            wr_start_addr <=#1{32{1'b0}};
+            wr_start_addr <={32{1'b0}};
           end 
         else 
           if (wr_cmd_line1)
              begin 
-               wr_start_addr <=#1pwdata[32-1:0];
+               wr_start_addr <=pwdata[32-1:0];
              end 
            else 
              if (load_wr1)
                 begin 
-                  wr_start_addr <=#1load_wdata[32+32-DATA_SHIFT-1:32-DATA_SHIFT];
+                  wr_start_addr <=load_wdata[32+32-DATA_SHIFT-1:32-DATA_SHIFT];
                 end
   
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            buff_size <=#1{10{1'b0}};
+            buff_size <={10{1'b0}};
           end 
         else 
           if (wr_cmd_line2)
              begin 
-               buff_size <=#1pwdata[10-1:0];
+               buff_size <=pwdata[10-1:0];
              end 
            else 
              if (load_wr2)
                 begin 
-                  buff_size <=#1load_wdata[10-1:0];
+                  buff_size <=load_wdata[10-1:0];
                 end
   
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            cmd_set_int_reg <=#11'b0;
-            cmd_last_reg <=#11'b0;
-            cmd_next_addr_reg <=#1{30{1'b0}};
+            cmd_set_int_reg <=1'b0;
+            cmd_last_reg <=1'b0;
+            cmd_next_addr_reg <={30{1'b0}};
           end 
         else 
           if (wr_cmd_line3)
              begin 
-               cmd_set_int_reg <=#1pwdata[0];
-               cmd_last_reg <=#1pwdata[1];
-               cmd_next_addr_reg <=#1pwdata[32-1:2];
+               cmd_set_int_reg <=pwdata[0];
+               cmd_last_reg <=pwdata[1];
+               cmd_next_addr_reg <=pwdata[32-1:2];
              end 
            else 
              if (load_wr3)
                 begin 
-                  cmd_set_int_reg <=#1load_wdata[32-DATA_SHIFT];
-                  cmd_last_reg <=#1load_wdata[33-DATA_SHIFT];
-                  cmd_next_addr_reg <=#1load_wdata[32+32-DATA_SHIFT-1:34-DATA_SHIFT];
+                  cmd_set_int_reg <=load_wdata[32-DATA_SHIFT];
+                  cmd_last_reg <=load_wdata[33-DATA_SHIFT];
+                  cmd_next_addr_reg <=load_wdata[32+32-DATA_SHIFT-1:34-DATA_SHIFT];
                 end
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          cmd_counter_reg <=#1{12{1'b0}};
+          cmd_counter_reg <={12{1'b0}};
         else 
           if (wr_ch_start)
-             cmd_counter_reg <=#1{12{1'b0}};
+             cmd_counter_reg <={12{1'b0}};
            else 
              if (ch_end&clken)
-                cmd_counter_reg <=#1cmd_counter_reg+1'b1;
+                cmd_counter_reg <=cmd_counter_reg+1'b1;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          int_counter_reg <=#1{4{1'b0}};
+          int_counter_reg <={4{1'b0}};
         else 
           if (wr_ch_start)
-             int_counter_reg <=#1{4{1'b0}};
+             int_counter_reg <={4{1'b0}};
            else 
              if ((ch_end_int&clken)|ch_end_clear)
-                int_counter_reg <=#1int_counter_reg+(ch_end_int&clken)-ch_end_clear;
+                int_counter_reg <=int_counter_reg+(ch_end_int&clken)-ch_end_clear;
  
   assign cmd_set_int=cmd_set_int_reg; 
   assign cmd_last=cmd_last_reg; 
@@ -9986,35 +3234,35 @@ module dma_axi64_core0_ch_reg #(
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            rd_burst_max_size_reg <=#1'd0;
-            rd_tokens_reg <=#1'd1;
-            rd_outs_max_reg <=#1{4{1'b0}};
-            rd_incr_reg <=#1'd1;
+            rd_burst_max_size_reg <='d0;
+            rd_tokens_reg <='d1;
+            rd_outs_max_reg <={4{1'b0}};
+            rd_incr_reg <='d1;
           end 
         else 
           if (wr_static_line0)
              begin 
-               rd_burst_max_size_reg <=#1pwdata[8-1:0];
-               rd_tokens_reg <=#1pwdata[6+16-1:16];
-               rd_outs_max_reg <=#1pwdata[4+24-1:24];
-               rd_incr_reg <=#1pwdata[31];
+               rd_burst_max_size_reg <=pwdata[8-1:0];
+               rd_tokens_reg <=pwdata[6+16-1:16];
+               rd_outs_max_reg <=pwdata[4+24-1:24];
+               rd_incr_reg <=pwdata[31];
              end
   
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            wr_burst_max_size_reg <=#1'd0;
-            wr_tokens_reg <=#1'd1;
-            wr_outs_max_reg <=#1{4{1'b0}};
-            wr_incr_reg <=#1'd1;
+            wr_burst_max_size_reg <='d0;
+            wr_tokens_reg <='d1;
+            wr_outs_max_reg <={4{1'b0}};
+            wr_incr_reg <='d1;
           end 
         else 
           if (wr_static_line1)
              begin 
-               wr_burst_max_size_reg <=#1pwdata[8-1:0];
-               wr_tokens_reg <=#1pwdata[6+16-1:16];
-               wr_outs_max_reg <=#1pwdata[4+24-1:24];
-               wr_incr_reg <=#1pwdata[31];
+               wr_burst_max_size_reg <=pwdata[8-1:0];
+               wr_tokens_reg <=pwdata[6+16-1:16];
+               wr_outs_max_reg <=pwdata[4+24-1:24];
+               wr_incr_reg <=pwdata[31];
              end
   
   assign rd_incr=rd_incr_reg; 
@@ -10041,22 +3289,22 @@ module dma_axi64_core0_ch_reg #(
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            joint_reg <=#11'b1;
-            end_swap_reg <=#12'b00;
+            joint_reg <=1'b1;
+            end_swap_reg <=2'b00;
           end 
         else 
           if (wr_static_line2)
              begin 
-               joint_reg <=#1pwdata[16];
-               end_swap_reg <=#1pwdata[29:28];
+               joint_reg <=pwdata[16];
+               end_swap_reg <=pwdata[29:28];
              end
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          simple_mem <=#11'b0;
+          simple_mem <=1'b0;
         else 
           if (ch_update)
-             simple_mem <=#1(rd_periph_num=='d0)&(wr_periph_num=='d0)&(~allow_line_cmd);
+             simple_mem <=(rd_periph_num=='d0)&(wr_periph_num=='d0)&(~allow_line_cmd);
  
   assign joint=joint_mode&joint_reg&simple_mem&1'b1; 
   assign joint_mux=joint; 
@@ -10072,18 +3320,18 @@ module dma_axi64_core0_ch_reg #(
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            rd_periph_num_reg <=#1'd0;
-            rd_periph_delay_reg <=#1'd0;
-            wr_periph_num_reg <=#1'd0;
-            wr_periph_delay_reg <=#1'd0;
+            rd_periph_num_reg <='d0;
+            rd_periph_delay_reg <='d0;
+            wr_periph_num_reg <='d0;
+            wr_periph_delay_reg <='d0;
           end 
         else 
           if (wr_static_line4)
              begin 
-               rd_periph_num_reg <=#1pwdata[4:0];
-               rd_periph_delay_reg <=#1pwdata[3+8-1:8];
-               wr_periph_num_reg <=#1pwdata[20:16];
-               wr_periph_delay_reg <=#1pwdata[3+24-1:24];
+               rd_periph_num_reg <=pwdata[4:0];
+               rd_periph_delay_reg <=pwdata[3+8-1:8];
+               wr_periph_num_reg <=pwdata[20:16];
+               wr_periph_delay_reg <=pwdata[3+24-1:24];
              end
   
   assign rd_periph_num=rd_periph_num_reg; 
@@ -10095,69 +3343,69 @@ module dma_axi64_core0_ch_reg #(
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            ch_enable <=#11'b1;
+            ch_enable <=1'b1;
           end 
         else 
           if (wr_ch_enable)
              begin 
-               ch_enable <=#1pwdata[0];
+               ch_enable <=pwdata[0];
              end
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          ch_in_prog <=#11'b0;
+          ch_in_prog <=1'b0;
         else 
           if (ch_update)
-             ch_in_prog <=#11'b1;
+             ch_in_prog <=1'b1;
            else 
              if (ch_end&clken)
-                ch_in_prog <=#11'b0;
+                ch_in_prog <=1'b0;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          rd_ch_in_prog <=#11'b0;
+          rd_ch_in_prog <=1'b0;
         else 
           if (ch_update)
-             rd_ch_in_prog <=#11'b1;
+             rd_ch_in_prog <=1'b1;
            else 
              if (fifo_underflow|fifo_overflow)
-                rd_ch_in_prog <=#11'b0;
+                rd_ch_in_prog <=1'b0;
               else 
                 if (rd_ch_end&clken)
-                   rd_ch_in_prog <=#11'b0;
+                   rd_ch_in_prog <=1'b0;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          wr_ch_in_prog <=#11'b0;
+          wr_ch_in_prog <=1'b0;
         else 
           if (ch_update)
-             wr_ch_in_prog <=#11'b1;
+             wr_ch_in_prog <=1'b1;
            else 
              if (fifo_underflow|fifo_overflow)
-                wr_ch_in_prog <=#11'b0;
+                wr_ch_in_prog <=1'b0;
               else 
                 if (wr_ch_end&clken)
-                   wr_ch_in_prog <=#11'b0;
+                   wr_ch_in_prog <=1'b0;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          load_in_prog_reg <=#11'b0;
+          load_in_prog_reg <=1'b0;
         else 
           if (load_req&clken)
-             load_in_prog_reg <=#11'b1;
+             load_in_prog_reg <=1'b1;
            else 
              if (ch_update&clken)
-                load_in_prog_reg <=#11'b0;
+                load_in_prog_reg <=1'b0;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          load_req_in_prog_reg <=#11'b0;
+          load_req_in_prog_reg <=1'b0;
         else 
           if (load_req&clken)
-             load_req_in_prog_reg <=#11'b1;
+             load_req_in_prog_reg <=1'b1;
            else 
              if (load_cmd&clken)
-                load_req_in_prog_reg <=#11'b0;
+                load_req_in_prog_reg <=1'b0;
  
   assign load_in_prog=load_in_prog_reg; 
   assign load_req_in_prog=load_req_in_prog_reg; 
@@ -10167,13 +3415,13 @@ module dma_axi64_core0_ch_reg #(
   assign ch_update_pre=wr_ch_start|load_wr_last|ch_retry; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          ch_update <=#11'b0;
+          ch_update <=1'b0;
         else 
           if (ch_update_pre)
-             ch_update <=#11'b1;
+             ch_update <=1'b1;
            else 
              if (clken)
-                ch_update <=#11'b0;
+                ch_update <=1'b0;
  
   prgen_delay #(1)delay_ch_update(.clk(clk),.reset(reset),.din(ch_update),.dout(ch_update_d)); 
   assign load_req=(ch_enable&ch_end&(~cmd_last))|(ch_update&(x_size=='d0)); 
@@ -10189,10 +3437,10 @@ module dma_axi64_core0_ch_reg #(
   prgen_rawstat #(13)rawstat(.clk(clk),.reset(reset),.clear(wr_int_clear),.write(wr_int_rawstat),.pwdata(pwdata[13-1:0]),.int_bus(int_bus),.rawstat(int_rawstat)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          int_enable <=#1{13{1'b1}};
+          int_enable <={13{1'b1}};
         else 
           if (wr_int_enable)
-             int_enable <=#1pwdata[13-1:0];
+             int_enable <=pwdata[13-1:0];
  
   assign int_status=int_rawstat&int_enable; 
   assign ch_int=|int_status; 
@@ -10387,23 +3635,23 @@ module dma_axi64_core0_ch_reg #(
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          prdata <=#1{32{1'b0}};
+          prdata <={32{1'b0}};
         else 
           if (gpread&pclken)
-             prdata <=#1prdata_pre;
+             prdata <=prdata_pre;
            else 
              if (pclken)
-                prdata <=#1{32{1'b0}};
+                prdata <={32{1'b0}};
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          pslverr <=#11'b0;
+          pslverr <=1'b0;
         else 
           if ((gpread|gpwrite)&pclken)
-             pslverr <=#1pslverr_pre;
+             pslverr <=pslverr_pre;
            else 
              if (pclken)
-                pslverr <=#11'b0;
+                pslverr <=1'b0;
  
 endmodule
  
@@ -10438,10 +3686,10 @@ module dma_axi64_apb_mux (
   assign pslverr=pslverr_pre; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          pready <=#11'b0;
+          pready <=1'b0;
         else 
           if (pclken)
-             pready <=#1psel&(~penable);
+             pready <=psel&(~penable);
  
 endmodule
  
@@ -10468,7 +3716,7 @@ module dma_axi64_core0_arbiter #(
    reg [7:0] current_active ;  
    wire current_ready_only ;  
    wire ch_last_pre ;  
-   wire ch_last ;  
+   //wire ch_last ;  
    wire ready ;  
    wire next_ready ;  
    wire next_ready0 ;  
@@ -10531,8 +3779,8 @@ module dma_axi64_core0_axim_resp #(
    wire resp_push ;  
    wire resp_pop ;  
    wire resp_empty ;  
-   wire resp_full ;  
-   wire [7-1:0] ID ;  
+   //wire resp_full ;  
+   //wire [7-1:0] ID ;  
   assign resp_push=AVALID&AREADY; 
   assign resp_pop=VALID&READY&LAST; 
   assign clr_pre=resp_pop; 
@@ -10546,10 +3794,10 @@ module dma_axi64_core0_axim_resp #(
   prgen_delay #(1)delay_decerr(.clk(clk),.reset(reset),.din(decerr_pre),.dout(decerr)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          ch_num_resp <=#13'b000;
+          ch_num_resp <=3'b000;
         else 
           if (clr_pre)
-             ch_num_resp <=#1ch_num_resp_pre;
+             ch_num_resp <=ch_num_resp_pre;
  
   prgen_fifo #(7,CMD_DEPTH)resp_fifo(.clk(clk),.reset(reset),.push(resp_push),.pop(resp_pop),.din(AID),.dout(ID),.empty(resp_empty),.full(resp_full)); 
 endmodule
@@ -10609,9 +3857,6 @@ module dma_axi64 (
    wire slv_wr_port_num0 ;  
    wire slv_rd_port_num1 ;  
    wire slv_wr_port_num1 ;  
-  assign M0_AWID=1'b0; 
-  assign M0_WID=1'b0; 
-  assign M0_ARID=1'b0; 
    wire [1-1:0] M0_AWID ;  
    wire [32-1:0] M0_AWADDR ;  
    wire [4-1:0] M0_AWLEN ;  
@@ -10640,10 +3885,13 @@ module dma_axi64 (
    wire M0_RLAST ;  
    wire M0_RVALID ;  
    wire M0_RREADY ;  
-   wire [31:1] periph_tx_req ;  
-   wire [31:1] periph_rx_req ;  
-   wire [31:1] periph_tx_clr ;  
-   wire [31:1] periph_rx_clr ;  
+   //wire [31:1] periph_tx_req ;  
+   //wire [31:1] periph_rx_req ;  
+   //wire [31:1] periph_tx_clr ;  
+   //wire [31:1] periph_rx_clr ;  
+  assign M0_AWID=1'b0; 
+  assign M0_WID=1'b0; 
+  assign M0_ARID=1'b0; 
   assign AWID0=M0_AWID; 
   assign AWADDR0=M0_AWADDR; 
   assign AWLEN0=M0_AWLEN; 
@@ -10696,19 +3944,19 @@ module dma_axi64_core0_ch_calc_addr (
   assign go_next_line_d=1'b0; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          burst_addr <=#1{32{1'b0}};
+          burst_addr <={32{1'b0}};
         else 
           if (load_in_prog)
-             burst_addr <=#1load_addr;
+             burst_addr <=load_addr;
            else 
              if (ch_update_d)
-                burst_addr <=#1start_addr;
+                burst_addr <=start_addr;
               else 
                 if (burst_start&incr)
-                   burst_addr <=#1burst_addr+burst_size;
+                   burst_addr <=burst_addr+burst_size;
                  else 
                    if (go_next_line_d&incr)
-                      burst_addr <=#1burst_addr+frame_width_diff;
+                      burst_addr <=burst_addr+frame_width_diff;
  
 endmodule
  
@@ -10729,15 +3977,15 @@ module prgen_joint_stall #(
     
    wire rd_transfer_joint ;  
    wire joint_fifo_rd ;  
-   wire joint_fifo_rd_valid ;  
+   //wire joint_fifo_rd_valid ;  
    wire [2:0] count_ch_fifo_pre ;  
    reg [2:0] count_ch_fifo ;  
    wire joint_stall_pre ;  
    reg joint_stall_reg ;  
    wire joint_not_ready_pre ;  
    wire joint_not_ready ;  
-   wire [SIZE_BITS-1:0] rd_transfer_size_joint ;  
-   wire rd_transfer_full ;  
+   //wire [SIZE_BITS-1:0] rd_transfer_size_joint ;  
+   //wire rd_transfer_full ;  
    reg [2:0] joint_rd_stall_num ;  
    wire joint_rd_stall ;  
   assign rd_transfer_joint=joint_req_out&rd_transfer; 
@@ -10745,22 +3993,22 @@ module prgen_joint_stall #(
   assign count_ch_fifo_pre=count_ch_fifo+rd_transfer_joint-ch_fifo_rd; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          count_ch_fifo <=#13'd0;
+          count_ch_fifo <=3'd0;
         else 
           if (joint_req_out&(rd_transfer_joint|ch_fifo_rd))
-             count_ch_fifo <=#1count_ch_fifo_pre;
+             count_ch_fifo <=count_ch_fifo_pre;
  
   assign joint_stall_pre=joint_req_out&((count_ch_fifo_pre>'d2)|((count_ch_fifo_pre=='d2)&(data_fullness_pre>'d1))|HOLD); 
   assign joint_not_ready_pre=joint_req_out&(data_fullness_pre>'d1)&(~(rd_transfer_joint&joint_stall_pre)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          joint_stall_reg <=#11'b0;
+          joint_stall_reg <=1'b0;
         else 
           if (joint_stall_pre)
-             joint_stall_reg <=#11'b1;
+             joint_stall_reg <=1'b1;
            else 
              if (count_ch_fifo_pre=='d0)
-                joint_stall_reg <=#11'b0;
+                joint_stall_reg <=1'b0;
  
   assign joint_stall=joint_stall_reg|(joint_req_out&HOLD); 
   prgen_delay #(1)delay_joint_not_ready(.clk(clk),.reset(reset),.din(joint_not_ready_pre),.dout(joint_not_ready)); 
@@ -10784,9 +4032,9 @@ module prgen_rawstat #(
   assign clear_bus={SIZE{clear}}&pwdata; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          rawstat <=#1{SIZE{1'b0}};
+          rawstat <={SIZE{1'b0}};
         else 
-          rawstat <=#1(rawstat|int_bus|write_bus)&(~clear_bus);
+          rawstat <=(rawstat|int_bus|write_bus)&(~clear_bus);
  
 endmodule
  
@@ -11044,8 +4292,8 @@ module dma_axi64_core0 (
    wire [2:0] wr_ch_num ;  
    wire wr_ch_last ;  
    wire wr_ch_last_joint ;  
-   wire [31:0] prdata ;  
-   wire pslverr ;  
+   //wire [31:0] prdata ;  
+   //wire pslverr ;  
    wire load_req_in_prog ;  
    wire [7:0] ch_idle ;  
    wire [7:0] ch_active ;  
@@ -11064,7 +4312,7 @@ module dma_axi64_core0 (
    wire [32-1:0] rd_burst_addr ;  
    wire [8-1:0] rd_burst_size ;  
    wire [6-1:0] rd_tokens ;  
-   wire rd_port_num ;  
+   //wire rd_port_num ;  
    wire [3-1:0] rd_periph_delay ;  
    wire rd_clr_valid ;  
    wire [2:0] rd_transfer_num ;  
@@ -11077,7 +4325,7 @@ module dma_axi64_core0 (
    wire [32-1:0] wr_burst_addr ;  
    wire [8-1:0] wr_burst_size ;  
    wire [6-1:0] wr_tokens ;  
-   wire wr_port_num ;  
+   //wire wr_port_num ;  
    wire [3-1:0] wr_periph_delay ;  
    wire wr_clr_valid ;  
    wire wr_clr_stall ;  
@@ -11225,13 +4473,13 @@ module dma_axi64_core0_axim_timeout (
   assign axim_timeout=(counter=='d0); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          counter <=#1{10{1'b1}};
+          counter <={10{1'b1}};
         else 
           if (VALID&READY)
-             counter <=#1{10{1'b1}};
+             counter <={10{1'b1}};
            else 
              if (VALID)
-                counter <=#1counter-1'b1;
+                counter <=counter-1'b1;
  
 endmodule
  
@@ -11300,12 +4548,12 @@ module dma_axi64_core0_axim_wr (
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            BRESP_d <=#12'b00;
+            BRESP_d <=2'b00;
           end 
         else 
           if (BVALID)
              begin 
-               BRESP_d <=#1BRESP;
+               BRESP_d <=BRESP;
              end
   
   dma_axi64_core0_axim_cmd dma_axi64_axim_wcmd(.clk(clk),.reset(reset),.end_line_cmd(wr_line_cmd),.extra_bit(wr_last_cmd),.cmd_port(wr_cmd_port),.joint_req(joint_req),.ch_num(wr_ch_num),.burst_start(wr_burst_start),.burst_addr(wr_burst_addr),.burst_size(wr_burst_size),.cmd_pending(wr_cmd_pending),.cmd_full(wr_cmd_full),.cmd_split(wr_cmd_split),.cmd_num(wr_cmd_num),.cmd_line(),.page_cross(page_cross),.AID(AWID),.AADDR(AWADDR),.APORT(AWPORT),.ALEN(AWLEN),.ASIZE(AWSIZE),.AVALID(AWVALID),.AREADY(AWREADY),.AWVALID(1'b0),.AJOINT(AJOINT),.axim_timeout_num(axim_timeout_num_aw),.axim_timeout(axim_timeout_aw)); 
@@ -11338,9 +4586,9 @@ module dma_axi64_core0_ch_rd_slicer (
   output [5-1:0] slice_rd_ptr,
   output slice_rd_valid) ; 
    wire slice_rd_pre ;  
-   wire slice_rd ;  
-   wire [5-1:0] slice_rd_ptr ;  
-   wire [4-1:0] slice_rsize ;  
+   //wire slice_rd ;  
+   //wire [5-1:0] slice_rd_ptr ;  
+   //wire [4-1:0] slice_rsize ;  
    wire fifo_rd_d ;  
    wire slice_rd_d ;  
    wire [3-1:0] rd_align_valid_pre ;  
@@ -11361,13 +4609,13 @@ module dma_axi64_core0_ch_rd_slicer (
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            rd_align_valid <=#1{3{1'b0}};
-            rd_align_d <=#1{3{1'b0}};
+            rd_align_valid <={3{1'b0}};
+            rd_align_d <={3{1'b0}};
           end 
         else 
           begin 
-            rd_align_valid <=#1rd_align_valid_pre;
-            rd_align_d <=#1rd_align_valid;
+            rd_align_valid <=rd_align_valid_pre;
+            rd_align_d <=rd_align_valid;
           end
   
   always @(   fifo_rdata or  next_rdata or  rd_align_d)
@@ -11416,29 +4664,29 @@ module dma_axi64_core0_ch_rd_slicer (
   
   always @(  posedge clk or  posedge reset)
        if (reset)
-          next_rdata <=#1{64{1'b0}};
+          next_rdata <={64{1'b0}};
         else 
           if (slice_rd_d)
-             next_rdata <=#1next_rdata_pre;
+             next_rdata <=next_rdata_pre;
  
   assign actual_rsize_pre=next_rsize+({4{fifo_rd}}&fifo_rsize); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          actual_rsize <=#1{4{1'b0}};
+          actual_rsize <={4{1'b0}};
         else 
           if (fifo_rd|(|next_rsize))
-             actual_rsize <=#1actual_rsize_pre;
+             actual_rsize <=actual_rsize_pre;
  
   prgen_min2 #(4)min_rsize(.a(rd_line_remain),.b(actual_rsize),.min(slice_rsize)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          next_rsize_reg <=#1{4{1'b0}};
+          next_rsize_reg <={4{1'b0}};
         else 
           if (next_rd)
-             next_rsize_reg <=#1{4{1'b0}};
+             next_rsize_reg <={4{1'b0}};
            else 
              if (fifo_rd|slice_rd)
-                next_rsize_reg <=#1next_rsize+({4{fifo_rd}}&fifo_rsize);
+                next_rsize_reg <=next_rsize+({4{fifo_rd}}&fifo_rsize);
  
   assign next_rsize=next_rsize_reg-({4{fifo_rd_d}}&slice_rsize); 
   assign next_rd=(~fifo_rd)&(|next_rsize); 
@@ -11491,17 +4739,17 @@ module dma_axi64_core0_ch_calc #(
    wire ch_update_d ;  
    wire ch_update_d2 ;  
    wire ch_update_d3 ;  
-   wire [32-1:0] burst_addr ;  
-   wire [8-1:0] burst_size ;  
+   //wire [32-1:0] burst_addr ;  
+   //wire [8-1:0] burst_size ;  
   prgen_delay #(1)delay_calc0(.clk(clk),.reset(reset),.din(ch_update),.dout(ch_update_d)); 
   prgen_delay #(1)delay_calc1(.clk(clk),.reset(reset),.din(ch_update_d),.dout(ch_update_d2)); 
   prgen_delay #(1)delay_calc2(.clk(clk),.reset(reset),.din(ch_update_d2),.dout(ch_update_d3)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          single <=#11'b0;
+          single <=1'b0;
         else 
           if (burst_start)
-             single <=#1(burst_size<=SINGLE_SIZE);
+             single <=(burst_size<=SINGLE_SIZE);
  
   dma_axi64_core0_ch_calc_addr dma_axi64_ch_calc_addr(.clk(clk),.reset(reset),.ch_update_d(ch_update_d),.load_in_prog(load_in_prog),.load_addr(load_addr),.go_next_line(go_next_line),.burst_start(burst_start),.incr(incr),.start_addr(start_addr),.frame_width(frame_width),.x_size(x_size),.burst_size(burst_size),.burst_addr(burst_addr)); 
   dma_axi64_core0_ch_calc_size #(.READ(READ))dma_axi64_ch_calc_size(.clk(clk),.reset(reset),.ch_update(ch_update),.ch_update_d(ch_update_d),.ch_update_d2(ch_update_d2),.ch_update_d3(ch_update_d3),.ch_end(ch_end),.ch_end_flush(ch_end_flush),.joint_line_req_clr(joint_line_req_clr),.wr_cmd_pending(wr_cmd_pending),.outs_empty(outs_empty),.load_in_prog(load_in_prog),.load_req_in_prog(load_req_in_prog),.burst_start(burst_start),.burst_addr(burst_addr),.burst_max_size(burst_max_size),.x_remain(x_remain),.fifo_wr_ready(fifo_wr_ready),.fifo_remain(fifo_remain),.burst_size(burst_size),.burst_ready(burst_ready),.burst_last(burst_last),.joint_ready_out(joint_ready_out),.joint_ready_in(joint_ready_in),.joint_line_req_in(joint_line_req_in),.joint_line_req_out(joint_line_req_out),.joint_burst_req_in(joint_burst_req_in),.joint_burst_req_out(joint_burst_req_out),.joint(joint),.page_cross(page_cross),.joint_cross(joint_cross),.joint_flush(joint_flush),.joint_flush_in(joint_flush_in)); 
@@ -11528,20 +4776,20 @@ module dma_axi64_core0_wdt (
   assign advance=(!current_ch_active)|current_burst_start|wdt_timeout; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          wdt_ch_num <=#13'd0;
+          wdt_ch_num <=3'd0;
         else 
           if (advance)
-             wdt_ch_num <=#1wdt_ch_num+1'b1;
+             wdt_ch_num <=wdt_ch_num+1'b1;
  
   assign wdt_timeout=(counter=='d0); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          counter <=#1{11{1'b1}};
+          counter <={11{1'b1}};
         else 
           if (advance|idle)
-             counter <=#1{11{1'b1}};
+             counter <={11{1'b1}};
            else 
-             counter <=#1counter-1'b1;
+             counter <=counter-1'b1;
  
 endmodule
  
@@ -11561,11 +4809,11 @@ module dma_axi64_core0_ch_fifo (
   assign DIN_BitSEL=(Mem[WR_ADDR]&~BitSEL)|(DIN&BitSEL); 
   always @( posedge CLK)
        if (WR)
-          Mem [WR_ADDR]<=#1DIN_BitSEL;
+          Mem [WR_ADDR]<=DIN_BitSEL;
  
   always @( posedge CLK)
        if (RD)
-          DOUT <=#1Mem[RD_ADDR];
+          DOUT <=Mem[RD_ADDR];
  
 endmodule
  
@@ -11612,8 +4860,8 @@ module dma_axi64_core0_axim_wdata (
    wire [8-1:0] WSTRB_data ;  
    wire [1:0] WSIZE_data ;  
    wire [4-1:0] WLEN_data ;  
-   wire WVALID ;  
-   wire WLAST ;  
+   //wire WVALID ;  
+   //wire WLAST ;  
    wire valid_last ;  
    wire wr_clr_line_stall_pre ;  
    wire wr_clr_line_stall ;  
@@ -11621,7 +4869,7 @@ module dma_axi64_core0_axim_wdata (
    wire [2:0] wr_transfer_num_pre ;  
    wire wr_transfer_pre ;  
    wire [4-1:0] wr_transfer_size_pre ;  
-   wire wr_transfer ;  
+   //wire wr_transfer ;  
    reg [2:0] last_channel ;  
    wire [7-1:0] WID_cmd ;  
    wire [1:0] WSIZE_cmd ;  
@@ -11631,7 +4879,7 @@ module dma_axi64_core0_axim_wdata (
    reg [2:0] data_fullness ;  
    wire joint_fifo_rd_valid ;  
    wire joint_req_out ;  
-   wire joint_stall ;  
+   //wire joint_stall ;  
    wire rd_transfer_joint ;  
    wire [4-1:0] rd_transfer_size_joint ;  
    wire rd_transfer_full ;  
@@ -11658,10 +4906,10 @@ module dma_axi64_core0_axim_wdata (
   assign data_fullness_pre=data_fullness+data_ready-wr_transfer_pre; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          data_fullness <=#13'd0;
+          data_fullness <=3'd0;
         else 
           if (data_ready|wr_transfer_pre)
-             data_fullness <=#1data_fullness_pre;
+             data_fullness <=data_fullness_pre;
  
   prgen_joint_stall #(4)gen_joint_stall(.clk(clk),.reset(reset),.joint_req_out(joint_req_out),.rd_transfer(rd_transfer),.rd_transfer_size(rd_transfer_size),.ch_fifo_rd(ch_fifo_rd),.data_fullness_pre(data_fullness_pre),.HOLD(1'b0),.joint_fifo_rd_valid(joint_fifo_rd_valid),.rd_transfer_size_joint(rd_transfer_size_joint),.rd_transfer_full(rd_transfer_full),.joint_stall(joint_stall)); 
   assign data_pending_pre=WVALID&(~WREADY); 
@@ -11686,10 +4934,10 @@ module dma_axi64_core0_axim_wdata (
   prgen_delay #(1)delay_cmd_pop(.clk(clk),.reset(reset),.din(cmd_pop),.dout(cmd_pop_d)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          last_channel <=#13'b000;
+          last_channel <=3'b000;
         else 
           if (cmd_push)
-             last_channel <=#1WID_pre[2:0];
+             last_channel <=WID_pre[2:0];
  
   assign wr_transfer_num_pre=WID_data[2:0]; 
   assign wr_transfer_pre=WVALID&WREADY; 
@@ -11698,24 +4946,24 @@ module dma_axi64_core0_axim_wdata (
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            wr_transfer_num <=#13'd0;
-            wr_transfer_size <=#13'd0;
+            wr_transfer_num <=3'd0;
+            wr_transfer_size <=3'd0;
           end 
         else 
           if (wr_transfer_pre)
              begin 
-               wr_transfer_num <=#1wr_transfer_num_pre;
-               wr_transfer_size <=#1wr_transfer_size_pre;
+               wr_transfer_num <=wr_transfer_num_pre;
+               wr_transfer_size <=wr_transfer_size_pre;
              end
   
   assign valid_last=ch_fifo_rd&(rd_out_count==WLEN_cmd)&(~cmd_empty); 
   assign wr_clr_line_pre=valid_last&line_end; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          wr_clr_line_num <=#13'd0;
+          wr_clr_line_num <=3'd0;
         else 
           if (wr_clr_line_pre)
-             wr_clr_line_num <=#1line_end_num;
+             wr_clr_line_num <=line_end_num;
  
   assign wr_clr_line_stall_pre=wr_clr_line_pre&(ch_fifo_rd_num==line_end_num); 
   prgen_delay #(1)delay_stall(.clk(clk),.reset(reset),.din(wr_clr_line_stall_pre),.dout(wr_clr_line_stall)); 
@@ -11767,13 +5015,13 @@ module dma_axi64_core0_axim_wdata (
   assign line_end_num=WID_cmd[2:0]; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          rd_out_count <=#1{4{1'b0}};
+          rd_out_count <={4{1'b0}};
         else 
           if (cmd_pop)
-             rd_out_count <=#1{4{1'b0}};
+             rd_out_count <={4{1'b0}};
            else 
              if (ch_fifo_rd)
-                rd_out_count <=#1rd_out_count+1'b1;
+                rd_out_count <=rd_out_count+1'b1;
  
   assign cmd_data_push=cmd_push; 
   assign cmd_data_pop=WVALID&WREADY&WLAST; 
@@ -11782,13 +5030,13 @@ module dma_axi64_core0_axim_wdata (
   prgen_fifo #(8+4+7+2,4)cmd_data_fifo(.clk(clk),.reset(reset),.push(cmd_data_push),.pop(cmd_data_pop),.din({WLEN_pre,WSIZE_pre,WSTRB_pre,WID_pre}),.dout({WLEN_data,WSIZE_data,WSTRB_data,WID_data}),.empty(cmd_data_empty),.full(cmd_data_full)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          rd_in_count <=#1{4{1'b0}};
+          rd_in_count <={4{1'b0}};
         else 
           if (cmd_data_pop)
-             rd_in_count <=#1{4{1'b0}};
+             rd_in_count <={4{1'b0}};
            else 
              if (wr_transfer_pre)
-                rd_in_count <=#1rd_in_count+1'b1;
+                rd_in_count <=rd_in_count+1'b1;
  
   assign data_push=ch_fifo_rd_valid; 
   assign data_pop=wr_transfer_pre; 
@@ -11866,12 +5114,12 @@ module dma_axi64_reg_core0 (
   always @(  posedge clk or  posedge reset)
        if (reset)
           begin 
-            joint_mode <=#11'b0;
+            joint_mode <=1'b0;
           end 
         else 
           if (wr_joint)
              begin 
-               joint_mode <=#1pwdata[0];
+               joint_mode <=pwdata[0];
              end
   
   assign rd_prio_top='d0; 
@@ -11932,30 +5180,30 @@ module dma_axi64_core0_axim_rdata (
   prgen_delay #(1)delay_clr2(.clk(clk),.reset(reset),.din(rd_clr_line_pre_d),.dout(rd_clr_line)); 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          ch_fifo_wr_num_d <=#13'b000;
+          ch_fifo_wr_num_d <=3'b000;
         else 
           if (rd_clr_line_pre)
-             ch_fifo_wr_num_d <=#1ch_fifo_wr_num;
+             ch_fifo_wr_num_d <=ch_fifo_wr_num;
  
   always @(  posedge clk or  posedge reset)
        if (reset)
-          rd_clr_line_num <=#13'b000;
+          rd_clr_line_num <=3'b000;
         else 
           if (rd_clr_line_pre_d)
-             rd_clr_line_num <=#1ch_fifo_wr_num_d;
+             rd_clr_line_num <=ch_fifo_wr_num_d;
  
   assign load_wr=RVALID&RREADY&load_cmd_id; 
   assign load_wr_num=RID[2:0]; 
   assign load_wdata=RDATA; 
   always @(  posedge clk or  posedge reset)
        if (reset)
-          load_wr_cycle <=#12'b00;
+          load_wr_cycle <=2'b00;
         else 
           if (load_wr&load_wr_cycle[0]&1'b1)
-             load_wr_cycle <=#12'b00;
+             load_wr_cycle <=2'b00;
            else 
              if (load_wr)
-                load_wr_cycle <=#1load_wr_cycle+1'b1;
+                load_wr_cycle <=load_wr_cycle+1'b1;
  
 endmodule
  
@@ -11991,43 +5239,3 @@ module prgen_mux8 #(
   
 endmodule
  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

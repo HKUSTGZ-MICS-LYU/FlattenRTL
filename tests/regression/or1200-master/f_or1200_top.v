@@ -6443,10 +6443,8 @@ module or1200_fpu_post_norm_intfloat_conv #(
   output f2i_out_sign) ; 
    reg [22:0] fract_out ;  
    reg [7:0] exp_out ;  
-   wire [30:0] out ;  
-   wire exp_out1_co ; 
-   wire overflow ; 
-   wire underflow ;  
+   //wire [30:0] out ;  
+   wire exp_out1_co ;  
    wire [22:0] fract_out_final ;  
    reg [22:0] fract_out_rnd ;  
    wire [8:0] exp_next_mi ;  
@@ -7702,8 +7700,7 @@ module or1200_fpu_fcmp (
    wire qnan_b ; 
    wire snan_b ; 
    wire opa_inf ; 
-   wire opb_inf ; 
-   wire inf ;  
+   wire opb_inf ;  
    wire qnan ; 
    wire snan ; 
    wire opa_zero ; 

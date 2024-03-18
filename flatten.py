@@ -667,7 +667,9 @@ def pyflattenverilog(design: str, top_module: str, output_file: str, debug_mode:
                     + ";"
                 )
             elif cur_list_of_ports_type[k * len_instance_port + i] == "reg":
-                if cur_list_of_ports_direction[k * len_instance_port + i] != "output":
+                # Handle case of reg output
+                if True:
+                # if cur_list_of_ports_direction[k * len_instance_port + i] != "output":
                     cur_new_variable.append(
                         "reg "
                         + ports_lhs_width[k * len_instance_port + i]
@@ -705,6 +707,7 @@ def pyflattenverilog(design: str, top_module: str, output_file: str, debug_mode:
                     + cur_list_of_ports_lhs[k * len_instance_port + i]
                     + ";"
                 )
+            
             
             if cur_list_of_ports_direction[k * len_instance_port + i] == "input":
                 # if cur_list_of_ports_type[i] == 'reg' :

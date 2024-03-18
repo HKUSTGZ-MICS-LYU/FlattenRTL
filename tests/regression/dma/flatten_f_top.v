@@ -163,11 +163,11 @@ module dma_axi64_core0_top #(
         parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_DELAY=1,
         parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_MAX_BURST=0?64:128,
         parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_HALF_BYTES=32/2,
-        parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_LARGE_FIFO=32>MAX_BURST,
+        parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_LARGE_FIFO=32>dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_MAX_BURST,
         parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_SMALL_FIFO=32==16,
         parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_MAX_BURST=0?64:128,
         parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_HALF_BYTES=32/2,
-        parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_LARGE_FIFO=32>MAX_BURST,
+        parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_LARGE_FIFO=32>dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_MAX_BURST,
         parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_SMALL_FIFO=32==16,
         parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_min2_max_WIDTH=8,
         parameter dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_min2_max_WIDTH=8,
@@ -567,7 +567,7 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_wdt_wr_burst_start;
     wire [2:0] dma_axi64_core0_dma_axi64_core0_wdt_wr_ch_num;
     wire  dma_axi64_core0_dma_axi64_core0_wdt_wdt_timeout;
-    reg [2:0] dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num = dma_axi64_core0_wdt_ch_num;
+    reg [2:0] dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num;
 
     reg[11-1:0]  dma_axi64_core0_dma_axi64_core0_wdt_counter  ;
     wire  dma_axi64_core0_dma_axi64_core0_wdt_current_ch_active  ;
@@ -580,20 +580,20 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_wdt_advance  =(!  dma_axi64_core0_dma_axi64_core0_wdt_current_ch_active  )|  dma_axi64_core0_dma_axi64_core0_wdt_current_burst_start  |  dma_axi64_core0_dma_axi64_core0_wdt_wdt_timeout  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_wdt_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_wdt_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_wdt_reset  )
-            dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num   <=#13'd0;
+            dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num   <=3'd0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_wdt_advance  )
-                dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num   <=#1  dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num  +1'b1;
+                dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num   <=  dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num  +1'b1;
 
     assign   dma_axi64_core0_dma_axi64_core0_wdt_wdt_timeout  =(  dma_axi64_core0_dma_axi64_core0_wdt_counter  =='d0);
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_wdt_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_wdt_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_wdt_reset  )
-            dma_axi64_core0_dma_axi64_core0_wdt_counter   <=#1{11{1'b1}};
+            dma_axi64_core0_dma_axi64_core0_wdt_counter   <={11{1'b1}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_wdt_advance  |  dma_axi64_core0_dma_axi64_core0_wdt_idle  )
-                dma_axi64_core0_dma_axi64_core0_wdt_counter   <=#1{11{1'b1}};
+                dma_axi64_core0_dma_axi64_core0_wdt_counter   <={11{1'b1}};
             else
-                dma_axi64_core0_dma_axi64_core0_wdt_counter   <=#1  dma_axi64_core0_dma_axi64_core0_wdt_counter  -1'b1;
+                dma_axi64_core0_dma_axi64_core0_wdt_counter   <=  dma_axi64_core0_dma_axi64_core0_wdt_counter  -1'b1;
 
     assign dma_axi64_core0_dma_axi64_core0_wdt_clk = dma_axi64_core0_gclk;
     assign dma_axi64_core0_dma_axi64_core0_wdt_reset = dma_axi64_core0_reset;
@@ -603,6 +603,7 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_wdt_wr_burst_start = dma_axi64_core0_wr_burst_start_joint;
     assign dma_axi64_core0_dma_axi64_core0_wdt_wr_ch_num = dma_axi64_core0_wr_ch_num_joint;
     assign dma_axi64_core0_wdt_timeout = dma_axi64_core0_dma_axi64_core0_wdt_wdt_timeout;
+    assign dma_axi64_core0_wdt_ch_num = dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num;
 
 
     wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_clk;
@@ -762,8 +763,8 @@ module dma_axi64_core0_top #(
     wire [6-1:0] dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens;
     wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_ready;
     wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_last;
-    reg  dma_axi64_core0_dma_axi64_core0_ctrl_rd_burst_start = dma_axi64_core0_rd_burst_start;
-    reg  dma_axi64_core0_dma_axi64_core0_ctrl_rd_finish = dma_axi64_core0_rd_finish;
+    reg  dma_axi64_core0_dma_axi64_core0_ctrl_rd_burst_start;
+    reg  dma_axi64_core0_dma_axi64_core0_ctrl_rd_finish;
     wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_busy;
     wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_hold;
     wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_clk;
@@ -783,8 +784,8 @@ module dma_axi64_core0_top #(
     wire [6-1:0] dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens;
     wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_ready;
     wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_last;
-    reg  dma_axi64_core0_dma_axi64_core0_ctrl_wr_burst_start = dma_axi64_core0_wr_burst_start;
-    reg  dma_axi64_core0_dma_axi64_core0_ctrl_wr_finish = dma_axi64_core0_wr_finish;
+    reg  dma_axi64_core0_dma_axi64_core0_ctrl_wr_burst_start;
+    reg  dma_axi64_core0_dma_axi64_core0_ctrl_wr_finish;
     wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_busy;
     wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_hold;
 
@@ -806,35 +807,35 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_ctrl_rd_go_next_line_d  =1'b0;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  )
-            dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl_reg   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl_reg   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_finish  )
-                dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl_reg   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl_reg   <=1'b0;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_go  )
-                    dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl_reg   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_req  ;
+                    dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl_reg   <=  dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_req  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl  =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl_reg  ;
     assign   dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_remain  =(|  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter  )|  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_last  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  )
-            dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter   <=#1{6{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter   <={6{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_go  )
-                dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens  ;
+                dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter   <=  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens  ;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_burst_start  &(|  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter  ))
-                    dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter  -1'b1;
+                    dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter   <=  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter  -1'b1;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  )
-            dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter   <=#1{3{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter   <={3{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_ch  )
-                dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_delay  ;
+                dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter   <=  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_delay  ;
             else
                 if (|  dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter  )
-                    dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter  -1'b1;
+                    dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter   <=  dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter  -1'b1;
 
     assign   dma_axi64_core0_dma_axi64_core0_ctrl_rd_stall  =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_cmd_pending  |  dma_axi64_core0_dma_axi64_core0_ctrl_rd_cmd_full  |  dma_axi64_core0_dma_axi64_core0_ctrl_rd_go_next_line_d  ;
     always @(                  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_go                                        or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_last                        or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_ready                       or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_clr_stall                      or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter                     or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_go_next_line_d                    or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_hold                   or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl                  or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_req                 or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_ch                or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_last_ch               or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_valid              or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_delay             or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_ps            or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_stall           or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_remain   )
@@ -952,9 +953,9 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  )
-            dma_axi64_core0_dma_axi64_core0_ctrl_rd_ps   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ;
+            dma_axi64_core0_dma_axi64_core0_ctrl_rd_ps   <=  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ;
         else
-            dma_axi64_core0_dma_axi64_core0_ctrl_rd_ps   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns  ;
+            dma_axi64_core0_dma_axi64_core0_ctrl_rd_ps   <=  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns  ;
 
 
 
@@ -977,35 +978,35 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_ctrl_wr_go_next_line_d  =1'b0;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_wr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  )
-            dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl_reg   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl_reg   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_finish  )
-                dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl_reg   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl_reg   <=1'b0;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_go  )
-                    dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl_reg   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_req  ;
+                    dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl_reg   <=  dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_req  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl  =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl_reg  ;
     assign   dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_remain  =(|  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter  )|  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_last  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_wr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  )
-            dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter   <=#1{6{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter   <={6{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_go  )
-                dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens  ;
+                dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter   <=  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens  ;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_burst_start  &(|  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter  ))
-                    dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter  -1'b1;
+                    dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter   <=  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter  -1'b1;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_wr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  )
-            dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter   <=#1{3{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter   <={3{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_ch  )
-                dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_delay  ;
+                dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter   <=  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_delay  ;
             else
                 if (|  dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter  )
-                    dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter  -1'b1;
+                    dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter   <=  dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter  -1'b1;
 
     assign   dma_axi64_core0_dma_axi64_core0_ctrl_wr_stall  =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_cmd_pending  |  dma_axi64_core0_dma_axi64_core0_ctrl_wr_cmd_full  |  dma_axi64_core0_dma_axi64_core0_ctrl_wr_go_next_line_d  ;
     always @(                  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_go                                        or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_last                        or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_ready                       or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_clr_stall                      or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter                     or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_go_next_line_d                    or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_hold                   or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl                  or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_req                 or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_ch                or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_last_ch               or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_valid              or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_delay             or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_ps            or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_stall           or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_remain   )
@@ -1123,9 +1124,9 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_wr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  )
-            dma_axi64_core0_dma_axi64_core0_ctrl_wr_ps   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ;
+            dma_axi64_core0_dma_axi64_core0_ctrl_wr_ps   <=  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ;
         else
-            dma_axi64_core0_dma_axi64_core0_ctrl_wr_ps   <=#1  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns  ;
+            dma_axi64_core0_dma_axi64_core0_ctrl_wr_ps   <=  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns  ;
 
     assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_clk = dma_axi64_core0_gclk;
     assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset = dma_axi64_core0_reset;
@@ -1144,6 +1145,8 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens = dma_axi64_core0_rd_tokens;
     assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_ready = dma_axi64_core0_rd_ready_joint;
     assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_last = dma_axi64_core0_rd_ch_last;
+    assign dma_axi64_core0_rd_burst_start = dma_axi64_core0_dma_axi64_core0_ctrl_rd_burst_start;
+    assign dma_axi64_core0_rd_finish = dma_axi64_core0_dma_axi64_core0_ctrl_rd_finish;
     assign dma_axi64_core0_rd_ctrl_busy = dma_axi64_core0_dma_axi64_core0_ctrl_rd_busy;
     assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_hold = dma_axi64_core0_rd_hold_ctrl;
     assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_clk = dma_axi64_core0_gclk;
@@ -1163,6 +1166,8 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens = dma_axi64_core0_wr_tokens;
     assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_ready = dma_axi64_core0_wr_ready_joint;
     assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_last = dma_axi64_core0_wr_ch_last_joint;
+    assign dma_axi64_core0_wr_burst_start = dma_axi64_core0_dma_axi64_core0_ctrl_wr_burst_start;
+    assign dma_axi64_core0_wr_finish = dma_axi64_core0_dma_axi64_core0_ctrl_wr_finish;
     assign dma_axi64_core0_wr_ctrl_busy = dma_axi64_core0_dma_axi64_core0_ctrl_wr_busy;
     assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_hold = dma_axi64_core0_wr_hold_ctrl;
 
@@ -1237,9 +1242,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_DELAY  -1];
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_clk;
@@ -1250,12 +1255,12 @@ module dma_axi64_core0_top #(
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_axim_wr_BRESP_d   <=#12'b00;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_BRESP_d   <=2'b00;
         end
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_BVALID  )
             begin
-                dma_axi64_core0_dma_axi64_core0_axim_wr_BRESP_d   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_BRESP  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_BRESP_d   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_BRESP  ;
             end
 
 
@@ -1270,21 +1275,21 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_port;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_joint_req;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_joint_pending;
-    reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_pending = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_pending;
+    reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_pending;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_full;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_split;
     wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_num;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_line;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_page_cross;
-    reg [7-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID = dma_axi64_core0_dma_axi64_core0_axim_wr_AWID;
-    reg [32-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR = dma_axi64_core0_dma_axi64_core0_axim_wr_AWADDR;
-    reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_APORT = dma_axi64_core0_dma_axi64_core0_axim_wr_AWPORT;
-    reg [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ALEN = dma_axi64_core0_dma_axi64_core0_axim_wr_AWLEN;
-    reg [1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE = dma_axi64_core0_dma_axi64_core0_axim_wr_AWSIZE;
+    reg [7-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID;
+    reg [32-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR;
+    reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_APORT;
+    reg [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ALEN;
+    reg [1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AREADY;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AWVALID;
-    reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AJOINT = dma_axi64_core0_dma_axi64_core0_axim_wr_AJOINT;
+    reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AJOINT;
 
     reg[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_reg  ;
     reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID_reg  ;
@@ -1333,9 +1338,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_DELAY  -1];
 
@@ -1344,45 +1349,45 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_DELAY  -1];
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_reach   <=#1{9{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_reach   <={9{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_high_addr_pre  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_reach   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_reach_pre  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_reach   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_reach_pre  ;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_start  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst   <=1'b0;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start  )
-                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst   <=#11'b1;
+                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst   <=1'b1;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst_d   <=#1{9{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst_d   <={9{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst_d   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst_d   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst  ;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_size   <=#1{8{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_size   <={8{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_size   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_size  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_size   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_size  ;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start_d  )
-                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_size   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_size  -  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst_d  ;
+                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_size   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_size  -  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst_d  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_split  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start_d  ;
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AREADY  ;
@@ -1391,22 +1396,22 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_joint_pending  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AREADY  )&  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AJOINT  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_pending   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_pending   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_pending   <=#11'b1;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_pending   <=1'b1;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst  ))
-                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_pending   <=#11'b0;
+                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_pending   <=1'b0;
 
 
 
     reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_DELAY  -1];
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk;
@@ -1430,22 +1435,22 @@ module dma_axi64_core0_top #(
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE   <=#1{2{1'b0}};
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AJOINT   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE   <={2{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AJOINT   <=1'b0;
         end
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start  )
             begin
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE_pre  ;
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AJOINT   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_joint_req  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE_pre  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AJOINT   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_joint_req  ;
             end
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_reg   <=#1{7{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_reg   <={7{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_reg   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_pre  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_reg   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_pre  ;
 
     always @(    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_reg            or    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst   )
     begin
@@ -1456,37 +1461,37 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR   <=#1{32{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR   <={32{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_start  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR  [32-1:12],{12{1'b1}}}+1'b1;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR  [32-1:12],{12{1'b1}}}+1'b1;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start  )
-                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR_pre  ;
+                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR_pre  ;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_APORT   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_APORT   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_APORT   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_port  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_APORT   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_port  ;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ALEN   <=#1{4{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ALEN   <={4{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_start  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ALEN   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ALEN_pre  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ALEN   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ALEN_pre  ;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID_reg   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID_reg   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AREADY  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID_reg   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID_reg   <=1'b0;
             else
                 if ((  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_size  >'d0))|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_start  )
-                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID_reg   <=#11'b1;
+                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID_reg   <=1'b1;
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AJOINT   ?   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID_reg  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AWVALID  ):  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID_reg  ;
 
@@ -1503,13 +1508,13 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_axim_timeout  =(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_counter  =='d0);
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_counter   <=#1{10{1'b1}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_counter   <={10{1'b1}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_VALID  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_READY  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_counter   <=#1{10{1'b1}};
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_counter   <={10{1'b1}};
             else
                 if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_VALID  )
-                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_counter   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_counter  -1'b1;
+                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_counter   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_counter  -1'b1;
 
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset;
@@ -1530,14 +1535,21 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_port = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_port;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_joint_req = dma_axi64_core0_dma_axi64_core0_axim_wr_joint_req;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_pending = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_joint_pending;
+    assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_pending = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_pending;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_full = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_full;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_split = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_split;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_num = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_num;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_AWID = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_line;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_page_cross = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_page_cross;
+    assign dma_axi64_core0_dma_axi64_core0_axim_wr_AWID = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID;
+    assign dma_axi64_core0_dma_axi64_core0_axim_wr_AWADDR = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR;
+    assign dma_axi64_core0_dma_axi64_core0_axim_wr_AWPORT = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_APORT;
+    assign dma_axi64_core0_dma_axi64_core0_axim_wr_AWLEN = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ALEN;
+    assign dma_axi64_core0_dma_axi64_core0_axim_wr_AWSIZE = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_AWVALID = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AREADY = dma_axi64_core0_dma_axi64_core0_axim_wr_AWREADY;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AWVALID = 1'b0;
+    assign dma_axi64_core0_dma_axi64_core0_axim_wr_AJOINT = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AJOINT;
 
 
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk;
@@ -1550,14 +1562,14 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd_valid;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_wr_ready;
     wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd_num;
-    reg [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_num = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_transfer_num;
+    reg [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_num;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer;
-    reg [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_size = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_transfer_size;
-    reg [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_next_size = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_next_size;
+    reg [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_size;
+    reg [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_next_size;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_resp_full;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_cmd_full;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line;
-    reg [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_num = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr_line_num;
+    reg [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_num;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_stall;
     wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_axim_timeout_num;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_axim_timeout;
@@ -1629,10 +1641,10 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness  +  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_ready  -  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_pre  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness   <=#13'd0;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness   <=3'd0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_ready  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_pre  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness_pre  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness_pre  ;
 
 
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_clk;
@@ -1695,31 +1707,31 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_DELAY  -1];
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo  +  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_joint  -  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_ch_fifo_rd  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo   <=#13'd0;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo   <=3'd0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_req_out  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_joint  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_ch_fifo_rd  ))
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo_pre  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo_pre  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_req_out  &((  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo_pre  >'d2)|((  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo_pre  =='d2)&(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_data_fullness_pre  >'d1))|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_HOLD  );
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_not_ready_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_req_out  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_data_fullness_pre  >'d1)&(~(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_joint  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_pre  ));
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_reg   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_reg   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_pre  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_reg   <=#11'b1;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_reg   <=1'b1;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo_pre  =='d0)
-                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_reg   <=#11'b0;
+                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_reg   <=1'b0;
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_reg  |(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_req_out  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_HOLD  );
 
@@ -1727,9 +1739,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_DELAY  -1];
 
@@ -1739,7 +1751,7 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_push;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_pop;
     wire [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_din;
-    reg [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_size_joint;
+    reg [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_empty;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_full;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_clk;
@@ -1747,7 +1759,7 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_push;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_pop;
     wire [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_din;
-    reg [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout = {dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_cmd,dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSIZE_cmd,dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_cmd,dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_req_out};
+    reg [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_empty;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_full;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_clk;
@@ -1755,7 +1767,7 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_push;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_pop;
     wire [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_din;
-    reg [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WDATA;
+    reg [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_empty;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_full;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_clk;
@@ -1783,45 +1795,45 @@ module dma_axi64_core0_top #(
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_WIDTH  {1'b0}};
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout_empty   <=#11'b1;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_WIDTH  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout_empty   <=1'b1;
         end
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reg_push  )
             begin
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_din  ;
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout_empty   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_din  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout_empty   <=1'b0;
             end
             else
                 if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reg_pop  )
                 begin
-                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_WIDTH  {1'b0}};
-                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout_empty   <=#11'b1;
+                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_WIDTH  {1'b0}};
+                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout_empty   <=1'b1;
                 end
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_pop  )
                     begin
-                        dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_out  ];
-                        dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout_empty   <=#11'b0;
+                        dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_out  ];
+                        dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout_empty   <=1'b0;
                     end
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_in   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_DEPTH_BITS  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_in   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_DEPTH_BITS  {1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_push  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_in   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_in  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_in  +1'b1;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_in   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_in  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_in  +1'b1;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_out   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_DEPTH_BITS  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_out   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_DEPTH_BITS  {1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_pop  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_out   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_out  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_out  +1'b1;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_out   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_out  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_out  +1'b1;
 
     always @( posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_clk  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_push  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_in  ]<=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_din  ;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_in  ]<=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_din  ;
 
     always @(    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_push            or    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_ptr_in   )
     begin
@@ -1837,10 +1849,10 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_DEPTH  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_DEPTH  {1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_push  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_pop  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness   <=#1(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness_out  ))|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness_in  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness   <=(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness_out  ))|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness_in  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_next  =|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fullness  ;
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_fifo_empty  =~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_next  ;
@@ -1858,13 +1870,13 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_pend  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_count   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_DEPTH  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_count   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_DEPTH  {1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_pend  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_stall  ))
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_count   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_count  -1'b1;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_count   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_count  -1'b1;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_din  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_stall  )
-                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_count   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_count  +1'b1;
+                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_count   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_count  +1'b1;
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_pend  =(|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_count  );
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_dout  =(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_din  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_pend  )&(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd_stall  );
@@ -1893,9 +1905,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_DELAY  -1];
 
@@ -1921,18 +1933,18 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_DELAY  -1];
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_last_channel   <=#13'b000;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_last_channel   <=3'b000;
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_push  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_last_channel   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_pre  [2:0];
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_last_channel   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_pre  [2:0];
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_num_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_data  [2:0];
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WVALID  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WREADY  ;
@@ -1942,33 +1954,33 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_DELAY  -1];
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_num   <=#13'd0;
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_size   <=#13'd0;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_num   <=3'd0;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_size   <=3'd0;
         end
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_pre  )
             begin
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_num   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_num_pre  ;
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_size   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_size_pre  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_num   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_num_pre  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_size   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_size_pre  ;
             end
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_valid_last  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_out_count  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_cmd  )&(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_empty  );
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_valid_last  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_line_end  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_num   <=#13'd0;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_num   <=3'd0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_pre  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_num   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_line_end_num  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_num   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_line_end_num  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_stall_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_pre  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd_num  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_line_end_num  );
 
@@ -1976,9 +1988,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_DELAY  -1];
 
@@ -1987,9 +1999,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_DELAY  -1];
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_clk;
@@ -2085,45 +2097,45 @@ module dma_axi64_core0_top #(
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_WIDTH  {1'b0}};
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout_empty   <=#11'b1;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_WIDTH  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout_empty   <=1'b1;
         end
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reg_push  )
             begin
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_din  ;
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout_empty   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_din  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout_empty   <=1'b0;
             end
             else
                 if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reg_pop  )
                 begin
-                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_WIDTH  {1'b0}};
-                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout_empty   <=#11'b1;
+                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_WIDTH  {1'b0}};
+                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout_empty   <=1'b1;
                 end
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_pop  )
                     begin
-                        dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_out  ];
-                        dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout_empty   <=#11'b0;
+                        dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_out  ];
+                        dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout_empty   <=1'b0;
                     end
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_in   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_DEPTH_BITS  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_in   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_DEPTH_BITS  {1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_push  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_in   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_in  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_in  +1'b1;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_in   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_in  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_in  +1'b1;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_out   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_DEPTH_BITS  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_out   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_DEPTH_BITS  {1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_pop  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_out   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_out  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_out  +1'b1;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_out   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_out  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_out  +1'b1;
 
     always @( posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_clk  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_push  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_in  ]<=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_din  ;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_in  ]<=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_din  ;
 
     always @(    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_push            or    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_ptr_in   )
     begin
@@ -2139,10 +2151,10 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_DEPTH  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_DEPTH  {1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_push  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_pop  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness   <=#1(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness_out  ))|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness_in  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness   <=(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness_out  ))|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness_in  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_next  =|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fullness  ;
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_fifo_empty  =~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_next  ;
@@ -2153,13 +2165,13 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_line_end_num  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_cmd  [2:0];
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_out_count   <=#1{4{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_out_count   <={4{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_pop  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_out_count   <=#1{4{1'b0}};
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_out_count   <={4{1'b0}};
             else
                 if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd  )
-                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_out_count   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_out_count  +1'b1;
+                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_out_count   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_out_count  +1'b1;
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_push  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_push  ;
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_pop  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WVALID  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WREADY  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLAST  ;
@@ -2187,45 +2199,45 @@ module dma_axi64_core0_top #(
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_WIDTH  {1'b0}};
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout_empty   <=#11'b1;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_WIDTH  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout_empty   <=1'b1;
         end
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reg_push  )
             begin
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_din  ;
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout_empty   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_din  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout_empty   <=1'b0;
             end
             else
                 if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reg_pop  )
                 begin
-                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_WIDTH  {1'b0}};
-                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout_empty   <=#11'b1;
+                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_WIDTH  {1'b0}};
+                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout_empty   <=1'b1;
                 end
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_pop  )
                     begin
-                        dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_out  ];
-                        dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout_empty   <=#11'b0;
+                        dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_out  ];
+                        dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_dout_empty   <=1'b0;
                     end
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_in   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_DEPTH_BITS  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_in   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_DEPTH_BITS  {1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_push  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_in   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_in  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_in  +1'b1;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_in   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_in  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_in  +1'b1;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_out   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_DEPTH_BITS  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_out   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_DEPTH_BITS  {1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_pop  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_out   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_out  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_out  +1'b1;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_out   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_out  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_out  +1'b1;
 
     always @( posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_clk  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_push  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_in  ]<=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_din  ;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_in  ]<=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_din  ;
 
     always @(    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_push            or    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_ptr_in   )
     begin
@@ -2241,10 +2253,10 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_DEPTH  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_DEPTH  {1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_push  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_pop  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness   <=#1(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness_out  ))|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness_in  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness   <=(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness_out  ))|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness_in  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_next  =|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fullness  ;
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_fifo_empty  =~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_next  ;
@@ -2253,13 +2265,13 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_in_count   <=#1{4{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_in_count   <={4{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_pop  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_in_count   <=#1{4{1'b0}};
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_in_count   <={4{1'b0}};
             else
                 if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_pre  )
-                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_in_count   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_in_count  +1'b1;
+                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_in_count   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_in_count  +1'b1;
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_push  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd_valid  ;
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_pop  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_pre  ;
@@ -2285,45 +2297,45 @@ module dma_axi64_core0_top #(
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_WIDTH  {1'b0}};
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout_empty   <=#11'b1;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_WIDTH  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout_empty   <=1'b1;
         end
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reg_push  )
             begin
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_din  ;
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout_empty   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_din  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout_empty   <=1'b0;
             end
             else
                 if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reg_pop  )
                 begin
-                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_WIDTH  {1'b0}};
-                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout_empty   <=#11'b1;
+                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_WIDTH  {1'b0}};
+                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout_empty   <=1'b1;
                 end
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_pop  )
                     begin
-                        dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_out  ];
-                        dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout_empty   <=#11'b0;
+                        dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_out  ];
+                        dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout_empty   <=1'b0;
                     end
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_in   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_DEPTH_BITS  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_in   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_DEPTH_BITS  {1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_push  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_in   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_in  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_in  +1'b1;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_in   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_in  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_in  +1'b1;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_out   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_DEPTH_BITS  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_out   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_DEPTH_BITS  {1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_pop  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_out   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_out  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_out  +1'b1;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_out   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_out  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_out  +1'b1;
 
     always @( posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_clk  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_push  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_in  ]<=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_din  ;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_in  ]<=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_din  ;
 
     always @(    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_push            or    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_ptr_in   )
     begin
@@ -2339,10 +2351,10 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_DEPTH  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_DEPTH  {1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_push  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_pop  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness   <=#1(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness_out  ))|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness_in  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness   <=(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness_out  ))|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness_in  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_next  =|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fullness  ;
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_fifo_empty  =~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_next  ;
@@ -2353,6 +2365,7 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_push = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_joint;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_pop = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_fifo_rd_valid;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_size;
+    assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_size_joint = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_dout;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_full = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo_empty;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_full = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_full;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk;
@@ -2360,6 +2373,7 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_push = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_push;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_pop = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_pop;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_din = {dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_pre,dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSIZE_pre,dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_pre,dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AJOINT};
+    assign {dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_cmd,dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSIZE_cmd,dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_cmd,dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_req_out} = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo_dout;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_empty = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_empty;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_full = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_full;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk;
@@ -2367,6 +2381,7 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_push = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_push;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_pop = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_pop;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo_din = {dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_pre,dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSIZE_pre,dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre,dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_pre};
+    assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WDATA = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_dout;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_empty = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_empty;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_full = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_full;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk;
@@ -2390,13 +2405,13 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_axim_timeout  =(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_counter  =='d0);
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_counter   <=#1{10{1'b1}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_counter   <={10{1'b1}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_VALID  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_READY  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_counter   <=#1{10{1'b1}};
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_counter   <={10{1'b1}};
             else
                 if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_VALID  )
-                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_counter   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_counter  -1'b1;
+                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_counter   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_counter  -1'b1;
 
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset;
@@ -2416,10 +2431,14 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd_valid = dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rd_valid;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_wr_ready = dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_wr_ready;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rd_num = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd_num;
+    assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_transfer_num = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_num;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_transfer = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer;
+    assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_transfer_size = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_size;
+    assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_next_size = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_next_size;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_resp_full = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_resp_full;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_full = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_cmd_full;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr_line = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line;
+    assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr_line_num = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_num;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_joint_stall = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_stall;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_num_w = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_axim_timeout_num;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_w = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_axim_timeout;
@@ -2443,7 +2462,7 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_decerr;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clr;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clr_last;
-    reg [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_ch_num_resp = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_ch_num_resp;
+    reg [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_ch_num_resp;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_full;
     wire [7-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_AID;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_AVALID;
@@ -2492,9 +2511,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_DELAY  -1];
 
@@ -2503,9 +2522,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_last_DELAY  -1];
 
@@ -2514,9 +2533,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_slverr_DELAY  -1];
 
@@ -2525,9 +2544,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_decerr_DELAY  -1];
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_delay_clr_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clk;
@@ -2549,10 +2568,10 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_ch_num_resp   <=#13'b000;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_ch_num_resp   <=3'b000;
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clr_pre  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_ch_num_resp   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_ch_num_resp_pre  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_ch_num_resp   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_ch_num_resp_pre  ;
 
 
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_clk;
@@ -2560,7 +2579,7 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_push;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_pop;
     wire [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_din;
-    reg [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_ID;
+    reg [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_empty;
     wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_full;
 
@@ -2584,45 +2603,45 @@ module dma_axi64_core0_top #(
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_WIDTH  {1'b0}};
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout_empty   <=#11'b1;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_WIDTH  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout_empty   <=1'b1;
         end
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reg_push  )
             begin
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_din  ;
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout_empty   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_din  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout_empty   <=1'b0;
             end
             else
                 if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reg_pop  )
                 begin
-                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_WIDTH  {1'b0}};
-                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout_empty   <=#11'b1;
+                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_WIDTH  {1'b0}};
+                    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout_empty   <=1'b1;
                 end
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_pop  )
                     begin
-                        dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_out  ];
-                        dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout_empty   <=#11'b0;
+                        dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_out  ];
+                        dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout_empty   <=1'b0;
                     end
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_in   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_DEPTH_BITS  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_in   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_DEPTH_BITS  {1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_push  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_in   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_in  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_in  +1'b1;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_in   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_in  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_in  +1'b1;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_out   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_DEPTH_BITS  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_out   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_DEPTH_BITS  {1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_pop  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_out   <=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_out  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_out  +1'b1;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_out   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_out  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_out  +1'b1;
 
     always @( posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_clk  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_push  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_in  ]<=#1  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_din  ;
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo   [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_in  ]<=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_din  ;
 
     always @(    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_push            or    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_ptr_in   )
     begin
@@ -2638,10 +2657,10 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_DEPTH  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_DEPTH  {1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_push  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_pop  )
-                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness   <=#1(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness_out  ))|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness_in  ;
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness   <=(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness_out  ))|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness_in  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_next  =|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fullness  ;
     assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_fifo_empty  =~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_next  ;
@@ -2652,6 +2671,7 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_push = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_push;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_pop = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_pop;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_AID;
+    assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_ID = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_dout;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_empty = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_empty;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_full = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_fifo_full;
 
@@ -2661,6 +2681,7 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_decerr = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_decerr;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clr;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr_last = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_clr_last;
+    assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_ch_num_resp = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_ch_num_resp;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_resp_full = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_resp_full;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_AID = dma_axi64_core0_dma_axi64_core0_axim_wr_AWID;
     assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp_AVALID = dma_axi64_core0_dma_axi64_core0_axim_wr_AWVALID;
@@ -2752,7 +2773,7 @@ module dma_axi64_core0_top #(
     wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_ch_fifo_wr_num;
     wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_rd_transfer_num;
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_rd_transfer;
-    reg [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_rd_transfer_size = dma_axi64_core0_rd_transfer_size;
+    reg [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_rd_transfer_size;
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_rd_burst_cmd;
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_line;
     wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_line_num;
@@ -2801,9 +2822,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_dout  =  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_DELAY  -1];
 
@@ -2812,9 +2833,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_dout  =  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_delay_rvalid_DELAY  -1];
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_delay_ready_clk = dma_axi64_core0_dma_axi64_core0_axim_rd_clk;
@@ -2829,16 +2850,16 @@ module dma_axi64_core0_top #(
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_axim_rd_RRESP_d   <=#12'b00;
-            dma_axi64_core0_dma_axi64_core0_axim_rd_RDATA_d   <=#1{64{1'b0}};
-            dma_axi64_core0_dma_axi64_core0_axim_rd_RLAST_d   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_axim_rd_RRESP_d   <=2'b00;
+            dma_axi64_core0_dma_axi64_core0_axim_rd_RDATA_d   <={64{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_RLAST_d   <=1'b0;
         end
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_RVALID  )
             begin
-                dma_axi64_core0_dma_axi64_core0_axim_rd_RRESP_d   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_RRESP  ;
-                dma_axi64_core0_dma_axi64_core0_axim_rd_RDATA_d   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_RDATA  ;
-                dma_axi64_core0_dma_axi64_core0_axim_rd_RLAST_d   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_RLAST  ;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_RRESP_d   <=  dma_axi64_core0_dma_axi64_core0_axim_rd_RRESP  ;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_RDATA_d   <=  dma_axi64_core0_dma_axi64_core0_axim_rd_RDATA  ;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_RLAST_d   <=  dma_axi64_core0_dma_axi64_core0_axim_rd_RLAST  ;
             end
 
     always @(   dma_axi64_core0_dma_axi64_core0_axim_rd_RID   )
@@ -2867,21 +2888,21 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_port;
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_joint_req;
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_joint_pending;
-    reg  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_pending = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_pending;
+    reg  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_pending;
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_full;
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_split;
     wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_num;
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_line;
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_page_cross;
-    reg [7-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID = dma_axi64_core0_dma_axi64_core0_axim_rd_ARID;
-    reg [32-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AADDR = dma_axi64_core0_dma_axi64_core0_axim_rd_ARADDR;
-    reg  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_APORT = dma_axi64_core0_dma_axi64_core0_axim_rd_ARPORT;
-    reg [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ALEN = dma_axi64_core0_dma_axi64_core0_axim_rd_ARLEN;
-    reg [1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ASIZE = dma_axi64_core0_dma_axi64_core0_axim_rd_ARSIZE;
+    reg [7-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID;
+    reg [32-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AADDR;
+    reg  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_APORT;
+    reg [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ALEN;
+    reg [1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ASIZE;
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID;
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AREADY;
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AWVALID;
-    reg  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AJOINT = dma_axi64_core0_dma_axi64_core0_axim_rd_axim_timeout_ar;
+    reg  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AJOINT;
 
     reg[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID_reg  ;
     reg  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID_reg  ;
@@ -2930,9 +2951,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_dout  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_DELAY  -1];
 
@@ -2941,45 +2962,45 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_dout  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cross_start_DELAY  -1];
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_reach   <=#1{9{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_reach   <={9{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_high_addr_pre  )
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_reach   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_reach_pre  ;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_reach   <=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_reach_pre  ;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_start  )
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst   <=1'b0;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cross_start  )
-                    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst   <=#11'b1;
+                    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst   <=1'b1;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_max_burst_d   <=#1{9{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_max_burst_d   <={9{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cross_start  )
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_max_burst_d   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_max_burst  ;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_max_burst_d   <=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_max_burst  ;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_size   <=#1{8{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_size   <={8{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cross_start  )
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_size   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_size  ;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_size   <=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_size  ;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cross_start_d  )
-                    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_size   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_size  -  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_max_burst_d  ;
+                    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_size   <=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_size  -  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_max_burst_d  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_split  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cross_start_d  ;
     assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AREADY  ;
@@ -2988,22 +3009,22 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_joint_pending  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID  &(~  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AREADY  )&  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AJOINT  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_pending   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_pending   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_start  )
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_pending   <=#11'b1;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_pending   <=1'b1;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd  &(~  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst  ))
-                    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_pending   <=#11'b0;
+                    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_pending   <=1'b0;
 
 
 
     reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_dout  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_cmd_line_DELAY  -1];
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_delay_high_addr_clk = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk;
@@ -3027,22 +3048,22 @@ module dma_axi64_core0_top #(
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ASIZE   <=#1{2{1'b0}};
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AJOINT   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ASIZE   <={2{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AJOINT   <=1'b0;
         end
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_start  )
             begin
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ASIZE   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ASIZE_pre  ;
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AJOINT   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_joint_req  ;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ASIZE   <=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ASIZE_pre  ;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AJOINT   <=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_joint_req  ;
             end
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID_reg   <=#1{7{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID_reg   <={7{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_start  )
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID_reg   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID_pre  ;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID_reg   <=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID_pre  ;
 
     always @(    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID_reg            or    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst   )
     begin
@@ -3053,37 +3074,37 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AADDR   <=#1{32{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AADDR   <={32{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_start  )
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AADDR   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AADDR  [32-1:12],{12{1'b1}}}+1'b1;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AADDR   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AADDR  [32-1:12],{12{1'b1}}}+1'b1;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_start  )
-                    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AADDR   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AADDR_pre  ;
+                    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AADDR   <=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AADDR_pre  ;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_APORT   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_APORT   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_start  )
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_APORT   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_port  ;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_APORT   <=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_port  ;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ALEN   <=#1{4{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ALEN   <={4{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_start  |  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_start  )
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ALEN   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ALEN_pre  ;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ALEN   <=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ALEN_pre  ;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID_reg   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID_reg   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AREADY  )
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID_reg   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID_reg   <=1'b0;
             else
                 if ((  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_start  &(  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_burst_size  >'d0))|  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_next_burst_start  )
-                    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID_reg   <=#11'b1;
+                    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID_reg   <=1'b1;
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AJOINT   ?   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID_reg  &(~  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AWVALID  ):  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID_reg  ;
 
@@ -3100,13 +3121,13 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_axim_timeout  =(  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_counter  =='d0);
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_counter   <=#1{10{1'b1}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_counter   <={10{1'b1}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_VALID  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_READY  )
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_counter   <=#1{10{1'b1}};
+                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_counter   <={10{1'b1}};
             else
                 if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_VALID  )
-                    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_counter   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_counter  -1'b1;
+                    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_counter   <=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_counter  -1'b1;
 
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_clk = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_clk;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_dma_axi64_axim_timeout_reset = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_reset;
@@ -3127,14 +3148,21 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_port = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_port;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_joint_req = dma_axi64_core0_dma_axi64_core0_axim_rd_joint_req;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_pending = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_joint_pending;
+    assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_pending = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_pending;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_full = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_full;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_split = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_split;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_num = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_num;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_line = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_cmd_line;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_page_cross = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_page_cross;
+    assign dma_axi64_core0_dma_axi64_core0_axim_rd_ARID = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AID;
+    assign dma_axi64_core0_dma_axi64_core0_axim_rd_ARADDR = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AADDR;
+    assign dma_axi64_core0_dma_axi64_core0_axim_rd_ARPORT = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_APORT;
+    assign dma_axi64_core0_dma_axi64_core0_axim_rd_ARLEN = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ALEN;
+    assign dma_axi64_core0_dma_axi64_core0_axim_rd_ARSIZE = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_ASIZE;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_ARVALID = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AVALID;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AREADY = dma_axi64_core0_dma_axi64_core0_axim_rd_ARREADY;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AWVALID = dma_axi64_core0_dma_axi64_core0_axim_rd_AWVALID;
+    assign dma_axi64_core0_dma_axi64_core0_axim_rd_axim_timeout_ar = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rcmd_AJOINT;
 
 
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_clk;
@@ -3150,10 +3178,10 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_burst_cmd;
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr;
     wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_num;
-    reg [1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_cycle = dma_axi64_core0_dma_axi64_core0_axim_rd_load_wr_cycle;
+    reg [1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_cycle;
     wire [64-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wdata;
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line;
-    reg [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line_num = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_line_num;
+    reg [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line_num;
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ARVALID;
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ARREADY;
     wire [7-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ARID;
@@ -3191,9 +3219,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_dout  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_DELAY  -1];
 
@@ -3202,9 +3230,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_dout  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr2_DELAY  -1];
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_delay_clr_clk = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_clk;
@@ -3218,30 +3246,30 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wr_num_d   <=#13'b000;
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wr_num_d   <=3'b000;
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line_pre  )
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wr_num_d   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wr_num  ;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wr_num_d   <=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wr_num  ;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line_num   <=#13'b000;
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line_num   <=3'b000;
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line_pre_d  )
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line_num   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wr_num_d  ;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line_num   <=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ch_fifo_wr_num_d  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RVALID  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RREADY  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_cmd_id  ;
     assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_num  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RID  [2:0];
     assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wdata  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_RDATA  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_cycle   <=#12'b00;
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_cycle   <=2'b00;
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr  &  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_cycle  [0]&1'b1)
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_cycle   <=#12'b00;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_cycle   <=2'b00;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr  )
-                    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_cycle   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_cycle  +1'b1;
+                    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_cycle   <=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_cycle  +1'b1;
 
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_clk = dma_axi64_core0_dma_axi64_core0_axim_rd_clk;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_reset = dma_axi64_core0_dma_axi64_core0_axim_rd_reset;
@@ -3256,8 +3284,10 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_burst_cmd = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_burst_cmd;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_load_wr = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_load_wr_num = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_num;
+    assign dma_axi64_core0_dma_axi64_core0_axim_rd_load_wr_cycle = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wr_cycle;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_load_wdata = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_load_wdata;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_line = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line;
+    assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_line_num = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_rd_clr_line_num;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ARVALID = dma_axi64_core0_dma_axi64_core0_axim_rd_ARVALID;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ARREADY = dma_axi64_core0_dma_axi64_core0_axim_rd_ARREADY;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rdata_ARID = dma_axi64_core0_dma_axi64_core0_axim_rd_ARID;
@@ -3275,7 +3305,7 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_decerr;
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clr;
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clr_last;
-    reg [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_ch_num_resp = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_ch_num_resp;
+    reg [2:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_ch_num_resp;
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_full;
     wire [7-1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_AID;
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_AVALID;
@@ -3324,9 +3354,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_dout  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_DELAY  -1];
 
@@ -3335,9 +3365,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_dout  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_last_DELAY  -1];
 
@@ -3346,9 +3376,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_dout  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_slverr_DELAY  -1];
 
@@ -3357,9 +3387,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_din  };
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_dout  =  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_decerr_DELAY  -1];
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_delay_clr_clk = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clk;
@@ -3381,10 +3411,10 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_ch_num_resp   <=#13'b000;
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_ch_num_resp   <=3'b000;
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clr_pre  )
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_ch_num_resp   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_ch_num_resp_pre  ;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_ch_num_resp   <=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_ch_num_resp_pre  ;
 
 
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_clk;
@@ -3392,7 +3422,7 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_push;
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_pop;
     wire [ dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_din;
-    reg [ dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_ID;
+    reg [ dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout;
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_empty;
     wire  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_full;
 
@@ -3416,45 +3446,45 @@ module dma_axi64_core0_top #(
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_WIDTH  {1'b0}};
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout_empty   <=#11'b1;
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_WIDTH  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout_empty   <=1'b1;
         end
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reg_push  )
             begin
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_din  ;
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout_empty   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout   <=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_din  ;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout_empty   <=1'b0;
             end
             else
                 if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reg_pop  )
                 begin
-                    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_WIDTH  {1'b0}};
-                    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout_empty   <=#11'b1;
+                    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_WIDTH  {1'b0}};
+                    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout_empty   <=1'b1;
                 end
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_pop  )
                     begin
-                        dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_out  ];
-                        dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout_empty   <=#11'b0;
+                        dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout   <=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo  [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_out  ];
+                        dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout_empty   <=1'b0;
                     end
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_in   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_DEPTH_BITS  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_in   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_DEPTH_BITS  {1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_push  )
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_in   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_in  ==  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_in  +1'b1;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_in   <=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_in  ==  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_in  +1'b1;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_out   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_DEPTH_BITS  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_out   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_DEPTH_BITS  {1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_pop  )
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_out   <=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_out  ==  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_out  +1'b1;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_out   <=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_out  ==  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_LAST_LINE   ? 0:  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_out  +1'b1;
 
     always @( posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_clk  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_push  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo   [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_in  ]<=#1  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_din  ;
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo   [  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_in  ]<=  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_din  ;
 
     always @(    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_push            or    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_ptr_in   )
     begin
@@ -3470,10 +3500,10 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_reset  )
-            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness   <=#1{  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_DEPTH  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness   <={  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_DEPTH  {1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_push  |  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_pop  )
-                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness   <=#1(  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness  &(~  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness_out  ))|  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness_in  ;
+                dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness   <=(  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness  &(~  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness_out  ))|  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness_in  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_next  =|  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fullness  ;
     assign   dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_fifo_empty  =~  dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_next  ;
@@ -3484,6 +3514,7 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_push = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_push;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_pop = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_pop;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_din = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_AID;
+    assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_ID = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_dout;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_empty = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_empty;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_full = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_fifo_full;
 
@@ -3493,6 +3524,7 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_decerr = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_decerr;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_pre = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clr;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_last = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_clr_last;
+    assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_ch_num_resp = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_ch_num_resp;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_rd_cmd_full = dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_resp_full;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_AID = dma_axi64_core0_dma_axi64_core0_axim_rd_ARID;
     assign dma_axi64_core0_dma_axi64_core0_axim_rd_dma_axi64_axim_rresp_AVALID = dma_axi64_core0_dma_axi64_core0_axim_rd_ARVALID;
@@ -3529,6 +3561,7 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_ch_fifo_wr_num = dma_axi64_core0_dma_axi64_core0_axim_rd_ch_fifo_wr_num;
     assign dma_axi64_core0_rd_transfer_num = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_transfer_num;
     assign dma_axi64_core0_rd_transfer = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_transfer;
+    assign dma_axi64_core0_rd_transfer_size = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_transfer_size;
     assign dma_axi64_core0_rd_burst_cmd = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_burst_cmd;
     assign dma_axi64_core0_rd_clr_line = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_line;
     assign dma_axi64_core0_rd_clr_line_num = dma_axi64_core0_dma_axi64_core0_axim_rd_rd_clr_line_num;
@@ -3740,19 +3773,19 @@ module dma_axi64_core0_top #(
     reg[2:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr_sel_d  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr_sel_d   <=#13'b000;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr_sel_d   <=3'b000;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_psel  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_penable  ))
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr_sel_d   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr_sel  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr_sel_d   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr_sel  ;
             else
                 if ((~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_psel  )&  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_pclken  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr_sel_d   <=#13'b000;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr_sel_d   <=3'b000;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr_sel  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr  [10:8];
 
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_ch_psel;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_ch_x;
 
     always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_x   )
     begin
@@ -3781,11 +3814,12 @@ module dma_axi64_core0_top #(
 
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr_sel;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_psel;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_ch_psel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_psel_ch_x;
 
 
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_sel;
     wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_ch_x;
-    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_prdata;
+    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_x;
 
     always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_ch_x            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_sel   )
     begin
@@ -3813,6 +3847,7 @@ module dma_axi64_core0_top #(
 
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr_sel_d;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_ch_prdata;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_prdata = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_mux_prdata_x;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_pslverr  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_ch_pslverr  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_paddr_sel_d  ];
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_apb_mux_clk = dma_axi64_core0_dma_axi64_core0_channels_pclk;
@@ -3989,43 +4024,43 @@ module dma_axi64_core0_top #(
 
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_sel;
     wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_ch_x;
-    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_periph_delay;
+    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_sel;
     wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_ch_x;
-    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_periph_delay;
+    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_sel;
     wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_ch_x;
-    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_clr_valid;
+    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_sel;
     wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_ch_x;
-    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_clr_valid;
+    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_sel;
     wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_ch_x;
-    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_load_req_in_prog;
+    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_sel;
     wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_ch_x;
-    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_burst_addr;
+    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_sel;
     wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_ch_x;
-    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_burst_size;
+    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_sel;
     wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_ch_x;
-    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_tokens;
+    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_sel;
     wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_ch_x;
-    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_tokens;
+    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_sel;
     wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_ch_x;
-    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_fifo_wr_ready;
+    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_sel;
     wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_ch_x;
-    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_last_cmd;
+    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_sel;
     wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_ch_x;
-    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_burst_addr;
+    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_sel;
     wire [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_ch_x;
-    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_burst_size;
+    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_x;
 
     always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_ch_x            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_sel   )
     begin
@@ -4082,76 +4117,76 @@ module dma_axi64_core0_top #(
 
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_timeout_aw;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_ch_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_timeout_w;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_ch_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_timeout_ar;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_ch_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wdt_timeout;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_ch_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_cmd_pending;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_ch_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_burst_start;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_ch_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_load_wr;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_ch_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_transfer;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_ch_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_slverr;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_ch_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_decerr;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_ch_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_decerr;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_ch_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_cmd_split;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_ch_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_cmd_split;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_ch_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_page_cross;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_ch_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_page_cross;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_ch_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_clr;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_ch_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_clr_load;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_ch_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_rd;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_ch_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_burst_start;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_ch_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_transfer;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_ch_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_slverr;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_ch_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_clr;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_ch_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_clr_last;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_ch_x;
     wire [3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_sel;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_x;
-    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_wr;
+    reg [8* dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_ch_x;
 
     always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_sel            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_x   )
     begin
@@ -5077,52 +5112,76 @@ module dma_axi64_core0_top #(
 
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_num_aw;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_aw;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_timeout_aw = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_6_ch_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_num_w;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_w;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_timeout_w = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_7_ch_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_num_ar;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_timeout_ar;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_timeout_ar = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_8_ch_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wdt_ch_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wdt_timeout;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wdt_timeout = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_9_ch_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_cmd_pending;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_cmd_pending = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_60_ch_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_burst_start;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_burst_start = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_11_ch_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_load_wr_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_load_wr;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_load_wr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_13_ch_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_transfer_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_transfer;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_transfer = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_15_ch_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num_resp;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_slverr;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_slverr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_16_ch_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num_resp;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_decerr;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_decerr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_17_ch_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num_resp;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_decerr;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_decerr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_39_ch_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_cmd_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_cmd_split;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_cmd_split = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_20_ch_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_cmd_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_cmd_split;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_cmd_split = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_42_ch_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_page_cross;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_page_cross = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_58_ch_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_page_cross;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_page_cross = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_59_ch_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num_resp;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_clr;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_clr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_18_ch_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num_resp;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_clr_load;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_clr_load = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_19_ch_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_rd_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_fifo_rd;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_rd = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_21_ch_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_burst_start;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_burst_start = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_34_ch_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_transfer_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_transfer;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_transfer = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_37_ch_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num_resp;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_slverr;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_slverr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_38_ch_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num_resp;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_clr;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_clr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_40_ch_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num_resp;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_clr_last;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_clr_last = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_41_ch_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_wr_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_fifo_wr;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_wr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_43_ch_x;
 
 
 
@@ -5206,30 +5265,43 @@ module dma_axi64_core0_top #(
 
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_periph_delay;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_periph_delay = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_30_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_periph_delay;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_periph_delay = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_51_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_clr_valid;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_clr_valid = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_33_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_clr_valid;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_clr_valid = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_53_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_load_req_in_prog;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_load_req_in_prog = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_23_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_burst_addr;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_burst_addr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_26_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_burst_size;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_burst_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_27_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_ch_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_rd_tokens;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_rd_tokens = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_28_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_tokens;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_tokens = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_49_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_rd_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_wr_ready;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_fifo_wr_ready = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_31_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_last_cmd;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_last_cmd = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_44_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_burst_addr;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_burst_addr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_47_x;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_sel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_ch_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_ch_x = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_wr_burst_size;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_wr_burst_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_mux_48_x;
 
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_ch_fifo_rd_valid = dma_axi64_core0_dma_axi64_core0_channels_ch_fifo_rd_valid;
     assign dma_axi64_core0_dma_axi64_core0_channels_fifo_rd_valid = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_channels_mux_fifo_rd_valid;
@@ -5610,9 +5682,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_DELAY  -1];
 
@@ -5621,9 +5693,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_outs_DELAY  -1];
 
@@ -5632,9 +5704,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_DELAY  -1];
 
@@ -5643,76 +5715,76 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_wr_clr_DELAY  -1];
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_not_in_prog   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_not_in_prog   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_update  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_not_in_prog   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_not_in_prog   <=1'b0;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_start  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_not_in_prog   <=#1(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_req  );
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_not_in_prog   <=(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_req  );
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_outs_empty  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_outs_d  )
-                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_not_in_prog   <=#11'b0;
+                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_not_in_prog   <=1'b0;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_not_in_prog   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_not_in_prog   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_update  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_not_in_prog   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_not_in_prog   <=1'b0;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_start  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_not_in_prog   <=#1(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_req  );
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_not_in_prog   <=(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_req  );
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_outs_empty  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_outs_d  )
-                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_not_in_prog   <=#11'b0;
+                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_not_in_prog   <=1'b0;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_in_prog   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_in_prog   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_update  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_in_prog   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_in_prog   <=1'b0;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_start  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_in_prog   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_req  ;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_in_prog   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_req  ;
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_outs_empty  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_outs_d  )
-                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_in_prog   <=#11'b0;
+                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_in_prog   <=1'b0;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_in_prog   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_in_prog   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_update  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_in_prog   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_in_prog   <=1'b0;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_start  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_in_prog   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_req  ;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_in_prog   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_req  ;
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_outs_empty  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_outs_d  )
-                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_in_prog   <=#11'b0;
+                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_in_prog   <=1'b0;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_cross_reg   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_cross_reg   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_update  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_cross_reg   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_cross_reg   <=1'b0;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_page_cross  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_cross_reg   <=#11'b1;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_cross_reg   <=1'b1;
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_not_in_prog  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_outs_empty  )
-                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_cross_reg   <=#11'b0;
+                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_cross_reg   <=1'b0;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_cross  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_cross_reg  ;
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_page_cross  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_page_cross  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_page_cross  ;
@@ -5749,9 +5821,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_idle_DELAY  -1];
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_delay_rd_clr_outs_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk;
@@ -5786,8 +5858,8 @@ module dma_axi64_core0_top #(
     wire [7:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_paddr;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwrite;
     wire [31:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata;
-    reg [31:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_prdata;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_pslverr;
+    reg [31:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr;
     wire [4:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_timeout_bus;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wdt_timeout;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_start;
@@ -5808,7 +5880,7 @@ module dma_axi64_core0_top #(
     wire [1-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_all_proc;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_rd_active;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_wr_active;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_in_prog = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_in_prog;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_in_prog;
     wire [10-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_x_offset;
     wire [10-8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_y_offset;
     wire [10-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_x_offset;
@@ -5817,9 +5889,9 @@ module dma_axi64_core0_top #(
     wire [5:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_gap;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_fifo_overflow;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_fifo_underflow;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_update;
-    reg [32-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_start_addr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_start_addr;
-    reg [32-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_start_addr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_start_addr;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update;
+    reg [32-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_start_addr;
+    reg [32-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_start_addr;
     wire [10-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_x_size;
     wire [10-8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_y_size;
     wire [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size;
@@ -6023,92 +6095,92 @@ module dma_axi64_core0_top #(
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_start_addr   <=#1{32{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_start_addr   <={32{1'b0}};
         end
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_cmd_line0  )
             begin
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_start_addr   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [32-1:0];
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_start_addr   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [32-1:0];
             end
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr0  )
                 begin
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_start_addr   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wdata  [32-1:0];
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_start_addr   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wdata  [32-1:0];
                 end
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_start_addr   <=#1{32{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_start_addr   <={32{1'b0}};
         end
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_cmd_line1  )
             begin
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_start_addr   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [32-1:0];
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_start_addr   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [32-1:0];
             end
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr1  )
                 begin
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_start_addr   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wdata  [32+32-  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_DATA_SHIFT  -1:32-  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_DATA_SHIFT  ];
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_start_addr   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wdata  [32+32-  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_DATA_SHIFT  -1:32-  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_DATA_SHIFT  ];
                 end
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_buff_size   <=#1{10{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_buff_size   <={10{1'b0}};
         end
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_cmd_line2  )
             begin
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_buff_size   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [10-1:0];
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_buff_size   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [10-1:0];
             end
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr2  )
                 begin
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_buff_size   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wdata  [10-1:0];
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_buff_size   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wdata  [10-1:0];
                 end
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_set_int_reg   <=#11'b0;
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_last_reg   <=#11'b0;
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_next_addr_reg   <=#1{30{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_set_int_reg   <=1'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_last_reg   <=1'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_next_addr_reg   <={30{1'b0}};
         end
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_cmd_line3  )
             begin
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_set_int_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [0];
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_last_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [1];
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_next_addr_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [32-1:2];
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_set_int_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [0];
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_last_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [1];
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_next_addr_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [32-1:2];
             end
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr3  )
                 begin
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_set_int_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wdata  [32-  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_DATA_SHIFT  ];
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_last_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wdata  [33-  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_DATA_SHIFT  ];
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_next_addr_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wdata  [32+32-  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_DATA_SHIFT  -1:34-  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_DATA_SHIFT  ];
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_set_int_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wdata  [32-  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_DATA_SHIFT  ];
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_last_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wdata  [33-  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_DATA_SHIFT  ];
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_next_addr_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wdata  [32+32-  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_DATA_SHIFT  -1:34-  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_DATA_SHIFT  ];
                 end
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_counter_reg   <=#1{12{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_counter_reg   <={12{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_start  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_counter_reg   <=#1{12{1'b0}};
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_counter_reg   <={12{1'b0}};
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_counter_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_counter_reg  +1'b1;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_counter_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_counter_reg  +1'b1;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_counter_reg   <=#1{4{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_counter_reg   <={4{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_start  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_counter_reg   <=#1{4{1'b0}};
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_counter_reg   <={4{1'b0}};
             else
                 if ((  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end_int  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  )|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end_clear  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_counter_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_counter_reg  +(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end_int  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  )-  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end_clear  ;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_counter_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_counter_reg  +(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end_int  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  )-  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end_clear  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_set_int  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_set_int_reg  ;
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_last  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_cmd_last_reg  ;
@@ -6120,35 +6192,35 @@ module dma_axi64_core0_top #(
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size_reg   <=#1'd0;
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_tokens_reg   <=#1'd1;
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outs_max_reg   <=#1{4{1'b0}};
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_incr_reg   <=#1'd1;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size_reg   <='d0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_tokens_reg   <='d1;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outs_max_reg   <={4{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_incr_reg   <='d1;
         end
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_static_line0  )
             begin
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [8-1:0];
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_tokens_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [6+16-1:16];
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outs_max_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [4+24-1:24];
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_incr_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [31];
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [8-1:0];
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_tokens_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [6+16-1:16];
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_outs_max_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [4+24-1:24];
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_incr_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [31];
             end
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_burst_max_size_reg   <=#1'd0;
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_tokens_reg   <=#1'd1;
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outs_max_reg   <=#1{4{1'b0}};
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_incr_reg   <=#1'd1;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_burst_max_size_reg   <='d0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_tokens_reg   <='d1;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outs_max_reg   <={4{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_incr_reg   <='d1;
         end
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_static_line1  )
             begin
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_burst_max_size_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [8-1:0];
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_tokens_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [6+16-1:16];
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outs_max_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [4+24-1:24];
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_incr_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [31];
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_burst_max_size_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [8-1:0];
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_tokens_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [6+16-1:16];
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_outs_max_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [4+24-1:24];
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_incr_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [31];
             end
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_incr  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_incr_reg  ;
@@ -6182,9 +6254,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_DELAY  -1];
 
@@ -6198,7 +6270,7 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_allow_full_burst;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_allow_full_fifo;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_joint_flush;
-    reg [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_burst_max_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size_pre;
+    reg [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_burst_max_size;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_clk;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_reset;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_update;
@@ -6208,7 +6280,7 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_allow_full_burst;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_allow_full_fifo;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_joint_flush;
-    reg [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_burst_max_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_burst_max_size_pre;
+    reg [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_burst_max_size;
 
     wire[8-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_burst_max_size_fifo  ;
     wire[8-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_burst_max_size_pre  ;
@@ -6225,10 +6297,10 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_burst_max_size   <=#1{8{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_burst_max_size   <={8{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_update  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_burst_max_size   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_burst_max_size_pre  >  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_MAX_BURST   ?   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_MAX_BURST  :  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_burst_max_size_pre  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_burst_max_size   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_burst_max_size_pre  >  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_MAX_BURST   ?   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_MAX_BURST  :  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_burst_max_size_pre  ;
 
 
 
@@ -6248,10 +6320,10 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_burst_max_size   <=#1{8{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_burst_max_size   <={8{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_update  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_burst_max_size   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_burst_max_size_pre  >  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_MAX_BURST   ?   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_MAX_BURST  :  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_burst_max_size_pre  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_burst_max_size   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_burst_max_size_pre  >  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_MAX_BURST   ?   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_MAX_BURST  :  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_burst_max_size_pre  ;
 
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_reset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset;
@@ -6262,6 +6334,7 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_allow_full_burst = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_full_burst;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_allow_full_fifo = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_full_fifo;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_joint_flush = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_flush;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size_pre = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_rd_burst_max_size;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_reset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_update = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_burst_max_size_update;
@@ -6271,26 +6344,27 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_allow_full_burst = 1'b0;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_allow_full_fifo = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_full_fifo;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_joint_flush = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_flush;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_burst_max_size_pre = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_dma_axi64_core0_ch_reg_size_wr_burst_max_size;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_reg   <=#11'b1;
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_end_swap_reg   <=#12'b00;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_reg   <=1'b1;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_end_swap_reg   <=2'b00;
         end
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_static_line2  )
             begin
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [16];
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_end_swap_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [29:28];
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [16];
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_end_swap_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [29:28];
             end
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_simple_mem   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_simple_mem   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_simple_mem   <=#1(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_num  =='d0)&(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_num  =='d0)&(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_line_cmd  );
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_simple_mem   <=(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_num  =='d0)&(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_num  =='d0)&(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_allow_line_cmd  );
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_mode  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_reg  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_simple_mem  &1'b1;
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint_mux  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_joint  ;
@@ -6306,18 +6380,18 @@ module dma_axi64_core0_top #(
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_num_reg   <=#1'd0;
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_delay_reg   <=#1'd0;
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_num_reg   <=#1'd0;
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_delay_reg   <=#1'd0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_num_reg   <='d0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_delay_reg   <='d0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_num_reg   <='d0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_delay_reg   <='d0;
         end
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_static_line4  )
             begin
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_num_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [4:0];
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_delay_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [3+8-1:8];
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_num_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [20:16];
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_delay_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [3+24-1:24];
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_num_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [4:0];
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_delay_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [3+8-1:8];
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_num_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [20:16];
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_periph_delay_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [3+24-1:24];
             end
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_num  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_periph_num_reg  ;
@@ -6329,69 +6403,69 @@ module dma_axi64_core0_top #(
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_enable   <=#11'b1;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_enable   <=1'b1;
         end
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_enable  )
             begin
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_enable   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [0];
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_enable   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [0];
             end
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_in_prog   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_in_prog   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_in_prog   <=#11'b1;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_in_prog   <=1'b1;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_end  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_in_prog   <=#11'b0;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_in_prog   <=1'b0;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_in_prog   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_in_prog   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_in_prog   <=#11'b1;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_in_prog   <=1'b1;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_fifo_underflow  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_fifo_overflow  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_in_prog   <=#11'b0;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_in_prog   <=1'b0;
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_end  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  )
-                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_in_prog   <=#11'b0;
+                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_ch_in_prog   <=1'b0;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_in_prog   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_in_prog   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_in_prog   <=#11'b1;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_in_prog   <=1'b1;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_fifo_underflow  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_fifo_overflow  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_in_prog   <=#11'b0;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_in_prog   <=1'b0;
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_end  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  )
-                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_in_prog   <=#11'b0;
+                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_in_prog   <=1'b0;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_in_prog_reg   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_in_prog_reg   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_req  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_in_prog_reg   <=#11'b1;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_in_prog_reg   <=1'b1;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_in_prog_reg   <=#11'b0;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_in_prog_reg   <=1'b0;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_req_in_prog_reg   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_req_in_prog_reg   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_req  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_req_in_prog_reg   <=#11'b1;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_req_in_prog_reg   <=1'b1;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_cmd  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_req_in_prog_reg   <=#11'b0;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_req_in_prog_reg   <=1'b0;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_in_prog  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_in_prog_reg  ;
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_req_in_prog  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_req_in_prog_reg  ;
@@ -6401,22 +6475,22 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update_pre  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_ch_start  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_load_wr_last  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_retry  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update_pre  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update   <=#11'b1;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update   <=1'b1;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update   <=#11'b0;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update   <=1'b0;
 
 
 
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_ch_update_DELAY  -1];
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_delay_max_size_update_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk;
@@ -6445,7 +6519,7 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_write;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_SIZE -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_pwdata;
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_SIZE -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_int_bus;
-    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_SIZE -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_rawstat = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_rawstat;
+    reg [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_SIZE -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_rawstat;
 
     wire[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_SIZE  -1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_write_bus  ;
     wire[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_SIZE  -1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_clear_bus  ;
@@ -6453,9 +6527,9 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_clear_bus  ={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_SIZE  {  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_clear  }}&  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_pwdata  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_rawstat   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_SIZE  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_rawstat   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_SIZE  {1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_rawstat   <=#1(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_rawstat  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_int_bus  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_write_bus  )&(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_clear_bus  );
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_rawstat   <=(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_rawstat  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_int_bus  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_write_bus  )&(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_clear_bus  );
 
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_reset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset;
@@ -6463,13 +6537,14 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_write = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_int_rawstat;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_pwdata = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata[13-1:0];
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_int_bus = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_bus;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_rawstat = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rawstat_rawstat;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_enable   <=#1{13{1'b1}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_enable   <={13{1'b1}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_int_enable  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_enable   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [13-1:0];
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_enable   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata  [13-1:0];
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_status  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_rawstat  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_enable  ;
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_int  =|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_status  ;
@@ -6664,23 +6739,23 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata   <=#1{32{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata   <={32{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpread  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pclken  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata_pre  ;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pclken  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata   <=#1{32{1'b0}};
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata   <={32{1'b0}};
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr   <=1'b0;
         else
             if ((  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpread  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_gpwrite  )&  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pclken  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr_pre  ;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pclken  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr   <=#11'b0;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr   <=1'b0;
 
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_pclk;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_clken = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clken;
@@ -6691,6 +6766,8 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_paddr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_paddr;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwrite = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_pwrite;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pwdata = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_pwdata;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_prdata = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_prdata;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_pslverr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_pslverr;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_timeout_bus = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_timeout_bus;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wdt_timeout = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wdt_timeout;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_start = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_start;
@@ -6711,6 +6788,7 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_int_all_proc = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_int_all_proc;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_rd_active = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_rd_active;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_wr_active = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_wr_active;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_in_prog = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_in_prog;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_x_offset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_x_offset;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_y_offset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_y_offset;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_x_offset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_x_offset;
@@ -6719,6 +6797,9 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_gap = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_gap;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_fifo_overflow = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_overflow;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_fifo_underflow = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_fifo_underflow;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_ch_update = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_ch_update;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_start_addr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_start_addr;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_start_addr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_wr_start_addr;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_x_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_x_size;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_y_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_y_size;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_max_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_reg_rd_burst_max_size;
@@ -6769,9 +6850,9 @@ module dma_axi64_core0_top #(
     wire [10-8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_y_size;
     wire [10-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_x_offset;
     wire [10-8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_y_offset;
-    reg [10-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_x_remain = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_x_remain;
+    reg [10-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_x_remain;
     wire [10-8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_clr_remain;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_ch_end = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_ch_end;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_ch_end;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_go_next_line;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_incr;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_clr_line;
@@ -6791,9 +6872,9 @@ module dma_axi64_core0_top #(
     wire [10-8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_y_size;
     wire [10-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_x_offset;
     wire [10-8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_y_offset;
-    reg [10-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_x_remain = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_x_remain;
+    reg [10-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_x_remain;
     wire [10-8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_clr_remain;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_ch_end = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_ch_end;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_ch_end;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_go_next_line;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_incr;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_clr_line;
@@ -6815,23 +6896,23 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_empty  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_ch_end_pre  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_ch_end  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_ch_end   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_ch_end   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_ch_update  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_ch_end   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_ch_end   <=1'b0;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_ch_end_pre  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_ch_end   <=#11'b1;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_ch_end   <=1'b1;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_x_remain   <=#1{10{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_x_remain   <={10{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_ch_update  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_go_next_line  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_x_remain   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_x_size  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_x_remain   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_x_size  ;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_burst_start  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_load_req_in_prog  ))
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_x_remain   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_x_remain  -  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_burst_size  ;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_x_remain   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_x_remain  -  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_burst_size  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_x_offset  ={10{1'b0}};
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_y_offset  ={10-8{1'b0}};
@@ -6852,23 +6933,23 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_empty  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_ch_end_pre  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_ch_end  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_ch_end   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_ch_end   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_ch_update  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_ch_end   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_ch_end   <=1'b0;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_ch_end_pre  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_ch_end   <=#11'b1;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_ch_end   <=1'b1;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_x_remain   <=#1{10{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_x_remain   <={10{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_ch_update  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_go_next_line  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_x_remain   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_x_size  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_x_remain   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_x_size  ;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_burst_start  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_load_req_in_prog  ))
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_x_remain   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_x_remain  -  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_burst_size  ;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_x_remain   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_x_remain  -  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_burst_size  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_x_offset  ={10{1'b0}};
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_y_offset  ={10-8{1'b0}};
@@ -6885,7 +6966,9 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_y_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_y_size;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_x_offset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_x_offset;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_y_offset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_y_offset;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_x_remain = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_x_remain;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_remain = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_clr_remain;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_ch_end = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_ch_end;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_go_next_line = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_go_next_line;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_incr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_incr;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_rd_clr_line = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_line;
@@ -6905,7 +6988,9 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_y_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_y_size;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_x_offset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_x_offset;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_y_offset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_y_offset;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_x_remain = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_x_remain;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_remain = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_clr_remain;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_ch_end = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_ch_end;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_go_next_line = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_go_next_line;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_incr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_incr;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_offsets_wr_clr_line = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_line;
@@ -6949,42 +7034,42 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_burst_qual  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_burst_start  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_burst_size_valid   <=#1{8{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_burst_size_valid   <={8{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_burst_qual  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_burst_size_valid   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_burst_size  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_burst_size_valid   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_burst_size  ;
             else
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_burst_size_valid   <=#1{8{1'b0}};
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_burst_size_valid   <={8{1'b0}};
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_burst_size_valid   <=#1{8{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_burst_size_valid   <={8{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_burst_qual  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_burst_size_valid   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_burst_size  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_burst_size_valid   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_burst_size  ;
             else
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_burst_size_valid   <=#1{8{1'b0}};
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_burst_size_valid   <={8{1'b0}};
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_transfer_size_valid  ={4{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_transfer  }}&  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_transfer_size  ;
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_transfer_size_valid  ={4{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_transfer  }}&  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_transfer_size  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_gap_reg   <=#1{1'b0,1'b1,{5{1'b0}}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_gap_reg   <={1'b0,1'b1,{5{1'b0}}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_ch_update  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_gap_reg   <=#1{1'b0,1'b1,{5{1'b0}}};
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_gap_reg   <={1'b0,1'b1,{5{1'b0}}};
             else
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_gap_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_gap_reg  -  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_burst_size_valid  +  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_transfer_size_valid  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_gap_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_gap_reg  -  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_burst_size_valid  +  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_transfer_size_valid  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_gap  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_gap_reg  [5+1] ? 'd0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_gap_reg  [5:0];
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_fullness_reg   <=#1{5+1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_fullness_reg   <={5+1{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_ch_update  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_fullness_reg   <=#1{5+1{1'b0}};
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_fullness_reg   <={5+1{1'b0}};
             else
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_fullness_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_fullness_reg  -  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_burst_size_valid  +  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_transfer_size_valid  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_fullness_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_fullness_reg  -  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_burst_size_valid  +  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_rd_transfer_size_valid  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_fullness  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_fullness_reg  [5+1] ? 'd0:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_wr_fullness_reg  [5:0];
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_remain_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_gclk;
@@ -7012,18 +7097,18 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_cmd;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_clr;
     wire [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_outs_max;
-    reg [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_outs = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_outs;
+    reg [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_outs;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_outs_empty;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_stall = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_stall;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_stall;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_timeout;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_clk;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_reset;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_cmd;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_clr;
     wire [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_outs_max;
-    reg [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_outs = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_outs;
+    reg [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_outs;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_outs_empty;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_stall = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_stall_pre;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_stall;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_timeout;
 
     wire[4-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_outs_pre  ;
@@ -7032,28 +7117,28 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_outs_pre  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_outs  +  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_cmd  -  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_clr  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_outs   <=#1'd0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_outs   <='d0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_cmd  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_clr  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_outs   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_outs_pre  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_outs   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_outs_pre  ;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_stall   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_stall   <=1'b0;
         else
             if (|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_outs_max  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_stall   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_outs  >=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_outs_max  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_stall   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_outs  >=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_outs_max  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_timeout  =(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_counter  =='d0);
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_counter   <=#1{10{1'b1}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_counter   <={10{1'b1}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_clr  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_counter   <=#1{10{1'b1}};
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_counter   <={10{1'b1}};
             else
                 if (|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_outs  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_counter   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_counter  -1'b1;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_counter   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_counter  -1'b1;
 
 
 
@@ -7064,42 +7149,46 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_outs_pre  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_outs  +  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_cmd  -  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_clr  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_outs   <=#1'd0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_outs   <='d0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_cmd  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_clr  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_outs   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_outs_pre  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_outs   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_outs_pre  ;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_stall   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_stall   <=1'b0;
         else
             if (|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_outs_max  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_stall   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_outs  >=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_outs_max  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_stall   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_outs  >=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_outs_max  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_timeout  =(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_counter  =='d0);
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_counter   <=#1{10{1'b1}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_counter   <={10{1'b1}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_clr  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_counter   <=#1{10{1'b1}};
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_counter   <={10{1'b1}};
             else
                 if (|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_outs  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_counter   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_counter  -1'b1;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_counter   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_counter  -1'b1;
 
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_gclk;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_reset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_cmd = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_cmd_outs;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_clr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_outs;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_outs_max = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_outs_max;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_outs = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_outs;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_outs_empty = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_outs_empty;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_stall = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_stall;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_timeout_rresp = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_rd_timeout;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_gclk;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_reset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_cmd = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_cmd_outs;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_clr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_outs;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_outs_max = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_outs_max;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_outs = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_outs;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_outs_empty = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_outs_empty;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_stall_pre = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_stall;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_timeout_wresp = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_outs_wr_timeout;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_stall  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_stall_pre  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_req  );
@@ -7128,7 +7217,7 @@ module dma_axi64_core0_top #(
     wire [32-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_burst_addr;
     wire [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_burst_size;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_burst_ready;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_single = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_ready;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_single;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_joint_ready_out;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_joint_ready_in;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_joint_line_req_in;
@@ -7165,7 +7254,7 @@ module dma_axi64_core0_top #(
     wire [32-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_burst_addr;
     wire [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_burst_size;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_burst_ready;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_single = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_single;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_single;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_joint_ready_out;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_joint_ready_in;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_joint_line_req_in;
@@ -7209,9 +7298,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc0_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc0_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc0_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc0_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc0_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc0_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc0_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc0_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc0_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc0_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc0_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc0_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc0_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc0_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc0_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc0_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc0_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc0_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc0_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc0_DELAY  -1];
 
@@ -7220,9 +7309,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc1_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc1_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc1_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc1_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc1_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc1_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc1_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc1_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc1_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc1_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc1_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc1_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc1_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc1_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc1_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc1_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc1_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc1_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc1_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc1_DELAY  -1];
 
@@ -7231,18 +7320,18 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc2_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc2_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc2_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc2_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc2_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc2_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc2_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc2_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc2_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc2_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc2_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc2_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc2_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc2_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc2_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc2_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc2_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc2_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc2_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc2_DELAY  -1];
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_single   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_single   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_burst_start  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_single   <=#1(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_burst_size  <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_SINGLE_SIZE  );
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_single   <=(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_burst_size  <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_SINGLE_SIZE  );
 
 
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_clk;
@@ -7257,7 +7346,7 @@ module dma_axi64_core0_top #(
     wire [12-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_frame_width;
     wire [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_x_size;
     wire [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_burst_size;
-    reg [32-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_burst_addr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_burst_addr;
+    reg [32-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_burst_addr;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_clk;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_reset;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_ch_update_d;
@@ -7270,7 +7359,7 @@ module dma_axi64_core0_top #(
     wire [12-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_frame_width;
     wire [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_x_size;
     wire [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_burst_size;
-    reg [32-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_burst_addr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_burst_addr;
+    reg [32-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_burst_addr;
 
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_go_next_line_d  ;
     reg[12-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_frame_width_diff_reg  ;
@@ -7279,19 +7368,19 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_go_next_line_d  =1'b0;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_burst_addr   <=#1{32{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_burst_addr   <={32{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_load_in_prog  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_burst_addr   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_load_addr  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_burst_addr   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_load_addr  ;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_ch_update_d  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_burst_addr   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_start_addr  ;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_burst_addr   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_start_addr  ;
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_burst_start  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_incr  )
-                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_burst_addr   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_burst_addr  +  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_burst_size  ;
+                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_burst_addr   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_burst_addr  +  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_burst_size  ;
                     else
                         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_go_next_line_d  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_incr  )
-                            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_burst_addr   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_burst_addr  +  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_frame_width_diff  ;
+                            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_burst_addr   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_burst_addr  +  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_frame_width_diff  ;
 
 
 
@@ -7315,8 +7404,8 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_fifo_wr_ready;
     wire [5:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_fifo_remain;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_last;
-    reg [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_burst_size;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_ready = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_burst_ready;
+    reg [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_size;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_ready;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_ready_in;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_ready_out;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint;
@@ -7348,8 +7437,8 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_fifo_wr_ready;
     wire [5:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_fifo_remain;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_last;
-    reg [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_burst_size;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_ready = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_burst_ready;
+    reg [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_size;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_ready;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_ready_in;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_ready_out;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint;
@@ -7422,13 +7511,13 @@ module dma_axi64_core0_top #(
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_min3_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_min3_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_min3_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_min3_min_ab   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_min3_WIDTH  {1'b0}};
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_min3_min_c   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_min3_WIDTH  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_min3_min_ab   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_min3_WIDTH  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_min3_min_c   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_min3_WIDTH  {1'b0}};
         end
         else
         begin
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_min3_min_ab   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_min3_min_ab_pre  ;
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_min3_min_c   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_min3_c  ;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_min3_min_ab   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_min3_min_ab_pre  ;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_min3_min_c   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_min3_c  ;
         end
 
 
@@ -7448,76 +7537,76 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_delay_fifo_not_ready_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_delay_fifo_not_ready_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_delay_fifo_not_ready_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_delay_fifo_not_ready_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_delay_fifo_not_ready_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_delay_fifo_not_ready_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_delay_fifo_not_ready_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_delay_fifo_not_ready_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_delay_fifo_not_ready_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_delay_fifo_not_ready_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_delay_fifo_not_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_delay_fifo_not_ready_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_delay_fifo_not_ready_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_delay_fifo_not_ready_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_delay_fifo_not_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_delay_fifo_not_ready_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_delay_fifo_not_ready_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_delay_fifo_not_ready_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_delay_fifo_not_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_delay_fifo_not_ready_DELAY  -1];
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_last  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_size  ==  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_x_remain  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_ready   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_ready   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_ch_update  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_ch_update_d  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_ch_update_d2  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_ch_update_d3  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_ready   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_ready   <=1'b0;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_load_req_in_prog  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_ready   <=#11'b1;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_ready   <=1'b1;
                 else
                     if (|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_burst_req  )
-                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_ready   <=#11'b1;
+                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_ready   <=1'b1;
                     else
                         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_line_req  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_buffer_small  ))
-                            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_ready   <=#11'b1;
+                            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_ready   <=1'b1;
                         else
                             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_load_in_prog  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_fifo_not_ready_pre  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_wait  |(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_page_cross  &(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_size  !=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_size_pre2  )))
-                                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_ready   <=#11'b0;
+                                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_ready   <=1'b0;
                             else
-                                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_ready   <=#1|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_size_pre2  ;
+                                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_ready   <=|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_size_pre2  ;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_size   <=#1{8{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_size   <={8{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_load_req_in_prog  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_size   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_CMD_SIZE  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_size   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_CMD_SIZE  ;
             else
                 if (|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_burst_req  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_size   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_burst_req_size  ;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_size   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_burst_req_size  ;
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_line_req  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_buffer_small  ))
-                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_size   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_line_req_size  ;
+                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_size   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_line_req_size  ;
                     else
-                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_size   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_size_pre2  ;
+                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_size   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_size_pre2  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_update  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_ch_update  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_ch_update_d  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_ch_update_d2  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_burst_req_reg   <=#12'b00;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_burst_req_reg   <=2'b00;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_update  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_flush  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_flush_in  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_burst_req_reg   <=#12'b00;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_burst_req_reg   <=2'b00;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_burst_req_reg  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_start  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_burst_req_reg   <=#12'b00;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_burst_req_reg   <=2'b00;
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_burst_req_in  )
-                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_burst_req_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_burst_req_reg  [0] ? 2'b11:2'b01;
+                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_burst_req_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_burst_req_reg  [0] ? 2'b11:2'b01;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_burst_req  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_burst_req_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_line_req_reg   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_line_req_reg   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_update  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_flush  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_flush_in  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_line_req_reg   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_line_req_reg   <=1'b0;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_line_req_reg  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_start  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_line_req_reg   <=#11'b0;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_line_req_reg   <=1'b0;
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_line_req_in  )
-                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_line_req_reg   <=#11'b1;
+                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_line_req_reg   <=1'b1;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_line_req  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_line_req_reg  ;
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_line_req_size  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_addr  [2:0]==3'd0 ? 4'd8:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_addr  [1:0]==2'd0 ? 'd4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_addr  [0]==1'd0 ? 'd2:'d1;
@@ -7541,11 +7630,11 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_page_cross;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_cross;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_in;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_ready_out;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_line_req = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_line_req_out;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_burst_req = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_burst_req_out;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_wait = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_wait;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_flush = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_flush;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_line_req;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_burst_req;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_wait;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_flush;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_flush_in;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_buffer_small;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_clk;
@@ -7566,11 +7655,11 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_page_cross;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_cross;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_in;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_ready_out;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_line_req = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_line_req_out;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_burst_req = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_burst_req_out;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_wait = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_wait;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_flush = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_flush;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_line_req;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_burst_req;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_wait;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_flush;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_flush_in;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_buffer_small;
 
@@ -7582,13 +7671,13 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_buffer_small  =(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_burst_max_size  >  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_x_remain  )|(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_x_remain  <'d8);
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out   <=1'b0;
         else
             if ((  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_page_cross  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ch_end_flush  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_flush  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_wait  )&(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ch_end  ))
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out   <=1'b0;
             else
                 if ((~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ch_end  )&(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_wr_cmd_pending  ))
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out_pre  ;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out_pre  ;
 
     always @(               dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ch_end_flush                                  or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_fifo_not_ready                     or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_fifo_remain                    or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_fifo_wr_ready                   or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_buffer_small                  or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_cross                 or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_flush_in                or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_line_req_clr               or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_in              or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out             or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_outs_empty            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_page_cross           or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ps   )
     begin
@@ -7727,12 +7816,12 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ps   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_IDLE  ;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ps   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_IDLE  ;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_update  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ps   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_IDLE  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ps   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_IDLE  ;
             else
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ps   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ns  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ps   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ns  ;
 
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_release_fifo  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_ready_in  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_ready_out  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_cross  );
@@ -7750,9 +7839,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc0_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc0_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc0_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc0_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc0_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc0_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc0_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc0_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc0_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc0_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc0_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc0_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc0_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc0_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc0_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc0_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc0_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc0_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc0_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc0_DELAY  -1];
 
@@ -7761,9 +7850,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc1_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc1_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc1_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc1_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc1_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc1_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc1_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc1_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc1_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc1_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc1_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc1_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc1_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc1_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc1_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc1_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc1_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc1_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc1_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc1_DELAY  -1];
 
@@ -7772,9 +7861,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc2_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc2_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc2_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc2_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc2_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc2_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc2_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc2_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc2_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc2_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc2_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc2_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc2_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc2_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc2_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc2_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc2_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc2_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc2_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_delay_calc2_DELAY  -1];
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_delay_calc0_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_clk;
@@ -7804,10 +7893,10 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_single   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_single   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_burst_start  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_single   <=#1(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_burst_size  <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_SINGLE_SIZE  );
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_single   <=(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_burst_size  <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_SINGLE_SIZE  );
 
 
 
@@ -7818,19 +7907,19 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_go_next_line_d  =1'b0;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_burst_addr   <=#1{32{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_burst_addr   <={32{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_load_in_prog  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_burst_addr   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_load_addr  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_burst_addr   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_load_addr  ;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_ch_update_d  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_burst_addr   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_start_addr  ;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_burst_addr   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_start_addr  ;
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_burst_start  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_incr  )
-                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_burst_addr   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_burst_addr  +  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_burst_size  ;
+                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_burst_addr   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_burst_addr  +  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_burst_size  ;
                     else
                         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_go_next_line_d  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_incr  )
-                            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_burst_addr   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_burst_addr  +  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_frame_width_diff  ;
+                            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_burst_addr   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_burst_addr  +  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_frame_width_diff  ;
 
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_clk;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_reset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_reset;
@@ -7844,6 +7933,7 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_frame_width = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_frame_width;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_x_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_x_size;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_burst_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_burst_size;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_burst_addr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_addr_burst_addr;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_clk;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_reset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_reset;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_ch_update_d = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_ch_update_d;
@@ -7856,6 +7946,7 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_frame_width = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_frame_width;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_x_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_x_size;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_burst_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_burst_size;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_burst_addr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_addr_burst_addr;
 
 
 
@@ -7907,13 +7998,13 @@ module dma_axi64_core0_top #(
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_min3_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_min3_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_min3_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_min3_min_ab   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_min3_WIDTH  {1'b0}};
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_min3_min_c   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_min3_WIDTH  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_min3_min_ab   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_min3_WIDTH  {1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_min3_min_c   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_min3_WIDTH  {1'b0}};
         end
         else
         begin
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_min3_min_ab   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_min3_min_ab_pre  ;
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_min3_min_c   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_min3_c  ;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_min3_min_ab   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_min3_min_ab_pre  ;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_min3_min_c   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_min3_c  ;
         end
 
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_min3_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_clk;
@@ -7937,9 +8028,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_delay_fifo_not_ready_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_delay_fifo_not_ready_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_delay_fifo_not_ready_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_delay_fifo_not_ready_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_delay_fifo_not_ready_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_delay_fifo_not_ready_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_delay_fifo_not_ready_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_delay_fifo_not_ready_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_delay_fifo_not_ready_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_delay_fifo_not_ready_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_delay_fifo_not_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_delay_fifo_not_ready_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_delay_fifo_not_ready_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_delay_fifo_not_ready_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_delay_fifo_not_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_delay_fifo_not_ready_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_delay_fifo_not_ready_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_delay_fifo_not_ready_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_delay_fifo_not_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_delay_fifo_not_ready_DELAY  -1];
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_delay_fifo_not_ready_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_clk;
@@ -7954,67 +8045,67 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_last  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_size  ==  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_x_remain  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_ready   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_ready   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_ch_update  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_ch_update_d  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_ch_update_d2  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_ch_update_d3  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_ready   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_ready   <=1'b0;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_load_req_in_prog  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_ready   <=#11'b1;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_ready   <=1'b1;
                 else
                     if (|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_burst_req  )
-                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_ready   <=#11'b1;
+                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_ready   <=1'b1;
                     else
                         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_line_req  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_buffer_small  ))
-                            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_ready   <=#11'b1;
+                            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_ready   <=1'b1;
                         else
                             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_load_in_prog  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_fifo_not_ready_pre  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_wait  |(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_page_cross  &(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_size  !=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_size_pre2  )))
-                                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_ready   <=#11'b0;
+                                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_ready   <=1'b0;
                             else
-                                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_ready   <=#1|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_size_pre2  ;
+                                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_ready   <=|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_size_pre2  ;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_size   <=#1{8{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_size   <={8{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_load_req_in_prog  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_size   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_CMD_SIZE  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_size   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_CMD_SIZE  ;
             else
                 if (|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_burst_req  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_size   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_burst_req_size  ;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_size   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_burst_req_size  ;
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_line_req  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_buffer_small  ))
-                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_size   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_line_req_size  ;
+                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_size   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_line_req_size  ;
                     else
-                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_size   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_size_pre2  ;
+                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_size   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_size_pre2  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_update  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_ch_update  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_ch_update_d  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_ch_update_d2  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_burst_req_reg   <=#12'b00;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_burst_req_reg   <=2'b00;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_update  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_flush  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_flush_in  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_burst_req_reg   <=#12'b00;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_burst_req_reg   <=2'b00;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_burst_req_reg  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_start  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_burst_req_reg   <=#12'b00;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_burst_req_reg   <=2'b00;
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_burst_req_in  )
-                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_burst_req_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_burst_req_reg  [0] ? 2'b11:2'b01;
+                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_burst_req_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_burst_req_reg  [0] ? 2'b11:2'b01;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_burst_req  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_burst_req_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_line_req_reg   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_line_req_reg   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_update  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_flush  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_flush_in  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_line_req_reg   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_line_req_reg   <=1'b0;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_line_req_reg  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_start  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_line_req_reg   <=#11'b0;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_line_req_reg   <=1'b0;
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_line_req_in  )
-                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_line_req_reg   <=#11'b1;
+                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_line_req_reg   <=1'b1;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_line_req  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_line_req_reg  ;
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_line_req_size  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_addr  [2:0]==3'd0 ? 4'd8:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_addr  [1:0]==2'd0 ? 'd4:  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_addr  [0]==1'd0 ? 'd2:'d1;
@@ -8029,13 +8120,13 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_buffer_small  =(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_burst_max_size  >  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_x_remain  )|(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_x_remain  <'d8);
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out   <=1'b0;
         else
             if ((  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_page_cross  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ch_end_flush  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_flush  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_wait  )&(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ch_end  ))
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out   <=1'b0;
             else
                 if ((~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ch_end  )&(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_wr_cmd_pending  ))
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out_pre  ;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out_pre  ;
 
     always @(               dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ch_end_flush                                  or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_fifo_not_ready                     or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_fifo_remain                    or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_fifo_wr_ready                   or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_buffer_small                  or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_cross                 or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_flush_in                or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_line_req_clr               or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_in              or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out             or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_outs_empty            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_page_cross           or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ps   )
     begin
@@ -8174,12 +8265,12 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ps   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_IDLE  ;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ps   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_IDLE  ;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_update  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ps   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_IDLE  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ps   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_IDLE  ;
             else
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ps   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ns  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ps   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_ns  ;
 
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_clk;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_reset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_reset;
@@ -8199,6 +8290,11 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_page_cross = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_page_cross;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_cross = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_cross;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_in = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_ready_in;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_ready_out = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_line_req_out = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_line_req;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_burst_req_out = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_burst_req;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_wait = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_wait;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_flush = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_flush;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_flush_in = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_flush_in;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_buffer_small = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_buffer_small;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_clk;
@@ -8219,6 +8315,11 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_page_cross = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_page_cross;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_cross = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_cross;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_in = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_ready_in;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_ready_out = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_ready_out;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_line_req_out = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_line_req;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_burst_req_out = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_burst_req;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_wait = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_wait;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_flush = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_flush;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_flush_in = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_flush_in;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_buffer_small = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_dma_axi64_core0_ch_calc_joint_joint_buffer_small;
 
@@ -8243,6 +8344,8 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_fifo_wr_ready = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_fifo_wr_ready;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_fifo_remain = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_fifo_remain;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_burst_last = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_last;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_burst_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_size;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_burst_ready = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_burst_ready;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_ready_in = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_joint_ready_in;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_joint_ready_out = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint_ready_out;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_dma_axi64_ch_calc_size_joint = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_joint;
@@ -8274,6 +8377,8 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_fifo_wr_ready = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_fifo_wr_ready;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_fifo_remain = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_fifo_remain;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_burst_last = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_last;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_burst_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_size;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_burst_ready = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_burst_ready;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_ready_in = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_joint_ready_in;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_joint_ready_out = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint_ready_out;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_dma_axi64_ch_calc_size_joint = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_joint;
@@ -8310,6 +8415,7 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_addr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_burst_addr;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_burst_size;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_burst_ready = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_burst_ready;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_ready = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_single;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_ready = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_joint_ready_out;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_joint_ready_in = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_ready;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_rd_joint_line_req_in = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_joint_line_req;
@@ -8346,6 +8452,7 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_addr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_burst_addr;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_burst_size;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_burst_ready = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_burst_ready;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_single = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_single;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_joint_ready = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_joint_ready_out;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_joint_ready_in = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_joint_ready;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_calc_wr_joint_line_req_in = 1'b0;
@@ -8362,7 +8469,7 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_reset;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_clken;
     wire [31:1] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_periph_req;
-    reg [31:1] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_periph_clr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_periph_rx_clr;
+    reg [31:1] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_periph_clr;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_periph_ready;
     wire [4:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_periph_num;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_clr_valid;
@@ -8371,7 +8478,7 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_reset;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_clken;
     wire [31:1] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_periph_req;
-    reg [31:1] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_periph_clr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_periph_tx_clr;
+    reg [31:1] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_periph_clr;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_periph_ready;
     wire [4:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_periph_num;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_clr_valid;
@@ -8400,9 +8507,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_delay_ready_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_delay_ready_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_delay_ready_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_delay_ready_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_delay_ready_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_delay_ready_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_delay_ready_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_delay_ready_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_delay_ready_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_delay_ready_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_delay_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_delay_ready_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_delay_ready_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_delay_ready_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_delay_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_delay_ready_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_delay_ready_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_delay_ready_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_delay_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_delay_ready_DELAY  -1];
 
@@ -8424,9 +8531,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_delay_ready_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_delay_ready_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_delay_ready_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_delay_ready_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_delay_ready_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_delay_ready_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_delay_ready_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_delay_ready_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_delay_ready_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_delay_ready_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_delay_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_delay_ready_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_delay_ready_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_delay_ready_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_delay_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_delay_ready_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_delay_ready_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_delay_ready_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_delay_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_delay_ready_DELAY  -1];
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_delay_ready_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_clk;
@@ -8442,6 +8549,7 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_reset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_clken = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clken;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_periph_req = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_periph_rx_req;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_periph_rx_clr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_periph_clr;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_periph_ready = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_periph_ready;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_periph_num = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_periph_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_rd_clr_valid = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_rd_clr_valid;
@@ -8450,6 +8558,7 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_reset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_clken = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clken;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_periph_req = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_periph_tx_req;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_periph_tx_clr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_periph_clr;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_periph_ready = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_periph_ready;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_periph_num = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_periph_num;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_periph_mux_wr_clr_valid = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_wr_clr_valid;
@@ -8523,10 +8632,10 @@ module dma_axi64_core0_top #(
     wire [1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_end_swap;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wr;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wr_fifo;
-    reg [5-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wr_ptr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_slice_wr_ptr;
-    reg [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_bsel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_slice_bsel;
-    reg [64-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wdata = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_slice_wdata;
-    reg [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wsize = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_slice_wsize;
+    reg [5-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wr_ptr;
+    reg [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_bsel;
+    reg [64-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wdata;
+    reg [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wsize;
 
     reg[4-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_line_remain  ;
     wire[4-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_join_wsize  ;
@@ -8553,16 +8662,16 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wr_fifo  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_line_remain   <=#14'd8;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_line_remain   <=4'd8;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_ch_update  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_rd_clr_line  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_line_remain   <=#14'd8;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_line_remain   <=4'd8;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wr_pre  &(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_line_remain  ==  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wsize_pre  ))
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_line_remain   <=#14'd8;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_line_remain   <=4'd8;
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wr_pre  )
-                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_line_remain   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_line_remain  -  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wsize_pre  ;
+                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_line_remain   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_line_remain  -  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wsize_pre  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_join_wsize  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_next_size  +  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_fifo_wsize  ;
 
@@ -8587,36 +8696,36 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_append   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_append   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_next_wr  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_append   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_append   <=1'b0;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_fifo_wr  &(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wsize_pre  ==  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_join_wsize  ))
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_append   <=#11'b0;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_append   <=1'b0;
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_fifo_wr  )
-                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_append   <=#11'b1;
+                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_append   <=1'b1;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_next_size   <=#1{4{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_next_size   <={4{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_next_wr  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_next_size   <=#1{4{1'b0}};
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_next_size   <={4{1'b0}};
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_fifo_wr  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_append  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_next_size   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_join_wsize  -  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_append_wsize  ;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_next_size   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_join_wsize  -  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_append_wsize  ;
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_fifo_wr  )
-                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_next_size   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_join_wsize  -  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_direct_wsize  ;
+                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_next_size   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_join_wsize  -  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_direct_wsize  ;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_align_wdata_d   <=#1{64{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_align_wdata_d   <={64{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_fifo_wr  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_align_wdata_d   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_align_wdata  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_align_wdata_d   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_align_wdata  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_wr_align_valid  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_rd_incr   ?   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_wr_align  :  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_wr_align  -  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_wr_ptr  [3-1:0];
     always @(     dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_fifo_wdata              or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_wr_align_valid           or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_fifo_wr   )
@@ -8705,9 +8814,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr0_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr0_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr0_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr0_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr0_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr0_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr0_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr0_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr0_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr0_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr0_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr0_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr0_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr0_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr0_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr0_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr0_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr0_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr0_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr0_DELAY  -1];
 
@@ -8716,9 +8825,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr_DELAY  -1];
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_delay_wr0_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_clk;
@@ -8733,14 +8842,14 @@ module dma_axi64_core0_top #(
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wsize   <=#1{4{1'b0}};
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wdata_pre_d   <=#1{64{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wsize   <={4{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wdata_pre_d   <={64{1'b0}};
         end
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wr_pre  )
             begin
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wsize   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wsize_pre  ;
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wdata_pre_d   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wdata_pre  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wsize   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wsize_pre  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wdata_pre_d   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wdata_pre  ;
             end
 
 
@@ -8765,14 +8874,14 @@ module dma_axi64_core0_top #(
 
     wire [1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_low_end_swap;
     wire [31:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_low_data_in;
-    reg [31:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_low_data_out = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_data_out_low;
+    reg [31:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_low_data_out;
     wire [3:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_low_bsel_in;
-    reg [3:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_low_bsel_out = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_bsel_out_low;
+    reg [3:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_low_bsel_out;
     wire [1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_high_end_swap;
     wire [31:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_high_data_in;
-    reg [31:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_high_data_out = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_data_out_high;
+    reg [31:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_high_data_out;
     wire [3:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_high_bsel_in;
-    reg [3:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_high_bsel_out = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_bsel_out_high;
+    reg [3:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_high_bsel_out;
 
     always @(    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_low_data_in            or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_low_end_swap   )
     begin
@@ -8835,10 +8944,14 @@ module dma_axi64_core0_top #(
 
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_low_end_swap = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_end_swap;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_low_data_in = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_data_in_low;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_data_out_low = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_low_data_out;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_low_bsel_in = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_bsel_in_low;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_bsel_out_low = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_low_bsel_out;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_high_end_swap = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_end_swap;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_high_data_in = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_data_in_high;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_data_out_high = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_high_data_out;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_high_bsel_in = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_bsel_in_high;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_bsel_out_high = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_swap32_high_bsel_out;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_data_out  ={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_data_out_high  ,  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_data_out_low  };
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_bsel_out  ={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_bsel_out_high  ,  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_swap64_bsel_out_low  };
@@ -8851,16 +8964,16 @@ module dma_axi64_core0_top #(
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wdata   <=#1{64{1'b0}};
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wr_ptr   <=#1{5{1'b0}};
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_bsel   <=#1{8{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wdata   <={64{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wr_ptr   <={5{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_bsel   <={8{1'b0}};
         end
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wr  )
             begin
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wdata   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wdata_swap  ;
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wr_ptr   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wr_ptr_pre  ;
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_bsel   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_bsel_swap  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wdata   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wdata_swap  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wr_ptr   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wr_ptr_pre  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_bsel   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_bsel_swap  ;
             end
 
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_clk;
@@ -8876,6 +8989,10 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_end_swap = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_end_swap;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_slice_wr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wr;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_slice_wr_fifo = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wr_fifo;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_slice_wr_ptr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wr_ptr;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_slice_bsel = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_bsel;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_slice_wdata = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wdata;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_slice_wsize = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_wr_slicer_slice_wsize;
 
 
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_clk;
@@ -8889,7 +9006,7 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_wr_incr;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_wr_single;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_slice_rd;
-    reg [64-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_slice_rdata = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_slice_rdata;
+    reg [64-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_slice_rdata;
     wire [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_slice_rsize;
     wire [5-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_slice_rd_ptr;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_slice_rd_valid;
@@ -8931,9 +9048,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd0_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd0_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd0_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd0_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd0_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd0_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd0_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd0_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd0_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd0_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd0_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd0_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd0_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd0_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd0_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd0_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd0_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd0_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd0_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd0_DELAY  -1];
 
@@ -8942,9 +9059,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd_valid_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd_valid_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd_valid_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd_valid_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd_valid_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd_valid_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd_valid_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd_valid_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd_valid_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd_valid_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd_valid_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd_valid_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd_valid_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd_valid_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd_valid_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd_valid_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd_valid_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd_valid_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd_valid_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd_valid_DELAY  -1];
 
@@ -8953,9 +9070,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd1_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd1_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd1_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd1_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd1_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd1_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd1_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd1_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd1_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd1_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd1_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd1_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd1_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd1_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd1_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd1_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd1_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd1_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd1_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd1_DELAY  -1];
 
@@ -8964,9 +9081,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd2_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd2_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd2_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd2_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd2_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd2_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd2_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd2_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd2_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd2_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd2_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd2_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd2_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd2_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd2_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd2_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd2_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd2_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd2_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd2_DELAY  -1];
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_delay_fifo_rd0_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_clk;
@@ -8990,13 +9107,13 @@ module dma_axi64_core0_top #(
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_rd_align_valid   <=#1{3{1'b0}};
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_rd_align_d   <=#1{3{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_rd_align_valid   <={3{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_rd_align_d   <={3{1'b0}};
         end
         else
         begin
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_rd_align_valid   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_rd_align_valid_pre  ;
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_rd_align_d   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_rd_align_valid  ;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_rd_align_valid   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_rd_align_valid_pre  ;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_rd_align_d   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_rd_align_valid  ;
         end
 
     always @(     dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_fifo_rdata              or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_next_rdata           or    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_rd_align_d   )
@@ -9045,18 +9162,18 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_next_rdata   <=#1{64{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_next_rdata   <={64{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_slice_rd_d  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_next_rdata   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_next_rdata_pre  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_next_rdata   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_next_rdata_pre  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_actual_rsize_pre  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_next_rsize  +({4{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_fifo_rd  }}&  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_fifo_rsize  );
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_actual_rsize   <=#1{4{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_actual_rsize   <={4{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_fifo_rd  |(|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_next_rsize  ))
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_actual_rsize   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_actual_rsize_pre  ;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_actual_rsize   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_actual_rsize_pre  ;
 
 
     wire [ dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_min_rsize_WIDTH -1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_min_rsize_a;
@@ -9070,13 +9187,13 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_next_rsize_reg   <=#1{4{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_next_rsize_reg   <={4{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_next_rd  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_next_rsize_reg   <=#1{4{1'b0}};
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_next_rsize_reg   <={4{1'b0}};
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_fifo_rd  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_slice_rd  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_next_rsize_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_next_rsize  +({4{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_fifo_rd  }}&  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_fifo_rsize  );
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_next_rsize_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_next_rsize  +({4{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_fifo_rd  }}&  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_fifo_rsize  );
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_next_rsize  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_next_rsize_reg  -({4{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_fifo_rd_d  }}&  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_slice_rsize  );
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_next_rd  =(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_fifo_rd  )&(|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_next_rsize  );
@@ -9093,6 +9210,7 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_wr_incr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_wr_incr;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_wr_single = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_wr_single;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_slice_rd = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_slice_rd;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_slice_rdata = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_slice_rdata;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_slice_rsize = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_slice_rsize;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_slice_rd_ptr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_slice_rd_ptr;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_slice_rd_valid = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_rd_slicer_slice_rd_valid;
@@ -9114,13 +9232,13 @@ module dma_axi64_core0_top #(
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_wr_clr_line;
     wire [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_wr_next_size;
     wire [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_wr_burst_size;
-    reg [5-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_ptr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_rd_ptr;
-    reg [5-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_wr_ptr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_wr_ptr;
-    reg [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_line_remain = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_rd_line_remain;
+    reg [5-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_ptr;
+    reg [5-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_wr_ptr;
+    reg [4-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_line_remain;
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_joint_delay;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_wr_ready = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_fifo_wr_ready;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_overflow = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_fifo_overflow;
-    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_underflow = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_fifo_underflow;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_wr_ready;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_overflow;
+    reg  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_underflow;
 
     wire[5-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_ptr_pre  ;
     wire[5-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_wr_ptr_pre  ;
@@ -9134,47 +9252,47 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_ptr_pre  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_ptr  +({4{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_slice_rd  }}&  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_slice_rsize  );
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_wr_ptr   <=#1{5{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_wr_ptr   <={5{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_ch_update  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_wr_ptr   <=#1{5{1'b0}};
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_wr_ptr   <={5{1'b0}};
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_slice_wr  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_wr_ptr   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_wr_ptr_pre  ;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_wr_ptr   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_wr_ptr_pre  ;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_ptr   <=#1{5{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_ptr   <={5{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_ch_update  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_ptr   <=#1{5{1'b0}};
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_ptr   <={5{1'b0}};
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_slice_rd  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_ptr   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_ptr_pre  ;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_ptr   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_ptr_pre  ;
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_line_remain   <=#14'd8;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_line_remain   <=4'd8;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_ch_update  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_wr_clr_line  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_line_remain   <=#14'd8;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_line_remain   <=4'd8;
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_slice_rd  &(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_line_remain  ==  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_slice_rsize  ))
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_line_remain   <=#14'd8;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_line_remain   <=4'd8;
                 else
                     if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_slice_rd  )
-                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_line_remain   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_line_remain  -  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_slice_rsize  ;
+                        dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_line_remain   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_line_remain  -  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_slice_rsize  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fullness_pre  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fullness  +({4{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_slice_wr  }}&  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_slice_wsize  )-({4{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_rd  }}&  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_rsize  );
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fullness   <=#1{5+2{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fullness   <={5+2{1'b0}};
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_ch_update  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fullness   <=#1{5+2{1'b0}};
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fullness   <={5+2{1'b0}};
             else
                 if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_rd  |  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_slice_wr  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fullness   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fullness_pre  ;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fullness   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fullness_pre  ;
 
 
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_delay_joint_in_prog_clk;
@@ -9185,9 +9303,9 @@ module dma_axi64_core0_top #(
     reg[  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_delay_joint_in_prog_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_delay_joint_in_prog_shift_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_delay_joint_in_prog_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_delay_joint_in_prog_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_delay_joint_in_prog_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_delay_joint_in_prog_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_delay_joint_in_prog_DELAY  +1{1'b0}};
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_delay_joint_in_prog_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_delay_joint_in_prog_DELAY  +1{1'b0}};
         else
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_delay_joint_in_prog_shift_reg   <=#1{  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_delay_joint_in_prog_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_delay_joint_in_prog_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_delay_joint_in_prog_din  };
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_delay_joint_in_prog_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_delay_joint_in_prog_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_delay_joint_in_prog_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_delay_joint_in_prog_din  };
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_delay_joint_in_prog_dout  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_delay_joint_in_prog_shift_reg  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_delay_joint_in_prog_DELAY  -1];
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_delay_joint_in_prog_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_clk;
@@ -9197,44 +9315,44 @@ module dma_axi64_core0_top #(
 
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_joint_delay_reg   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_joint_delay_reg   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_joint_in_prog  &(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_joint_in_prog_d  ))
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_joint_delay_reg   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fullness  >32-4'd8;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_joint_delay_reg   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fullness  >32-4'd8;
             else
                 if (~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_joint_in_prog  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_joint_delay_reg   <=#11'b0;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_joint_delay_reg   <=1'b0;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_joint_delay  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_joint_delay_reg  ;
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_reset  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_wr_ready   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_wr_ready   <=1'b0;
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_joint_in_prog  )
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_wr_ready   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_wr_ready   <=1'b0;
             else
                 if (|  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_wr_next_size  )
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_wr_ready   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fullness_pre  >=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_wr_next_size  ;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_wr_ready   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fullness_pre  >=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_wr_next_size  ;
 
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_underflow_pre  =  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fullness  [5+1];
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_overflow_pre  =(~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fullness  [5+1])&(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fullness  [5:0]>32);
     always @(  posedge    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_reset  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_reset  )
         begin
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_overflow   <=#11'b0;
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_underflow   <=#11'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_overflow   <=1'b0;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_underflow   <=1'b0;
         end
         else
             if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_ch_update  )
             begin
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_overflow   <=#11'b0;
-                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_underflow   <=#11'b0;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_overflow   <=1'b0;
+                dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_underflow   <=1'b0;
             end
             else
                 if ((!  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_overflow  )&(!  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_underflow  ))
                 begin
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_overflow   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_overflow_pre  ;
-                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_underflow   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_underflow_pre  ;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_overflow   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_overflow_pre  ;
+                    dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_underflow   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_underflow_pre  ;
                 end
 
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_clk;
@@ -9253,7 +9371,13 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_wr_clr_line = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_wr_clr_line;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_wr_next_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_wr_next_size;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_wr_burst_size = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_wr_burst_size;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_rd_ptr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_ptr;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_wr_ptr = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_wr_ptr;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_rd_line_remain = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_rd_line_remain;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_joint_delay = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_joint_delay;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_fifo_wr_ready = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_wr_ready;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_fifo_overflow = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_overflow;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_fifo_underflow = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_ptr_fifo_underflow;
 
 
     wire  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_CLK;
@@ -9263,7 +9387,7 @@ module dma_axi64_core0_top #(
     wire [5-3-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_RD_ADDR;
     wire [64-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_DIN;
     wire [8-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_BSEL;
-    reg [64-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_DOUT = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_DOUT;
+    reg [64-1:0] dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_DOUT;
 
     reg[64-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_Mem  [4-1:0];
     wire[64-1:0]  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_BitSEL  ;
@@ -9272,11 +9396,11 @@ module dma_axi64_core0_top #(
     assign   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_DIN_BitSEL  =(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_Mem  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_WR_ADDR  ]&~  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_BitSEL  )|(  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_DIN  &  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_BitSEL  );
     always @( posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_CLK  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_WR  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_Mem   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_WR_ADDR  ]<=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_DIN_BitSEL  ;
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_Mem   [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_WR_ADDR  ]<=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_DIN_BitSEL  ;
 
     always @( posedge   dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_CLK  )
         if (  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_RD  )
-            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_DOUT   <=#1  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_Mem  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_RD_ADDR  ];
+            dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_DOUT   <=  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_Mem  [  dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_RD_ADDR  ];
 
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_CLK = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_clk;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_WR = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_slice_wr_fifo;
@@ -9285,6 +9409,7 @@ module dma_axi64_core0_top #(
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_RD_ADDR = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_slice_rd_ptr[5-1:3];
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_DIN = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_slice_wdata;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_BSEL = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_slice_bsel;
+    assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_DOUT = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_dma_axi64_ch_fifo_DOUT;
 
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_clk = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_clk;
     assign dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_dma_axi64_ch_fifo_ctrl_reset = dma_axi64_core0_dma_axi64_core0_channels_dma_axi64_core0_ch0_reset;
