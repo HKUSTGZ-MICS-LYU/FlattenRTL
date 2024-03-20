@@ -167,7 +167,7 @@ endmodule
 
 ```
 
-## Limitations
+## Limitations and Features
 ### Module Declaration
 
 The module declaration should be follow the standard style below without any parameters:
@@ -181,4 +181,53 @@ module decl(a, b, c);
 
 Currently we don't support definitions and parameters.
 
+### Port Connection
 
+Ordered port connection, named port connection and no info at the rhs(right hand side) are not supported.
+
+```verilog
+//Ordered port connection
+
+```
+
+### Parameter Assignment
+
+The parameter assignment should follow:
+
+```verilog
+parameter A;
+parameter B;
+```
+
+The assignment below is not supported
+```verilog
+parameter A,B;
+```
+
+### Net Assignment
+
+The net assignment should follow:
+
+```verilog
+wire a;
+or
+wire a,b;
+```
+
+The assignment below is not supported
+```verilog
+wire a = [exp], b = [exp];
+```
+
+### Reg Assignment
+
+Same as net assignment
+
+
+### Duplication Declration
+
+The declration below is not supported
+```verilog
+module A(output X)
+wire X;
+```
