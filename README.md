@@ -187,7 +187,7 @@ Ordered port connection, named port connection and no info at the rhs(right hand
 
 ```verilog
 //Ordered port connection
-
+Ins ins(a,b,c)
 ```
 
 ### Parameter Assignment
