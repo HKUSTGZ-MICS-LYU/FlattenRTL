@@ -33,7 +33,7 @@
 //--
 //-- Source file: dma_core_top.v
 //---------------------------------------------------------
-
+// Fix missing module declaration and module instantiation in dma_axi64_core0_ch and dma_axi64_core0_ch_empty
 
 
 module dma_axi64_core0_top(clk,reset,scan_en,idle,ch_int_all_proc,ch_start,clkdiv,periph_tx_req,periph_tx_clr,periph_rx_req,periph_rx_clr,pclken,psel,penable,paddr,pwrite,pwdata,prdata,pslverr,pready,rd_port_num,wr_port_num,joint_mode,joint_remote,rd_prio_top,rd_prio_high,rd_prio_top_num,rd_prio_high_num,wr_prio_top,wr_prio_high,wr_prio_top_num,wr_prio_high_num,AWADDR,AWLEN,AWSIZE,AWVALID,AWREADY,WDATA,WSTRB,WLAST,WVALID,WREADY,BRESP,BVALID,BREADY,ARADDR,ARLEN,ARSIZE,ARVALID,ARREADY,RDATA,RRESP,RLAST,RVALID,RREADY);
@@ -5794,6 +5794,7 @@ dma_axi64_core0_ch dma_axi64_core0_ch0 (
             .wr_transfer_size(wr_transfer_size),
             .wr_next_size(wr_next_size),
                 .wr_clr_stall(ch_wr_clr_stall[0]),
+              .wr_incr(),
 
             .timeout_aw(ch_timeout_aw[0]),
             .timeout_w(ch_timeout_w[0]),
@@ -5909,6 +5910,7 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty1 (
             .wr_transfer_size(wr_transfer_size),
             .wr_next_size(wr_next_size),
                 .wr_clr_stall(ch_wr_clr_stall[1]),
+              .wr_incr(),
 
             .timeout_aw(ch_timeout_aw[1]),
             .timeout_w(ch_timeout_w[1]),
@@ -6024,6 +6026,7 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty2 (
             .wr_transfer_size(wr_transfer_size),
             .wr_next_size(wr_next_size),
                 .wr_clr_stall(ch_wr_clr_stall[2]),
+             .wr_incr(),
 
             .timeout_aw(ch_timeout_aw[2]),
             .timeout_w(ch_timeout_w[2]),
@@ -6139,6 +6142,7 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty3 (
             .wr_transfer_size(wr_transfer_size),
             .wr_next_size(wr_next_size),
                 .wr_clr_stall(ch_wr_clr_stall[3]),
+            .wr_incr(),
 
             .timeout_aw(ch_timeout_aw[3]),
             .timeout_w(ch_timeout_w[3]),
@@ -6254,6 +6258,7 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty4 (
             .wr_transfer_size(wr_transfer_size),
             .wr_next_size(wr_next_size),
                 .wr_clr_stall(ch_wr_clr_stall[4]),
+              .wr_incr(),
 
             .timeout_aw(ch_timeout_aw[4]),
             .timeout_w(ch_timeout_w[4]),
@@ -6369,6 +6374,7 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty5 (
             .wr_transfer_size(wr_transfer_size),
             .wr_next_size(wr_next_size),
                 .wr_clr_stall(ch_wr_clr_stall[5]),
+              .wr_incr(),
 
             .timeout_aw(ch_timeout_aw[5]),
             .timeout_w(ch_timeout_w[5]),
@@ -6484,6 +6490,7 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty6 (
             .wr_transfer_size(wr_transfer_size),
             .wr_next_size(wr_next_size),
                 .wr_clr_stall(ch_wr_clr_stall[6]),
+              .wr_incr(),
 
             .timeout_aw(ch_timeout_aw[6]),
             .timeout_w(ch_timeout_w[6]),
@@ -6599,6 +6606,7 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty7 (
             .wr_transfer_size(wr_transfer_size),
             .wr_next_size(wr_next_size),
                 .wr_clr_stall(ch_wr_clr_stall[7]),
+              .wr_incr(),
 
             .timeout_aw(ch_timeout_aw[7]),
             .timeout_w(ch_timeout_w[7]),
@@ -9978,6 +9986,7 @@ module dma_axi64_core0_axim_wr(clk,reset,wr_cmd_port,wr_last_cmd,wr_line_cmd,wr_
              .extra_bit(wr_last_cmd),
              .cmd_port(wr_cmd_port),
              .joint_req(joint_req),
+             .joint_pending(),
              .ch_num(wr_ch_num),
              .burst_start(wr_burst_start),
              .burst_addr(wr_burst_addr),

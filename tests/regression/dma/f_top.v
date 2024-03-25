@@ -1,4 +1,30 @@
-module dma_axi64_core0_top (
+module dma_axi64_core0_top #(
+parameter dma_axi64_core0_dma_axi64_core0_arbiter_rd_CH_LAST=1-1,
+parameter dma_axi64_core0_dma_axi64_core0_arbiter_wr_CH_LAST=1-1,
+parameter dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE=3'd0,
+parameter dma_axi64_core0_dma_axi64_core0_ctrl_rd_CMD=3'd1,
+parameter dma_axi64_core0_dma_axi64_core0_ctrl_rd_WAIT_CLR=3'd2,
+parameter dma_axi64_core0_dma_axi64_core0_ctrl_rd_WAIT_DELAY=3'd3,
+parameter dma_axi64_core0_dma_axi64_core0_ctrl_rd_STALL=3'd4,
+parameter dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE=3'd0,
+parameter dma_axi64_core0_dma_axi64_core0_ctrl_wr_CMD=3'd1,
+parameter dma_axi64_core0_dma_axi64_core0_ctrl_wr_WAIT_CLR=3'd2,
+parameter dma_axi64_core0_dma_axi64_core0_ctrl_wr_WAIT_DELAY=3'd3,
+parameter dma_axi64_core0_dma_axi64_core0_ctrl_wr_STALL=3'd4,
+parameter dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_DELAY=1,
+parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AXI_WORD_SIZE=0?2'b10:2'b11,
+parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AXI_3=0?2:3,
+parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_DELAY=1,
+parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_DELAY=1,
+parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_DELAY=1,
+parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_SIZE_BITS=4,
+parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_DELAY=2,
+parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_DELAY=1,
+parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_DELAY=1,
+parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_DELAY=1,
+parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_DELAY=1,
+parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_DELAY=1,
+parameter dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_DELAY=2) (
   input clk,
   input reset,
   input scan_en,
@@ -105,7 +131,1780 @@ module dma_axi64_core0_top (
   assign slow_RRESP=RRESP; 
   assign slow_RLAST=RLAST; 
   assign slow_RVALID=RVALID; 
-  dma_axi64_core0 dma_axi64_core0(.clk(clk_out),.reset(reset),.scan_en(scan_en),.idle(idle),.ch_int_all_proc(ch_int_all_proc),.ch_start(ch_start),.periph_tx_req(periph_tx_req),.periph_tx_clr(periph_tx_clr),.periph_rx_req(periph_rx_req),.periph_rx_clr(periph_rx_clr),.pclk(clk),.clken(clken),.pclken(pclken),.psel(psel),.penable(penable),.paddr(paddr[10:0]),.pwrite(pwrite),.pwdata(pwdata),.prdata(prdata),.pslverr(pslverr),.joint_mode_in(joint_mode),.joint_remote(joint_remote),.rd_prio_top(rd_prio_top),.rd_prio_high(rd_prio_high),.rd_prio_top_num(rd_prio_top_num),.rd_prio_high_num(rd_prio_high_num),.wr_prio_top(wr_prio_top),.wr_prio_high(wr_prio_high),.wr_prio_top_num(wr_prio_top_num),.wr_prio_high_num(wr_prio_high_num),.rd_port_num(rd_port_num),.wr_port_num(wr_port_num),.AWADDR(slow_AWADDR),.AWLEN(slow_AWLEN),.AWSIZE(slow_AWSIZE),.AWVALID(slow_AWVALID),.AWREADY(slow_AWREADY),.WDATA(slow_WDATA),.WSTRB(slow_WSTRB),.WLAST(slow_WLAST),.WVALID(slow_WVALID),.WREADY(slow_WREADY),.BRESP(slow_BRESP),.BVALID(slow_BVALID),.BREADY(slow_BREADY),.ARADDR(slow_ARADDR),.ARLEN(slow_ARLEN),.ARSIZE(slow_ARSIZE),.ARVALID(slow_ARVALID),.ARREADY(slow_ARREADY),.RDATA(slow_RDATA),.RRESP(slow_RRESP),.RLAST(slow_RLAST),.RVALID(slow_RVALID),.RREADY(slow_RREADY)); 
+  
+wire  dma_axi64_core0_clk;
+wire  dma_axi64_core0_reset;
+wire  dma_axi64_core0_scan_en;
+wire  dma_axi64_core0_idle;
+wire [8*1-1:0] dma_axi64_core0_ch_int_all_proc;
+wire [7:0] dma_axi64_core0_ch_start;
+wire [31:1] dma_axi64_core0_periph_tx_req;
+wire [31:1] dma_axi64_core0_periph_tx_clr;
+wire [31:1] dma_axi64_core0_periph_rx_req;
+wire [31:1] dma_axi64_core0_periph_rx_clr;
+wire  dma_axi64_core0_pclk;
+wire  dma_axi64_core0_clken;
+wire  dma_axi64_core0_pclken;
+wire  dma_axi64_core0_psel;
+wire  dma_axi64_core0_penable;
+wire [10:0] dma_axi64_core0_paddr;
+wire  dma_axi64_core0_pwrite;
+wire [31:0] dma_axi64_core0_pwdata;
+wire [31:0] dma_axi64_core0_prdata;
+wire  dma_axi64_core0_pslverr;
+wire  dma_axi64_core0_rd_port_num;
+wire  dma_axi64_core0_wr_port_num;
+wire  dma_axi64_core0_joint_mode_in;
+wire  dma_axi64_core0_joint_remote;
+wire  dma_axi64_core0_rd_prio_top;
+wire  dma_axi64_core0_rd_prio_high;
+wire [2:0] dma_axi64_core0_rd_prio_top_num;
+wire [2:0] dma_axi64_core0_rd_prio_high_num;
+wire  dma_axi64_core0_wr_prio_top;
+wire  dma_axi64_core0_wr_prio_high;
+wire [2:0] dma_axi64_core0_wr_prio_top_num;
+wire [2:0] dma_axi64_core0_wr_prio_high_num;
+wire [31:0] dma_axi64_core0_AWADDR;
+wire [4-1:0] dma_axi64_core0_AWLEN;
+wire [2-1:0] dma_axi64_core0_AWSIZE;
+wire  dma_axi64_core0_AWVALID;
+wire  dma_axi64_core0_AWREADY;
+wire [63:0] dma_axi64_core0_WDATA;
+wire [64/8-1:0] dma_axi64_core0_WSTRB;
+wire  dma_axi64_core0_WLAST;
+wire  dma_axi64_core0_WVALID;
+wire  dma_axi64_core0_WREADY;
+wire [1:0] dma_axi64_core0_BRESP;
+wire  dma_axi64_core0_BVALID;
+wire  dma_axi64_core0_BREADY;
+wire [31:0] dma_axi64_core0_ARADDR;
+wire [4-1:0] dma_axi64_core0_ARLEN;
+wire [2-1:0] dma_axi64_core0_ARSIZE;
+wire  dma_axi64_core0_ARVALID;
+wire  dma_axi64_core0_ARREADY;
+wire [63:0] dma_axi64_core0_RDATA;
+wire [1:0] dma_axi64_core0_RRESP;
+wire  dma_axi64_core0_RLAST;
+wire  dma_axi64_core0_RVALID;
+wire  dma_axi64_core0_RREADY;
+ 
+   wire  dma_axi64_core0_wdt_timeout  ; 
+   wire[2:0]  dma_axi64_core0_wdt_ch_num  ; 
+   wire  dma_axi64_core0_rd_ch_go_joint  ; 
+   wire  dma_axi64_core0_rd_ch_go_null  ; 
+   wire  dma_axi64_core0_rd_ch_go  ; 
+   wire[2:0]  dma_axi64_core0_rd_ch_num  ; 
+   wire  dma_axi64_core0_rd_ch_last  ; 
+   wire  dma_axi64_core0_wr_ch_go_joint  ; 
+   wire  dma_axi64_core0_wr_ch_go  ; 
+   wire[2:0]  dma_axi64_core0_wr_ch_num_joint  ; 
+   wire[2:0]  dma_axi64_core0_wr_ch_num  ; 
+   wire  dma_axi64_core0_wr_ch_last  ; 
+   wire  dma_axi64_core0_wr_ch_last_joint  ; 
+   wire  dma_axi64_core0_load_req_in_prog  ; 
+   wire[7:0]  dma_axi64_core0_ch_idle  ; 
+   wire[7:0]  dma_axi64_core0_ch_active  ; 
+   wire[7:0]  dma_axi64_core0_ch_active_joint  ; 
+   wire[7:0]  dma_axi64_core0_ch_rd_active  ; 
+   wire[7:0]  dma_axi64_core0_ch_wr_active  ; 
+   wire  dma_axi64_core0_wr_last_cmd  ; 
+   wire  dma_axi64_core0_rd_line_cmd  ; 
+   wire  dma_axi64_core0_wr_line_cmd  ; 
+   wire  dma_axi64_core0_rd_go_next_line  ; 
+   wire  dma_axi64_core0_wr_go_next_line  ; 
+   wire[7:0]  dma_axi64_core0_ch_rd_ready_joint  ; 
+   wire[7:0]  dma_axi64_core0_ch_rd_ready  ; 
+   wire  dma_axi64_core0_rd_ready  ; 
+   wire  dma_axi64_core0_rd_ready_joint  ; 
+   wire[32-1:0]  dma_axi64_core0_rd_burst_addr  ; 
+   wire[8-1:0]  dma_axi64_core0_rd_burst_size  ; 
+   wire[6-1:0]  dma_axi64_core0_rd_tokens  ; 
+   wire[3-1:0]  dma_axi64_core0_rd_periph_delay  ; 
+   wire  dma_axi64_core0_rd_clr_valid  ; 
+   wire[2:0]  dma_axi64_core0_rd_transfer_num  ; 
+   wire  dma_axi64_core0_rd_transfer  ; 
+   wire[4-1:0]  dma_axi64_core0_rd_transfer_size  ; 
+   wire  dma_axi64_core0_rd_clr_stall  ; 
+   wire[7:0]  dma_axi64_core0_ch_wr_ready  ; 
+   wire  dma_axi64_core0_wr_ready  ; 
+   wire  dma_axi64_core0_wr_ready_joint  ; 
+   wire[32-1:0]  dma_axi64_core0_wr_burst_addr  ; 
+   wire[8-1:0]  dma_axi64_core0_wr_burst_size  ; 
+   wire[6-1:0]  dma_axi64_core0_wr_tokens  ; 
+   wire[3-1:0]  dma_axi64_core0_wr_periph_delay  ; 
+   wire  dma_axi64_core0_wr_clr_valid  ; 
+   wire  dma_axi64_core0_wr_clr_stall  ; 
+   wire[7:0]  dma_axi64_core0_ch_joint_req  ; 
+   wire  dma_axi64_core0_joint_req  ; 
+   wire  dma_axi64_core0_joint_mode  ; 
+   wire  dma_axi64_core0_joint_ch_go  ; 
+   wire  dma_axi64_core0_joint_stall  ; 
+   wire  dma_axi64_core0_rd_burst_start  ; 
+   wire  dma_axi64_core0_rd_finish_joint  ; 
+   wire  dma_axi64_core0_rd_finish  ; 
+   wire  dma_axi64_core0_rd_ctrl_busy  ; 
+   wire  dma_axi64_core0_wr_burst_start_joint  ; 
+   wire  dma_axi64_core0_wr_burst_start  ; 
+   wire  dma_axi64_core0_wr_finish  ; 
+   wire  dma_axi64_core0_wr_ctrl_busy  ; 
+   wire  dma_axi64_core0_wr_cmd_split  ; 
+   wire[2:0]  dma_axi64_core0_wr_cmd_num  ; 
+   wire  dma_axi64_core0_wr_cmd_pending_joint  ; 
+   wire  dma_axi64_core0_wr_cmd_pending  ; 
+   wire  dma_axi64_core0_wr_cmd_full_joint  ; 
+   wire  dma_axi64_core0_ch_fifo_rd  ; 
+   wire[4-1:0]  dma_axi64_core0_ch_fifo_rsize  ; 
+   wire[2:0]  dma_axi64_core0_ch_fifo_rd_num  ; 
+   wire[2:0]  dma_axi64_core0_wr_transfer_num  ; 
+   wire  dma_axi64_core0_wr_transfer  ; 
+   wire[4-1:0]  dma_axi64_core0_wr_transfer_size  ; 
+   wire[4-1:0]  dma_axi64_core0_wr_next_size  ; 
+   wire  dma_axi64_core0_wr_clr_line  ; 
+   wire[2:0]  dma_axi64_core0_wr_clr_line_num  ; 
+   wire  dma_axi64_core0_wr_cmd_full  ; 
+   wire  dma_axi64_core0_wr_slverr  ; 
+   wire  dma_axi64_core0_wr_decerr  ; 
+   wire  dma_axi64_core0_wr_clr  ; 
+   wire  dma_axi64_core0_wr_clr_last  ; 
+   wire[2:0]  dma_axi64_core0_wr_ch_num_resp  ; 
+   wire  dma_axi64_core0_timeout_aw  ; 
+   wire  dma_axi64_core0_timeout_w  ; 
+   wire[2:0]  dma_axi64_core0_timeout_num_aw  ; 
+   wire[2:0]  dma_axi64_core0_timeout_num_w  ; 
+   wire  dma_axi64_core0_wr_hold_ctrl  ; 
+   wire  dma_axi64_core0_wr_hold  ; 
+   wire  dma_axi64_core0_joint_in_prog  ; 
+   wire  dma_axi64_core0_joint_not_in_prog  ; 
+   wire  dma_axi64_core0_joint_mux_in_prog  ; 
+   wire  dma_axi64_core0_wr_page_cross  ; 
+   wire  dma_axi64_core0_load_wr  ; 
+   wire[2:0]  dma_axi64_core0_load_wr_num  ; 
+   wire[1:0]  dma_axi64_core0_load_wr_cycle  ; 
+   wire[64-1:0]  dma_axi64_core0_load_wdata  ; 
+   wire  dma_axi64_core0_rd_cmd_split  ; 
+   wire  dma_axi64_core0_rd_cmd_line  ; 
+   wire[2:0]  dma_axi64_core0_rd_cmd_num  ; 
+   wire  dma_axi64_core0_rd_cmd_pending_joint  ; 
+   wire  dma_axi64_core0_rd_cmd_pending  ; 
+   wire  dma_axi64_core0_rd_cmd_full_joint  ; 
+   wire  dma_axi64_core0_ch_fifo_wr  ; 
+   wire[64-1:0]  dma_axi64_core0_ch_fifo_wdata  ; 
+   wire[4-1:0]  dma_axi64_core0_ch_fifo_wsize  ; 
+   wire[2:0]  dma_axi64_core0_ch_fifo_wr_num  ; 
+   wire  dma_axi64_core0_rd_clr_line  ; 
+   wire[2:0]  dma_axi64_core0_rd_clr_line_num  ; 
+   wire  dma_axi64_core0_rd_burst_cmd  ; 
+   wire  dma_axi64_core0_rd_cmd_full  ; 
+   wire  dma_axi64_core0_rd_slverr  ; 
+   wire  dma_axi64_core0_rd_decerr  ; 
+   wire  dma_axi64_core0_rd_clr  ; 
+   wire  dma_axi64_core0_rd_clr_last  ; 
+   wire  dma_axi64_core0_rd_clr_load  ; 
+   wire[2:0]  dma_axi64_core0_rd_ch_num_resp  ; 
+   wire  dma_axi64_core0_timeout_ar  ; 
+   wire[2:0]  dma_axi64_core0_timeout_num_ar  ; 
+   wire  dma_axi64_core0_rd_hold_joint  ; 
+   wire  dma_axi64_core0_rd_hold_ctrl  ; 
+   wire  dma_axi64_core0_rd_hold  ; 
+   wire  dma_axi64_core0_joint_hold  ; 
+   wire  dma_axi64_core0_rd_page_cross  ; 
+   wire  dma_axi64_core0_joint_page_cross  ; 
+   wire  dma_axi64_core0_rd_arbiter_en  ; 
+   wire  dma_axi64_core0_wr_arbiter_en  ; 
+   wire  dma_axi64_core0_rd_cmd_port  ; 
+   wire  dma_axi64_core0_wr_cmd_port  ; 
+   wire[64-1:0]  dma_axi64_core0_ch_fifo_rdata  ; 
+   wire  dma_axi64_core0_ch_fifo_rd_valid  ; 
+   wire  dma_axi64_core0_ch_fifo_wr_ready  ; 
+   wire  dma_axi64_core0_FIFO_WR  ; 
+   wire  dma_axi64_core0_FIFO_RD  ; 
+   wire[3+5-3-1:0]  dma_axi64_core0_FIFO_WR_ADDR  ; 
+   wire[3+5-3-1:0]  dma_axi64_core0_FIFO_RD_ADDR  ; 
+   wire[64-1:0]  dma_axi64_core0_FIFO_DIN  ; 
+   wire[8-1:0]  dma_axi64_core0_FIFO_BSEL  ; 
+   wire[64-1:0]  dma_axi64_core0_FIFO_DOUT  ; 
+   wire  dma_axi64_core0_clk_en  ; 
+   wire  dma_axi64_core0_gclk  ; 
+  assign   dma_axi64_core0_joint_mode  =  dma_axi64_core0_joint_mode_in  &1'b1; 
+  assign   dma_axi64_core0_rd_arbiter_en  =1'b1; 
+  assign   dma_axi64_core0_wr_arbiter_en  =!  dma_axi64_core0_joint_mode  ; 
+  assign   dma_axi64_core0_rd_ready  =  dma_axi64_core0_ch_rd_ready  [  dma_axi64_core0_rd_ch_num  ]; 
+  assign   dma_axi64_core0_wr_ready  =  dma_axi64_core0_ch_wr_ready  [  dma_axi64_core0_wr_ch_num_joint  ]; 
+  assign   dma_axi64_core0_rd_ready_joint  =  dma_axi64_core0_joint_mode  &  dma_axi64_core0_joint_req   ?   dma_axi64_core0_rd_ready  &  dma_axi64_core0_wr_ready  :  dma_axi64_core0_rd_ready  ; 
+  assign   dma_axi64_core0_wr_ready_joint  =  dma_axi64_core0_joint_mode  &  dma_axi64_core0_joint_req   ?   dma_axi64_core0_rd_ready  &  dma_axi64_core0_wr_ready  :  dma_axi64_core0_wr_ready  ; 
+  assign   dma_axi64_core0_ch_active_joint  =  dma_axi64_core0_joint_mode   ?   dma_axi64_core0_ch_rd_active  |  dma_axi64_core0_ch_wr_active  :  dma_axi64_core0_ch_rd_active  ; 
+  assign   dma_axi64_core0_joint_page_cross  =(  dma_axi64_core0_rd_page_cross  &  dma_axi64_core0_rd_ready  )|(  dma_axi64_core0_wr_page_cross  &  dma_axi64_core0_wr_ready  ); 
+  assign   dma_axi64_core0_joint_req  =  dma_axi64_core0_ch_joint_req  [  dma_axi64_core0_rd_ch_num  ]; 
+  assign   dma_axi64_core0_ch_rd_ready_joint  =  dma_axi64_core0_joint_mode   ? (  dma_axi64_core0_ch_joint_req  &  dma_axi64_core0_ch_rd_ready  &  dma_axi64_core0_ch_wr_ready  )|((~  dma_axi64_core0_ch_joint_req  )&(  dma_axi64_core0_ch_rd_ready  |  dma_axi64_core0_ch_wr_ready  )):  dma_axi64_core0_ch_rd_ready  ; 
+  assign   dma_axi64_core0_wr_burst_start_joint  =  dma_axi64_core0_joint_mode  &  dma_axi64_core0_joint_req   ?   dma_axi64_core0_rd_burst_start  :  dma_axi64_core0_wr_burst_start  ; 
+  assign   dma_axi64_core0_joint_hold  =  dma_axi64_core0_joint_mux_in_prog  |(  dma_axi64_core0_joint_in_prog  &(~  dma_axi64_core0_joint_req  ))|(  dma_axi64_core0_joint_not_in_prog  &  dma_axi64_core0_joint_req  )|  dma_axi64_core0_joint_stall  |(  dma_axi64_core0_joint_req  &  dma_axi64_core0_joint_page_cross  ); 
+  assign   dma_axi64_core0_rd_hold_ctrl  =  dma_axi64_core0_joint_mode   ?   dma_axi64_core0_rd_hold  |  dma_axi64_core0_joint_hold  |(  dma_axi64_core0_joint_in_prog  &  dma_axi64_core0_wr_hold  ):  dma_axi64_core0_rd_hold  ; 
+  assign   dma_axi64_core0_rd_hold_joint  =  dma_axi64_core0_joint_mode  &(  dma_axi64_core0_rd_hold_ctrl  |  dma_axi64_core0_rd_ctrl_busy  |  dma_axi64_core0_wr_ctrl_busy  ); 
+  assign   dma_axi64_core0_wr_hold_ctrl  =  dma_axi64_core0_joint_mode  &(  dma_axi64_core0_joint_req  |  dma_axi64_core0_joint_in_prog  ) ?   dma_axi64_core0_wr_hold  |  dma_axi64_core0_joint_hold  :  dma_axi64_core0_wr_hold  ; 
+  assign   dma_axi64_core0_rd_ch_go_joint  =  dma_axi64_core0_rd_ch_go  &  dma_axi64_core0_ch_rd_ready  [  dma_axi64_core0_rd_ch_num  ]&(~  dma_axi64_core0_rd_ctrl_busy  ); 
+  assign   dma_axi64_core0_wr_ch_go_joint  =  dma_axi64_core0_joint_mode   ? (  dma_axi64_core0_wr_ready  &(~  dma_axi64_core0_wr_ctrl_busy  )&(  dma_axi64_core0_joint_req   ?   dma_axi64_core0_rd_ch_go_joint  :  dma_axi64_core0_rd_ch_go  &(~  dma_axi64_core0_rd_ch_go_joint  ))):  dma_axi64_core0_wr_ch_go  ; 
+  assign   dma_axi64_core0_rd_ch_go_null  =  dma_axi64_core0_rd_ch_go  &(~  dma_axi64_core0_rd_ch_go_joint  )&(  dma_axi64_core0_joint_mode   ? (~  dma_axi64_core0_wr_ch_go_joint  ):1'b1); 
+  assign   dma_axi64_core0_wr_ch_num_joint  =  dma_axi64_core0_joint_mode   ?   dma_axi64_core0_rd_ch_num  :  dma_axi64_core0_wr_ch_num  ; 
+  assign   dma_axi64_core0_wr_ch_last_joint  =  dma_axi64_core0_joint_mode   ?   dma_axi64_core0_rd_ch_last  :  dma_axi64_core0_wr_ch_last  ; 
+  assign   dma_axi64_core0_rd_finish_joint  =  dma_axi64_core0_joint_mode   ?   dma_axi64_core0_rd_finish  |  dma_axi64_core0_wr_finish  |  dma_axi64_core0_rd_ch_go_null  :  dma_axi64_core0_rd_finish  |  dma_axi64_core0_rd_ch_go_null  ; 
+  assign   dma_axi64_core0_rd_cmd_full_joint  =  dma_axi64_core0_joint_mode  &  dma_axi64_core0_joint_req   ?   dma_axi64_core0_wr_cmd_full  |  dma_axi64_core0_rd_cmd_full  :  dma_axi64_core0_rd_cmd_full  ; 
+  assign   dma_axi64_core0_wr_cmd_full_joint  =  dma_axi64_core0_joint_mode  &  dma_axi64_core0_joint_req   ?   dma_axi64_core0_wr_cmd_full  |  dma_axi64_core0_rd_cmd_full  :  dma_axi64_core0_wr_cmd_full  ; 
+  assign   dma_axi64_core0_rd_cmd_pending_joint  =  dma_axi64_core0_joint_mode   ?   dma_axi64_core0_rd_cmd_pending  |  dma_axi64_core0_wr_cmd_pending  :  dma_axi64_core0_rd_cmd_pending  ; 
+  assign   dma_axi64_core0_wr_cmd_pending_joint  =  dma_axi64_core0_joint_mode  &  dma_axi64_core0_joint_req   ?   dma_axi64_core0_rd_cmd_pending  |  dma_axi64_core0_wr_cmd_pending  :  dma_axi64_core0_wr_cmd_pending  ; 
+  assign   dma_axi64_core0_idle  =&  dma_axi64_core0_ch_idle  ; 
+  assign   dma_axi64_core0_gclk  =  dma_axi64_core0_clk  ;  
+  
+wire  dma_axi64_core0_dma_axi64_core0_wdt_clk;
+wire  dma_axi64_core0_dma_axi64_core0_wdt_reset;
+wire [7:0] dma_axi64_core0_dma_axi64_core0_wdt_ch_active;
+wire  dma_axi64_core0_dma_axi64_core0_wdt_rd_burst_start;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_wdt_rd_ch_num;
+wire  dma_axi64_core0_dma_axi64_core0_wdt_wr_burst_start;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_wdt_wr_ch_num;
+wire  dma_axi64_core0_dma_axi64_core0_wdt_wdt_timeout;
+reg [2:0] dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num;
+ 
+   reg[11-1:0]  dma_axi64_core0_dma_axi64_core0_wdt_counter  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_wdt_current_ch_active  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_wdt_current_burst_start  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_wdt_advance  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_wdt_idle  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_wdt_idle  =  dma_axi64_core0_dma_axi64_core0_wdt_ch_active  ==8'd0; 
+  assign   dma_axi64_core0_dma_axi64_core0_wdt_current_ch_active  =  dma_axi64_core0_dma_axi64_core0_wdt_ch_active  [  dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num  ]; 
+  assign   dma_axi64_core0_dma_axi64_core0_wdt_current_burst_start  =(  dma_axi64_core0_dma_axi64_core0_wdt_rd_burst_start  &(  dma_axi64_core0_dma_axi64_core0_wdt_rd_ch_num  ==  dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num  ))|(  dma_axi64_core0_dma_axi64_core0_wdt_wr_burst_start  &(  dma_axi64_core0_dma_axi64_core0_wdt_wr_ch_num  ==  dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num  )); 
+  assign   dma_axi64_core0_dma_axi64_core0_wdt_advance  =(!  dma_axi64_core0_dma_axi64_core0_wdt_current_ch_active  )|  dma_axi64_core0_dma_axi64_core0_wdt_current_burst_start  |  dma_axi64_core0_dma_axi64_core0_wdt_wdt_timeout  ; 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_wdt_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_wdt_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_wdt_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num   <=3'd0;
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_wdt_advance  ) 
+              dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num   <=  dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num  +1'b1;
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_wdt_wdt_timeout  =(  dma_axi64_core0_dma_axi64_core0_wdt_counter  =='d0); 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_wdt_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_wdt_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_wdt_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_wdt_counter   <={11{1'b1}};
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_wdt_advance  |  dma_axi64_core0_dma_axi64_core0_wdt_idle  ) 
+              dma_axi64_core0_dma_axi64_core0_wdt_counter   <={11{1'b1}};
+           else  
+              dma_axi64_core0_dma_axi64_core0_wdt_counter   <=  dma_axi64_core0_dma_axi64_core0_wdt_counter  -1'b1;
+
+assign dma_axi64_core0_dma_axi64_core0_wdt_clk = dma_axi64_core0_gclk;
+assign dma_axi64_core0_dma_axi64_core0_wdt_reset = dma_axi64_core0_reset;
+assign dma_axi64_core0_dma_axi64_core0_wdt_ch_active = dma_axi64_core0_ch_active;
+assign dma_axi64_core0_dma_axi64_core0_wdt_rd_burst_start = dma_axi64_core0_rd_burst_start;
+assign dma_axi64_core0_dma_axi64_core0_wdt_rd_ch_num = dma_axi64_core0_rd_ch_num;
+assign dma_axi64_core0_dma_axi64_core0_wdt_wr_burst_start = dma_axi64_core0_wr_burst_start_joint;
+assign dma_axi64_core0_dma_axi64_core0_wdt_wr_ch_num = dma_axi64_core0_wr_ch_num_joint;
+assign dma_axi64_core0_wdt_timeout = dma_axi64_core0_dma_axi64_core0_wdt_wdt_timeout;
+assign dma_axi64_core0_wdt_ch_num = dma_axi64_core0_dma_axi64_core0_wdt_wdt_ch_num;
+  
+  
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_clk;
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_reset;
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_enable;
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_joint_mode;
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_page_cross;
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_joint_req;
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_prio_top;
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_prio_high;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_arbiter_rd_prio_top_num;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_arbiter_rd_prio_high_num;
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_hold;
+wire [7:0] dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_ready;
+wire [7:0] dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_active;
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_finish;
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go_out;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_num;
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_last;
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_clk;
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_reset;
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_enable;
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_joint_mode;
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_page_cross;
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_joint_req;
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_prio_top;
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_prio_high;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_arbiter_wr_prio_top_num;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_arbiter_wr_prio_high_num;
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_hold;
+wire [7:0] dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_ready;
+wire [7:0] dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_active;
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_finish;
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go_out;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_num;
+wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_last;
+ 
+   reg[7:0]  dma_axi64_core0_dma_axi64_core0_arbiter_rd_current_active  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_current_ready_only  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_last_pre  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ready  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_next_ready  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_next_ready0  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_next_ready1  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_prio_top_ready  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_prio_high_ready  ; 
+   reg  dma_axi64_core0_dma_axi64_core0_arbiter_rd_in_prog  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go_pre  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go_pre_d  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go_top_pre  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go_high_pre  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go_d  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go_top  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go_high  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go_next  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_hold_d  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_rd_advance_next  ; 
+   wire[2:0]  dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_num_pre  ; 
+   wire[3:0]  dma_axi64_core0_dma_axi64_core0_arbiter_rd_next_ch_num0_pre  ; 
+   wire[3:0]  dma_axi64_core0_dma_axi64_core0_arbiter_rd_next_ch_num0_pre2  ; 
+   wire[2:0]  dma_axi64_core0_dma_axi64_core0_arbiter_rd_next_ch_num0  ; 
+   wire[3:0]  dma_axi64_core0_dma_axi64_core0_arbiter_rd_next_ch_num1_pre  ; 
+   wire[3:0]  dma_axi64_core0_dma_axi64_core0_arbiter_rd_next_ch_num1_pre2  ; 
+   wire[2:0]  dma_axi64_core0_dma_axi64_core0_arbiter_rd_next_ch_num1  ; 
+   wire[2:0]  dma_axi64_core0_dma_axi64_core0_arbiter_rd_next_ch_num_pre  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go_out  ='d1; 
+  assign   dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_num  ='d0; 
+  assign   dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_last  ='d1;
+  
+  
+ 
+   reg[7:0]  dma_axi64_core0_dma_axi64_core0_arbiter_wr_current_active  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_current_ready_only  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_last_pre  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ready  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_next_ready  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_next_ready0  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_next_ready1  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_prio_top_ready  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_prio_high_ready  ; 
+   reg  dma_axi64_core0_dma_axi64_core0_arbiter_wr_in_prog  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go_pre  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go_pre_d  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go_top_pre  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go_high_pre  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go_d  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go_top  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go_high  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go_next  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_hold_d  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_arbiter_wr_advance_next  ; 
+   wire[2:0]  dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_num_pre  ; 
+   wire[3:0]  dma_axi64_core0_dma_axi64_core0_arbiter_wr_next_ch_num0_pre  ; 
+   wire[3:0]  dma_axi64_core0_dma_axi64_core0_arbiter_wr_next_ch_num0_pre2  ; 
+   wire[2:0]  dma_axi64_core0_dma_axi64_core0_arbiter_wr_next_ch_num0  ; 
+   wire[3:0]  dma_axi64_core0_dma_axi64_core0_arbiter_wr_next_ch_num1_pre  ; 
+   wire[3:0]  dma_axi64_core0_dma_axi64_core0_arbiter_wr_next_ch_num1_pre2  ; 
+   wire[2:0]  dma_axi64_core0_dma_axi64_core0_arbiter_wr_next_ch_num1  ; 
+   wire[2:0]  dma_axi64_core0_dma_axi64_core0_arbiter_wr_next_ch_num_pre  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go_out  ='d1; 
+  assign   dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_num  ='d0; 
+  assign   dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_last  ='d1;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_clk = dma_axi64_core0_gclk;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_reset = dma_axi64_core0_reset;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_enable = dma_axi64_core0_rd_arbiter_en;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_joint_mode = dma_axi64_core0_joint_mode;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_page_cross = dma_axi64_core0_joint_page_cross;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_joint_req = dma_axi64_core0_joint_req;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_prio_top = dma_axi64_core0_rd_prio_top;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_prio_high = dma_axi64_core0_rd_prio_high;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_prio_top_num = dma_axi64_core0_rd_prio_top_num;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_prio_high_num = dma_axi64_core0_rd_prio_high_num;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_hold = dma_axi64_core0_rd_hold_joint;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_ready = dma_axi64_core0_ch_rd_ready_joint;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_active = dma_axi64_core0_ch_active_joint;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_rd_finish = dma_axi64_core0_rd_finish_joint;
+assign dma_axi64_core0_rd_ch_go = dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_go_out;
+assign dma_axi64_core0_rd_ch_num = dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_num;
+assign dma_axi64_core0_rd_ch_last = dma_axi64_core0_dma_axi64_core0_arbiter_rd_ch_last;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_clk = dma_axi64_core0_gclk;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_reset = dma_axi64_core0_reset;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_enable = dma_axi64_core0_wr_arbiter_en;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_joint_mode = dma_axi64_core0_joint_mode;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_page_cross = 1'b0;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_joint_req = dma_axi64_core0_joint_req;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_prio_top = dma_axi64_core0_wr_prio_top;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_prio_high = dma_axi64_core0_wr_prio_high;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_prio_top_num = dma_axi64_core0_wr_prio_top_num;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_prio_high_num = dma_axi64_core0_wr_prio_high_num;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_hold = 1'b0;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_ready = dma_axi64_core0_ch_wr_ready;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_active = dma_axi64_core0_ch_wr_active;
+assign dma_axi64_core0_dma_axi64_core0_arbiter_wr_finish = dma_axi64_core0_wr_finish;
+assign dma_axi64_core0_wr_ch_go = dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_go_out;
+assign dma_axi64_core0_wr_ch_num = dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_num;
+assign dma_axi64_core0_wr_ch_last = dma_axi64_core0_dma_axi64_core0_arbiter_wr_ch_last;
+  
+  
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_clk;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_go;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_cmd_full;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_cmd_pending;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_req;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_num;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_num_resp;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_go_next_line;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_valid;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_last;
+wire [3-1:0] dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_delay;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_clr_stall;
+wire [6-1:0] dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_ready;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_last;
+reg  dma_axi64_core0_dma_axi64_core0_ctrl_rd_burst_start;
+reg  dma_axi64_core0_dma_axi64_core0_ctrl_rd_finish;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_busy;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_hold;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_clk;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_go;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_cmd_full;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_cmd_pending;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_req;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_num;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_num_resp;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_go_next_line;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_valid;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_last;
+wire [3-1:0] dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_delay;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_clr_stall;
+wire [6-1:0] dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_ready;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_last;
+reg  dma_axi64_core0_dma_axi64_core0_ctrl_wr_burst_start;
+reg  dma_axi64_core0_dma_axi64_core0_ctrl_wr_finish;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_busy;
+wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_hold;
+ 
+   wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_remain  ; 
+   reg  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_remain_reg  ; 
+   reg[6-1:0]  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_stall  ; 
+   reg  dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl_reg  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl  ; 
+   reg[3-1:0]  dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_ch  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_last_ch  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_ctrl_rd_go_next_line_d  ; 
+   reg[2:0]  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ps  ; 
+   reg[2:0]  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_ctrl_rd_busy  =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ps  !=  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_ch  =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_valid  &  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr  &(  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_num  ==  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_num_resp  ); 
+  assign   dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_last_ch  =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_valid  &  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_last  &(  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_num  ==  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_num_resp  ); 
+  assign   dma_axi64_core0_dma_axi64_core0_ctrl_rd_go_next_line_d  =1'b0; 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl_reg   <=1'b0;
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_finish  ) 
+              dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl_reg   <=1'b0;
+           else 
+             if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_go  ) 
+                 dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl_reg   <=  dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_req  ;
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl  =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl_reg  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_remain  =(|  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter  )|  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_last  ; 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter   <={6{1'b0}};
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_go  ) 
+              dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter   <=  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens  ;
+           else 
+             if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_burst_start  &(|  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter  )) 
+                 dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter   <=  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_counter  -1'b1;
+ 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter   <={3{1'b0}};
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_ch  ) 
+              dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter   <=  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_delay  ;
+           else 
+             if (|  dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter  ) 
+                 dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter   <=  dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter  -1'b1;
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_ctrl_rd_stall  =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_cmd_pending  |  dma_axi64_core0_dma_axi64_core0_ctrl_rd_cmd_full  |  dma_axi64_core0_dma_axi64_core0_ctrl_rd_go_next_line_d  ; 
+  always @(                  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_go                                        or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_last                        or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_ready                       or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_clr_stall                      or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter                     or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_go_next_line_d                    or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_hold                   or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl                  or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_req                 or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_ch                or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_last_ch               or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_valid              or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_delay             or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_ps            or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_stall           or    dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_remain   )
+       begin  
+          dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ; 
+          dma_axi64_core0_dma_axi64_core0_ctrl_rd_burst_start   =1'b0; 
+          dma_axi64_core0_dma_axi64_core0_ctrl_rd_finish   =1'b0;
+         case (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ps  ) 
+           dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE   :
+             begin 
+               if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_go  )
+                  begin 
+                    if (!  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_ready  )
+                       begin  
+                          dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ; 
+                          dma_axi64_core0_dma_axi64_core0_ctrl_rd_finish   =1'b1;
+                       end 
+                     else 
+                       if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_stall  ) 
+                           dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_STALL  ;
+                        else  
+                           dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_CMD  ;
+                  end 
+                else  
+                   dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ;
+             end  
+           dma_axi64_core0_dma_axi64_core0_ctrl_rd_CMD   :
+             begin 
+               if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_req  ^  dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_ctrl  )
+                  begin  
+                     dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ; 
+                     dma_axi64_core0_dma_axi64_core0_ctrl_rd_finish   =1'b1;
+                  end 
+                else 
+                  if ((  dma_axi64_core0_dma_axi64_core0_ctrl_rd_clr_stall  |  dma_axi64_core0_dma_axi64_core0_ctrl_rd_hold  )&  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_remain  ) 
+                      dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_CMD  ;
+                   else 
+                     if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_ready  &  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_remain  )
+                        begin 
+                          if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_stall  ) 
+                              dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_STALL  ;
+                           else 
+                             begin  
+                                dma_axi64_core0_dma_axi64_core0_ctrl_rd_burst_start   =1'b1; 
+                                dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_WAIT_CLR  ;
+                             end 
+                        end 
+                      else 
+                        if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_last  &(~  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_ready  )) 
+                            dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_CMD  ;
+                         else 
+                           begin  
+                              dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ; 
+                              dma_axi64_core0_dma_axi64_core0_ctrl_rd_finish   =1'b1;
+                           end 
+             end  
+           dma_axi64_core0_dma_axi64_core0_ctrl_rd_WAIT_CLR   :
+             begin 
+               if ((|  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_delay  )&  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_valid  )
+                  begin 
+                    if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_last_ch  )
+                       begin  
+                          dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ; 
+                          dma_axi64_core0_dma_axi64_core0_ctrl_rd_finish   =1'b1;
+                       end 
+                     else 
+                       if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_ch  ) 
+                           dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_WAIT_DELAY  ;
+                        else  
+                           dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_WAIT_CLR  ;
+                  end 
+                else 
+                  if (!  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_remain  )
+                     begin  
+                        dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ; 
+                        dma_axi64_core0_dma_axi64_core0_ctrl_rd_finish   =1'b1;
+                     end 
+                   else  
+                      dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_WAIT_DELAY  ;
+             end  
+           dma_axi64_core0_dma_axi64_core0_ctrl_rd_WAIT_DELAY   :
+             begin 
+               if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_go_next_line_d  ) 
+                   dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_WAIT_DELAY  ;
+                else 
+                  if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_delay_counter  =='d0) 
+                      dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_STALL  ;
+                   else  
+                      dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_WAIT_DELAY  ;
+             end  
+           dma_axi64_core0_dma_axi64_core0_ctrl_rd_STALL   :
+             begin 
+               if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_ready  &  dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens_remain  )
+                  begin 
+                    if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_stall  ) 
+                        dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_STALL  ;
+                     else  
+                        dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_CMD  ;
+                  end 
+                else 
+                  if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_last  &(~  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_ready  )) 
+                      dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_CMD  ;
+                   else 
+                     begin  
+                        dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ; 
+                        dma_axi64_core0_dma_axi64_core0_ctrl_rd_finish   =1'b1;
+                     end 
+             end 
+          default :
+             begin  
+                dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ;
+             end 
+         endcase 
+       end
+  
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_ctrl_rd_ps   <=  dma_axi64_core0_dma_axi64_core0_ctrl_rd_IDLE  ;
+        else  
+           dma_axi64_core0_dma_axi64_core0_ctrl_rd_ps   <=  dma_axi64_core0_dma_axi64_core0_ctrl_rd_ns  ;
+
+  
+  
+ 
+   wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_remain  ; 
+   reg  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_remain_reg  ; 
+   reg[6-1:0]  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_stall  ; 
+   reg  dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl_reg  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl  ; 
+   reg[3-1:0]  dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_ch  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_last_ch  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_ctrl_wr_go_next_line_d  ; 
+   reg[2:0]  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ps  ; 
+   reg[2:0]  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_ctrl_wr_busy  =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ps  !=  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_ch  =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_valid  &  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr  &(  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_num  ==  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_num_resp  ); 
+  assign   dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_last_ch  =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_valid  &  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_last  &(  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_num  ==  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_num_resp  ); 
+  assign   dma_axi64_core0_dma_axi64_core0_ctrl_wr_go_next_line_d  =1'b0; 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_wr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl_reg   <=1'b0;
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_finish  ) 
+              dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl_reg   <=1'b0;
+           else 
+             if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_go  ) 
+                 dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl_reg   <=  dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_req  ;
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl  =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl_reg  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_remain  =(|  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter  )|  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_last  ; 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_wr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter   <={6{1'b0}};
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_go  ) 
+              dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter   <=  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens  ;
+           else 
+             if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_burst_start  &(|  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter  )) 
+                 dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter   <=  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_counter  -1'b1;
+ 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_wr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter   <={3{1'b0}};
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_ch  ) 
+              dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter   <=  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_delay  ;
+           else 
+             if (|  dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter  ) 
+                 dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter   <=  dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter  -1'b1;
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_ctrl_wr_stall  =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_cmd_pending  |  dma_axi64_core0_dma_axi64_core0_ctrl_wr_cmd_full  |  dma_axi64_core0_dma_axi64_core0_ctrl_wr_go_next_line_d  ; 
+  always @(                  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_go                                        or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_last                        or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_ready                       or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_clr_stall                      or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter                     or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_go_next_line_d                    or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_hold                   or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl                  or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_req                 or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_ch                or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_last_ch               or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_valid              or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_delay             or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_ps            or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_stall           or    dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_remain   )
+       begin  
+          dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ; 
+          dma_axi64_core0_dma_axi64_core0_ctrl_wr_burst_start   =1'b0; 
+          dma_axi64_core0_dma_axi64_core0_ctrl_wr_finish   =1'b0;
+         case (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ps  ) 
+           dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE   :
+             begin 
+               if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_go  )
+                  begin 
+                    if (!  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_ready  )
+                       begin  
+                          dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ; 
+                          dma_axi64_core0_dma_axi64_core0_ctrl_wr_finish   =1'b1;
+                       end 
+                     else 
+                       if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_stall  ) 
+                           dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_STALL  ;
+                        else  
+                           dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_CMD  ;
+                  end 
+                else  
+                   dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ;
+             end  
+           dma_axi64_core0_dma_axi64_core0_ctrl_wr_CMD   :
+             begin 
+               if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_req  ^  dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_ctrl  )
+                  begin  
+                     dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ; 
+                     dma_axi64_core0_dma_axi64_core0_ctrl_wr_finish   =1'b1;
+                  end 
+                else 
+                  if ((  dma_axi64_core0_dma_axi64_core0_ctrl_wr_clr_stall  |  dma_axi64_core0_dma_axi64_core0_ctrl_wr_hold  )&  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_remain  ) 
+                      dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_CMD  ;
+                   else 
+                     if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_ready  &  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_remain  )
+                        begin 
+                          if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_stall  ) 
+                              dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_STALL  ;
+                           else 
+                             begin  
+                                dma_axi64_core0_dma_axi64_core0_ctrl_wr_burst_start   =1'b1; 
+                                dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_WAIT_CLR  ;
+                             end 
+                        end 
+                      else 
+                        if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_last  &(~  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_ready  )) 
+                            dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_CMD  ;
+                         else 
+                           begin  
+                              dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ; 
+                              dma_axi64_core0_dma_axi64_core0_ctrl_wr_finish   =1'b1;
+                           end 
+             end  
+           dma_axi64_core0_dma_axi64_core0_ctrl_wr_WAIT_CLR   :
+             begin 
+               if ((|  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_delay  )&  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_valid  )
+                  begin 
+                    if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_last_ch  )
+                       begin  
+                          dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ; 
+                          dma_axi64_core0_dma_axi64_core0_ctrl_wr_finish   =1'b1;
+                       end 
+                     else 
+                       if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_ch  ) 
+                           dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_WAIT_DELAY  ;
+                        else  
+                           dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_WAIT_CLR  ;
+                  end 
+                else 
+                  if (!  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_remain  )
+                     begin  
+                        dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ; 
+                        dma_axi64_core0_dma_axi64_core0_ctrl_wr_finish   =1'b1;
+                     end 
+                   else  
+                      dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_WAIT_DELAY  ;
+             end  
+           dma_axi64_core0_dma_axi64_core0_ctrl_wr_WAIT_DELAY   :
+             begin 
+               if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_go_next_line_d  ) 
+                   dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_WAIT_DELAY  ;
+                else 
+                  if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_delay_counter  =='d0) 
+                      dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_STALL  ;
+                   else  
+                      dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_WAIT_DELAY  ;
+             end  
+           dma_axi64_core0_dma_axi64_core0_ctrl_wr_STALL   :
+             begin 
+               if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_ready  &  dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens_remain  )
+                  begin 
+                    if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_stall  ) 
+                        dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_STALL  ;
+                     else  
+                        dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_CMD  ;
+                  end 
+                else 
+                  if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_last  &(~  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_ready  )) 
+                      dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_CMD  ;
+                   else 
+                     begin  
+                        dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ; 
+                        dma_axi64_core0_dma_axi64_core0_ctrl_wr_finish   =1'b1;
+                     end 
+             end 
+          default :
+             begin  
+                dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns   =  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ;
+             end 
+         endcase 
+       end
+  
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_ctrl_wr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_ctrl_wr_ps   <=  dma_axi64_core0_dma_axi64_core0_ctrl_wr_IDLE  ;
+        else  
+           dma_axi64_core0_dma_axi64_core0_ctrl_wr_ps   <=  dma_axi64_core0_dma_axi64_core0_ctrl_wr_ns  ;
+
+assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_clk = dma_axi64_core0_gclk;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_reset = dma_axi64_core0_reset;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_go = dma_axi64_core0_rd_ch_go_joint;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_cmd_full = dma_axi64_core0_rd_cmd_full_joint;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_cmd_pending = dma_axi64_core0_rd_cmd_pending_joint;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_joint_req = dma_axi64_core0_joint_req;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_num = dma_axi64_core0_rd_ch_num;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_num_resp = dma_axi64_core0_rd_ch_num_resp;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_go_next_line = dma_axi64_core0_rd_go_next_line;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_valid = dma_axi64_core0_rd_clr_valid;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr = dma_axi64_core0_rd_clr;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_clr_last = dma_axi64_core0_rd_clr_last;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_periph_delay = dma_axi64_core0_rd_periph_delay;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_clr_stall = dma_axi64_core0_rd_clr_stall;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_tokens = dma_axi64_core0_rd_tokens;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_ready = dma_axi64_core0_rd_ready_joint;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_ch_last = dma_axi64_core0_rd_ch_last;
+assign dma_axi64_core0_rd_burst_start = dma_axi64_core0_dma_axi64_core0_ctrl_rd_burst_start;
+assign dma_axi64_core0_rd_finish = dma_axi64_core0_dma_axi64_core0_ctrl_rd_finish;
+assign dma_axi64_core0_rd_ctrl_busy = dma_axi64_core0_dma_axi64_core0_ctrl_rd_busy;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_rd_hold = dma_axi64_core0_rd_hold_ctrl;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_clk = dma_axi64_core0_gclk;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_reset = dma_axi64_core0_reset;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_go = dma_axi64_core0_wr_ch_go_joint;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_cmd_full = dma_axi64_core0_wr_cmd_full_joint;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_cmd_pending = dma_axi64_core0_wr_cmd_pending_joint;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_joint_req = dma_axi64_core0_joint_req;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_num = dma_axi64_core0_wr_ch_num_joint;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_num_resp = dma_axi64_core0_wr_ch_num_resp;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_go_next_line = dma_axi64_core0_wr_go_next_line;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_valid = dma_axi64_core0_wr_clr_valid;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr = dma_axi64_core0_wr_clr;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_clr_last = dma_axi64_core0_wr_clr_last;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_periph_delay = dma_axi64_core0_wr_periph_delay;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_clr_stall = dma_axi64_core0_wr_clr_stall;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_tokens = dma_axi64_core0_wr_tokens;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_ready = dma_axi64_core0_wr_ready_joint;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_ch_last = dma_axi64_core0_wr_ch_last_joint;
+assign dma_axi64_core0_wr_burst_start = dma_axi64_core0_dma_axi64_core0_ctrl_wr_burst_start;
+assign dma_axi64_core0_wr_finish = dma_axi64_core0_dma_axi64_core0_ctrl_wr_finish;
+assign dma_axi64_core0_wr_ctrl_busy = dma_axi64_core0_dma_axi64_core0_ctrl_wr_busy;
+assign dma_axi64_core0_dma_axi64_core0_ctrl_wr_hold = dma_axi64_core0_wr_hold_ctrl;
+  
+  
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_clk;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_reset;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_port;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_last_cmd;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_line_cmd;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_wr_ch_num;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_burst_start;
+wire [32-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_wr_burst_addr;
+wire [8-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_wr_burst_size;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_pending;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_split;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_num;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_rd_transfer;
+wire [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_rd_transfer_size;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rd;
+wire [64-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rdata;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rd_valid;
+wire [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rsize;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_wr_ready;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rd_num;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_wr_transfer_num;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_transfer;
+wire [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_wr_transfer_size;
+wire [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_wr_next_size;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_full;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr_line;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr_line_num;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_slverr;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_decerr;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr_last;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_wr_ch_num_resp;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_page_cross;
+wire [32-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_AWADDR;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_AWPORT;
+wire [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_AWLEN;
+wire [1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_AWSIZE;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_AWVALID;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_AWREADY;
+wire [64-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_WDATA;
+wire [8-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_WSTRB;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_WLAST;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_WVALID;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_WREADY;
+wire [1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_BRESP;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_BVALID;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_BREADY;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_joint_req;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_joint_stall;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_aw;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_w;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_num_aw;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_num_w;
+ 
+   wire[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_AWID  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_AJOINT  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_BVALID_d  ; 
+   wire[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_BID  ; 
+   reg[1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_BRESP_d  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_resp_full  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_BREADY  =1'b1;  
+  
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_clk;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_reset;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_din;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_dout;
+ 
+   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_shift_reg  ; 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_DELAY  +1{1'b0}};
+        else  
+           dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_din  };
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_DELAY  -1];
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_clk;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_reset;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_din = dma_axi64_core0_dma_axi64_core0_axim_wr_BVALID;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_BVALID_d = dma_axi64_core0_dma_axi64_core0_axim_wr_delay_bvalid_dout;
+ 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_reset  )
+          begin  
+             dma_axi64_core0_dma_axi64_core0_axim_wr_BRESP_d   <=2'b00;
+          end 
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_BVALID  )
+             begin  
+                dma_axi64_core0_dma_axi64_core0_axim_wr_BRESP_d   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_BRESP  ;
+             end
+   
+  
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ch_num;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start;
+wire [32-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_addr;
+wire [8-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_size;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_end_line_cmd;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_extra_bit;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_port;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_joint_req;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_joint_pending;
+reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_pending;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_full;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_split;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_num;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_line;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_page_cross;
+reg [7-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID;
+reg [32-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR;
+reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_APORT;
+reg [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ALEN;
+reg [1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AREADY;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AWVALID;
+reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AJOINT;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_axim_timeout_num;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_axim_timeout;
+ 
+   reg[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_reg  ; 
+   reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID_reg  ; 
+   wire[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_pre  ; 
+   wire[32-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR_pre  ; 
+   wire[1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE_pre  ; 
+   wire[4-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ALEN_pre  ; 
+   wire[8-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_length  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_line_pre  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_high_addr_pre  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_high_addr  ; 
+   wire[8:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_reach_pre  ; 
+   reg[8:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_reach  ; 
+   reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_joint_cross  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_page_cross_pre  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start_d  ; 
+   wire[8:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst  ; 
+   reg[8:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst_d  ; 
+   reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst  ; 
+   reg[8-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_size  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_start  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_high_addr_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_addr  [11:8]==4'hf; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_reach_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_addr  [7:0]+  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_size  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_page_cross  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_high_addr  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_reach  >{1'b1,{8{1'b0}}}); 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst  ={1'b1,{8{1'b0}}}-  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_addr  [7:0]; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_start  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID_reg  )&(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_full  ); 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_page_cross  ;  
+  
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_clk;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_reset;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_din;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_dout;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_clk;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_reset;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_din;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_dout;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_clk;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_reset;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_din;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_dout;
+ 
+   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_shift_reg  ; 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_DELAY  +1{1'b0}};
+        else  
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_din  };
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_DELAY  -1];
+  
+  
+ 
+   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_shift_reg  ; 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_DELAY  +1{1'b0}};
+        else  
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_din  };
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_DELAY  -1];
+ 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_reach   <={9{1'b0}};
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_high_addr_pre  ) 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_reach   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_reach_pre  ;
+ 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst   <=1'b0;
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_start  ) 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst   <=1'b0;
+           else 
+             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start  ) 
+                 dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst   <=1'b1;
+ 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst_d   <={9{1'b0}};
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start  ) 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst_d   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst  ;
+ 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_size   <={8{1'b0}};
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start  ) 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_size   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_size  ;
+           else 
+             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start_d  ) 
+                 dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_size   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_size  -  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst_d  ;
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_split  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start_d  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AREADY  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_num  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID  [2:0]; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_line_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID  [6]; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_joint_pending  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AREADY  )&  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AJOINT  ; 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_pending   <=1'b0;
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start  ) 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_pending   <=1'b1;
+           else 
+             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst  )) 
+                 dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_pending   <=1'b0;
+  
+  
+ 
+   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_shift_reg  ; 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_DELAY  +1{1'b0}};
+        else  
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_din  };
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_DELAY  -1];
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_high_addr_pre;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_high_addr = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_high_addr_dout;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cross_start_d = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cross_start_dout;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_line_pre;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_line = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_delay_cmd_line_dout;
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_pre  ={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_end_line_cmd  ,  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE_pre  [1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_extra_bit  ,  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ch_num  [2:0]}; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_addr  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_size  =='d1 ? 2'b00:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_size  =='d2 ? 2'b01:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_size  =='d4 ? 2'b10:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AXI_WORD_SIZE  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_length  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst   ?   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_size  :  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_page_cross   ?   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_max_burst  :  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_size  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ALEN_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_length  [8-1:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AXI_3  ]=='d0 ? {4{1'b0}}:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_length  [8-1:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AXI_3  ]-1'b1; 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
+          begin  
+             dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE   <={2{1'b0}}; 
+             dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AJOINT   <=1'b0;
+          end 
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start  )
+             begin  
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE_pre  ; 
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AJOINT   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_joint_req  ;
+             end
+  
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_reg   <={7{1'b0}};
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start  ) 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_reg   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_pre  ;
+ 
+  always @(    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_reg            or    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst   )
+       begin  
+          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID   =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_reg  ; 
+          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID   [6]=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_reg  [6]&(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst  ); 
+          dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID   [3]=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID_reg  [3]&(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst  );
+       end
+  
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR   <={32{1'b0}};
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_start  ) 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR  [32-1:12],{12{1'b1}}}+1'b1;
+           else 
+             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start  ) 
+                 dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR_pre  ;
+ 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_APORT   <=1'b0;
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start  ) 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_APORT   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_port  ;
+ 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ALEN   <={4{1'b0}};
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_start  ) 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ALEN   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ALEN_pre  ;
+ 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID_reg   <=1'b0;
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AREADY  ) 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID_reg   <=1'b0;
+           else 
+             if ((  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_size  >'d0))|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_next_burst_start  ) 
+                 dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID_reg   <=1'b1;
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AJOINT   ?   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID_reg  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AWVALID  ):  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID_reg  ;  
+  
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_clk;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_reset;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_VALID;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_READY;
+wire [7-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_ID;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_axim_timeout_num;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_axim_timeout;
+ 
+   reg[10-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_counter  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_axim_timeout_num  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_ID  [2:0]; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_axim_timeout  =(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_counter  =='d0); 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_counter   <={10{1'b1}};
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_VALID  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_READY  ) 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_counter   <={10{1'b1}};
+           else 
+             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_VALID  ) 
+                 dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_counter   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_counter  -1'b1;
+
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_VALID = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_READY = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AREADY;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_ID = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_axim_timeout_num = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_axim_timeout_num;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_axim_timeout = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_dma_axi64_axim_timeout_axim_timeout;
+
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_clk;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_reset;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ch_num = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_ch_num;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_start = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_burst_start;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_addr = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_burst_addr;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_burst_size = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_burst_size;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_end_line_cmd = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_line_cmd;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_extra_bit = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_last_cmd;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_port = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_port;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_joint_req = dma_axi64_core0_dma_axi64_core0_axim_wr_joint_req;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_pending = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_pending;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_full = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_full;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_split = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_split;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_num = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_cmd_num;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_page_cross = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_page_cross;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_AWID = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AID;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_AWADDR = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AADDR;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_AWPORT = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_APORT;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_AWLEN = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ALEN;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_AWSIZE = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_ASIZE;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_AWVALID = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AVALID;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AREADY = dma_axi64_core0_dma_axi64_core0_axim_wr_AWREADY;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AWVALID = 1'b0;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_AJOINT = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_AJOINT;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_num_aw = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_axim_timeout_num;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_aw = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wcmd_axim_timeout;
+  
+  
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer;
+wire [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer_size;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd;
+wire [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rsize;
+wire [64-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rdata;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd_valid;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_wr_ready;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd_num;
+reg [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_num;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer;
+reg [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_size;
+reg [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_next_size;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_resp_full;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_cmd_full;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line;
+reg [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_num;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_stall;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_axim_timeout_num;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_axim_timeout;
+wire [7-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWID;
+wire [32-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWADDR;
+wire [4-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWLEN;
+wire [1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWSIZE;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWVALID;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWREADY;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AJOINT;
+wire [64-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WDATA;
+wire [8-1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLAST;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WVALID;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WREADY;
+ 
+   wire[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID  ; 
+   wire[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_pre  ; 
+   reg[8-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre  ; 
+   wire[1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSIZE_pre  ; 
+   wire[4-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_pre  ; 
+   wire[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_data  ; 
+   wire[8-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_data  ; 
+   wire[1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSIZE_data  ; 
+   wire[4-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_data  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_valid_last  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_stall_pre  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_stall  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_pre  ; 
+   wire[2:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_num_pre  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_pre  ; 
+   wire[4-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_size_pre  ; 
+   reg[2:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_last_channel  ; 
+   wire[7-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_cmd  ; 
+   wire[1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSIZE_cmd  ; 
+   wire[4-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_cmd  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_ready  ; 
+   wire[2:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness_pre  ; 
+   reg[2:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_fifo_rd_valid  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_req_out  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer_joint  ; 
+   wire[4-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer_size_joint  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer_full  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_push  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_pop  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_pop_d  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_empty  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_full  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_push  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_pop  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_empty  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_full  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_push  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_pop  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_empty  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_full  ; 
+   reg[4-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_out_count  ; 
+   reg[4-1:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_in_count  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_pending_pre  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_pending  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_line_end  ; 
+   wire[2:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_line_end_num  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_ready  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd_valid  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness  +  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_ready  -  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_pre  ; 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness   <=3'd0;
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_ready  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_pre  ) 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness_pre  ;
+  
+  
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_clk;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_req_out;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer;
+wire [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_SIZE_BITS -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_size;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_ch_fifo_rd;
+wire [2:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_data_fullness_pre;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_HOLD;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_fifo_rd_valid;
+wire [ dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_SIZE_BITS -1:0] dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_size_joint;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_full;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall;
+ 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_joint  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_fifo_rd  ; 
+   wire[2:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo_pre  ; 
+   reg[2:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_pre  ; 
+   reg  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_reg  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_not_ready_pre  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_not_ready  ; 
+   reg[2:0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_rd_stall_num  ; 
+   wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_rd_stall  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_joint  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_req_out  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer  ;  
+  
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_clk;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_reset;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_din;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_dout;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_clk;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_reset;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_din;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_dout;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_clk;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_reset;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_din;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_dout;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_clk;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_reset;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_din;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_dout;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_clk;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_reset;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_din;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_dout;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_clk;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_reset;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_din;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_dout;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_clk;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_reset;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_din;
+wire  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_dout;
+ 
+   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_shift_reg  ; 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_DELAY  +1{1'b0}};
+        else  
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_din  };
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_DELAY  -1];
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo  +  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_joint  -  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_ch_fifo_rd  ; 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo   <=3'd0;
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_req_out  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_joint  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_ch_fifo_rd  )) 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo_pre  ;
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_req_out  &((  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo_pre  >'d2)|((  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo_pre  =='d2)&(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_data_fullness_pre  >'d1))|  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_HOLD  ); 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_not_ready_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_req_out  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_data_fullness_pre  >'d1)&(~(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_joint  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_pre  )); 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_reg   <=1'b0;
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_pre  ) 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_reg   <=1'b1;
+           else 
+             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_count_ch_fifo_pre  =='d0) 
+                 dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_reg   <=1'b0;
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall_reg  |(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_req_out  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_HOLD  );  
+  
+ 
+   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_shift_reg  ; 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_DELAY  +1{1'b0}};
+        else  
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_din  };
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_DELAY  -1];
+  
+  prgen_fifo  #(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_SIZE_BITS  ,2)  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_fifo  (. clk (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_clk  ),. reset (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset  ),. push (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_joint  ),. pop (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_fifo_rd_valid  ),. din (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_size  ),. dout (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_size_joint  ),. empty (),. full (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_full  ));  
+  prgen_stall  #(3)  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_stall_joint_fifo_rd  (. clk (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_clk  ),. reset (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset  ),. din (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_fifo_rd  ),. stall (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_not_ready  ),. dout (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_fifo_rd_valid  ));
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_req_out = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_req_out;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_size = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer_size;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_ch_fifo_rd = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_data_fullness_pre = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fullness_pre;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_HOLD = 1'b0;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_fifo_rd_valid = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_fifo_rd_valid;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer_size_joint = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_size_joint;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer_full = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_full;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_stall = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_stall;
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_pending_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WVALID  &(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WREADY  );  
+  
+ 
+   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_shift_reg  ; 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_DELAY  +1{1'b0}};
+        else  
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_din  };
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_DELAY  -1];
+ 
+  always @(   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSIZE_cmd   )
+       begin 
+         case (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSIZE_cmd  )
+          2 'b00: 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_next_size   =4'd1;
+          2 'b01: 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_next_size   =4'd2;
+          2 'b10: 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_next_size   =4'd4;
+          2 'b11: 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_next_size   =4'd8;
+         endcase 
+       end
+  
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_fifo_rd_valid  |((~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_empty  )&(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_pending  )&(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_stall  )&  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_wr_ready  ); 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rsize  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_fifo_rd_valid   ?   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer_size_joint  :  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_cmd  [5:4]==2'b00 ? 4'd1:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_cmd  [5:4]==2'b01 ? 4'd2:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_cmd  [5:4]==2'b10 ? 4'd4:4'd8; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd_num  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_cmd  [2:0];  
+  
+ 
+   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_shift_reg  ; 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_DELAY  +1{1'b0}};
+        else  
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_din  };
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_DELAY  -1];
+ 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_last_channel   <=3'b000;
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_push  ) 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_last_channel   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_pre  [2:0];
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_num_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_data  [2:0]; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WVALID  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WREADY  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_size_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_data  [5:4]==2'b00 ? 4'd1:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_data  [5:4]==2'b01 ? 4'd2:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_data  [5:4]==2'b10 ? 4'd4:4'd8;  
+  
+ 
+   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_shift_reg  ; 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_DELAY  +1{1'b0}};
+        else  
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_din  };
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_DELAY  -1];
+ 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
+          begin  
+             dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_num   <=3'd0; 
+             dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_size   <=3'd0;
+          end 
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_pre  )
+             begin  
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_num   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_num_pre  ; 
+                dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_size   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_size_pre  ;
+             end
+  
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_valid_last  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_out_count  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_cmd  )&(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_empty  ); 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_valid_last  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_line_end  ; 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_num   <=3'd0;
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_pre  ) 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_num   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_line_end_num  ;
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_stall_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_pre  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd_num  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_line_end_num  );  
+  
+ 
+   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_shift_reg  ; 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_DELAY  +1{1'b0}};
+        else  
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_din  };
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_DELAY  -1];
+  
+  
+ 
+   reg[  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_DELAY  :0]  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_shift_reg  ; 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_DELAY  +1{1'b0}};
+        else  
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_shift_reg   <={  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_DELAY  -1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_din  };
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_dout  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_shift_reg  [  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_DELAY  -1];
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_clk;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_rd_transfer_joint;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_fifo_rd = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_fifo_rd_dout;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_clk;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_reset;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_not_ready_pre;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_joint_not_ready = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_gen_joint_stall_delay_joint_not_ready_dout;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_pending_pre;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_pending = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_pending_dout;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_pop;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_pop_d = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_cmd_pop_dout;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_pre;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_wr_transfer_dout;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_stall_pre;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_stall = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_stall_dout;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_din = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_pre;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_delay_clr_line_dout;
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_cmd_full  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_full  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_full  |  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_resp_full  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_push  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWVALID  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWREADY  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_pop  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_valid_last  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWID  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWLEN  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSIZE_pre  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWSIZE  ; 
+  always @(    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWADDR            or    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWSIZE   )
+       begin 
+         case ({  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWSIZE  [1:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWADDR  [2:0]})
+          { 2'b00,3'b000}: 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b0000_0001;
+          { 2'b00,3'b001}: 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b0000_0010;
+          { 2'b00,3'b010}: 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b0000_0100;
+          { 2'b00,3'b011}: 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b0000_1000;
+          { 2'b00,3'b100}: 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b0001_0000;
+          { 2'b00,3'b101}: 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b0010_0000;
+          { 2'b00,3'b110}: 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b0100_0000;
+          { 2'b00,3'b111}: 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b1000_0000;
+          { 2'b01,3'b000}: 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b0000_0011;
+          { 2'b01,3'b010}: 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b0000_1100;
+          { 2'b01,3'b100}: 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b0011_0000;
+          { 2'b01,3'b110}: 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b1100_0000;
+          { 2'b10,3'b000}: 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b0000_1111;
+          { 2'b10,3'b100}: 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b1111_0000;
+          default : 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre   =8'b1111_1111;
+         endcase 
+       end
+   
+  prgen_fifo  #(7+4+2+1,4)  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_fifo  (. clk (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk  ),. reset (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  ),. push (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_push  ),. pop (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_pop  ),. din ({  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_pre  ,  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSIZE_pre  ,  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_pre  ,  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AJOINT  }),. dout ({  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_cmd  ,  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSIZE_cmd  ,  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_cmd  ,  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_req_out  }),. empty (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_empty  ),. full (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_full  )); 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_line_end  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_cmd  [6]; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_line_end_num  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_cmd  [2:0]; 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_out_count   <={4{1'b0}};
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_pop  ) 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_out_count   <={4{1'b0}};
+           else 
+             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd  ) 
+                 dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_out_count   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_out_count  +1'b1;
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_push  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_push  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_pop  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WVALID  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WREADY  &  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLAST  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB  =(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_in_count  [0] ? {  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_data  [3:0],  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_data  [7:4]}:  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_data  )&{8{  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WVALID  }}; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_data  ;  
+  prgen_fifo  #(8+4+7+2,4)  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_fifo  (. clk (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk  ),. reset (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  ),. push (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_push  ),. pop (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_pop  ),. din ({  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_pre  ,  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSIZE_pre  ,  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_pre  ,  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_pre  }),. dout ({  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_data  ,  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSIZE_data  ,  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB_data  ,  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID_data  }),. empty (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_empty  ),. full (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_full  )); 
+  always @(  posedge    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk          or  posedge   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  )
+       if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  ) 
+           dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_in_count   <={4{1'b0}};
+        else 
+          if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_pop  ) 
+              dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_in_count   <={4{1'b0}};
+           else 
+             if (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_pre  ) 
+                 dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_in_count   <=  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_in_count  +1'b1;
+ 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_push  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd_valid  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_pop  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_pre  ;  
+  prgen_fifo  #(64,5+2)  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_fifo  (. clk (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk  ),. reset (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  ),. push (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_push  ),. pop (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_pop  ),. din (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rdata  ),. dout (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WDATA  ),. empty (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_empty  ),. full (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_full  )); 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WVALID  =~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_data_empty  ; 
+  assign   dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLAST  =  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WVALID  &(  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_in_count  ==  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLEN_data  )&(~  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_cmd_data_empty  );  
+  dma_axi64_core0_axim_timeout    dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_dma_axi64_axim_timeout  (. clk (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk  ),. reset (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset  ),. VALID (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WVALID  ),. READY (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WREADY  ),. ID (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WID  ),. axim_timeout_num (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_axim_timeout_num  ),. axim_timeout (  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_axim_timeout  ));
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_clk = dma_axi64_core0_dma_axi64_core0_axim_wr_clk;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_reset = dma_axi64_core0_dma_axi64_core0_axim_wr_reset;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer = dma_axi64_core0_dma_axi64_core0_axim_wr_rd_transfer;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_rd_transfer_size = dma_axi64_core0_dma_axi64_core0_axim_wr_rd_transfer_size;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rd = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rsize = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rsize;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rdata = dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rdata;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd_valid = dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rd_valid;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_wr_ready = dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_wr_ready;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rd_num = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_ch_fifo_rd_num;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_transfer_num = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_num;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_transfer = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_transfer_size = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_transfer_size;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_next_size = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_next_size;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_resp_full = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_resp_full;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_full = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_cmd_full;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr_line = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr_line_num = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_wr_clr_line_num;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_joint_stall = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_joint_stall;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_num_w = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_axim_timeout_num;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_w = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_axim_timeout;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWID = dma_axi64_core0_dma_axi64_core0_axim_wr_AWID;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWADDR = dma_axi64_core0_dma_axi64_core0_axim_wr_AWADDR;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWLEN = dma_axi64_core0_dma_axi64_core0_axim_wr_AWLEN;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWSIZE = dma_axi64_core0_dma_axi64_core0_axim_wr_AWSIZE;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWVALID = dma_axi64_core0_dma_axi64_core0_axim_wr_AWVALID;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AWREADY = dma_axi64_core0_dma_axi64_core0_axim_wr_AWREADY;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_AJOINT = dma_axi64_core0_dma_axi64_core0_axim_wr_AJOINT;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_WDATA = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WDATA;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_WSTRB = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WSTRB;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_WLAST = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WLAST;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_WVALID = dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WVALID;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wdata_WREADY = dma_axi64_core0_dma_axi64_core0_axim_wr_WREADY;
+  
+  dma_axi64_core0_axim_resp  #(. CMD_DEPTH (4))  dma_axi64_core0_dma_axi64_core0_axim_wr_dma_axi64_axim_wresp  (. clk (  dma_axi64_core0_dma_axi64_core0_axim_wr_clk  ),. reset (  dma_axi64_core0_dma_axi64_core0_axim_wr_reset  ),. slverr (  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_slverr  ),. decerr (  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_decerr  ),. clr (  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr  ),. clr_last (  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr_last  ),. ch_num_resp (  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_ch_num_resp  ),. resp_full (  dma_axi64_core0_dma_axi64_core0_axim_wr_wr_resp_full  ),. AID (  dma_axi64_core0_dma_axi64_core0_axim_wr_AWID  ),. AVALID (  dma_axi64_core0_dma_axi64_core0_axim_wr_AWVALID  ),. AREADY (  dma_axi64_core0_dma_axi64_core0_axim_wr_AWREADY  ),. ID (  dma_axi64_core0_dma_axi64_core0_axim_wr_BID  ),. RESP (  dma_axi64_core0_dma_axi64_core0_axim_wr_BRESP_d  ),. VALID (  dma_axi64_core0_dma_axi64_core0_axim_wr_BVALID_d  ),. READY (  dma_axi64_core0_dma_axi64_core0_axim_wr_BREADY  ),. LAST (1'b1));
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_clk = dma_axi64_core0_gclk;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_reset = dma_axi64_core0_reset;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_port = dma_axi64_core0_wr_cmd_port;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_last_cmd = dma_axi64_core0_wr_last_cmd;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_line_cmd = dma_axi64_core0_wr_line_cmd;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_ch_num = dma_axi64_core0_wr_ch_num_joint;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_burst_start = dma_axi64_core0_wr_burst_start_joint;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_burst_addr = dma_axi64_core0_wr_burst_addr;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_wr_burst_size = dma_axi64_core0_wr_burst_size;
+assign dma_axi64_core0_wr_cmd_pending = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_pending;
+assign dma_axi64_core0_wr_cmd_split = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_split;
+assign dma_axi64_core0_wr_cmd_num = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_num;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_rd_transfer = dma_axi64_core0_rd_transfer;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_rd_transfer_size = dma_axi64_core0_rd_transfer_size;
+assign dma_axi64_core0_ch_fifo_rd = dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rd;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rdata = dma_axi64_core0_ch_fifo_rdata;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rd_valid = dma_axi64_core0_ch_fifo_rd_valid;
+assign dma_axi64_core0_ch_fifo_rsize = dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rsize;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_wr_ready = dma_axi64_core0_ch_fifo_wr_ready;
+assign dma_axi64_core0_ch_fifo_rd_num = dma_axi64_core0_dma_axi64_core0_axim_wr_ch_fifo_rd_num;
+assign dma_axi64_core0_wr_transfer_num = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_transfer_num;
+assign dma_axi64_core0_wr_transfer = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_transfer;
+assign dma_axi64_core0_wr_transfer_size = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_transfer_size;
+assign dma_axi64_core0_wr_next_size = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_next_size;
+assign dma_axi64_core0_wr_cmd_full = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_cmd_full;
+assign dma_axi64_core0_wr_clr_line = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr_line;
+assign dma_axi64_core0_wr_clr_line_num = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr_line_num;
+assign dma_axi64_core0_wr_slverr = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_slverr;
+assign dma_axi64_core0_wr_decerr = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_decerr;
+assign dma_axi64_core0_wr_clr = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr;
+assign dma_axi64_core0_wr_clr_last = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_clr_last;
+assign dma_axi64_core0_wr_ch_num_resp = dma_axi64_core0_dma_axi64_core0_axim_wr_wr_ch_num_resp;
+assign dma_axi64_core0_wr_page_cross = dma_axi64_core0_dma_axi64_core0_axim_wr_page_cross;
+assign dma_axi64_core0_AWADDR = dma_axi64_core0_dma_axi64_core0_axim_wr_AWADDR;
+assign dma_axi64_core0_wr_port_num = dma_axi64_core0_dma_axi64_core0_axim_wr_AWPORT;
+assign dma_axi64_core0_AWLEN = dma_axi64_core0_dma_axi64_core0_axim_wr_AWLEN;
+assign dma_axi64_core0_AWSIZE = dma_axi64_core0_dma_axi64_core0_axim_wr_AWSIZE;
+assign dma_axi64_core0_AWVALID = dma_axi64_core0_dma_axi64_core0_axim_wr_AWVALID;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_AWREADY = dma_axi64_core0_AWREADY;
+assign dma_axi64_core0_WDATA = dma_axi64_core0_dma_axi64_core0_axim_wr_WDATA;
+assign dma_axi64_core0_WSTRB = dma_axi64_core0_dma_axi64_core0_axim_wr_WSTRB;
+assign dma_axi64_core0_WLAST = dma_axi64_core0_dma_axi64_core0_axim_wr_WLAST;
+assign dma_axi64_core0_WVALID = dma_axi64_core0_dma_axi64_core0_axim_wr_WVALID;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_WREADY = dma_axi64_core0_WREADY;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_BRESP = dma_axi64_core0_BRESP;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_BVALID = dma_axi64_core0_BVALID;
+assign dma_axi64_core0_BREADY = dma_axi64_core0_dma_axi64_core0_axim_wr_BREADY;
+assign dma_axi64_core0_dma_axi64_core0_axim_wr_joint_req = dma_axi64_core0_joint_req;
+assign dma_axi64_core0_joint_stall = dma_axi64_core0_dma_axi64_core0_axim_wr_joint_stall;
+assign dma_axi64_core0_timeout_aw = dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_aw;
+assign dma_axi64_core0_timeout_w = dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_w;
+assign dma_axi64_core0_timeout_num_aw = dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_num_aw;
+assign dma_axi64_core0_timeout_num_w = dma_axi64_core0_dma_axi64_core0_axim_wr_axim_timeout_num_w;
+  
+  dma_axi64_core0_axim_rd    dma_axi64_core0_dma_axi64_core0_axim_rd  (. clk (  dma_axi64_core0_gclk  ),. reset (  dma_axi64_core0_reset  ),. load_wr (  dma_axi64_core0_load_wr  ),. load_wr_num (  dma_axi64_core0_load_wr_num  ),. load_wr_cycle (  dma_axi64_core0_load_wr_cycle  ),. load_wdata (  dma_axi64_core0_load_wdata  ),. load_req_in_prog (  dma_axi64_core0_load_req_in_prog  ),. joint_stall (  dma_axi64_core0_joint_stall  ),. joint_req (  dma_axi64_core0_joint_req  ),. rd_cmd_port (  dma_axi64_core0_rd_cmd_port  ),. rd_ch_num (  dma_axi64_core0_rd_ch_num  ),. rd_burst_start (  dma_axi64_core0_rd_burst_start  ),. rd_burst_addr (  dma_axi64_core0_rd_burst_addr  ),. rd_burst_size (  dma_axi64_core0_rd_burst_size  ),. rd_cmd_split (  dma_axi64_core0_rd_cmd_split  ),. rd_cmd_line (  dma_axi64_core0_rd_cmd_line  ),. rd_cmd_num (  dma_axi64_core0_rd_cmd_num  ),. rd_cmd_pending (  dma_axi64_core0_rd_cmd_pending  ),. ch_fifo_wr (  dma_axi64_core0_ch_fifo_wr  ),. ch_fifo_wdata (  dma_axi64_core0_ch_fifo_wdata  ),. ch_fifo_wsize (  dma_axi64_core0_ch_fifo_wsize  ),. ch_fifo_wr_num (  dma_axi64_core0_ch_fifo_wr_num  ),. rd_clr_line (  dma_axi64_core0_rd_clr_line  ),. rd_clr_line_num (  dma_axi64_core0_rd_clr_line_num  ),. rd_line_cmd (  dma_axi64_core0_rd_line_cmd  ),. rd_transfer (  dma_axi64_core0_rd_transfer  ),. rd_transfer_size (  dma_axi64_core0_rd_transfer_size  ),. rd_transfer_num (  dma_axi64_core0_rd_transfer_num  ),. rd_burst_cmd (  dma_axi64_core0_rd_burst_cmd  ),. rd_cmd_full (  dma_axi64_core0_rd_cmd_full  ),. rd_slverr (  dma_axi64_core0_rd_slverr  ),. rd_decerr (  dma_axi64_core0_rd_decerr  ),. rd_clr (  dma_axi64_core0_rd_clr  ),. rd_clr_load (  dma_axi64_core0_rd_clr_load  ),. rd_clr_last (  dma_axi64_core0_rd_clr_last  ),. rd_ch_num_resp (  dma_axi64_core0_rd_ch_num_resp  ),. page_cross (  dma_axi64_core0_rd_page_cross  ),. ARADDR (  dma_axi64_core0_ARADDR  ),. ARPORT (  dma_axi64_core0_rd_port_num  ),. ARLEN (  dma_axi64_core0_ARLEN  ),. ARSIZE (  dma_axi64_core0_ARSIZE  ),. ARVALID (  dma_axi64_core0_ARVALID  ),. ARREADY (  dma_axi64_core0_ARREADY  ),. AWVALID (  dma_axi64_core0_AWVALID  ),. RDATA (  dma_axi64_core0_RDATA  ),. RRESP (  dma_axi64_core0_RRESP  ),. RLAST (  dma_axi64_core0_RLAST  ),. RVALID (  dma_axi64_core0_RVALID  ),. RREADY_out (  dma_axi64_core0_RREADY  ),. axim_timeout_ar (  dma_axi64_core0_timeout_ar  ),. axim_timeout_num_ar (  dma_axi64_core0_timeout_num_ar  )); 
+  assign   dma_axi64_core0_rd_hold  =1'b0; 
+  assign   dma_axi64_core0_wr_hold  =1'b0;  
+  dma_axi64_core0_channels    dma_axi64_core0_dma_axi64_core0_channels  (. clk (  dma_axi64_core0_clk  ),. reset (  dma_axi64_core0_reset  ),. scan_en (  dma_axi64_core0_scan_en  ),. pclk (  dma_axi64_core0_pclk  ),. clken (  dma_axi64_core0_clken  ),. pclken (  dma_axi64_core0_pclken  ),. psel (  dma_axi64_core0_psel  ),. penable (  dma_axi64_core0_penable  ),. paddr (  dma_axi64_core0_paddr  [10:0]),. pwrite (  dma_axi64_core0_pwrite  ),. pwdata (  dma_axi64_core0_pwdata  ),. prdata (  dma_axi64_core0_prdata  ),. pslverr (  dma_axi64_core0_pslverr  ),. periph_tx_req (  dma_axi64_core0_periph_tx_req  ),. periph_tx_clr (  dma_axi64_core0_periph_tx_clr  ),. periph_rx_req (  dma_axi64_core0_periph_rx_req  ),. periph_rx_clr (  dma_axi64_core0_periph_rx_clr  ),. rd_cmd_split (  dma_axi64_core0_rd_cmd_split  ),. rd_cmd_line (  dma_axi64_core0_rd_cmd_line  ),. rd_cmd_num (  dma_axi64_core0_rd_cmd_num  ),. wr_cmd_split (  dma_axi64_core0_wr_cmd_split  ),. wr_cmd_pending (  dma_axi64_core0_wr_cmd_pending  ),. wr_cmd_num (  dma_axi64_core0_wr_cmd_num  ),. rd_clr_valid (  dma_axi64_core0_rd_clr_valid  ),. wr_clr_valid (  dma_axi64_core0_wr_clr_valid  ),. rd_clr (  dma_axi64_core0_rd_clr  ),. rd_clr_load (  dma_axi64_core0_rd_clr_load  ),. wr_clr (  dma_axi64_core0_wr_clr  ),. rd_clr_stall (  dma_axi64_core0_rd_clr_stall  ),. wr_clr_stall (  dma_axi64_core0_wr_clr_stall  ),. load_wr (  dma_axi64_core0_load_wr  ),. load_wr_num (  dma_axi64_core0_load_wr_num  ),. load_wr_cycle (  dma_axi64_core0_load_wr_cycle  ),. rd_ch_num (  dma_axi64_core0_rd_ch_num  ),. load_req_in_prog (  dma_axi64_core0_load_req_in_prog  ),. wr_ch_num (  dma_axi64_core0_wr_ch_num_joint  ),. wr_last_cmd (  dma_axi64_core0_wr_last_cmd  ),. load_wdata (  dma_axi64_core0_load_wdata  ),. wr_slverr (  dma_axi64_core0_wr_slverr  ),. wr_decerr (  dma_axi64_core0_wr_decerr  ),. wr_ch_num_resp (  dma_axi64_core0_wr_ch_num_resp  ),. rd_slverr (  dma_axi64_core0_rd_slverr  ),. rd_decerr (  dma_axi64_core0_rd_decerr  ),. rd_ch_num_resp (  dma_axi64_core0_rd_ch_num_resp  ),. wr_clr_last (  dma_axi64_core0_wr_clr_last  ),. ch_int_all_proc (  dma_axi64_core0_ch_int_all_proc  ),. ch_start (  dma_axi64_core0_ch_start  ),. ch_idle (  dma_axi64_core0_ch_idle  ),. ch_active (  dma_axi64_core0_ch_active  ),. ch_rd_active (  dma_axi64_core0_ch_rd_active  ),. ch_wr_active (  dma_axi64_core0_ch_wr_active  ),. rd_line_cmd (  dma_axi64_core0_rd_line_cmd  ),. wr_line_cmd (  dma_axi64_core0_wr_line_cmd  ),. rd_go_next_line (  dma_axi64_core0_rd_go_next_line  ),. wr_go_next_line (  dma_axi64_core0_wr_go_next_line  ),. timeout_aw (  dma_axi64_core0_timeout_aw  ),. timeout_w (  dma_axi64_core0_timeout_w  ),. timeout_ar (  dma_axi64_core0_timeout_ar  ),. timeout_num_aw (  dma_axi64_core0_timeout_num_aw  ),. timeout_num_w (  dma_axi64_core0_timeout_num_w  ),. timeout_num_ar (  dma_axi64_core0_timeout_num_ar  ),. wdt_timeout (  dma_axi64_core0_wdt_timeout  ),. wdt_ch_num (  dma_axi64_core0_wdt_ch_num  ),. ch_fifo_wr_num (  dma_axi64_core0_ch_fifo_wr_num  ),. rd_transfer_num (  dma_axi64_core0_rd_transfer_num  ),. rd_burst_start (  dma_axi64_core0_rd_burst_start  ),. ch_rd_ready (  dma_axi64_core0_ch_rd_ready  ),. rd_burst_addr (  dma_axi64_core0_rd_burst_addr  ),. rd_burst_size (  dma_axi64_core0_rd_burst_size  ),. rd_tokens (  dma_axi64_core0_rd_tokens  ),. rd_cmd_port (  dma_axi64_core0_rd_cmd_port  ),. rd_periph_delay (  dma_axi64_core0_rd_periph_delay  ),. rd_transfer (  dma_axi64_core0_rd_transfer  ),. rd_transfer_size (  dma_axi64_core0_rd_transfer_size  ),. rd_clr_line (  dma_axi64_core0_rd_clr_line  ),. rd_clr_line_num (  dma_axi64_core0_rd_clr_line_num  ),. fifo_rd (  dma_axi64_core0_ch_fifo_rd  ),. fifo_rsize (  dma_axi64_core0_ch_fifo_rsize  ),. fifo_rd_valid (  dma_axi64_core0_ch_fifo_rd_valid  ),. fifo_rdata (  dma_axi64_core0_ch_fifo_rdata  ),. fifo_wr_ready (  dma_axi64_core0_ch_fifo_wr_ready  ),. ch_fifo_rd_num (  dma_axi64_core0_ch_fifo_rd_num  ),. wr_burst_start (  dma_axi64_core0_wr_burst_start_joint  ),. ch_wr_ready (  dma_axi64_core0_ch_wr_ready  ),. wr_burst_addr (  dma_axi64_core0_wr_burst_addr  ),. wr_burst_size (  dma_axi64_core0_wr_burst_size  ),. wr_tokens (  dma_axi64_core0_wr_tokens  ),. wr_cmd_port (  dma_axi64_core0_wr_cmd_port  ),. wr_periph_delay (  dma_axi64_core0_wr_periph_delay  ),. wr_transfer_num (  dma_axi64_core0_wr_transfer_num  ),. wr_transfer (  dma_axi64_core0_wr_transfer  ),. wr_transfer_size (  dma_axi64_core0_wr_transfer_size  ),. wr_next_size (  dma_axi64_core0_wr_next_size  ),. wr_clr_line (  dma_axi64_core0_wr_clr_line  ),. wr_clr_line_num (  dma_axi64_core0_wr_clr_line_num  ),. fifo_wr (  dma_axi64_core0_ch_fifo_wr  ),. fifo_wdata (  dma_axi64_core0_ch_fifo_wdata  ),. fifo_wsize (  dma_axi64_core0_ch_fifo_wsize  ),. joint_mode (  dma_axi64_core0_joint_mode  ),. joint_remote (  dma_axi64_core0_joint_remote  ),. rd_page_cross (  dma_axi64_core0_rd_page_cross  ),. wr_page_cross (  dma_axi64_core0_wr_page_cross  ),. joint_in_prog (  dma_axi64_core0_joint_in_prog  ),. joint_not_in_prog (  dma_axi64_core0_joint_not_in_prog  ),. joint_mux_in_prog (  dma_axi64_core0_joint_mux_in_prog  ),. ch_joint_req (  dma_axi64_core0_ch_joint_req  ));
+assign dma_axi64_core0_clk = clk_out;
+assign dma_axi64_core0_reset = reset;
+assign dma_axi64_core0_scan_en = scan_en;
+assign idle = dma_axi64_core0_idle;
+assign ch_int_all_proc = dma_axi64_core0_ch_int_all_proc;
+assign dma_axi64_core0_ch_start = ch_start;
+assign dma_axi64_core0_periph_tx_req = periph_tx_req;
+assign periph_tx_clr = dma_axi64_core0_periph_tx_clr;
+assign dma_axi64_core0_periph_rx_req = periph_rx_req;
+assign periph_rx_clr = dma_axi64_core0_periph_rx_clr;
+assign dma_axi64_core0_pclk = clk;
+assign dma_axi64_core0_clken = clken;
+assign dma_axi64_core0_pclken = pclken;
+assign dma_axi64_core0_psel = psel;
+assign dma_axi64_core0_penable = penable;
+assign dma_axi64_core0_paddr = paddr[10:0];
+assign dma_axi64_core0_pwrite = pwrite;
+assign dma_axi64_core0_pwdata = pwdata;
+assign prdata = dma_axi64_core0_prdata;
+assign pslverr = dma_axi64_core0_pslverr;
+assign rd_port_num = dma_axi64_core0_rd_port_num;
+assign wr_port_num = dma_axi64_core0_wr_port_num;
+assign dma_axi64_core0_joint_mode_in = joint_mode;
+assign dma_axi64_core0_joint_remote = joint_remote;
+assign dma_axi64_core0_rd_prio_top = rd_prio_top;
+assign dma_axi64_core0_rd_prio_high = rd_prio_high;
+assign dma_axi64_core0_rd_prio_top_num = rd_prio_top_num;
+assign dma_axi64_core0_rd_prio_high_num = rd_prio_high_num;
+assign dma_axi64_core0_wr_prio_top = wr_prio_top;
+assign dma_axi64_core0_wr_prio_high = wr_prio_high;
+assign dma_axi64_core0_wr_prio_top_num = wr_prio_top_num;
+assign dma_axi64_core0_wr_prio_high_num = wr_prio_high_num;
+assign slow_AWADDR = dma_axi64_core0_AWADDR;
+assign slow_AWLEN = dma_axi64_core0_AWLEN;
+assign slow_AWSIZE = dma_axi64_core0_AWSIZE;
+assign slow_AWVALID = dma_axi64_core0_AWVALID;
+assign dma_axi64_core0_AWREADY = slow_AWREADY;
+assign slow_WDATA = dma_axi64_core0_WDATA;
+assign slow_WSTRB = dma_axi64_core0_WSTRB;
+assign slow_WLAST = dma_axi64_core0_WLAST;
+assign slow_WVALID = dma_axi64_core0_WVALID;
+assign dma_axi64_core0_WREADY = slow_WREADY;
+assign dma_axi64_core0_BRESP = slow_BRESP;
+assign dma_axi64_core0_BVALID = slow_BVALID;
+assign slow_BREADY = dma_axi64_core0_BREADY;
+assign slow_ARADDR = dma_axi64_core0_ARADDR;
+assign slow_ARLEN = dma_axi64_core0_ARLEN;
+assign slow_ARSIZE = dma_axi64_core0_ARSIZE;
+assign slow_ARVALID = dma_axi64_core0_ARVALID;
+assign dma_axi64_core0_ARREADY = slow_ARREADY;
+assign dma_axi64_core0_RDATA = slow_RDATA;
+assign dma_axi64_core0_RRESP = slow_RRESP;
+assign dma_axi64_core0_RLAST = slow_RLAST;
+assign dma_axi64_core0_RVALID = slow_RVALID;
+assign slow_RREADY = dma_axi64_core0_RREADY;
+ 
 endmodule
  
 module prgen_fifo #(
@@ -2835,14 +4634,14 @@ module dma_axi64_core0_channels (
    wire [7:0] ch_wr_cmd_pending ;  
   dma_axi64_core0_channels_apb_mux dma_axi64_channels_apb_mux(.clk(pclk),.reset(reset),.pclken(pclken),.psel(psel),.penable(penable),.paddr(paddr[10:8]),.prdata(prdata),.pslverr(pslverr),.ch_psel(ch_psel),.ch_prdata(ch_prdata),.ch_pslverr(ch_pslverr)); 
   dma_axi64_core0_channels_mux dma_axi64_channels_mux(.ch_joint_in_prog(ch_joint_in_prog),.ch_joint_not_in_prog(ch_joint_not_in_prog),.ch_joint_mux_in_prog(ch_joint_mux_in_prog),.joint_in_prog(joint_in_prog),.joint_not_in_prog(joint_not_in_prog),.joint_mux_in_prog(joint_mux_in_prog),.ch_rd_page_cross(ch_rd_page_cross),.ch_wr_page_cross(ch_wr_page_cross),.rd_page_cross(rd_page_cross),.wr_page_cross(wr_page_cross),.ch_wr_cmd_pending(ch_wr_cmd_pending),.wr_cmd_pending(wr_cmd_pending),.fifo_rdata(fifo_rdata),.ch_fifo_rdata(ch_fifo_rdata),.fifo_rd_valid(fifo_rd_valid),.ch_fifo_rd_valid(ch_fifo_rd_valid),.periph_rx_clr(periph_rx_clr),.ch_periph_rx_clr(ch_periph_rx_clr),.periph_tx_clr(periph_tx_clr),.ch_periph_tx_clr(ch_periph_tx_clr),.timeout_aw(timeout_aw),.timeout_w(timeout_w),.timeout_ar(timeout_ar),.timeout_num_aw(timeout_num_aw),.timeout_num_w(timeout_num_w),.timeout_num_ar(timeout_num_ar),.wdt_timeout(wdt_timeout),.wdt_ch_num(wdt_ch_num),.ch_timeout_aw(ch_timeout_aw),.ch_timeout_w(ch_timeout_w),.ch_timeout_ar(ch_timeout_ar),.ch_wdt_timeout(ch_wdt_timeout),.rd_ch_num(rd_ch_num),.rd_cmd_num(rd_cmd_num),.load_req_in_prog(load_req_in_prog),.rd_line_cmd(rd_line_cmd),.rd_go_next_line(rd_go_next_line),.rd_burst_start(rd_burst_start),.rd_burst_addr(rd_burst_addr),.rd_burst_size(rd_burst_size),.rd_tokens(rd_tokens),.rd_cmd_port(rd_cmd_port),.rd_periph_delay(rd_periph_delay),.rd_clr_valid(rd_clr_valid),.rd_cmd_split(rd_cmd_split),.rd_cmd_line(rd_cmd_line),.rd_clr_stall(rd_clr_stall),.ch_load_req_in_prog(ch_load_req_in_prog),.ch_rd_line_cmd(ch_rd_line_cmd),.ch_rd_go_next_line(ch_rd_go_next_line),.ch_rd_burst_start(ch_rd_burst_start),.ch_rd_burst_addr(ch_rd_burst_addr),.ch_rd_burst_size(ch_rd_burst_size),.ch_rd_tokens(ch_rd_tokens),.ch_rd_port_num(ch_rd_port_num),.ch_rd_periph_delay(ch_rd_periph_delay),.ch_rd_clr_valid(ch_rd_clr_valid),.ch_rd_cmd_split(ch_rd_cmd_split),.ch_rd_cmd_line(ch_rd_cmd_line),.ch_rd_clr_stall(ch_rd_clr_stall),.load_wr_num(load_wr_num),.load_wr(load_wr),.ch_load_wr(ch_load_wr),.ch_fifo_wr_num(ch_fifo_wr_num),.rd_transfer_num(rd_transfer_num),.rd_clr_line_num(rd_clr_line_num),.rd_transfer(rd_transfer),.rd_clr_line(rd_clr_line),.fifo_wr(fifo_wr),.ch_rd_clr_line(ch_rd_clr_line),.ch_rd_transfer(ch_rd_transfer),.ch_fifo_wr(ch_fifo_wr),.rd_ch_num_resp(rd_ch_num_resp),.rd_slverr(rd_slverr),.rd_decerr(rd_decerr),.rd_clr(rd_clr),.rd_clr_load(rd_clr_load),.ch_rd_slverr(ch_rd_slverr),.ch_rd_decerr(ch_rd_decerr),.ch_rd_clr(ch_rd_clr),.ch_rd_clr_load(ch_rd_clr_load),.wr_ch_num(wr_ch_num),.wr_cmd_num(wr_cmd_num),.wr_last_cmd(wr_last_cmd),.wr_line_cmd(wr_line_cmd),.wr_go_next_line(wr_go_next_line),.wr_burst_start(wr_burst_start),.wr_burst_addr(wr_burst_addr),.wr_burst_size(wr_burst_size),.wr_tokens(wr_tokens),.wr_cmd_port(wr_cmd_port),.wr_periph_delay(wr_periph_delay),.wr_clr_valid(wr_clr_valid),.wr_cmd_split(wr_cmd_split),.wr_clr_stall(wr_clr_stall),.ch_wr_last_cmd(ch_wr_last_cmd),.ch_wr_line_cmd(ch_wr_line_cmd),.ch_wr_go_next_line(ch_wr_go_next_line),.ch_wr_burst_start(ch_wr_burst_start),.ch_wr_burst_addr(ch_wr_burst_addr),.ch_wr_burst_size(ch_wr_burst_size),.ch_wr_tokens(ch_wr_tokens),.ch_wr_port_num(ch_wr_port_num),.ch_wr_periph_delay(ch_wr_periph_delay),.ch_wr_clr_valid(ch_wr_clr_valid),.ch_wr_cmd_split(ch_wr_cmd_split),.ch_wr_clr_stall(ch_wr_clr_stall),.ch_fifo_rd_num(ch_fifo_rd_num),.wr_transfer_num(wr_transfer_num),.wr_clr_line_num(wr_clr_line_num),.wr_transfer(wr_transfer),.wr_clr_line(wr_clr_line),.fifo_rd(fifo_rd),.fifo_wr_ready(fifo_wr_ready),.ch_wr_transfer(ch_wr_transfer),.ch_wr_clr_line(ch_wr_clr_line),.ch_fifo_rd(ch_fifo_rd),.ch_fifo_wr_ready(ch_fifo_wr_ready),.wr_ch_num_resp(wr_ch_num_resp),.wr_slverr(wr_slverr),.wr_decerr(wr_decerr),.wr_clr(wr_clr),.wr_clr_last(wr_clr_last),.ch_wr_slverr(ch_wr_slverr),.ch_wr_decerr(ch_wr_decerr),.ch_wr_clr_last(ch_wr_clr_last),.ch_wr_clr(ch_wr_clr)); 
-  dma_axi64_core0_ch dma_axi64_core0_ch0(.clk(clk),.reset(reset),.scan_en(scan_en),.idle(ch_idle[0]),.pclk(pclk),.clken(clken),.pclken(pclken),.psel(ch_psel[0]),.penable(penable),.paddr(paddr[7:0]),.pwrite(pwrite),.pwdata(pwdata),.prdata(ch_prdata[31+32*0:32*0]),.pslverr(ch_pslverr[0]),.periph_tx_req(periph_tx_req),.periph_tx_clr(ch_periph_tx_clr[31*0+31-1:31*0]),.periph_rx_req(periph_rx_req),.periph_rx_clr(ch_periph_rx_clr[31*0+31-1:31*0]),.rd_cmd_split(ch_rd_cmd_split[0]),.rd_cmd_line(ch_rd_cmd_line[0]),.rd_clr_line(ch_rd_clr_line[0]),.rd_clr(ch_rd_clr[0]),.rd_clr_load(ch_rd_clr_load[0]),.rd_slverr(ch_rd_slverr[0]),.rd_decerr(ch_rd_decerr[0]),.rd_line_cmd(ch_rd_line_cmd[0]),.rd_go_next_line(ch_rd_go_next_line[0]),.rd_transfer(ch_rd_transfer[0]),.rd_transfer_size(rd_transfer_size),.rd_clr_stall(ch_rd_clr_stall[0]),.wr_cmd_split(ch_wr_cmd_split[0]),.wr_cmd_pending(ch_wr_cmd_pending[0]),.wr_clr_line(ch_wr_clr_line[0]),.wr_clr(ch_wr_clr[0]),.wr_clr_last(ch_wr_clr_last[0]),.wr_slverr(ch_wr_slverr[0]),.wr_decerr(ch_wr_decerr[0]),.wr_last_cmd(ch_wr_last_cmd[0]),.wr_line_cmd(ch_wr_line_cmd[0]),.wr_go_next_line(ch_wr_go_next_line[0]),.wr_transfer(ch_wr_transfer[0]),.wr_transfer_size(wr_transfer_size),.wr_next_size(wr_next_size),.wr_clr_stall(ch_wr_clr_stall[0]),.timeout_aw(ch_timeout_aw[0]),.timeout_w(ch_timeout_w[0]),.timeout_ar(ch_timeout_ar[0]),.wdt_timeout(ch_wdt_timeout[0]),.load_wr(ch_load_wr[0]),.load_wr_cycle(load_wr_cycle),.load_wdata(load_wdata),.load_req_in_prog(ch_load_req_in_prog[0]),.ch_active(ch_active[0]),.ch_rd_active(ch_rd_active[0]),.ch_wr_active(ch_wr_active[0]),.rd_burst_start(ch_rd_burst_start[0]),.rd_ready(ch_rd_ready[0]),.rd_burst_addr(ch_rd_burst_addr[32-1+32*0:32*0]),.rd_burst_size(ch_rd_burst_size[8-1+8*0:8*0]),.rd_tokens(ch_rd_tokens[6-1+6*0:6*0]),.rd_port_num(ch_rd_port_num[0]),.rd_periph_delay(ch_rd_periph_delay[3-1+3*0:3*0]),.rd_clr_valid(ch_rd_clr_valid[0]),.wr_burst_start(ch_wr_burst_start[0]),.wr_ready(ch_wr_ready[0]),.wr_burst_addr(ch_wr_burst_addr[32-1+32*0:32*0]),.wr_burst_size(ch_wr_burst_size[8-1+8*0:8*0]),.wr_tokens(ch_wr_tokens[6-1+6*0:6*0]),.wr_port_num(ch_wr_port_num[0]),.wr_periph_delay(ch_wr_periph_delay[3-1+3*0:3*0]),.wr_clr_valid(ch_wr_clr_valid[0]),.fifo_wr(ch_fifo_wr[0]),.fifo_wdata(fifo_wdata),.fifo_wsize(fifo_wsize),.fifo_rd(ch_fifo_rd[0]),.fifo_rsize(fifo_rsize),.fifo_rd_valid(ch_fifo_rd_valid[0]),.fifo_rdata(ch_fifo_rdata[(64-1)+64*0:64*0]),.fifo_wr_ready(ch_fifo_wr_ready[0]),.joint_mode(joint_mode),.joint_remote(joint_remote),.rd_page_cross(ch_rd_page_cross[0]),.wr_page_cross(ch_wr_page_cross[0]),.joint_in_prog(ch_joint_in_prog[0]),.joint_not_in_prog(ch_joint_not_in_prog[0]),.joint_mux_in_prog(ch_joint_mux_in_prog[0]),.joint_req(ch_joint_req[0]),.ch_start(ch_start[0]),.int_all_proc(ch_int_all_proc[1-1+(1*0):1*0])); 
-  dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty1(.clk(clk),.reset(reset),.scan_en(scan_en),.idle(ch_idle[1]),.pclk(pclk),.clken(clken),.pclken(pclken),.psel(ch_psel[1]),.penable(penable),.paddr(paddr[7:0]),.pwrite(pwrite),.pwdata(pwdata),.prdata(ch_prdata[31+32*1:32*1]),.pslverr(ch_pslverr[1]),.periph_tx_req(periph_tx_req),.periph_tx_clr(ch_periph_tx_clr[31*1+31-1:31*1]),.periph_rx_req(periph_rx_req),.periph_rx_clr(ch_periph_rx_clr[31*1+31-1:31*1]),.rd_cmd_split(ch_rd_cmd_split[1]),.rd_cmd_line(ch_rd_cmd_line[1]),.rd_clr_line(ch_rd_clr_line[1]),.rd_clr(ch_rd_clr[1]),.rd_clr_load(ch_rd_clr_load[1]),.rd_slverr(ch_rd_slverr[1]),.rd_decerr(ch_rd_decerr[1]),.rd_line_cmd(ch_rd_line_cmd[1]),.rd_go_next_line(ch_rd_go_next_line[1]),.rd_transfer(ch_rd_transfer[1]),.rd_transfer_size(rd_transfer_size),.rd_clr_stall(ch_rd_clr_stall[1]),.wr_cmd_split(ch_wr_cmd_split[1]),.wr_cmd_pending(ch_wr_cmd_pending[1]),.wr_clr_line(ch_wr_clr_line[1]),.wr_clr(ch_wr_clr[1]),.wr_clr_last(ch_wr_clr_last[1]),.wr_slverr(ch_wr_slverr[1]),.wr_decerr(ch_wr_decerr[1]),.wr_last_cmd(ch_wr_last_cmd[1]),.wr_line_cmd(ch_wr_line_cmd[1]),.wr_go_next_line(ch_wr_go_next_line[1]),.wr_transfer(ch_wr_transfer[1]),.wr_transfer_size(wr_transfer_size),.wr_next_size(wr_next_size),.wr_clr_stall(ch_wr_clr_stall[1]),.timeout_aw(ch_timeout_aw[1]),.timeout_w(ch_timeout_w[1]),.timeout_ar(ch_timeout_ar[1]),.wdt_timeout(ch_wdt_timeout[1]),.load_wr(ch_load_wr[1]),.load_wr_cycle(load_wr_cycle),.load_wdata(load_wdata),.load_req_in_prog(ch_load_req_in_prog[1]),.ch_active(ch_active[1]),.ch_rd_active(ch_rd_active[1]),.ch_wr_active(ch_wr_active[1]),.rd_burst_start(ch_rd_burst_start[1]),.rd_ready(ch_rd_ready[1]),.rd_burst_addr(ch_rd_burst_addr[32-1+32*1:32*1]),.rd_burst_size(ch_rd_burst_size[8-1+8*1:8*1]),.rd_tokens(ch_rd_tokens[6-1+6*1:6*1]),.rd_port_num(ch_rd_port_num[1]),.rd_periph_delay(ch_rd_periph_delay[3-1+3*1:3*1]),.rd_clr_valid(ch_rd_clr_valid[1]),.wr_burst_start(ch_wr_burst_start[1]),.wr_ready(ch_wr_ready[1]),.wr_burst_addr(ch_wr_burst_addr[32-1+32*1:32*1]),.wr_burst_size(ch_wr_burst_size[8-1+8*1:8*1]),.wr_tokens(ch_wr_tokens[6-1+6*1:6*1]),.wr_port_num(ch_wr_port_num[1]),.wr_periph_delay(ch_wr_periph_delay[3-1+3*1:3*1]),.wr_clr_valid(ch_wr_clr_valid[1]),.fifo_wr(ch_fifo_wr[1]),.fifo_wdata(fifo_wdata),.fifo_wsize(fifo_wsize),.fifo_rd(ch_fifo_rd[1]),.fifo_rsize(fifo_rsize),.fifo_rd_valid(ch_fifo_rd_valid[1]),.fifo_rdata(ch_fifo_rdata[(64-1)+64*1:64*1]),.fifo_wr_ready(ch_fifo_wr_ready[1]),.joint_mode(joint_mode),.joint_remote(joint_remote),.rd_page_cross(ch_rd_page_cross[1]),.wr_page_cross(ch_wr_page_cross[1]),.joint_in_prog(ch_joint_in_prog[1]),.joint_not_in_prog(ch_joint_not_in_prog[1]),.joint_mux_in_prog(ch_joint_mux_in_prog[1]),.joint_req(ch_joint_req[1]),.ch_start(ch_start[1]),.int_all_proc(ch_int_all_proc[1-1+(1*1):1*1])); 
-  dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty2(.clk(clk),.reset(reset),.scan_en(scan_en),.idle(ch_idle[2]),.pclk(pclk),.clken(clken),.pclken(pclken),.psel(ch_psel[2]),.penable(penable),.paddr(paddr[7:0]),.pwrite(pwrite),.pwdata(pwdata),.prdata(ch_prdata[31+32*2:32*2]),.pslverr(ch_pslverr[2]),.periph_tx_req(periph_tx_req),.periph_tx_clr(ch_periph_tx_clr[31*2+31-1:31*2]),.periph_rx_req(periph_rx_req),.periph_rx_clr(ch_periph_rx_clr[31*2+31-1:31*2]),.rd_cmd_split(ch_rd_cmd_split[2]),.rd_cmd_line(ch_rd_cmd_line[2]),.rd_clr_line(ch_rd_clr_line[2]),.rd_clr(ch_rd_clr[2]),.rd_clr_load(ch_rd_clr_load[2]),.rd_slverr(ch_rd_slverr[2]),.rd_decerr(ch_rd_decerr[2]),.rd_line_cmd(ch_rd_line_cmd[2]),.rd_go_next_line(ch_rd_go_next_line[2]),.rd_transfer(ch_rd_transfer[2]),.rd_transfer_size(rd_transfer_size),.rd_clr_stall(ch_rd_clr_stall[2]),.wr_cmd_split(ch_wr_cmd_split[2]),.wr_cmd_pending(ch_wr_cmd_pending[2]),.wr_clr_line(ch_wr_clr_line[2]),.wr_clr(ch_wr_clr[2]),.wr_clr_last(ch_wr_clr_last[2]),.wr_slverr(ch_wr_slverr[2]),.wr_decerr(ch_wr_decerr[2]),.wr_last_cmd(ch_wr_last_cmd[2]),.wr_line_cmd(ch_wr_line_cmd[2]),.wr_go_next_line(ch_wr_go_next_line[2]),.wr_transfer(ch_wr_transfer[2]),.wr_transfer_size(wr_transfer_size),.wr_next_size(wr_next_size),.wr_clr_stall(ch_wr_clr_stall[2]),.timeout_aw(ch_timeout_aw[2]),.timeout_w(ch_timeout_w[2]),.timeout_ar(ch_timeout_ar[2]),.wdt_timeout(ch_wdt_timeout[2]),.load_wr(ch_load_wr[2]),.load_wr_cycle(load_wr_cycle),.load_wdata(load_wdata),.load_req_in_prog(ch_load_req_in_prog[2]),.ch_active(ch_active[2]),.ch_rd_active(ch_rd_active[2]),.ch_wr_active(ch_wr_active[2]),.rd_burst_start(ch_rd_burst_start[2]),.rd_ready(ch_rd_ready[2]),.rd_burst_addr(ch_rd_burst_addr[32-1+32*2:32*2]),.rd_burst_size(ch_rd_burst_size[8-1+8*2:8*2]),.rd_tokens(ch_rd_tokens[6-1+6*2:6*2]),.rd_port_num(ch_rd_port_num[2]),.rd_periph_delay(ch_rd_periph_delay[3-1+3*2:3*2]),.rd_clr_valid(ch_rd_clr_valid[2]),.wr_burst_start(ch_wr_burst_start[2]),.wr_ready(ch_wr_ready[2]),.wr_burst_addr(ch_wr_burst_addr[32-1+32*2:32*2]),.wr_burst_size(ch_wr_burst_size[8-1+8*2:8*2]),.wr_tokens(ch_wr_tokens[6-1+6*2:6*2]),.wr_port_num(ch_wr_port_num[2]),.wr_periph_delay(ch_wr_periph_delay[3-1+3*2:3*2]),.wr_clr_valid(ch_wr_clr_valid[2]),.fifo_wr(ch_fifo_wr[2]),.fifo_wdata(fifo_wdata),.fifo_wsize(fifo_wsize),.fifo_rd(ch_fifo_rd[2]),.fifo_rsize(fifo_rsize),.fifo_rd_valid(ch_fifo_rd_valid[2]),.fifo_rdata(ch_fifo_rdata[(64-1)+64*2:64*2]),.fifo_wr_ready(ch_fifo_wr_ready[2]),.joint_mode(joint_mode),.joint_remote(joint_remote),.rd_page_cross(ch_rd_page_cross[2]),.wr_page_cross(ch_wr_page_cross[2]),.joint_in_prog(ch_joint_in_prog[2]),.joint_not_in_prog(ch_joint_not_in_prog[2]),.joint_mux_in_prog(ch_joint_mux_in_prog[2]),.joint_req(ch_joint_req[2]),.ch_start(ch_start[2]),.int_all_proc(ch_int_all_proc[1-1+(1*2):1*2])); 
-  dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty3(.clk(clk),.reset(reset),.scan_en(scan_en),.idle(ch_idle[3]),.pclk(pclk),.clken(clken),.pclken(pclken),.psel(ch_psel[3]),.penable(penable),.paddr(paddr[7:0]),.pwrite(pwrite),.pwdata(pwdata),.prdata(ch_prdata[31+32*3:32*3]),.pslverr(ch_pslverr[3]),.periph_tx_req(periph_tx_req),.periph_tx_clr(ch_periph_tx_clr[31*3+31-1:31*3]),.periph_rx_req(periph_rx_req),.periph_rx_clr(ch_periph_rx_clr[31*3+31-1:31*3]),.rd_cmd_split(ch_rd_cmd_split[3]),.rd_cmd_line(ch_rd_cmd_line[3]),.rd_clr_line(ch_rd_clr_line[3]),.rd_clr(ch_rd_clr[3]),.rd_clr_load(ch_rd_clr_load[3]),.rd_slverr(ch_rd_slverr[3]),.rd_decerr(ch_rd_decerr[3]),.rd_line_cmd(ch_rd_line_cmd[3]),.rd_go_next_line(ch_rd_go_next_line[3]),.rd_transfer(ch_rd_transfer[3]),.rd_transfer_size(rd_transfer_size),.rd_clr_stall(ch_rd_clr_stall[3]),.wr_cmd_split(ch_wr_cmd_split[3]),.wr_cmd_pending(ch_wr_cmd_pending[3]),.wr_clr_line(ch_wr_clr_line[3]),.wr_clr(ch_wr_clr[3]),.wr_clr_last(ch_wr_clr_last[3]),.wr_slverr(ch_wr_slverr[3]),.wr_decerr(ch_wr_decerr[3]),.wr_last_cmd(ch_wr_last_cmd[3]),.wr_line_cmd(ch_wr_line_cmd[3]),.wr_go_next_line(ch_wr_go_next_line[3]),.wr_transfer(ch_wr_transfer[3]),.wr_transfer_size(wr_transfer_size),.wr_next_size(wr_next_size),.wr_clr_stall(ch_wr_clr_stall[3]),.timeout_aw(ch_timeout_aw[3]),.timeout_w(ch_timeout_w[3]),.timeout_ar(ch_timeout_ar[3]),.wdt_timeout(ch_wdt_timeout[3]),.load_wr(ch_load_wr[3]),.load_wr_cycle(load_wr_cycle),.load_wdata(load_wdata),.load_req_in_prog(ch_load_req_in_prog[3]),.ch_active(ch_active[3]),.ch_rd_active(ch_rd_active[3]),.ch_wr_active(ch_wr_active[3]),.rd_burst_start(ch_rd_burst_start[3]),.rd_ready(ch_rd_ready[3]),.rd_burst_addr(ch_rd_burst_addr[32-1+32*3:32*3]),.rd_burst_size(ch_rd_burst_size[8-1+8*3:8*3]),.rd_tokens(ch_rd_tokens[6-1+6*3:6*3]),.rd_port_num(ch_rd_port_num[3]),.rd_periph_delay(ch_rd_periph_delay[3-1+3*3:3*3]),.rd_clr_valid(ch_rd_clr_valid[3]),.wr_burst_start(ch_wr_burst_start[3]),.wr_ready(ch_wr_ready[3]),.wr_burst_addr(ch_wr_burst_addr[32-1+32*3:32*3]),.wr_burst_size(ch_wr_burst_size[8-1+8*3:8*3]),.wr_tokens(ch_wr_tokens[6-1+6*3:6*3]),.wr_port_num(ch_wr_port_num[3]),.wr_periph_delay(ch_wr_periph_delay[3-1+3*3:3*3]),.wr_clr_valid(ch_wr_clr_valid[3]),.fifo_wr(ch_fifo_wr[3]),.fifo_wdata(fifo_wdata),.fifo_wsize(fifo_wsize),.fifo_rd(ch_fifo_rd[3]),.fifo_rsize(fifo_rsize),.fifo_rd_valid(ch_fifo_rd_valid[3]),.fifo_rdata(ch_fifo_rdata[(64-1)+64*3:64*3]),.fifo_wr_ready(ch_fifo_wr_ready[3]),.joint_mode(joint_mode),.joint_remote(joint_remote),.rd_page_cross(ch_rd_page_cross[3]),.wr_page_cross(ch_wr_page_cross[3]),.joint_in_prog(ch_joint_in_prog[3]),.joint_not_in_prog(ch_joint_not_in_prog[3]),.joint_mux_in_prog(ch_joint_mux_in_prog[3]),.joint_req(ch_joint_req[3]),.ch_start(ch_start[3]),.int_all_proc(ch_int_all_proc[1-1+(1*3):1*3])); 
-  dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty4(.clk(clk),.reset(reset),.scan_en(scan_en),.idle(ch_idle[4]),.pclk(pclk),.clken(clken),.pclken(pclken),.psel(ch_psel[4]),.penable(penable),.paddr(paddr[7:0]),.pwrite(pwrite),.pwdata(pwdata),.prdata(ch_prdata[31+32*4:32*4]),.pslverr(ch_pslverr[4]),.periph_tx_req(periph_tx_req),.periph_tx_clr(ch_periph_tx_clr[31*4+31-1:31*4]),.periph_rx_req(periph_rx_req),.periph_rx_clr(ch_periph_rx_clr[31*4+31-1:31*4]),.rd_cmd_split(ch_rd_cmd_split[4]),.rd_cmd_line(ch_rd_cmd_line[4]),.rd_clr_line(ch_rd_clr_line[4]),.rd_clr(ch_rd_clr[4]),.rd_clr_load(ch_rd_clr_load[4]),.rd_slverr(ch_rd_slverr[4]),.rd_decerr(ch_rd_decerr[4]),.rd_line_cmd(ch_rd_line_cmd[4]),.rd_go_next_line(ch_rd_go_next_line[4]),.rd_transfer(ch_rd_transfer[4]),.rd_transfer_size(rd_transfer_size),.rd_clr_stall(ch_rd_clr_stall[4]),.wr_cmd_split(ch_wr_cmd_split[4]),.wr_cmd_pending(ch_wr_cmd_pending[4]),.wr_clr_line(ch_wr_clr_line[4]),.wr_clr(ch_wr_clr[4]),.wr_clr_last(ch_wr_clr_last[4]),.wr_slverr(ch_wr_slverr[4]),.wr_decerr(ch_wr_decerr[4]),.wr_last_cmd(ch_wr_last_cmd[4]),.wr_line_cmd(ch_wr_line_cmd[4]),.wr_go_next_line(ch_wr_go_next_line[4]),.wr_transfer(ch_wr_transfer[4]),.wr_transfer_size(wr_transfer_size),.wr_next_size(wr_next_size),.wr_clr_stall(ch_wr_clr_stall[4]),.timeout_aw(ch_timeout_aw[4]),.timeout_w(ch_timeout_w[4]),.timeout_ar(ch_timeout_ar[4]),.wdt_timeout(ch_wdt_timeout[4]),.load_wr(ch_load_wr[4]),.load_wr_cycle(load_wr_cycle),.load_wdata(load_wdata),.load_req_in_prog(ch_load_req_in_prog[4]),.ch_active(ch_active[4]),.ch_rd_active(ch_rd_active[4]),.ch_wr_active(ch_wr_active[4]),.rd_burst_start(ch_rd_burst_start[4]),.rd_ready(ch_rd_ready[4]),.rd_burst_addr(ch_rd_burst_addr[32-1+32*4:32*4]),.rd_burst_size(ch_rd_burst_size[8-1+8*4:8*4]),.rd_tokens(ch_rd_tokens[6-1+6*4:6*4]),.rd_port_num(ch_rd_port_num[4]),.rd_periph_delay(ch_rd_periph_delay[3-1+3*4:3*4]),.rd_clr_valid(ch_rd_clr_valid[4]),.wr_burst_start(ch_wr_burst_start[4]),.wr_ready(ch_wr_ready[4]),.wr_burst_addr(ch_wr_burst_addr[32-1+32*4:32*4]),.wr_burst_size(ch_wr_burst_size[8-1+8*4:8*4]),.wr_tokens(ch_wr_tokens[6-1+6*4:6*4]),.wr_port_num(ch_wr_port_num[4]),.wr_periph_delay(ch_wr_periph_delay[3-1+3*4:3*4]),.wr_clr_valid(ch_wr_clr_valid[4]),.fifo_wr(ch_fifo_wr[4]),.fifo_wdata(fifo_wdata),.fifo_wsize(fifo_wsize),.fifo_rd(ch_fifo_rd[4]),.fifo_rsize(fifo_rsize),.fifo_rd_valid(ch_fifo_rd_valid[4]),.fifo_rdata(ch_fifo_rdata[(64-1)+64*4:64*4]),.fifo_wr_ready(ch_fifo_wr_ready[4]),.joint_mode(joint_mode),.joint_remote(joint_remote),.rd_page_cross(ch_rd_page_cross[4]),.wr_page_cross(ch_wr_page_cross[4]),.joint_in_prog(ch_joint_in_prog[4]),.joint_not_in_prog(ch_joint_not_in_prog[4]),.joint_mux_in_prog(ch_joint_mux_in_prog[4]),.joint_req(ch_joint_req[4]),.ch_start(ch_start[4]),.int_all_proc(ch_int_all_proc[1-1+(1*4):1*4])); 
-  dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty5(.clk(clk),.reset(reset),.scan_en(scan_en),.idle(ch_idle[5]),.pclk(pclk),.clken(clken),.pclken(pclken),.psel(ch_psel[5]),.penable(penable),.paddr(paddr[7:0]),.pwrite(pwrite),.pwdata(pwdata),.prdata(ch_prdata[31+32*5:32*5]),.pslverr(ch_pslverr[5]),.periph_tx_req(periph_tx_req),.periph_tx_clr(ch_periph_tx_clr[31*5+31-1:31*5]),.periph_rx_req(periph_rx_req),.periph_rx_clr(ch_periph_rx_clr[31*5+31-1:31*5]),.rd_cmd_split(ch_rd_cmd_split[5]),.rd_cmd_line(ch_rd_cmd_line[5]),.rd_clr_line(ch_rd_clr_line[5]),.rd_clr(ch_rd_clr[5]),.rd_clr_load(ch_rd_clr_load[5]),.rd_slverr(ch_rd_slverr[5]),.rd_decerr(ch_rd_decerr[5]),.rd_line_cmd(ch_rd_line_cmd[5]),.rd_go_next_line(ch_rd_go_next_line[5]),.rd_transfer(ch_rd_transfer[5]),.rd_transfer_size(rd_transfer_size),.rd_clr_stall(ch_rd_clr_stall[5]),.wr_cmd_split(ch_wr_cmd_split[5]),.wr_cmd_pending(ch_wr_cmd_pending[5]),.wr_clr_line(ch_wr_clr_line[5]),.wr_clr(ch_wr_clr[5]),.wr_clr_last(ch_wr_clr_last[5]),.wr_slverr(ch_wr_slverr[5]),.wr_decerr(ch_wr_decerr[5]),.wr_last_cmd(ch_wr_last_cmd[5]),.wr_line_cmd(ch_wr_line_cmd[5]),.wr_go_next_line(ch_wr_go_next_line[5]),.wr_transfer(ch_wr_transfer[5]),.wr_transfer_size(wr_transfer_size),.wr_next_size(wr_next_size),.wr_clr_stall(ch_wr_clr_stall[5]),.timeout_aw(ch_timeout_aw[5]),.timeout_w(ch_timeout_w[5]),.timeout_ar(ch_timeout_ar[5]),.wdt_timeout(ch_wdt_timeout[5]),.load_wr(ch_load_wr[5]),.load_wr_cycle(load_wr_cycle),.load_wdata(load_wdata),.load_req_in_prog(ch_load_req_in_prog[5]),.ch_active(ch_active[5]),.ch_rd_active(ch_rd_active[5]),.ch_wr_active(ch_wr_active[5]),.rd_burst_start(ch_rd_burst_start[5]),.rd_ready(ch_rd_ready[5]),.rd_burst_addr(ch_rd_burst_addr[32-1+32*5:32*5]),.rd_burst_size(ch_rd_burst_size[8-1+8*5:8*5]),.rd_tokens(ch_rd_tokens[6-1+6*5:6*5]),.rd_port_num(ch_rd_port_num[5]),.rd_periph_delay(ch_rd_periph_delay[3-1+3*5:3*5]),.rd_clr_valid(ch_rd_clr_valid[5]),.wr_burst_start(ch_wr_burst_start[5]),.wr_ready(ch_wr_ready[5]),.wr_burst_addr(ch_wr_burst_addr[32-1+32*5:32*5]),.wr_burst_size(ch_wr_burst_size[8-1+8*5:8*5]),.wr_tokens(ch_wr_tokens[6-1+6*5:6*5]),.wr_port_num(ch_wr_port_num[5]),.wr_periph_delay(ch_wr_periph_delay[3-1+3*5:3*5]),.wr_clr_valid(ch_wr_clr_valid[5]),.fifo_wr(ch_fifo_wr[5]),.fifo_wdata(fifo_wdata),.fifo_wsize(fifo_wsize),.fifo_rd(ch_fifo_rd[5]),.fifo_rsize(fifo_rsize),.fifo_rd_valid(ch_fifo_rd_valid[5]),.fifo_rdata(ch_fifo_rdata[(64-1)+64*5:64*5]),.fifo_wr_ready(ch_fifo_wr_ready[5]),.joint_mode(joint_mode),.joint_remote(joint_remote),.rd_page_cross(ch_rd_page_cross[5]),.wr_page_cross(ch_wr_page_cross[5]),.joint_in_prog(ch_joint_in_prog[5]),.joint_not_in_prog(ch_joint_not_in_prog[5]),.joint_mux_in_prog(ch_joint_mux_in_prog[5]),.joint_req(ch_joint_req[5]),.ch_start(ch_start[5]),.int_all_proc(ch_int_all_proc[1-1+(1*5):1*5])); 
-  dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty6(.clk(clk),.reset(reset),.scan_en(scan_en),.idle(ch_idle[6]),.pclk(pclk),.clken(clken),.pclken(pclken),.psel(ch_psel[6]),.penable(penable),.paddr(paddr[7:0]),.pwrite(pwrite),.pwdata(pwdata),.prdata(ch_prdata[31+32*6:32*6]),.pslverr(ch_pslverr[6]),.periph_tx_req(periph_tx_req),.periph_tx_clr(ch_periph_tx_clr[31*6+31-1:31*6]),.periph_rx_req(periph_rx_req),.periph_rx_clr(ch_periph_rx_clr[31*6+31-1:31*6]),.rd_cmd_split(ch_rd_cmd_split[6]),.rd_cmd_line(ch_rd_cmd_line[6]),.rd_clr_line(ch_rd_clr_line[6]),.rd_clr(ch_rd_clr[6]),.rd_clr_load(ch_rd_clr_load[6]),.rd_slverr(ch_rd_slverr[6]),.rd_decerr(ch_rd_decerr[6]),.rd_line_cmd(ch_rd_line_cmd[6]),.rd_go_next_line(ch_rd_go_next_line[6]),.rd_transfer(ch_rd_transfer[6]),.rd_transfer_size(rd_transfer_size),.rd_clr_stall(ch_rd_clr_stall[6]),.wr_cmd_split(ch_wr_cmd_split[6]),.wr_cmd_pending(ch_wr_cmd_pending[6]),.wr_clr_line(ch_wr_clr_line[6]),.wr_clr(ch_wr_clr[6]),.wr_clr_last(ch_wr_clr_last[6]),.wr_slverr(ch_wr_slverr[6]),.wr_decerr(ch_wr_decerr[6]),.wr_last_cmd(ch_wr_last_cmd[6]),.wr_line_cmd(ch_wr_line_cmd[6]),.wr_go_next_line(ch_wr_go_next_line[6]),.wr_transfer(ch_wr_transfer[6]),.wr_transfer_size(wr_transfer_size),.wr_next_size(wr_next_size),.wr_clr_stall(ch_wr_clr_stall[6]),.timeout_aw(ch_timeout_aw[6]),.timeout_w(ch_timeout_w[6]),.timeout_ar(ch_timeout_ar[6]),.wdt_timeout(ch_wdt_timeout[6]),.load_wr(ch_load_wr[6]),.load_wr_cycle(load_wr_cycle),.load_wdata(load_wdata),.load_req_in_prog(ch_load_req_in_prog[6]),.ch_active(ch_active[6]),.ch_rd_active(ch_rd_active[6]),.ch_wr_active(ch_wr_active[6]),.rd_burst_start(ch_rd_burst_start[6]),.rd_ready(ch_rd_ready[6]),.rd_burst_addr(ch_rd_burst_addr[32-1+32*6:32*6]),.rd_burst_size(ch_rd_burst_size[8-1+8*6:8*6]),.rd_tokens(ch_rd_tokens[6-1+6*6:6*6]),.rd_port_num(ch_rd_port_num[6]),.rd_periph_delay(ch_rd_periph_delay[3-1+3*6:3*6]),.rd_clr_valid(ch_rd_clr_valid[6]),.wr_burst_start(ch_wr_burst_start[6]),.wr_ready(ch_wr_ready[6]),.wr_burst_addr(ch_wr_burst_addr[32-1+32*6:32*6]),.wr_burst_size(ch_wr_burst_size[8-1+8*6:8*6]),.wr_tokens(ch_wr_tokens[6-1+6*6:6*6]),.wr_port_num(ch_wr_port_num[6]),.wr_periph_delay(ch_wr_periph_delay[3-1+3*6:3*6]),.wr_clr_valid(ch_wr_clr_valid[6]),.fifo_wr(ch_fifo_wr[6]),.fifo_wdata(fifo_wdata),.fifo_wsize(fifo_wsize),.fifo_rd(ch_fifo_rd[6]),.fifo_rsize(fifo_rsize),.fifo_rd_valid(ch_fifo_rd_valid[6]),.fifo_rdata(ch_fifo_rdata[(64-1)+64*6:64*6]),.fifo_wr_ready(ch_fifo_wr_ready[6]),.joint_mode(joint_mode),.joint_remote(joint_remote),.rd_page_cross(ch_rd_page_cross[6]),.wr_page_cross(ch_wr_page_cross[6]),.joint_in_prog(ch_joint_in_prog[6]),.joint_not_in_prog(ch_joint_not_in_prog[6]),.joint_mux_in_prog(ch_joint_mux_in_prog[6]),.joint_req(ch_joint_req[6]),.ch_start(ch_start[6]),.int_all_proc(ch_int_all_proc[1-1+(1*6):1*6])); 
-  dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty7(.clk(clk),.reset(reset),.scan_en(scan_en),.idle(ch_idle[7]),.pclk(pclk),.clken(clken),.pclken(pclken),.psel(ch_psel[7]),.penable(penable),.paddr(paddr[7:0]),.pwrite(pwrite),.pwdata(pwdata),.prdata(ch_prdata[31+32*7:32*7]),.pslverr(ch_pslverr[7]),.periph_tx_req(periph_tx_req),.periph_tx_clr(ch_periph_tx_clr[31*7+31-1:31*7]),.periph_rx_req(periph_rx_req),.periph_rx_clr(ch_periph_rx_clr[31*7+31-1:31*7]),.rd_cmd_split(ch_rd_cmd_split[7]),.rd_cmd_line(ch_rd_cmd_line[7]),.rd_clr_line(ch_rd_clr_line[7]),.rd_clr(ch_rd_clr[7]),.rd_clr_load(ch_rd_clr_load[7]),.rd_slverr(ch_rd_slverr[7]),.rd_decerr(ch_rd_decerr[7]),.rd_line_cmd(ch_rd_line_cmd[7]),.rd_go_next_line(ch_rd_go_next_line[7]),.rd_transfer(ch_rd_transfer[7]),.rd_transfer_size(rd_transfer_size),.rd_clr_stall(ch_rd_clr_stall[7]),.wr_cmd_split(ch_wr_cmd_split[7]),.wr_cmd_pending(ch_wr_cmd_pending[7]),.wr_clr_line(ch_wr_clr_line[7]),.wr_clr(ch_wr_clr[7]),.wr_clr_last(ch_wr_clr_last[7]),.wr_slverr(ch_wr_slverr[7]),.wr_decerr(ch_wr_decerr[7]),.wr_last_cmd(ch_wr_last_cmd[7]),.wr_line_cmd(ch_wr_line_cmd[7]),.wr_go_next_line(ch_wr_go_next_line[7]),.wr_transfer(ch_wr_transfer[7]),.wr_transfer_size(wr_transfer_size),.wr_next_size(wr_next_size),.wr_clr_stall(ch_wr_clr_stall[7]),.timeout_aw(ch_timeout_aw[7]),.timeout_w(ch_timeout_w[7]),.timeout_ar(ch_timeout_ar[7]),.wdt_timeout(ch_wdt_timeout[7]),.load_wr(ch_load_wr[7]),.load_wr_cycle(load_wr_cycle),.load_wdata(load_wdata),.load_req_in_prog(ch_load_req_in_prog[7]),.ch_active(ch_active[7]),.ch_rd_active(ch_rd_active[7]),.ch_wr_active(ch_wr_active[7]),.rd_burst_start(ch_rd_burst_start[7]),.rd_ready(ch_rd_ready[7]),.rd_burst_addr(ch_rd_burst_addr[32-1+32*7:32*7]),.rd_burst_size(ch_rd_burst_size[8-1+8*7:8*7]),.rd_tokens(ch_rd_tokens[6-1+6*7:6*7]),.rd_port_num(ch_rd_port_num[7]),.rd_periph_delay(ch_rd_periph_delay[3-1+3*7:3*7]),.rd_clr_valid(ch_rd_clr_valid[7]),.wr_burst_start(ch_wr_burst_start[7]),.wr_ready(ch_wr_ready[7]),.wr_burst_addr(ch_wr_burst_addr[32-1+32*7:32*7]),.wr_burst_size(ch_wr_burst_size[8-1+8*7:8*7]),.wr_tokens(ch_wr_tokens[6-1+6*7:6*7]),.wr_port_num(ch_wr_port_num[7]),.wr_periph_delay(ch_wr_periph_delay[3-1+3*7:3*7]),.wr_clr_valid(ch_wr_clr_valid[7]),.fifo_wr(ch_fifo_wr[7]),.fifo_wdata(fifo_wdata),.fifo_wsize(fifo_wsize),.fifo_rd(ch_fifo_rd[7]),.fifo_rsize(fifo_rsize),.fifo_rd_valid(ch_fifo_rd_valid[7]),.fifo_rdata(ch_fifo_rdata[(64-1)+64*7:64*7]),.fifo_wr_ready(ch_fifo_wr_ready[7]),.joint_mode(joint_mode),.joint_remote(joint_remote),.rd_page_cross(ch_rd_page_cross[7]),.wr_page_cross(ch_wr_page_cross[7]),.joint_in_prog(ch_joint_in_prog[7]),.joint_not_in_prog(ch_joint_not_in_prog[7]),.joint_mux_in_prog(ch_joint_mux_in_prog[7]),.joint_req(ch_joint_req[7]),.ch_start(ch_start[7]),.int_all_proc(ch_int_all_proc[1-1+(1*7):1*7])); 
+  dma_axi64_core0_ch dma_axi64_core0_ch0(.clk(clk),.reset(reset),.scan_en(scan_en),.idle(ch_idle[0]),.pclk(pclk),.clken(clken),.pclken(pclken),.psel(ch_psel[0]),.penable(penable),.paddr(paddr[7:0]),.pwrite(pwrite),.pwdata(pwdata),.prdata(ch_prdata[31+32*0:32*0]),.pslverr(ch_pslverr[0]),.periph_tx_req(periph_tx_req),.periph_tx_clr(ch_periph_tx_clr[31*0+31-1:31*0]),.periph_rx_req(periph_rx_req),.periph_rx_clr(ch_periph_rx_clr[31*0+31-1:31*0]),.rd_cmd_split(ch_rd_cmd_split[0]),.rd_cmd_line(ch_rd_cmd_line[0]),.rd_clr_line(ch_rd_clr_line[0]),.rd_clr(ch_rd_clr[0]),.rd_clr_load(ch_rd_clr_load[0]),.rd_slverr(ch_rd_slverr[0]),.rd_decerr(ch_rd_decerr[0]),.rd_line_cmd(ch_rd_line_cmd[0]),.rd_go_next_line(ch_rd_go_next_line[0]),.rd_transfer(ch_rd_transfer[0]),.rd_transfer_size(rd_transfer_size),.rd_clr_stall(ch_rd_clr_stall[0]),.wr_cmd_split(ch_wr_cmd_split[0]),.wr_cmd_pending(ch_wr_cmd_pending[0]),.wr_clr_line(ch_wr_clr_line[0]),.wr_clr(ch_wr_clr[0]),.wr_clr_last(ch_wr_clr_last[0]),.wr_slverr(ch_wr_slverr[0]),.wr_decerr(ch_wr_decerr[0]),.wr_last_cmd(ch_wr_last_cmd[0]),.wr_line_cmd(ch_wr_line_cmd[0]),.wr_go_next_line(ch_wr_go_next_line[0]),.wr_transfer(ch_wr_transfer[0]),.wr_transfer_size(wr_transfer_size),.wr_next_size(wr_next_size),.wr_clr_stall(ch_wr_clr_stall[0]),.wr_incr(),.timeout_aw(ch_timeout_aw[0]),.timeout_w(ch_timeout_w[0]),.timeout_ar(ch_timeout_ar[0]),.wdt_timeout(ch_wdt_timeout[0]),.load_wr(ch_load_wr[0]),.load_wr_cycle(load_wr_cycle),.load_wdata(load_wdata),.load_req_in_prog(ch_load_req_in_prog[0]),.ch_active(ch_active[0]),.ch_rd_active(ch_rd_active[0]),.ch_wr_active(ch_wr_active[0]),.rd_burst_start(ch_rd_burst_start[0]),.rd_ready(ch_rd_ready[0]),.rd_burst_addr(ch_rd_burst_addr[32-1+32*0:32*0]),.rd_burst_size(ch_rd_burst_size[8-1+8*0:8*0]),.rd_tokens(ch_rd_tokens[6-1+6*0:6*0]),.rd_port_num(ch_rd_port_num[0]),.rd_periph_delay(ch_rd_periph_delay[3-1+3*0:3*0]),.rd_clr_valid(ch_rd_clr_valid[0]),.wr_burst_start(ch_wr_burst_start[0]),.wr_ready(ch_wr_ready[0]),.wr_burst_addr(ch_wr_burst_addr[32-1+32*0:32*0]),.wr_burst_size(ch_wr_burst_size[8-1+8*0:8*0]),.wr_tokens(ch_wr_tokens[6-1+6*0:6*0]),.wr_port_num(ch_wr_port_num[0]),.wr_periph_delay(ch_wr_periph_delay[3-1+3*0:3*0]),.wr_clr_valid(ch_wr_clr_valid[0]),.fifo_wr(ch_fifo_wr[0]),.fifo_wdata(fifo_wdata),.fifo_wsize(fifo_wsize),.fifo_rd(ch_fifo_rd[0]),.fifo_rsize(fifo_rsize),.fifo_rd_valid(ch_fifo_rd_valid[0]),.fifo_rdata(ch_fifo_rdata[(64-1)+64*0:64*0]),.fifo_wr_ready(ch_fifo_wr_ready[0]),.joint_mode(joint_mode),.joint_remote(joint_remote),.rd_page_cross(ch_rd_page_cross[0]),.wr_page_cross(ch_wr_page_cross[0]),.joint_in_prog(ch_joint_in_prog[0]),.joint_not_in_prog(ch_joint_not_in_prog[0]),.joint_mux_in_prog(ch_joint_mux_in_prog[0]),.joint_req(ch_joint_req[0]),.ch_start(ch_start[0]),.int_all_proc(ch_int_all_proc[1-1+(1*0):1*0])); 
+  dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty1(.clk(clk),.reset(reset),.scan_en(scan_en),.idle(ch_idle[1]),.pclk(pclk),.clken(clken),.pclken(pclken),.psel(ch_psel[1]),.penable(penable),.paddr(paddr[7:0]),.pwrite(pwrite),.pwdata(pwdata),.prdata(ch_prdata[31+32*1:32*1]),.pslverr(ch_pslverr[1]),.periph_tx_req(periph_tx_req),.periph_tx_clr(ch_periph_tx_clr[31*1+31-1:31*1]),.periph_rx_req(periph_rx_req),.periph_rx_clr(ch_periph_rx_clr[31*1+31-1:31*1]),.rd_cmd_split(ch_rd_cmd_split[1]),.rd_cmd_line(ch_rd_cmd_line[1]),.rd_clr_line(ch_rd_clr_line[1]),.rd_clr(ch_rd_clr[1]),.rd_clr_load(ch_rd_clr_load[1]),.rd_slverr(ch_rd_slverr[1]),.rd_decerr(ch_rd_decerr[1]),.rd_line_cmd(ch_rd_line_cmd[1]),.rd_go_next_line(ch_rd_go_next_line[1]),.rd_transfer(ch_rd_transfer[1]),.rd_transfer_size(rd_transfer_size),.rd_clr_stall(ch_rd_clr_stall[1]),.wr_cmd_split(ch_wr_cmd_split[1]),.wr_cmd_pending(ch_wr_cmd_pending[1]),.wr_clr_line(ch_wr_clr_line[1]),.wr_clr(ch_wr_clr[1]),.wr_clr_last(ch_wr_clr_last[1]),.wr_slverr(ch_wr_slverr[1]),.wr_decerr(ch_wr_decerr[1]),.wr_last_cmd(ch_wr_last_cmd[1]),.wr_line_cmd(ch_wr_line_cmd[1]),.wr_go_next_line(ch_wr_go_next_line[1]),.wr_transfer(ch_wr_transfer[1]),.wr_transfer_size(wr_transfer_size),.wr_next_size(wr_next_size),.wr_clr_stall(ch_wr_clr_stall[1]),.wr_incr(),.timeout_aw(ch_timeout_aw[1]),.timeout_w(ch_timeout_w[1]),.timeout_ar(ch_timeout_ar[1]),.wdt_timeout(ch_wdt_timeout[1]),.load_wr(ch_load_wr[1]),.load_wr_cycle(load_wr_cycle),.load_wdata(load_wdata),.load_req_in_prog(ch_load_req_in_prog[1]),.ch_active(ch_active[1]),.ch_rd_active(ch_rd_active[1]),.ch_wr_active(ch_wr_active[1]),.rd_burst_start(ch_rd_burst_start[1]),.rd_ready(ch_rd_ready[1]),.rd_burst_addr(ch_rd_burst_addr[32-1+32*1:32*1]),.rd_burst_size(ch_rd_burst_size[8-1+8*1:8*1]),.rd_tokens(ch_rd_tokens[6-1+6*1:6*1]),.rd_port_num(ch_rd_port_num[1]),.rd_periph_delay(ch_rd_periph_delay[3-1+3*1:3*1]),.rd_clr_valid(ch_rd_clr_valid[1]),.wr_burst_start(ch_wr_burst_start[1]),.wr_ready(ch_wr_ready[1]),.wr_burst_addr(ch_wr_burst_addr[32-1+32*1:32*1]),.wr_burst_size(ch_wr_burst_size[8-1+8*1:8*1]),.wr_tokens(ch_wr_tokens[6-1+6*1:6*1]),.wr_port_num(ch_wr_port_num[1]),.wr_periph_delay(ch_wr_periph_delay[3-1+3*1:3*1]),.wr_clr_valid(ch_wr_clr_valid[1]),.fifo_wr(ch_fifo_wr[1]),.fifo_wdata(fifo_wdata),.fifo_wsize(fifo_wsize),.fifo_rd(ch_fifo_rd[1]),.fifo_rsize(fifo_rsize),.fifo_rd_valid(ch_fifo_rd_valid[1]),.fifo_rdata(ch_fifo_rdata[(64-1)+64*1:64*1]),.fifo_wr_ready(ch_fifo_wr_ready[1]),.joint_mode(joint_mode),.joint_remote(joint_remote),.rd_page_cross(ch_rd_page_cross[1]),.wr_page_cross(ch_wr_page_cross[1]),.joint_in_prog(ch_joint_in_prog[1]),.joint_not_in_prog(ch_joint_not_in_prog[1]),.joint_mux_in_prog(ch_joint_mux_in_prog[1]),.joint_req(ch_joint_req[1]),.ch_start(ch_start[1]),.int_all_proc(ch_int_all_proc[1-1+(1*1):1*1])); 
+  dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty2(.clk(clk),.reset(reset),.scan_en(scan_en),.idle(ch_idle[2]),.pclk(pclk),.clken(clken),.pclken(pclken),.psel(ch_psel[2]),.penable(penable),.paddr(paddr[7:0]),.pwrite(pwrite),.pwdata(pwdata),.prdata(ch_prdata[31+32*2:32*2]),.pslverr(ch_pslverr[2]),.periph_tx_req(periph_tx_req),.periph_tx_clr(ch_periph_tx_clr[31*2+31-1:31*2]),.periph_rx_req(periph_rx_req),.periph_rx_clr(ch_periph_rx_clr[31*2+31-1:31*2]),.rd_cmd_split(ch_rd_cmd_split[2]),.rd_cmd_line(ch_rd_cmd_line[2]),.rd_clr_line(ch_rd_clr_line[2]),.rd_clr(ch_rd_clr[2]),.rd_clr_load(ch_rd_clr_load[2]),.rd_slverr(ch_rd_slverr[2]),.rd_decerr(ch_rd_decerr[2]),.rd_line_cmd(ch_rd_line_cmd[2]),.rd_go_next_line(ch_rd_go_next_line[2]),.rd_transfer(ch_rd_transfer[2]),.rd_transfer_size(rd_transfer_size),.rd_clr_stall(ch_rd_clr_stall[2]),.wr_cmd_split(ch_wr_cmd_split[2]),.wr_cmd_pending(ch_wr_cmd_pending[2]),.wr_clr_line(ch_wr_clr_line[2]),.wr_clr(ch_wr_clr[2]),.wr_clr_last(ch_wr_clr_last[2]),.wr_slverr(ch_wr_slverr[2]),.wr_decerr(ch_wr_decerr[2]),.wr_last_cmd(ch_wr_last_cmd[2]),.wr_line_cmd(ch_wr_line_cmd[2]),.wr_go_next_line(ch_wr_go_next_line[2]),.wr_transfer(ch_wr_transfer[2]),.wr_transfer_size(wr_transfer_size),.wr_next_size(wr_next_size),.wr_clr_stall(ch_wr_clr_stall[2]),.wr_incr(),.timeout_aw(ch_timeout_aw[2]),.timeout_w(ch_timeout_w[2]),.timeout_ar(ch_timeout_ar[2]),.wdt_timeout(ch_wdt_timeout[2]),.load_wr(ch_load_wr[2]),.load_wr_cycle(load_wr_cycle),.load_wdata(load_wdata),.load_req_in_prog(ch_load_req_in_prog[2]),.ch_active(ch_active[2]),.ch_rd_active(ch_rd_active[2]),.ch_wr_active(ch_wr_active[2]),.rd_burst_start(ch_rd_burst_start[2]),.rd_ready(ch_rd_ready[2]),.rd_burst_addr(ch_rd_burst_addr[32-1+32*2:32*2]),.rd_burst_size(ch_rd_burst_size[8-1+8*2:8*2]),.rd_tokens(ch_rd_tokens[6-1+6*2:6*2]),.rd_port_num(ch_rd_port_num[2]),.rd_periph_delay(ch_rd_periph_delay[3-1+3*2:3*2]),.rd_clr_valid(ch_rd_clr_valid[2]),.wr_burst_start(ch_wr_burst_start[2]),.wr_ready(ch_wr_ready[2]),.wr_burst_addr(ch_wr_burst_addr[32-1+32*2:32*2]),.wr_burst_size(ch_wr_burst_size[8-1+8*2:8*2]),.wr_tokens(ch_wr_tokens[6-1+6*2:6*2]),.wr_port_num(ch_wr_port_num[2]),.wr_periph_delay(ch_wr_periph_delay[3-1+3*2:3*2]),.wr_clr_valid(ch_wr_clr_valid[2]),.fifo_wr(ch_fifo_wr[2]),.fifo_wdata(fifo_wdata),.fifo_wsize(fifo_wsize),.fifo_rd(ch_fifo_rd[2]),.fifo_rsize(fifo_rsize),.fifo_rd_valid(ch_fifo_rd_valid[2]),.fifo_rdata(ch_fifo_rdata[(64-1)+64*2:64*2]),.fifo_wr_ready(ch_fifo_wr_ready[2]),.joint_mode(joint_mode),.joint_remote(joint_remote),.rd_page_cross(ch_rd_page_cross[2]),.wr_page_cross(ch_wr_page_cross[2]),.joint_in_prog(ch_joint_in_prog[2]),.joint_not_in_prog(ch_joint_not_in_prog[2]),.joint_mux_in_prog(ch_joint_mux_in_prog[2]),.joint_req(ch_joint_req[2]),.ch_start(ch_start[2]),.int_all_proc(ch_int_all_proc[1-1+(1*2):1*2])); 
+  dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty3(.clk(clk),.reset(reset),.scan_en(scan_en),.idle(ch_idle[3]),.pclk(pclk),.clken(clken),.pclken(pclken),.psel(ch_psel[3]),.penable(penable),.paddr(paddr[7:0]),.pwrite(pwrite),.pwdata(pwdata),.prdata(ch_prdata[31+32*3:32*3]),.pslverr(ch_pslverr[3]),.periph_tx_req(periph_tx_req),.periph_tx_clr(ch_periph_tx_clr[31*3+31-1:31*3]),.periph_rx_req(periph_rx_req),.periph_rx_clr(ch_periph_rx_clr[31*3+31-1:31*3]),.rd_cmd_split(ch_rd_cmd_split[3]),.rd_cmd_line(ch_rd_cmd_line[3]),.rd_clr_line(ch_rd_clr_line[3]),.rd_clr(ch_rd_clr[3]),.rd_clr_load(ch_rd_clr_load[3]),.rd_slverr(ch_rd_slverr[3]),.rd_decerr(ch_rd_decerr[3]),.rd_line_cmd(ch_rd_line_cmd[3]),.rd_go_next_line(ch_rd_go_next_line[3]),.rd_transfer(ch_rd_transfer[3]),.rd_transfer_size(rd_transfer_size),.rd_clr_stall(ch_rd_clr_stall[3]),.wr_cmd_split(ch_wr_cmd_split[3]),.wr_cmd_pending(ch_wr_cmd_pending[3]),.wr_clr_line(ch_wr_clr_line[3]),.wr_clr(ch_wr_clr[3]),.wr_clr_last(ch_wr_clr_last[3]),.wr_slverr(ch_wr_slverr[3]),.wr_decerr(ch_wr_decerr[3]),.wr_last_cmd(ch_wr_last_cmd[3]),.wr_line_cmd(ch_wr_line_cmd[3]),.wr_go_next_line(ch_wr_go_next_line[3]),.wr_transfer(ch_wr_transfer[3]),.wr_transfer_size(wr_transfer_size),.wr_next_size(wr_next_size),.wr_clr_stall(ch_wr_clr_stall[3]),.wr_incr(),.timeout_aw(ch_timeout_aw[3]),.timeout_w(ch_timeout_w[3]),.timeout_ar(ch_timeout_ar[3]),.wdt_timeout(ch_wdt_timeout[3]),.load_wr(ch_load_wr[3]),.load_wr_cycle(load_wr_cycle),.load_wdata(load_wdata),.load_req_in_prog(ch_load_req_in_prog[3]),.ch_active(ch_active[3]),.ch_rd_active(ch_rd_active[3]),.ch_wr_active(ch_wr_active[3]),.rd_burst_start(ch_rd_burst_start[3]),.rd_ready(ch_rd_ready[3]),.rd_burst_addr(ch_rd_burst_addr[32-1+32*3:32*3]),.rd_burst_size(ch_rd_burst_size[8-1+8*3:8*3]),.rd_tokens(ch_rd_tokens[6-1+6*3:6*3]),.rd_port_num(ch_rd_port_num[3]),.rd_periph_delay(ch_rd_periph_delay[3-1+3*3:3*3]),.rd_clr_valid(ch_rd_clr_valid[3]),.wr_burst_start(ch_wr_burst_start[3]),.wr_ready(ch_wr_ready[3]),.wr_burst_addr(ch_wr_burst_addr[32-1+32*3:32*3]),.wr_burst_size(ch_wr_burst_size[8-1+8*3:8*3]),.wr_tokens(ch_wr_tokens[6-1+6*3:6*3]),.wr_port_num(ch_wr_port_num[3]),.wr_periph_delay(ch_wr_periph_delay[3-1+3*3:3*3]),.wr_clr_valid(ch_wr_clr_valid[3]),.fifo_wr(ch_fifo_wr[3]),.fifo_wdata(fifo_wdata),.fifo_wsize(fifo_wsize),.fifo_rd(ch_fifo_rd[3]),.fifo_rsize(fifo_rsize),.fifo_rd_valid(ch_fifo_rd_valid[3]),.fifo_rdata(ch_fifo_rdata[(64-1)+64*3:64*3]),.fifo_wr_ready(ch_fifo_wr_ready[3]),.joint_mode(joint_mode),.joint_remote(joint_remote),.rd_page_cross(ch_rd_page_cross[3]),.wr_page_cross(ch_wr_page_cross[3]),.joint_in_prog(ch_joint_in_prog[3]),.joint_not_in_prog(ch_joint_not_in_prog[3]),.joint_mux_in_prog(ch_joint_mux_in_prog[3]),.joint_req(ch_joint_req[3]),.ch_start(ch_start[3]),.int_all_proc(ch_int_all_proc[1-1+(1*3):1*3])); 
+  dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty4(.clk(clk),.reset(reset),.scan_en(scan_en),.idle(ch_idle[4]),.pclk(pclk),.clken(clken),.pclken(pclken),.psel(ch_psel[4]),.penable(penable),.paddr(paddr[7:0]),.pwrite(pwrite),.pwdata(pwdata),.prdata(ch_prdata[31+32*4:32*4]),.pslverr(ch_pslverr[4]),.periph_tx_req(periph_tx_req),.periph_tx_clr(ch_periph_tx_clr[31*4+31-1:31*4]),.periph_rx_req(periph_rx_req),.periph_rx_clr(ch_periph_rx_clr[31*4+31-1:31*4]),.rd_cmd_split(ch_rd_cmd_split[4]),.rd_cmd_line(ch_rd_cmd_line[4]),.rd_clr_line(ch_rd_clr_line[4]),.rd_clr(ch_rd_clr[4]),.rd_clr_load(ch_rd_clr_load[4]),.rd_slverr(ch_rd_slverr[4]),.rd_decerr(ch_rd_decerr[4]),.rd_line_cmd(ch_rd_line_cmd[4]),.rd_go_next_line(ch_rd_go_next_line[4]),.rd_transfer(ch_rd_transfer[4]),.rd_transfer_size(rd_transfer_size),.rd_clr_stall(ch_rd_clr_stall[4]),.wr_cmd_split(ch_wr_cmd_split[4]),.wr_cmd_pending(ch_wr_cmd_pending[4]),.wr_clr_line(ch_wr_clr_line[4]),.wr_clr(ch_wr_clr[4]),.wr_clr_last(ch_wr_clr_last[4]),.wr_slverr(ch_wr_slverr[4]),.wr_decerr(ch_wr_decerr[4]),.wr_last_cmd(ch_wr_last_cmd[4]),.wr_line_cmd(ch_wr_line_cmd[4]),.wr_go_next_line(ch_wr_go_next_line[4]),.wr_transfer(ch_wr_transfer[4]),.wr_transfer_size(wr_transfer_size),.wr_next_size(wr_next_size),.wr_clr_stall(ch_wr_clr_stall[4]),.wr_incr(),.timeout_aw(ch_timeout_aw[4]),.timeout_w(ch_timeout_w[4]),.timeout_ar(ch_timeout_ar[4]),.wdt_timeout(ch_wdt_timeout[4]),.load_wr(ch_load_wr[4]),.load_wr_cycle(load_wr_cycle),.load_wdata(load_wdata),.load_req_in_prog(ch_load_req_in_prog[4]),.ch_active(ch_active[4]),.ch_rd_active(ch_rd_active[4]),.ch_wr_active(ch_wr_active[4]),.rd_burst_start(ch_rd_burst_start[4]),.rd_ready(ch_rd_ready[4]),.rd_burst_addr(ch_rd_burst_addr[32-1+32*4:32*4]),.rd_burst_size(ch_rd_burst_size[8-1+8*4:8*4]),.rd_tokens(ch_rd_tokens[6-1+6*4:6*4]),.rd_port_num(ch_rd_port_num[4]),.rd_periph_delay(ch_rd_periph_delay[3-1+3*4:3*4]),.rd_clr_valid(ch_rd_clr_valid[4]),.wr_burst_start(ch_wr_burst_start[4]),.wr_ready(ch_wr_ready[4]),.wr_burst_addr(ch_wr_burst_addr[32-1+32*4:32*4]),.wr_burst_size(ch_wr_burst_size[8-1+8*4:8*4]),.wr_tokens(ch_wr_tokens[6-1+6*4:6*4]),.wr_port_num(ch_wr_port_num[4]),.wr_periph_delay(ch_wr_periph_delay[3-1+3*4:3*4]),.wr_clr_valid(ch_wr_clr_valid[4]),.fifo_wr(ch_fifo_wr[4]),.fifo_wdata(fifo_wdata),.fifo_wsize(fifo_wsize),.fifo_rd(ch_fifo_rd[4]),.fifo_rsize(fifo_rsize),.fifo_rd_valid(ch_fifo_rd_valid[4]),.fifo_rdata(ch_fifo_rdata[(64-1)+64*4:64*4]),.fifo_wr_ready(ch_fifo_wr_ready[4]),.joint_mode(joint_mode),.joint_remote(joint_remote),.rd_page_cross(ch_rd_page_cross[4]),.wr_page_cross(ch_wr_page_cross[4]),.joint_in_prog(ch_joint_in_prog[4]),.joint_not_in_prog(ch_joint_not_in_prog[4]),.joint_mux_in_prog(ch_joint_mux_in_prog[4]),.joint_req(ch_joint_req[4]),.ch_start(ch_start[4]),.int_all_proc(ch_int_all_proc[1-1+(1*4):1*4])); 
+  dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty5(.clk(clk),.reset(reset),.scan_en(scan_en),.idle(ch_idle[5]),.pclk(pclk),.clken(clken),.pclken(pclken),.psel(ch_psel[5]),.penable(penable),.paddr(paddr[7:0]),.pwrite(pwrite),.pwdata(pwdata),.prdata(ch_prdata[31+32*5:32*5]),.pslverr(ch_pslverr[5]),.periph_tx_req(periph_tx_req),.periph_tx_clr(ch_periph_tx_clr[31*5+31-1:31*5]),.periph_rx_req(periph_rx_req),.periph_rx_clr(ch_periph_rx_clr[31*5+31-1:31*5]),.rd_cmd_split(ch_rd_cmd_split[5]),.rd_cmd_line(ch_rd_cmd_line[5]),.rd_clr_line(ch_rd_clr_line[5]),.rd_clr(ch_rd_clr[5]),.rd_clr_load(ch_rd_clr_load[5]),.rd_slverr(ch_rd_slverr[5]),.rd_decerr(ch_rd_decerr[5]),.rd_line_cmd(ch_rd_line_cmd[5]),.rd_go_next_line(ch_rd_go_next_line[5]),.rd_transfer(ch_rd_transfer[5]),.rd_transfer_size(rd_transfer_size),.rd_clr_stall(ch_rd_clr_stall[5]),.wr_cmd_split(ch_wr_cmd_split[5]),.wr_cmd_pending(ch_wr_cmd_pending[5]),.wr_clr_line(ch_wr_clr_line[5]),.wr_clr(ch_wr_clr[5]),.wr_clr_last(ch_wr_clr_last[5]),.wr_slverr(ch_wr_slverr[5]),.wr_decerr(ch_wr_decerr[5]),.wr_last_cmd(ch_wr_last_cmd[5]),.wr_line_cmd(ch_wr_line_cmd[5]),.wr_go_next_line(ch_wr_go_next_line[5]),.wr_transfer(ch_wr_transfer[5]),.wr_transfer_size(wr_transfer_size),.wr_next_size(wr_next_size),.wr_clr_stall(ch_wr_clr_stall[5]),.wr_incr(),.timeout_aw(ch_timeout_aw[5]),.timeout_w(ch_timeout_w[5]),.timeout_ar(ch_timeout_ar[5]),.wdt_timeout(ch_wdt_timeout[5]),.load_wr(ch_load_wr[5]),.load_wr_cycle(load_wr_cycle),.load_wdata(load_wdata),.load_req_in_prog(ch_load_req_in_prog[5]),.ch_active(ch_active[5]),.ch_rd_active(ch_rd_active[5]),.ch_wr_active(ch_wr_active[5]),.rd_burst_start(ch_rd_burst_start[5]),.rd_ready(ch_rd_ready[5]),.rd_burst_addr(ch_rd_burst_addr[32-1+32*5:32*5]),.rd_burst_size(ch_rd_burst_size[8-1+8*5:8*5]),.rd_tokens(ch_rd_tokens[6-1+6*5:6*5]),.rd_port_num(ch_rd_port_num[5]),.rd_periph_delay(ch_rd_periph_delay[3-1+3*5:3*5]),.rd_clr_valid(ch_rd_clr_valid[5]),.wr_burst_start(ch_wr_burst_start[5]),.wr_ready(ch_wr_ready[5]),.wr_burst_addr(ch_wr_burst_addr[32-1+32*5:32*5]),.wr_burst_size(ch_wr_burst_size[8-1+8*5:8*5]),.wr_tokens(ch_wr_tokens[6-1+6*5:6*5]),.wr_port_num(ch_wr_port_num[5]),.wr_periph_delay(ch_wr_periph_delay[3-1+3*5:3*5]),.wr_clr_valid(ch_wr_clr_valid[5]),.fifo_wr(ch_fifo_wr[5]),.fifo_wdata(fifo_wdata),.fifo_wsize(fifo_wsize),.fifo_rd(ch_fifo_rd[5]),.fifo_rsize(fifo_rsize),.fifo_rd_valid(ch_fifo_rd_valid[5]),.fifo_rdata(ch_fifo_rdata[(64-1)+64*5:64*5]),.fifo_wr_ready(ch_fifo_wr_ready[5]),.joint_mode(joint_mode),.joint_remote(joint_remote),.rd_page_cross(ch_rd_page_cross[5]),.wr_page_cross(ch_wr_page_cross[5]),.joint_in_prog(ch_joint_in_prog[5]),.joint_not_in_prog(ch_joint_not_in_prog[5]),.joint_mux_in_prog(ch_joint_mux_in_prog[5]),.joint_req(ch_joint_req[5]),.ch_start(ch_start[5]),.int_all_proc(ch_int_all_proc[1-1+(1*5):1*5])); 
+  dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty6(.clk(clk),.reset(reset),.scan_en(scan_en),.idle(ch_idle[6]),.pclk(pclk),.clken(clken),.pclken(pclken),.psel(ch_psel[6]),.penable(penable),.paddr(paddr[7:0]),.pwrite(pwrite),.pwdata(pwdata),.prdata(ch_prdata[31+32*6:32*6]),.pslverr(ch_pslverr[6]),.periph_tx_req(periph_tx_req),.periph_tx_clr(ch_periph_tx_clr[31*6+31-1:31*6]),.periph_rx_req(periph_rx_req),.periph_rx_clr(ch_periph_rx_clr[31*6+31-1:31*6]),.rd_cmd_split(ch_rd_cmd_split[6]),.rd_cmd_line(ch_rd_cmd_line[6]),.rd_clr_line(ch_rd_clr_line[6]),.rd_clr(ch_rd_clr[6]),.rd_clr_load(ch_rd_clr_load[6]),.rd_slverr(ch_rd_slverr[6]),.rd_decerr(ch_rd_decerr[6]),.rd_line_cmd(ch_rd_line_cmd[6]),.rd_go_next_line(ch_rd_go_next_line[6]),.rd_transfer(ch_rd_transfer[6]),.rd_transfer_size(rd_transfer_size),.rd_clr_stall(ch_rd_clr_stall[6]),.wr_cmd_split(ch_wr_cmd_split[6]),.wr_cmd_pending(ch_wr_cmd_pending[6]),.wr_clr_line(ch_wr_clr_line[6]),.wr_clr(ch_wr_clr[6]),.wr_clr_last(ch_wr_clr_last[6]),.wr_slverr(ch_wr_slverr[6]),.wr_decerr(ch_wr_decerr[6]),.wr_last_cmd(ch_wr_last_cmd[6]),.wr_line_cmd(ch_wr_line_cmd[6]),.wr_go_next_line(ch_wr_go_next_line[6]),.wr_transfer(ch_wr_transfer[6]),.wr_transfer_size(wr_transfer_size),.wr_next_size(wr_next_size),.wr_clr_stall(ch_wr_clr_stall[6]),.wr_incr(),.timeout_aw(ch_timeout_aw[6]),.timeout_w(ch_timeout_w[6]),.timeout_ar(ch_timeout_ar[6]),.wdt_timeout(ch_wdt_timeout[6]),.load_wr(ch_load_wr[6]),.load_wr_cycle(load_wr_cycle),.load_wdata(load_wdata),.load_req_in_prog(ch_load_req_in_prog[6]),.ch_active(ch_active[6]),.ch_rd_active(ch_rd_active[6]),.ch_wr_active(ch_wr_active[6]),.rd_burst_start(ch_rd_burst_start[6]),.rd_ready(ch_rd_ready[6]),.rd_burst_addr(ch_rd_burst_addr[32-1+32*6:32*6]),.rd_burst_size(ch_rd_burst_size[8-1+8*6:8*6]),.rd_tokens(ch_rd_tokens[6-1+6*6:6*6]),.rd_port_num(ch_rd_port_num[6]),.rd_periph_delay(ch_rd_periph_delay[3-1+3*6:3*6]),.rd_clr_valid(ch_rd_clr_valid[6]),.wr_burst_start(ch_wr_burst_start[6]),.wr_ready(ch_wr_ready[6]),.wr_burst_addr(ch_wr_burst_addr[32-1+32*6:32*6]),.wr_burst_size(ch_wr_burst_size[8-1+8*6:8*6]),.wr_tokens(ch_wr_tokens[6-1+6*6:6*6]),.wr_port_num(ch_wr_port_num[6]),.wr_periph_delay(ch_wr_periph_delay[3-1+3*6:3*6]),.wr_clr_valid(ch_wr_clr_valid[6]),.fifo_wr(ch_fifo_wr[6]),.fifo_wdata(fifo_wdata),.fifo_wsize(fifo_wsize),.fifo_rd(ch_fifo_rd[6]),.fifo_rsize(fifo_rsize),.fifo_rd_valid(ch_fifo_rd_valid[6]),.fifo_rdata(ch_fifo_rdata[(64-1)+64*6:64*6]),.fifo_wr_ready(ch_fifo_wr_ready[6]),.joint_mode(joint_mode),.joint_remote(joint_remote),.rd_page_cross(ch_rd_page_cross[6]),.wr_page_cross(ch_wr_page_cross[6]),.joint_in_prog(ch_joint_in_prog[6]),.joint_not_in_prog(ch_joint_not_in_prog[6]),.joint_mux_in_prog(ch_joint_mux_in_prog[6]),.joint_req(ch_joint_req[6]),.ch_start(ch_start[6]),.int_all_proc(ch_int_all_proc[1-1+(1*6):1*6])); 
+  dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty7(.clk(clk),.reset(reset),.scan_en(scan_en),.idle(ch_idle[7]),.pclk(pclk),.clken(clken),.pclken(pclken),.psel(ch_psel[7]),.penable(penable),.paddr(paddr[7:0]),.pwrite(pwrite),.pwdata(pwdata),.prdata(ch_prdata[31+32*7:32*7]),.pslverr(ch_pslverr[7]),.periph_tx_req(periph_tx_req),.periph_tx_clr(ch_periph_tx_clr[31*7+31-1:31*7]),.periph_rx_req(periph_rx_req),.periph_rx_clr(ch_periph_rx_clr[31*7+31-1:31*7]),.rd_cmd_split(ch_rd_cmd_split[7]),.rd_cmd_line(ch_rd_cmd_line[7]),.rd_clr_line(ch_rd_clr_line[7]),.rd_clr(ch_rd_clr[7]),.rd_clr_load(ch_rd_clr_load[7]),.rd_slverr(ch_rd_slverr[7]),.rd_decerr(ch_rd_decerr[7]),.rd_line_cmd(ch_rd_line_cmd[7]),.rd_go_next_line(ch_rd_go_next_line[7]),.rd_transfer(ch_rd_transfer[7]),.rd_transfer_size(rd_transfer_size),.rd_clr_stall(ch_rd_clr_stall[7]),.wr_cmd_split(ch_wr_cmd_split[7]),.wr_cmd_pending(ch_wr_cmd_pending[7]),.wr_clr_line(ch_wr_clr_line[7]),.wr_clr(ch_wr_clr[7]),.wr_clr_last(ch_wr_clr_last[7]),.wr_slverr(ch_wr_slverr[7]),.wr_decerr(ch_wr_decerr[7]),.wr_last_cmd(ch_wr_last_cmd[7]),.wr_line_cmd(ch_wr_line_cmd[7]),.wr_go_next_line(ch_wr_go_next_line[7]),.wr_transfer(ch_wr_transfer[7]),.wr_transfer_size(wr_transfer_size),.wr_next_size(wr_next_size),.wr_clr_stall(ch_wr_clr_stall[7]),.wr_incr(),.timeout_aw(ch_timeout_aw[7]),.timeout_w(ch_timeout_w[7]),.timeout_ar(ch_timeout_ar[7]),.wdt_timeout(ch_wdt_timeout[7]),.load_wr(ch_load_wr[7]),.load_wr_cycle(load_wr_cycle),.load_wdata(load_wdata),.load_req_in_prog(ch_load_req_in_prog[7]),.ch_active(ch_active[7]),.ch_rd_active(ch_rd_active[7]),.ch_wr_active(ch_wr_active[7]),.rd_burst_start(ch_rd_burst_start[7]),.rd_ready(ch_rd_ready[7]),.rd_burst_addr(ch_rd_burst_addr[32-1+32*7:32*7]),.rd_burst_size(ch_rd_burst_size[8-1+8*7:8*7]),.rd_tokens(ch_rd_tokens[6-1+6*7:6*7]),.rd_port_num(ch_rd_port_num[7]),.rd_periph_delay(ch_rd_periph_delay[3-1+3*7:3*7]),.rd_clr_valid(ch_rd_clr_valid[7]),.wr_burst_start(ch_wr_burst_start[7]),.wr_ready(ch_wr_ready[7]),.wr_burst_addr(ch_wr_burst_addr[32-1+32*7:32*7]),.wr_burst_size(ch_wr_burst_size[8-1+8*7:8*7]),.wr_tokens(ch_wr_tokens[6-1+6*7:6*7]),.wr_port_num(ch_wr_port_num[7]),.wr_periph_delay(ch_wr_periph_delay[3-1+3*7:3*7]),.wr_clr_valid(ch_wr_clr_valid[7]),.fifo_wr(ch_fifo_wr[7]),.fifo_wdata(fifo_wdata),.fifo_wsize(fifo_wsize),.fifo_rd(ch_fifo_rd[7]),.fifo_rsize(fifo_rsize),.fifo_rd_valid(ch_fifo_rd_valid[7]),.fifo_rdata(ch_fifo_rdata[(64-1)+64*7:64*7]),.fifo_wr_ready(ch_fifo_wr_ready[7]),.joint_mode(joint_mode),.joint_remote(joint_remote),.rd_page_cross(ch_rd_page_cross[7]),.wr_page_cross(ch_wr_page_cross[7]),.joint_in_prog(ch_joint_in_prog[7]),.joint_not_in_prog(ch_joint_not_in_prog[7]),.joint_mux_in_prog(ch_joint_mux_in_prog[7]),.joint_req(ch_joint_req[7]),.ch_start(ch_start[7]),.int_all_proc(ch_int_all_proc[1-1+(1*7):1*7])); 
 endmodule
  
 module dma_axi64_core0_ch_reg #(
@@ -4556,7 +6355,7 @@ module dma_axi64_core0_axim_wr (
                BRESP_d <=BRESP;
              end
   
-  dma_axi64_core0_axim_cmd dma_axi64_axim_wcmd(.clk(clk),.reset(reset),.end_line_cmd(wr_line_cmd),.extra_bit(wr_last_cmd),.cmd_port(wr_cmd_port),.joint_req(joint_req),.ch_num(wr_ch_num),.burst_start(wr_burst_start),.burst_addr(wr_burst_addr),.burst_size(wr_burst_size),.cmd_pending(wr_cmd_pending),.cmd_full(wr_cmd_full),.cmd_split(wr_cmd_split),.cmd_num(wr_cmd_num),.cmd_line(),.page_cross(page_cross),.AID(AWID),.AADDR(AWADDR),.APORT(AWPORT),.ALEN(AWLEN),.ASIZE(AWSIZE),.AVALID(AWVALID),.AREADY(AWREADY),.AWVALID(1'b0),.AJOINT(AJOINT),.axim_timeout_num(axim_timeout_num_aw),.axim_timeout(axim_timeout_aw)); 
+  dma_axi64_core0_axim_cmd dma_axi64_axim_wcmd(.clk(clk),.reset(reset),.end_line_cmd(wr_line_cmd),.extra_bit(wr_last_cmd),.cmd_port(wr_cmd_port),.joint_req(joint_req),.joint_pending(),.ch_num(wr_ch_num),.burst_start(wr_burst_start),.burst_addr(wr_burst_addr),.burst_size(wr_burst_size),.cmd_pending(wr_cmd_pending),.cmd_full(wr_cmd_full),.cmd_split(wr_cmd_split),.cmd_num(wr_cmd_num),.cmd_line(),.page_cross(page_cross),.AID(AWID),.AADDR(AWADDR),.APORT(AWPORT),.ALEN(AWLEN),.ASIZE(AWSIZE),.AVALID(AWVALID),.AREADY(AWREADY),.AWVALID(1'b0),.AJOINT(AJOINT),.axim_timeout_num(axim_timeout_num_aw),.axim_timeout(axim_timeout_aw)); 
   dma_axi64_core0_axim_wdata dma_axi64_axim_wdata(.clk(clk),.reset(reset),.joint_stall(joint_stall),.rd_transfer(rd_transfer),.rd_transfer_size(rd_transfer_size),.ch_fifo_rd(ch_fifo_rd),.ch_fifo_rdata(ch_fifo_rdata),.ch_fifo_rd_valid(ch_fifo_rd_valid),.ch_fifo_rsize(ch_fifo_rsize),.ch_fifo_rd_num(ch_fifo_rd_num),.ch_fifo_wr_ready(ch_fifo_wr_ready),.wr_transfer_num(wr_transfer_num),.wr_transfer(wr_transfer),.wr_transfer_size(wr_transfer_size),.wr_next_size(wr_next_size),.wr_resp_full(wr_resp_full),.wr_cmd_full(wr_cmd_full),.wr_clr_line(wr_clr_line),.wr_clr_line_num(wr_clr_line_num),.AWID(AWID),.AWADDR(AWADDR),.AWLEN(AWLEN),.AWSIZE(AWSIZE),.AWVALID(AWVALID),.AWREADY(AWREADY),.AJOINT(AJOINT),.WDATA(WDATA),.WSTRB(WSTRB),.WLAST(WLAST),.WVALID(WVALID),.WREADY(WREADY),.axim_timeout_num(axim_timeout_num_w),.axim_timeout(axim_timeout_w)); 
   dma_axi64_core0_axim_resp #(.CMD_DEPTH(4))dma_axi64_axim_wresp(.clk(clk),.reset(reset),.slverr(wr_slverr),.decerr(wr_decerr),.clr(wr_clr),.clr_last(wr_clr_last),.ch_num_resp(wr_ch_num_resp),.resp_full(wr_resp_full),.AID(AWID),.AVALID(AWVALID),.AREADY(AWREADY),.ID(BID),.RESP(BRESP_d),.VALID(BVALID_d),.READY(BREADY),.LAST(1'b1)); 
 endmodule
@@ -5239,3 +7038,15 @@ module prgen_mux8 #(
   
 endmodule
  
+
+
+
+
+
+
+
+
+
+
+
+

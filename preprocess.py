@@ -70,7 +70,7 @@ def formatter_file(design, outputpath):
 
                
             def visitParameter_declaration(self, ctx: VerilogParser.Parameter_declarationContext):
-               if isinstance(ctx.parentCtx, VerilogParser.Module_declarationContext):
+               if isinstance(ctx.parentCtx, VerilogParser.Module_parameter_port_listContext):
                   pass
                else:
                   for i in range(0,len(ctx.list_of_param_assignments().param_assignment())):
@@ -366,8 +366,8 @@ def formatter_file(design, outputpath):
          def __init__(self):
             self.module = None
          
-         # def is_implicit_port_definition(self, ctx:VerilogParser.Module_declarationContext):
-         #    return ctx.list_of_port_declarations().port_declaration() == []
+         def is_implicit_port_definition(self, ctx:VerilogParser.Module_declarationContext):
+            return ctx.list_of_port_declarations().port_declaration() == []
          
          def _insert_parameter(self, ctx:VerilogParser.Module_declarationContext):
             parameter = '#(\n'

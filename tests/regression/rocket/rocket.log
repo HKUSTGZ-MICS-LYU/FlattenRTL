@@ -1,0 +1,289 @@
+IntXbar
+NonSyncResetSynchronizerPrimitiveShiftReg_d3
+SynchronizerShiftReg_w2_d3
+IntSyncAsyncCrossingSink
+SimpleClockGroupSource
+FixedClockBroadcast
+TLMonitor
+TLMonitor_1
+TLXbar
+TLMonitor_2
+TLMonitor_3
+TLFIFOFixer
+ram_2x4
+ram_addr_2x31
+ram_2x8
+ram_2x3
+ram_2x2
+ram_2x1
+Queue
+ram_data_2x64
+Queue_1
+Queue_2
+Queue_4
+AXI4Buffer
+Queue_5
+ram_8x9
+Queue_6
+AXI4UserYanker
+ram_id_8x4
+ram_data_8x64
+ram_resp_8x2
+ram_last_8x1
+Queue_15
+AXI4Deinterleaver
+AXI4IdIndexer
+TLMonitor_4
+Queue_20
+Queue_21
+TLToAXI4
+TLInterconnectCoupler_4
+SystemBus
+PeripheryBus
+TLMonitor_5
+ram_addr_2x32
+Queue_22
+Queue_23
+TLBuffer_2
+TLMonitor_6
+TLBuffer_3
+TLMonitor_7
+TLFIFOFixer_2
+Queue_26
+Queue_27
+AXI4ToTL
+ram_4x8
+Queue_28
+AXI4UserYanker_1
+Queue_32
+Queue_34
+AXI4Fragmenter
+AXI4IdIndexer_1
+TLInterconnectCoupler_5
+FixedClockBroadcast_3
+TLMonitor_8
+TLFIFOFixer_3
+TLMonitor_9
+TLXbar_5
+TLMonitor_10
+ram_source_2x5
+ram_address_2x28
+Queue_35
+Queue_36
+TLBuffer_4
+TLMonitor_11
+TLAtomicAutomata_1
+TLMonitor_12
+Queue_37
+TLError
+TLMonitor_13
+ram_address_2x14
+Queue_38
+TLBuffer_5
+ErrorDeviceWrapper
+TLMonitor_14
+Repeater
+TLFragmenter
+TLInterconnectCoupler_7
+TLMonitor_15
+Repeater_1
+TLFragmenter_1
+TLInterconnectCoupler_8
+TLMonitor_16
+Repeater_2
+TLFragmenter_2
+TLInterconnectCoupler_10
+TLMonitor_17
+Repeater_3
+TLFragmenter_3
+TLInterconnectCoupler_11
+PeripheryBus_1
+TLMonitor_18
+TLFIFOFixer_4
+TLMonitor_19
+ProbePicker
+ram_8x14
+Queue_40
+AXI4UserYanker_2
+AXI4IdIndexer_2
+TLMonitor_20
+Queue_73
+TLToAXI4_1
+TLInterconnectCoupler_12
+MemoryBus
+TLMonitor_21
+BroadcastFilter
+ram_8x72
+Queue_74
+TLBroadcastTracker
+TLBroadcastTracker_1
+TLBroadcastTracker_2
+TLBroadcastTracker_3
+TLBroadcast
+TLMonitor_22
+BankBinder
+CoherenceManagerWrapper
+TLMonitor_23
+TLMonitor_24
+TLXbar_8
+IntXbar_1
+OptimizationBarrier
+PMPChecker
+data_arrays_0_512x64
+DCacheDataArray
+AMOALU
+tag_array_0_64x22
+DCache
+tag_array_0_64x21
+data_arrays_512x32
+ICache
+ShiftQueue
+PMPChecker_2
+TLB_1
+Frontend
+HellaCacheArbiter
+Arbiter
+PTW
+RVCExpander
+IBuf
+CSRFile
+BreakpointUnit
+ALU
+MulDiv
+PlusArgTimeout
+rf_31x64
+Rocket
+RocketTile
+TLMonitor_25
+Queue_78
+Queue_79
+ram_2x52
+Queue_80
+Queue_81
+Queue_82
+TLBuffer_10
+SynchronizerShiftReg_w1_d3
+IntSyncAsyncCrossingSink_1
+IntSyncSyncCrossingSink
+IntSyncSyncCrossingSink_1
+AsyncResetRegVec_w1_i0
+IntSyncCrossingSource_1
+TilePRCIDomain
+TLMonitor_26
+LevelGateway
+PLICFanIn
+Queue_83
+TLPLIC
+ClockSinkDomain
+TLMonitor_27
+CLINT
+BundleBridgeNexus_15
+TLMonitor_28
+TLXbar_10
+DMIToTL
+TLMonitor_29
+TLDebugModuleOuter
+IntSyncCrossingSource_4
+TLMonitor_30
+TLBusBypassBar
+TLMonitor_31
+TLError_1
+TLBusBypass
+TLMonitor_32
+AsyncResetSynchronizerPrimitiveShiftReg_d3_i0
+AsyncResetSynchronizerShiftReg_w1_d3_i0
+AsyncResetSynchronizerShiftReg_w1_d3_i0_1
+AsyncValidSync
+AsyncQueueSource
+ClockCrossingReg_w43
+AsyncQueueSink
+TLAsyncCrossingSource
+AsyncQueueSource_1
+TLDebugModuleOuterAsync
+TLMonitor_33
+TLMonitor_34
+TLDebugModuleInner
+ClockCrossingReg_w55
+AsyncQueueSink_1
+AsyncQueueSource_2
+TLAsyncCrossingSink
+ClockCrossingReg_w15
+AsyncQueueSink_2
+TLDebugModuleInnerAsync
+TLDebugModule
+AsyncResetRegVec_w2_i0
+IntSyncCrossingSource_5
+TLMonitor_35
+TLROM
+ClockSinkDomain_1
+ExampleRocketSystem
+mem_33554432x64
+AXI4RAM
+AXI4Xbar
+Queue_86
+Queue_88
+Queue_90
+AXI4Buffer_1
+Queue_91
+AXI4Fragmenter_1
+SimAXIMem
+mem_512x64
+AXI4RAM_1
+AXI4Xbar_1
+Queue_96
+AXI4Buffer_2
+Queue_101
+AXI4Fragmenter_2
+SimAXIMem_1
+ResetSynchronizerShiftReg_w1_d3_i0
+TestHarness
+plusarg_reader
+[Processing] tests/regression/rocket/tmp/f_rocket_0.v
+[Processing] MODULE: IntXbar	NAME:['ibus_int_bus']
+[Processing] tests/regression/rocket/tmp/f_rocket_1.v
+[Processing] MODULE: IntSyncAsyncCrossingSink	NAME:['ibus_intsink']
+[Processing] tests/regression/rocket/tmp/f_rocket_2.v
+[Processing] MODULE: SynchronizerShiftReg_w2_d3	NAME:['ibus_intsink_chain']
+[Processing] tests/regression/rocket/tmp/f_rocket_3.v
+[Processing] MODULE: NonSyncResetSynchronizerPrimitiveShiftReg_d3	NAME:['ibus_intsink_chain_output_chain', 'ibus_intsink_chain_output_chain_1']
+[Processing] tests/regression/rocket/tmp/f_rocket_4.v
+[Processing] MODULE: SimpleClockGroupSource	NAME:['dummyClockGroupSourceNode']
+[Processing] tests/regression/rocket/tmp/f_rocket_5.v
+[Processing] MODULE: SystemBus	NAME:['subsystem_sbus']
+[Processing] tests/regression/rocket/tmp/f_rocket_6.v
+[Processing] MODULE: FixedClockBroadcast	NAME:['subsystem_sbus_fixedClockNode']
+[Processing] tests/regression/rocket/tmp/f_rocket_7.v
+[Processing] MODULE: TLXbar	NAME:['subsystem_sbus_system_bus_xbar']
+[Processing] tests/regression/rocket/tmp/f_rocket_8.v
+[Processing] MODULE: TLMonitor	NAME:['subsystem_sbus_system_bus_xbar_monitor']
+[Processing] tests/regression/rocket/tmp/f_rocket_9.v
+[Processing] MODULE: plusarg_reader	NAME:['subsystem_sbus_system_bus_xbar_monitor_plusarg_reader', 'subsystem_sbus_system_bus_xbar_monitor_plusarg_reader_1']
+[Processing] tests/regression/rocket/tmp/f_rocket_10.v
+[Processing] MODULE: TLMonitor_1	NAME:['subsystem_sbus_system_bus_xbar_monitor_1']
+[Processing] tests/regression/rocket/tmp/f_rocket_11.v
+[Processing] MODULE: plusarg_reader	NAME:['subsystem_sbus_system_bus_xbar_monitor_1_plusarg_reader', 'subsystem_sbus_system_bus_xbar_monitor_1_plusarg_reader_1']
+[Processing] tests/regression/rocket/tmp/f_rocket_12.v
+[Processing] MODULE: TLFIFOFixer	NAME:['subsystem_sbus_fixer']
+[Processing] tests/regression/rocket/tmp/f_rocket_13.v
+[Processing] MODULE: TLMonitor_2	NAME:['subsystem_sbus_fixer_monitor']
+[Processing] tests/regression/rocket/tmp/f_rocket_14.v
+[Processing] MODULE: plusarg_reader	NAME:['subsystem_sbus_fixer_monitor_plusarg_reader', 'subsystem_sbus_fixer_monitor_plusarg_reader_1']
+[Processing] tests/regression/rocket/tmp/f_rocket_15.v
+[Processing] MODULE: TLMonitor_3	NAME:['subsystem_sbus_fixer_monitor_1']
+[Processing] tests/regression/rocket/tmp/f_rocket_16.v
+[Processing] MODULE: plusarg_reader	NAME:['subsystem_sbus_fixer_monitor_1_plusarg_reader', 'subsystem_sbus_fixer_monitor_1_plusarg_reader_1']
+[Processing] tests/regression/rocket/tmp/f_rocket_17.v
+[Processing] MODULE: TLInterconnectCoupler_4	NAME:['subsystem_sbus_coupler_to_port_named_mmio_port_axi4']
+[Processing] tests/regression/rocket/tmp/f_rocket_18.v
+[Processing] MODULE: AXI4Buffer	NAME:['subsystem_sbus_coupler_to_port_named_mmio_port_axi4_axi4buf']
+[Processing] tests/regression/rocket/tmp/f_rocket_19.v
+[Processing] MODULE: Queue	NAME:['subsystem_sbus_coupler_to_port_named_mmio_port_axi4_axi4buf_nodeOut_aw_deq_q', 'subsystem_sbus_coupler_to_port_named_mmio_port_axi4_axi4buf_nodeOut_ar_deq_q']
+[Processing] tests/regression/rocket/tmp/f_rocket_20.v
+[Processing] MODULE: ram_2x4	NAME:['subsystem_sbus_coupler_to_port_named_mmio_port_axi4_axi4buf_nodeOut_aw_deq_q_ram_id_ext', 'subsystem_sbus_coupler_to_port_named_mmio_port_axi4_axi4buf_nodeOut_aw_deq_q_ram_cache_ext', 'subsystem_sbus_coupler_to_port_named_mmio_port_axi4_axi4buf_nodeOut_aw_deq_q_ram_qos_ext', 'subsystem_sbus_coupler_to_port_named_mmio_port_axi4_axi4buf_nodeOut_ar_deq_q_ram_id_ext', 'subsystem_sbus_coupler_to_port_named_mmio_port_axi4_axi4buf_nodeOut_ar_deq_q_ram_cache_ext', 'subsystem_sbus_coupler_to_port_named_mmio_port_axi4_axi4buf_nodeOut_ar_deq_q_ram_qos_ext']
+[Processing] tests/regression/rocket/tmp/f_rocket_21.v
+[Processing] MODULE: ram_addr_2x31	NAME:['subsystem_sbus_coupler_to_port_named_mmio_port_axi4_axi4buf_nodeOut_aw_deq_q_ram_addr_ext', 'subsystem_sbus_coupler_to_port_named_mmio_port_axi4_axi4buf_nodeOut_ar_deq_q_ram_addr_ext']
+[Processing] tests/regression/rocket/tmp/f_rocket_22.v
+[Processing] MODULE: ram_2x8	NAME:['subsystem_sbus_coupler_to_port_named_mmio_port_axi4_axi4buf_nodeOut_aw_deq_q_ram_len_ext', 'subsystem_sbus_coupler_to_port_named_mmio_port_axi4_axi4buf_nodeOut_ar_deq_q_ram_len_ext']
+[Processing] tests/regression/rocket/tmp/f_rocket_23.v
+[Processing] MODULE: ram_2x3	NAME:['subsystem_sbus_coupler_to_port_named_mmio_port_axi4_axi4buf_nodeOut_aw_deq_q_ram_size_ext', 'subsystem_sbus_coupler_to_port_named_mmio_port_axi4_axi4buf_nodeOut_aw_deq_q_ram_prot_ext', 'subsystem_sbus_coupler_to_port_named_mmio_port_axi4_axi4buf_nodeOut_ar_deq_q_ram_size_ext', 'subsystem_sbus_coupler_to_port_named_mmio_port_axi4_axi4buf_nodeOut_ar_deq_q_ram_prot_ext']
+[Processing] tests/regression/rocket/tmp/f_rocket_24.v

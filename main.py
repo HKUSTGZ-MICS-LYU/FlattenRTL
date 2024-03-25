@@ -8,10 +8,10 @@ start_time = time.time()
 start_memory = psutil.Process(os.getpid()).memory_info().rss / (1024 * 1024)
 # formatted part
 
-path = "tests/regression/dma"
-inputfile = "/top.v"
-outputfile = "/f_top.v"
-top_module = "dma_axi64_core0_top"
+path = "tests/regression/rocket"
+inputfile = "/rocket.v"
+outputfile = "/f_rocket.v"
+top_module = "ExampleRocketSystem"
 inputpath = path + inputfile
 formatpath = path + outputfile
 
@@ -42,7 +42,6 @@ else:
 tmp_output_path = os.path.dirname(formatpath) + "/tmp/" + formatpath.split("/")[-1]
 
 debug_mode = True
-
 
 with open(formatpath, "r") as file:
     design = file.read()

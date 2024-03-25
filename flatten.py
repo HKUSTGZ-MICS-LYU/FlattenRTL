@@ -89,41 +89,24 @@ def pyflattenverilog(design: str, top_module: str, output_file: str, debug_mode:
                     if isinstance(child, antlr4.tree.Tree.TerminalNodeImpl):
                         pass
                     else:
-                        # e.g. .a() -> no expression for port "a"
-                        if child.expression() is None:
-                            continue
-                        self.list_of_ports_rhs.append(child.expression().getText())
-                        if isinstance(
-                            child, VerilogParser.Ordered_port_connectionContext
-                        ):
-                            if (
-                                self.dict_of_lhs_to_rhs.get(
-                                    self.name_of_module_instances[-1]
-                                )
-                                is None
-                            ):
-                                self.dict_of_lhs_to_rhs[
-                                    self.name_of_module_instances[-1]
-                                ] = {}
-                        elif (
-                            isinstance(
-                                child, VerilogParser.Named_port_connectionContext
-                            )
-                            is not None
-                        ):
-                            if (
-                                self.dict_of_lhs_to_rhs.get(
-                                    self.name_of_module_instances[-1]
-                                )
-                                is None
-                            ):
-                                self.dict_of_lhs_to_rhs[
-                                    self.name_of_module_instances[-1]
-                                ] = {}
-                            self.dict_of_lhs_to_rhs[self.name_of_module_instances[-1]][
-                                child.port_identifier().getText()
-                            ] = child.expression().getText()
-
+                        # e.g. Special case: .a() -> no expression for port "a"
+                        if child.expression() is not None:
+                            self.list_of_ports_rhs.append(child.expression().getText())
+                        else:
+                            self.list_of_ports_rhs.append("")
+                        if isinstance(child, VerilogParser.Ordered_port_connectionContext):
+                            if (self.dict_of_lhs_to_rhs.get(self.name_of_module_instances[-1]) is None):
+                                self.dict_of_lhs_to_rhs[self.name_of_module_instances[-1]] = {}
+                        elif (isinstance(child, VerilogParser.Named_port_connectionContext) is not None):
+                            if (self.dict_of_lhs_to_rhs.get(self.name_of_module_instances[-1])is None):
+                                self.dict_of_lhs_to_rhs[self.name_of_module_instances[-1]] = {}
+                            if child.expression() is not None:
+                                self.dict_of_lhs_to_rhs[self.name_of_module_instances[-1]][child.port_identifier().getText()] = child.expression().getText()
+                                
+                                self.dict_of_lhs_to_rhs[self.name_of_module_instances[-1]][child.port_identifier().getText()] = \
+                                    self.dict_of_lhs_to_rhs[self.name_of_module_instances[-1]][child.port_identifier().getText()].replace("?", " ? ")
+                            else:
+                                self.dict_of_lhs_to_rhs[self.name_of_module_instances[-1]][child.port_identifier().getText()] = ""
                 if ctx.parameter_value_assignment() is not None:
                     list_of_parameter_assignments = (
                         ctx.parameter_value_assignment().list_of_parameter_assignments()
@@ -133,41 +116,19 @@ def pyflattenverilog(design: str, top_module: str, output_file: str, debug_mode:
                         if isinstance(child, antlr4.tree.Tree.TerminalNodeImpl):
                             pass
                         else:
-                            if isinstance(
-                                child, VerilogParser.Named_parameter_assignmentContext
-                            ):
-                                if (
-                                    self.dict_of_parameters.get(
-                                        self.name_of_module_instances[-1]
-                                    )
-                                    is None
-                                ):
-                                    self.dict_of_parameters[
-                                        self.name_of_module_instances[-1]
-                                    ] = {}
-                                self.dict_of_parameters[
-                                    self.name_of_module_instances[-1]
-                                ][
+                            if isinstance(child, VerilogParser.Named_parameter_assignmentContext):
+                                if (self.dict_of_parameters.get(self.name_of_module_instances[-1]) is None):
+                                    self.dict_of_parameters[self.name_of_module_instances[-1]] = {}
+                                self.dict_of_parameters[self.name_of_module_instances[-1]][
                                     self.name_of_module_instances[-1]
                                     + "_"
                                     + child.parameter_identifier().getText()
                                 ] = child.mintypmax_expression().getText()
-                            elif isinstance(
-                                child, VerilogParser.Ordered_parameter_assignmentContext
-                            ):
-                                if (
-                                    self.dict_of_parameters.get(
-                                        self.name_of_module_instances[-1]
-                                    )
-                                    is None
-                                ):
-                                    self.dict_of_parameters[
-                                        self.name_of_module_instances[-1]
-                                    ] = {}
-                                self.dict_of_parameters[
-                                    self.name_of_module_instances[-1]
-                                ][
-                                    list_of_parameter_assignments.children.index(child)
+                            elif isinstance(child, VerilogParser.Ordered_parameter_assignmentContext):
+                                if (self.dict_of_parameters.get(self.name_of_module_instances[-1])is None):
+                                    self.dict_of_parameters[self.name_of_module_instances[-1]] = {}
+                                self.dict_of_parameters[self.name_of_module_instances[-1]][
+                                    int(list_of_parameter_assignments.children.index(child)/2)
                                 ] = child.getText()
 
     visitor = MyModuleInstantiationVisitor()
@@ -223,9 +184,13 @@ def pyflattenverilog(design: str, top_module: str, output_file: str, debug_mode:
             # "Parameter B = A;"
             # After flatten, it should be
             # Parameter B = [cur_prefix]_A;
+            # Can even handle complicated case like:
+            # Parameter C = A + B;
             def find_and_repalce_param_in_param_value(self,  param_value, prefix, cur_dict_of_parameter):
                 item = cur_dict_of_parameter[prefix]
                 for _key in item.keys():
+                    if isinstance(_key,int):
+                        continue 
                     tmp_item = _key[len(prefix) + 1 :]
                     # Find whole word 'item' in param_value
                     pattern = r"\b{}\b".format(tmp_item)
@@ -243,10 +208,7 @@ def pyflattenverilog(design: str, top_module: str, output_file: str, debug_mode:
                     for item in cur_prefixs:
                         if cur_dict_of_parameters.get(item) is None:
                             cur_dict_of_parameters[item] = {}
-                        if (
-                            cur_dict_of_parameters[item].get(item + "_" + param_name)
-                            is None
-                        ):
+                        if (cur_dict_of_parameters[item].get(item + "_" + param_name)is None):
                             # Handle the ordered parameter
                             if (cur_dict_of_parameters[item].get(self.counter)is not None):
                                 cur_dict_of_parameters[item][item + "_" + param_name] = cur_dict_of_parameters[item].get(self.counter)
@@ -255,6 +217,7 @@ def pyflattenverilog(design: str, top_module: str, output_file: str, debug_mode:
                                     param_value, item, cur_dict_of_parameters
                                 )
                                 cur_dict_of_parameters[item][item + "_" + param_name] = param_value
+                    self.counter += 1
 
         class myMoudleParameterPortVisitor(VerilogParserVisitor):
             def __init__(self):
@@ -512,7 +475,8 @@ def pyflattenverilog(design: str, top_module: str, output_file: str, debug_mode:
 
         def _traverse_children(self, ctx):
             if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
-                pass
+                if ctx.symbol.text == "?":
+                    ctx.symbol.text = " ? "
             else:
                 for child in ctx.getChildren():
                     if isinstance(child, VerilogParser.Input_declarationContext):
@@ -633,6 +597,10 @@ def pyflattenverilog(design: str, top_module: str, output_file: str, debug_mode:
             "type": cur_list_of_ports_type[i],
         }
 
+    # (4. WARN the mismatch of port and instiation)
+    if len(cur_list_of_ports_rhs) != len(cur_list_of_ports_lhs):
+        print("[WARNING] The mismatch of port and instiation in ", cur_module_identifier," ", cur_name_of_module_instances)
+
     # 4. Obtain new assignment with 'prefix', lhs and rhs and define the port as wire type
     # Implementation: define the lhs variable with new name in "assign field" and connect with rhs variable
     # e.g. variable 'a' in 'add_high in 'adder_32bit', It should be adder_32bit_add_high_a, first define it as wire type
@@ -716,6 +684,9 @@ def pyflattenverilog(design: str, top_module: str, output_file: str, debug_mode:
                 rhs = dict_of_lhs_to_rhs[cur_prefixs[k]].get(
                     cur_list_of_ports_lhs[k * len_instance_port + i]
                 )
+                # Empty rhs, special case for .a() -> no expression for port "a"
+                if rhs == "":
+                    continue
                 if rhs is None:
                     rhs = cur_list_of_ports_rhs[k * len_instance_port + i]
                 cur_new_assign.append(
@@ -734,6 +705,9 @@ def pyflattenverilog(design: str, top_module: str, output_file: str, debug_mode:
                 rhs = dict_of_lhs_to_rhs[cur_prefixs[k]].get(
                     cur_list_of_ports_lhs[k * len_instance_port + i]
                 )
+                # Empty rhs, special case for .a() -> no expression for port "a"
+                if rhs == "":
+                    continue
                 if rhs is None:
                     rhs = cur_list_of_ports_rhs[k * len_instance_port + i]
                 cur_new_assign.append(
