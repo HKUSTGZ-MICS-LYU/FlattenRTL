@@ -11,16 +11,9 @@ import os
 import re
 import copy
 
-res_index = 0
-
-
-def pyflattenverilog(design: str, top_module: str, output_file: str, debug_mode: bool):
-    global res_index
+def pyflattenverilog(design: str, top_module: str, output_file: str):
 
     # output file handler
-    output_file = output_file.split(".")[0] + "_" + str(res_index) + ".v"
-    if debug_mode:
-        res_index += 1
     print("[Processing] %s" % (output_file))
     of_handler = open(output_file, "w")
 

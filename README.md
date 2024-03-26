@@ -30,7 +30,7 @@ FlattenRTL is a tool for flattening verilog design.
 python3 -m pip install antlr4-python3-runtime==4.7.2
 ```
 
-### Step 1
+### Usage
 Open file main.py, set the path and file that you want process.
 ```python
 path = 'tests/regression/AES' # Folder
@@ -42,7 +42,7 @@ top_module = 'top' # Top module
 ### Step 2
 Run the main.py at the root of this directory
 ```shell
-python3 main.py
+python3 main.py tests/regression/AES top.v --top=top --output=flatten.v -g
 ```
 
 
