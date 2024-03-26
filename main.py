@@ -55,13 +55,23 @@ def main():
         design = file.read()            
         tmp_idx = 0
         tmp_flatten_design = design
-        while tmp_flatten_design != -1:
-            tmp_output_file = pathlib.Path(tmp_folder, f'flatten_{tmp_idx}.v')
+        done = False
+        while not done:
             if args.debug:
+                tmp_output_file = pathlib.Path(tmp_folder, f'flatten_{tmp_idx}.v')
+                with open(tmp_output_file, 'w') as f:
+                    f.write(tmp_flatten_design)
                 tmp_idx += 1
-            tmp_flatten_design = flatten.pyflattenverilog(
-                tmp_flatten_design, args.top, str(tmp_output_file)
+            done, tmp_flatten_design = flatten.pyflattenverilog(
+                tmp_flatten_design, args.top
             )
+    
+    # write to output file
+    with open(output_file, "w") as f:
+        f.write(tmp_flatten_design)
+    
+    # format
+    os.system("bin/iStyle -n --style=ansi " + str(output_file))
 
 if __name__ == "__main__":
     main()

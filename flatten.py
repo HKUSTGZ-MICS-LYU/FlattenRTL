@@ -11,11 +11,7 @@ import os
 import re
 import copy
 
-def pyflattenverilog(design: str, top_module: str, output_file: str):
-
-    # output file handler
-    print("[Processing] %s" % (output_file))
-    of_handler = open(output_file, "w")
+def pyflattenverilog(design: str, top_module: str):
 
     def Parameter2Tree(Design):
         lexer = VerilogLexer(InputStream(Design))
@@ -135,19 +131,7 @@ def pyflattenverilog(design: str, top_module: str, output_file: str):
 
     # If we cannot find the current module identifier
     if cur_module_identifier == "":
-        of_handler.close()
-        os.remove(output_file)
-        flatten_path = "/".join(output_file.split("/")[:-2]) + "/flatten_"
-        orig_file_name = "_".join(output_file.split("/")[-1].split("_")[:-1]) + ".v"
-        flatten_path = flatten_path + orig_file_name
-        of_handler = open(flatten_path, "w")
-        print(
-            design[top_node_tree.start.start : top_node_tree.stop.stop + 1],
-            file=of_handler,
-        )
-        of_handler.close()
-        os.system("bin/iStyle -n --style=ansi " + flatten_path)
-        return -1
+        return True, design[top_node_tree.start.start : top_node_tree.stop.stop + 1]
     else:
         print(
             "[Processing] MODULE: %s\tNAME:%s"
@@ -881,6 +865,7 @@ def pyflattenverilog(design: str, top_module: str, output_file: str):
             super().__init__()
             self.start = []
             self.stop = []
+            self.tmp_design = ''
 
         def _traverse_children(self, ctx):
             if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
@@ -902,22 +887,19 @@ def pyflattenverilog(design: str, top_module: str, output_file: str):
         def visitModule_declaration(self, ctx: VerilogParser.Module_declarationContext):
             if ctx.module_identifier().getText() == top_module:
                 self._traverse_children(ctx)
-                print(design[: self.start[0]], file=of_handler)
+                self.tmp_design += design[: self.start[0]] + '\n'
                 for wire in cur_new_variable:
-                    print(wire, file=of_handler)
-                print(insert_parts[0], file=of_handler)
+                    self.tmp_design += wire + '\n'
+                self.tmp_design += insert_parts[0] + '\n'
                 for i in range(1, len(self.start)):
-                    print(design[self.stop[i - 1] + 1 : self.start[i]], file=of_handler)
-                    print(insert_parts[i], file=of_handler)
+                    self.tmp_design += design[self.stop[i - 1] + 1 : self.start[i]] + '\n'
+                    self.tmp_design += insert_parts[i] + '\n'
                 for assign in cur_new_assign:
-                    print(assign, file=of_handler)
-                print(design[self.stop[-1] + 1 :], file=of_handler)
+                    self.tmp_design += assign + '\n'
+                self.tmp_design += design[self.stop[-1] + 1 :] + '\n'
 
     # Create a visitor instance and visit the top module node
     visitor = VerilogIdentifierVisitor()
     visitor.visit(top_node_tree)
 
-    of_handler.close()
-    of_handler = open(output_file, "r")
-    tmp_flatten_design = of_handler.read()
-    return tmp_flatten_design
+    return False, visitor.tmp_design
