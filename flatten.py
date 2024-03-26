@@ -11,39 +11,33 @@ import os
 import re
 import copy
 
+# This function is used to convert the verilog to a tree
+def design_to_tree(design):
+    lexer = VerilogLexer(InputStream(design))
+    stream = CommonTokenStream(lexer)
+    parser = VerilogParser(stream)
+    tree = parser.source_text()
+    return tree
+
+# Return top module node
+class TopModuleNodeFinder(VerilogParserVisitor):
+    def __init__(self, top_module):
+        self.top_module_node = ""
+        self.top_module = top_module
+
+    def visitModule_declaration(self, ctx: VerilogParser.Module_declarationContext):
+        module_name = ctx.module_identifier().getText()
+        if module_name == self.top_module:
+            self.top_module_node = ctx
+
 def pyflattenverilog(design: str, top_module: str):
-
-    def Parameter2Tree(Design):
-        lexer = VerilogLexer(InputStream(Design))
-        stream = CommonTokenStream(lexer)
-        parser = VerilogParser(stream)
-        tree = parser.module_parameter_port_list()
-        return tree
-
-    # This function is used to convert the verilog to a tree
-    def Design2Tree(Design):
-        lexer = VerilogLexer(InputStream(Design))
-        stream = CommonTokenStream(lexer)
-        parser = VerilogParser(stream)
-        tree = parser.source_text()
-        return tree
-
     # 1. Specify the top module and convert the design to a tree
-    tree = Design2Tree(design)
+    tree = design_to_tree(design)
 
     # 2. Get the top module node
-    class MyTopModuleVisitor(VerilogParserVisitor):
-        def __init__(self):
-            self.top_module_node = ""
-
-        def visitModule_declaration(self, ctx: VerilogParser.Module_declarationContext):
-            module_name = ctx.module_identifier().getText()
-            if module_name == top_module:
-                self.top_module_node = ctx
-
-    visitor = MyTopModuleVisitor()
-    visitor.visit(tree)
-    top_node_tree = visitor.top_module_node
+    top_finder = TopModuleNodeFinder(top_module)
+    top_finder.visit(tree)
+    top_node_tree = top_finder.top_module_node
 
     # 3. Walk to the first initialization node
     # According to module_identifier, we will get multiple name_of_module_instances
@@ -433,7 +427,7 @@ def pyflattenverilog(design: str, top_module: str):
     inst_module_nodes = []
     no_port_parameter = False
     for k in range(0, len(cur_prefixs)):
-        tmp_inst_module_design = Design2Tree(inst_module_design)
+        tmp_inst_module_design = design_to_tree(inst_module_design)
         visitor = InstModuleVisitor(k)
         visitor.visit(tmp_inst_module_design)
         inst_module_design_trees.append(tmp_inst_module_design)
@@ -825,7 +819,7 @@ def pyflattenverilog(design: str, top_module: str):
         def visitModule_declaration(self, ctx: VerilogParser.Module_declarationContext):
             self.inst_module_node = ctx
             self.formatProcess(self.inst_module_node)
-            self.inst_module_node = Design2Tree(self.text)
+            self.inst_module_node = design_to_tree(self.text)
 
     inst_module_designs = []
     for k in range(0, len(cur_prefixs)):
