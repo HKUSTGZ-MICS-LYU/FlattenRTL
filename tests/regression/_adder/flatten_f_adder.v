@@ -84,49 +84,16 @@ module adder_32bit (
     wire  upper_half_upper_half_upper_half_cout;
 
     assign {  lower_half_lower_half_lower_half_cout  ,  lower_half_lower_half_lower_half_sum  }=  lower_half_lower_half_lower_half_a  +  lower_half_lower_half_lower_half_b  +  lower_half_lower_half_lower_half_cin  ;
-
-
-
     assign {  lower_half_lower_half_upper_half_cout  ,  lower_half_lower_half_upper_half_sum  }=  lower_half_lower_half_upper_half_a  +  lower_half_lower_half_upper_half_b  +  lower_half_lower_half_upper_half_cin  ;
-
-
-
-
     wire  lower_half_upper_half_carry  ;
-
-
     assign {  lower_half_upper_half_lower_half_cout  ,  lower_half_upper_half_lower_half_sum  }=  lower_half_upper_half_lower_half_a  +  lower_half_upper_half_lower_half_b  +  lower_half_upper_half_lower_half_cin  ;
-
-
-
     assign {  lower_half_upper_half_upper_half_cout  ,  lower_half_upper_half_upper_half_sum  }=  lower_half_upper_half_upper_half_a  +  lower_half_upper_half_upper_half_b  +  lower_half_upper_half_upper_half_cin  ;
-
-
-
-
-
     wire  upper_half_carry  ;
-
-
     wire  upper_half_lower_half_carry  ;
-
-
     assign {  upper_half_lower_half_lower_half_cout  ,  upper_half_lower_half_lower_half_sum  }=  upper_half_lower_half_lower_half_a  +  upper_half_lower_half_lower_half_b  +  upper_half_lower_half_lower_half_cin  ;
-
-
-
     assign {  upper_half_lower_half_upper_half_cout  ,  upper_half_lower_half_upper_half_sum  }=  upper_half_lower_half_upper_half_a  +  upper_half_lower_half_upper_half_b  +  upper_half_lower_half_upper_half_cin  ;
-
-
-
-
     wire  upper_half_upper_half_carry  ;
-
-
     assign {  upper_half_upper_half_lower_half_cout  ,  upper_half_upper_half_lower_half_sum  }=  upper_half_upper_half_lower_half_a  +  upper_half_upper_half_lower_half_b  +  upper_half_upper_half_lower_half_cin  ;
-
-
-
     assign {  upper_half_upper_half_upper_half_cout  ,  upper_half_upper_half_upper_half_sum  }=  upper_half_upper_half_upper_half_a  +  upper_half_upper_half_upper_half_b  +  upper_half_upper_half_upper_half_cin  ;
     assign lower_half_lower_half_lower_half_a = lower_half_lower_half_a[3:0];
     assign lower_half_lower_half_lower_half_b = lower_half_lower_half_b[3:0];
