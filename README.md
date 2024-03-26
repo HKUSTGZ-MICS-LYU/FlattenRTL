@@ -168,6 +168,7 @@ endmodule
 ```
 
 ## Limitations and Features
+## Limitations and Features
 ### Module Declaration
 
 The module declaration should be follow the standard style below without any parameters:
