@@ -143,15 +143,14 @@ def formatter_file(design, outputpath):
                               if not is_multiple_identifier:
                                  child.parentCtx.start.text = '//'+child.parentCtx.start.text
                               else:
-                                 
                                  print("[WARNING Multi-wire Definition Module]:",self.module.module_identifier().getText())
-                                 # print("[Problematic Line]:",child.list_of_net_identifiers().getChild(i).start.line)
+                                 print("[Problematic Line]:",child.list_of_net_identifiers().getChild(i).start.line)
                                  print("[WARNING Possible duplicate wire with port]: ",name)
-                  #             # del child.parentCtx.children[index_of_child]
-                  #             # if index_of_child == 0 and child.list_of_net_identifiers().getChildCount()!=1:
-                  #             #    del child.parentCtx.children[index_of_child+1]
-                  #             # elif index_of_child != 0:
-                  #             #    del child.parentCtx.children[index_of_child-1]
+                                 # del child.parentCtx.children[index_of_child]
+                                 # if index_of_child == 0 and child.list_of_net_identifiers().getChildCount()!=1:
+                                 #    del child.parentCtx.children[index_of_child+1]
+                                 # elif index_of_child != 0:
+                                 #    del child.parentCtx.children[index_of_child-1]
                            
                self._visit_port_declaration(child)
 
