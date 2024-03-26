@@ -4,25 +4,6 @@
 
 FlattenRTL is a tool for flattening verilog design.
 
-## Directory Struture
-```
-├── antlr4_verilog  ->  ANTLR4 Library
-└── tests
-    ├── EDAUtils  ->  The flatten result of EDAUtils
-    └── regression
-        ├── adder  ->  Folder of design
-        │   ├── adder.v  -> Design that we want to test
-        │   ├── f_adder.v  -> Format design that we want to test
-        │   ├── flatten_f_adder.v  -> Final flatten design
-        │   └── tmp  -> temp file
-        │       ├── adder_0.v
-        │       ├── adder_1.v
-        │       ├── adder_2.v
-        │       ├── adder_3.v
-        │       ├── adder_4.v
-        │       └── adder_5.v
-```
-
 ## How to use?
 
 ### Install
@@ -31,13 +12,54 @@ python3 -m pip install antlr4-python3-runtime==4.7.2
 ```
 
 ### Usage
-Run the main.py
+For information about the `lemon` command arguments type:
 ```shell
-python3 main.py tests/regression/_adder adder.v --top=adder_32bit --output=f_adder.v -g
+python main.py --help
+```
+
+```
+Welcome to FlattenRTL! 
+usage: main.py [-h] [-t TOP] [-o OUTPUT] [-g] dir input
+
+positional arguments:
+  dir                   The working directory.
+  input                 The input file containing the top module
+
+options:
+  -h, --help            show this help message and exit
+  -t TOP, --top TOP     The name of the top module.
+  -o OUTPUT, --output OUTPUT
+                        The output file containint the flattened module.
+                        Default = flatten.v
+  -g, --debug           Enable debug mode.
 ```
 
 
+
+
 ## Demo
+
+Run the main.py
+```shell
+python3 main.py tests/regression/_adder adder.v --top=adder_32bit --output=flatten.v -g
+```
+
+## Directory Struture
+```
+├── antlr4_verilog  ->  ANTLR4 Library
+└── tests
+    ├── EDAUtils  ->  The flatten result of EDAUtils
+    └── regression
+        ├── adder  ->  Folder of design
+        │   ├── adder.v  -> Design that we want to test
+        │   ├── flatten.v  -> Final flatten design
+        │   └── tmp  -> temp file
+        │       ├── flatten_0.v
+        │       ├── flatten_1.v
+        │       ├── flatten_2.v
+        │       └── flatten_3.v
+```
+
 ### Unflatten Design
 
 ```verilog
@@ -300,86 +322,13 @@ endmodule
 
 ```
 
-## Limitations and Features
-## Limitations and Features
-### Module Declaration
+## Citation
 
-The module declaration should be follow the standard style below without any parameters:
-
-```verilog
-module decl(a, b, c);
-   input  [2:0] a;
-   input  [2:0] b;
-   output [2:0] c;
-```
-
-Currently we don't support definitions and parameters.
-
-### Port Connection
-
-Ordered port connection, named port connection and no info at the rhs(right hand side) are supported.
-
-```verilog
-//Ordered port connection
-
-```
-
-### Parameter Assignment
-
-The parameter assignment should follow:
-
-```verilog
-parameter A;
-parameter B;
-```
-
-The assignment below is not supported
-```verilog
-parameter A,B;
-```
-
-### Net Assignment
-
-The net assignment should follow:
-
-```verilog
-wire a;
-or
-wire a,b;
-```
-
-The assignment below is not supported
-```verilog
-wire a = [exp], b = [exp];
-```
-
-### Reg Assignment
-
-Same as net assignment
-
-### Module Inistialization
-
-The ordered parameter assignment(without identification of parameter) feature is supported:
-```verilog
-A a#(1,2)(x,y,z);
-```
-
-The two inistialization in one statement are supported:
-```verilog
-A a#(1,2)(x,y,z);
-```
-
-
-### Duplication Declration
-
-The declration below is not supported
-```verilog
-module A(output X)
-wire X;
-```
-
-### Bad Naming Problem
-
-Assume you have a variable named `iq_a`, and there's an instance named `x`. After flattening, the variable name becomes `x_iq_a` to reflect its origin within the x instance.
-
-However, consider a situation where a variable is named `a`, and there's an instance named `x_iq`. In the flattened naming convention, this variable would also end up with the name `x_iq_a`, which is identical to the previous example despite originating from a different hierarchical structure.
+If you use this repository in your work, please cite:
+```BibTeX
+@inproceedings{flattenrtl2024,
+  title={FlattenRTL: An Open Source Tool for Flattening Verilog Module at RTL Level},
+  author={Meng, Xiangchen and Zheng, Ziyue and Lyu, Yangdi},
+  booktitle={International Symposium of EDA},
+  year={2024}
+}
