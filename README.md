@@ -33,7 +33,7 @@ python3 -m pip install antlr4-python3-runtime==4.7.2
 ### Usage
 Run the main.py
 ```shell
-python3 main.py tests/regression/AES top.v --top=top --output=flatten.v -g
+python3 main.py tests/regression/_adder adder.v --top=adder_32bit --output=f_adder.v -g
 ```
 
 
