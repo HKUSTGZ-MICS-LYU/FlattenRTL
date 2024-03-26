@@ -31,16 +31,7 @@ python3 -m pip install antlr4-python3-runtime==4.7.2
 ```
 
 ### Usage
-Open file main.py, set the path and file that you want process.
-```python
-path = 'tests/regression/AES' # Folder
-inputfile = '/top.v' # The file that you want to process
-outputfile = '/f_top.v' # Output file
-top_module = 'top' # Top module
-```
-
-### Step 2
-Run the main.py at the root of this directory
+Run the main.py
 ```shell
 python3 main.py tests/regression/AES top.v --top=top --output=flatten.v -g
 ```
