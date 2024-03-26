@@ -8,10 +8,10 @@ start_time = time.time()
 start_memory = psutil.Process(os.getpid()).memory_info().rss / (1024 * 1024)
 # formatted part
 
-path = "tests/regression/rocket"
-inputfile = "/rocket.v"
-outputfile = "/f_rocket.v"
-top_module = "ExampleRocketSystem"
+path = "tests/regression/_adder"
+inputfile = "/adder.v"
+outputfile = "/f_adder.v"
+top_module = "adder_32bit"
 inputpath = path + inputfile
 formatpath = path + outputfile
 
