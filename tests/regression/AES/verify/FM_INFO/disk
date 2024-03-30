@@ -1,0 +1,10 @@
+Directory = /hpc/home/connect.zzheng989/researchlib/pyflattenverilog/tests/regression/AES/AES-T500/verify
+Total     = 1.18076e+06 GB
+Available = 1.08829e+06 GB
+Used      = 92476 GB (8%)
+
+Directory = /tmp
+Total     = 1776 GB
+Available = 1752 GB
+Used      = 24 GB (2%)
+

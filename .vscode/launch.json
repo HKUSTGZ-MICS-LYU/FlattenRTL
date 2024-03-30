@@ -1,0 +1,26 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "b17",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": ["tests/regression/b17", "b17.v", "--top=b17", "--output=flatten.v", "-g"],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "adder",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": ["tests/regression/_adder", "adder.v", "--top=adder_32bit", "--output=flatten.v", "-g"],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        }
+    ]
+}

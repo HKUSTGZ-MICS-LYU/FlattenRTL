@@ -1,0 +1,10 @@
+Directory = /hpc/home/connect.zzheng989/researchlib/pyflattenverilog/tests/regression/b19/verify
+Total     = 1.18076e+06 GB
+Available = 1.08842e+06 GB
+Used      = 92340 GB (8%)
+
+Directory = /tmp
+Total     = 1221 GB
+Available = 1211 GB
+Used      = 10 GB (1%)
+
