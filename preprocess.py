@@ -1,50 +1,7 @@
-from antlr4_verilog import InputStream, CommonTokenStream, ParseTreeWalker
-from antlr4_verilog.verilog import VerilogLexer, VerilogParser, VerilogParserListener, VerilogParserVisitor
-import antlr4
-from io import StringIO
-import os
+from antlr4.tree.Tree import TerminalNodeImpl
+from antlr4_verilog.verilog import VerilogParser, VerilogParserVisitor
 
-def parse(Design):
-   lexer = VerilogLexer(InputStream(Design))
-   stream = CommonTokenStream(lexer)
-   parser = VerilogParser(stream)
-   return parser
-
-"This function is used to convert the verilog to a tree"
-def parse_design_to_tree(Design):
-   parser = parse(Design)
-   tree = parser.source_text()
-   return tree
-
-def parse_port_to_tree(Design):
-   parser = parse(Design)
-   tree = parser.list_of_port_declarations()
-   return tree
-
-def parse_parameter_to_tree(Design):
-   parser = parse(Design)
-   tree = parser.module_parameter_port_list()
-   return tree
-
-def parse_module_to_tree(Design):
-   parser = parse(Design)
-   tree = parser.module_item()
-   return tree
-
-def parse_net_declare_to_tree(Design):
-   parser = parse(Design)
-   tree = parser.net_declaration()
-   return tree
-
-def parse_reg_declare_to_tree(Design):
-   parser = parse(Design)
-   tree = parser.reg_declaration()
-   return tree
-
-def parse_mod_ins_to_tree(Design):
-   parser = parse(Design)
-   tree = parser.module_instantiation()
-   return tree
+from design_parser import *
 
 class ParameterVisitor(VerilogParserVisitor):
    def __init__(self):
@@ -59,7 +16,7 @@ class ParameterVisitor(VerilogParserVisitor):
       self.__empty_all_text(ctx.parentCtx)
    
    def __empty_all_text(self,ctx):
-      if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
+      if isinstance(ctx, TerminalNodeImpl):
          try:
             ctx.start.text = ''
             ctx.stop.text = ''
@@ -89,7 +46,7 @@ class ModuleVisitor(VerilogParserVisitor):
       
    # visit module declaration
    def __visit_module_declaration(self, ctx:VerilogParser.Module_declarationContext):  
-      if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
+      if isinstance(ctx, TerminalNodeImpl):
          return 
       for child in ctx.getChildren():
          if isinstance(child, VerilogParser.List_of_port_declarationsContext):
@@ -99,7 +56,7 @@ class ModuleVisitor(VerilogParserVisitor):
 
    # visit port declaration
    def __visit_port_declaration(self, ctx):
-      if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
+      if isinstance(ctx, TerminalNodeImpl):
          return
       for child in ctx.getChildren():
          if isinstance(child, VerilogParser.Port_declarationContext):
@@ -209,7 +166,7 @@ class ModuleVisitor(VerilogParserVisitor):
 
    # visit port list
    def __visit_port_list(self,ctx):
-      if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
+      if isinstance(ctx, TerminalNodeImpl):
          return
       for child in ctx.getChildren():
          if isinstance(child, VerilogParser.Port_identifierContext):
@@ -303,7 +260,7 @@ class ModuleItemModifier(VerilogParserVisitor):
          ctx.parentCtx.children.insert(index_of_child + i, parse_mod_ins_to_tree(new_module_instantiation[i]))
 
    def __traverse_children(self,ctx):
-      if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
+      if isinstance(ctx, TerminalNodeImpl):
          return
       for child in ctx.getChildren():
          if isinstance(child, VerilogParser.Net_declarationContext):
@@ -352,7 +309,7 @@ class PortModifyVisitor(VerilogParserVisitor):
       self.module = ctx
    
    def __modify_module_declaration(self,ctx:VerilogParser.Module_declarationContext):  
-      if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
+      if isinstance(ctx, TerminalNodeImpl):
          pass
       else:
          for child in ctx.getChildren():
@@ -379,7 +336,7 @@ class PortModifyVisitor(VerilogParserVisitor):
       return ctx
    
    def __remove_signal_declaration(self, ctx):
-      if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
+      if isinstance(ctx, TerminalNodeImpl):
          pass
       else:
          for child in list(ctx.children):
@@ -396,7 +353,7 @@ class PortModifyVisitor(VerilogParserVisitor):
 
    def __find_port_declaration(self, ctx):
       result = False
-      if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
+      if isinstance(ctx, TerminalNodeImpl):
          pass
       else:
          for child in ctx.getChildren():
@@ -414,7 +371,7 @@ class PortModifyVisitor(VerilogParserVisitor):
 
    def __get_simple_identifier(self, ctx: VerilogParser.Module_itemContext):
       sig_name = None
-      if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
+      if isinstance(ctx, TerminalNodeImpl):
          pass
       else:
          for child in ctx.getChildren():
@@ -430,7 +387,7 @@ class PortModifyVisitor(VerilogParserVisitor):
    
    def __add_block_content(self, ctx):
       for child in ctx.getChildren():
-         if isinstance(child, antlr4.tree.Tree.TerminalNodeImpl) and child.symbol.text == ';':
+         if isinstance(child, TerminalNodeImpl) and child.symbol.text == ';':
             index = ctx.children.index(child)
             # for i , item in enumerate(block_parameter):
             #    parameter = item
@@ -440,7 +397,7 @@ class PortModifyVisitor(VerilogParserVisitor):
                ctx.children.insert(index + len(self.block_parameter) + 1, parse_module_to_tree(defination))
 
    def __remove_block_content(self, ctx):
-      if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
+      if isinstance(ctx, TerminalNodeImpl):
          pass
       else:
          if ctx.children is not None:
@@ -469,7 +426,7 @@ class FormatVisitor(VerilogParserVisitor):
    def __traverse_children(self,ctx,indent = 0):  
       if isinstance(ctx, VerilogParser.Module_declarationContext):
          ctx.stop.text = chr(31) + ctx.stop.text + chr(31)
-      if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
+      if isinstance(ctx, TerminalNodeImpl):
          pass
       else:
          for child in ctx.getChildren():
@@ -480,7 +437,7 @@ class FormatVisitor(VerilogParserVisitor):
                   if i == 0:
                      item.symbol.text = chr(31) + ' ' * indent + item.symbol.text
                   else:
-                     if isinstance(item, antlr4.tree.Tree.TerminalNodeImpl):
+                     if isinstance(item, TerminalNodeImpl):
                         item.symbol.text = ' ' + item.symbol.text + ' '
                      else:
                         item.start.text = ' ' + item.start.text
@@ -490,12 +447,12 @@ class FormatVisitor(VerilogParserVisitor):
             if isinstance(child, VerilogParser.Reg_declarationContext):
                for i, item in enumerate(child.getChildren()):
                   if i == 0:
-                     if isinstance(item, antlr4.tree.Tree.TerminalNodeImpl):
+                     if isinstance(item, TerminalNodeImpl):
                         item.symbol.text = chr(31) + ' ' * indent + item.symbol.text
                      else: 
                         item.start.text = chr(31) + ' ' * indent + item.start.text
                   else:
-                     if isinstance(item, antlr4.tree.Tree.TerminalNodeImpl):
+                     if isinstance(item, TerminalNodeImpl):
                         item.symbol.text = ' ' + item.symbol.text + ' '
                      else:
                         item.start.text = ' ' + item.start.text
@@ -504,12 +461,12 @@ class FormatVisitor(VerilogParserVisitor):
             if isinstance(child, VerilogParser.Net_declarationContext):
                for i, item in enumerate(child.getChildren()):
                   if i == 0:
-                     if isinstance(item, antlr4.tree.Tree.TerminalNodeImpl):
+                     if isinstance(item, TerminalNodeImpl):
                         item.symbol.text = chr(31) + ' ' * indent + item.symbol.text
                      else: 
                         item.start.text = chr(31) + ' ' * indent + item.start.text
                   else:
-                     if isinstance(item, antlr4.tree.Tree.TerminalNodeImpl):
+                     if isinstance(item, TerminalNodeImpl):
                         item.symbol.text = ' ' + item.symbol.text + ' '
                      else:
                         item.start.text = ' ' + item.start.text
@@ -521,12 +478,12 @@ class FormatVisitor(VerilogParserVisitor):
             if isinstance(child, VerilogParser.Integer_declarationContext):
                for i, item in enumerate(child.getChildren()):
                   if i == 0:
-                     if isinstance(item, antlr4.tree.Tree.TerminalNodeImpl):
+                     if isinstance(item, TerminalNodeImpl):
                         item.symbol.text = chr(31) + ' ' * indent + item.symbol.text
                      else: 
                         item.start.text = chr(31) + ' ' * indent + item.start.text
                   else:
-                     if isinstance(item, antlr4.tree.Tree.TerminalNodeImpl):
+                     if isinstance(item, TerminalNodeImpl):
                         item.symbol.text = ' ' + item.symbol.text + ' '
                      else:
                         item.start.text = ' ' + item.start.text
@@ -545,12 +502,12 @@ class FormatVisitor(VerilogParserVisitor):
             if isinstance(child, VerilogParser.Event_expressionContext):
                for i, item in enumerate(child.getChildren()):
                   if i == 0:
-                     if isinstance(item, antlr4.tree.Tree.TerminalNodeImpl):
+                     if isinstance(item, TerminalNodeImpl):
                         item.symbol.text = ' ' + item.symbol.text 
                      else:
                         item.start.text = ' ' + item.start.text
                   else:
-                     if isinstance(item, antlr4.tree.Tree.TerminalNodeImpl):
+                     if isinstance(item, TerminalNodeImpl):
                         item.symbol.text = ' ' + item.symbol.text 
                      else:
                         item.start.text = ' ' + item.start.text
@@ -565,7 +522,7 @@ class FormatVisitor(VerilogParserVisitor):
             # If block
             if isinstance(child, VerilogParser.Conditional_statementContext):
                child.start.text = chr(31) + ' ' * indent + child.start.text + ' '
-            if isinstance(child, antlr4.tree.Tree.TerminalNodeImpl) and child.symbol.text == 'else':
+            if isinstance(child, TerminalNodeImpl) and child.symbol.text == 'else':
                child.symbol.text = chr(31) + ' ' * indent + child.symbol.text + ' '
 
             # Nonblocking assignment
@@ -583,12 +540,12 @@ class FormatVisitor(VerilogParserVisitor):
             if isinstance(child, VerilogParser.Block_item_declarationContext):
                for i, item in enumerate(child.getChildren()):
                   if i == 0:
-                     if isinstance(item, antlr4.tree.Tree.TerminalNodeImpl):
+                     if isinstance(item, TerminalNodeImpl):
                         item.symbol.text = chr(31) + ' ' * indent + item.symbol.text 
                      else:
                         item.start.text = chr(31) + ' ' * indent + item.start.text
                   else:
-                     if isinstance(item, antlr4.tree.Tree.TerminalNodeImpl):
+                     if isinstance(item, TerminalNodeImpl):
                         item.symbol.text = ' ' + item.symbol.text 
                      else:
                         item.start.text = ' ' + item.start.text

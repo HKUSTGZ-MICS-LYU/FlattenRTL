@@ -1,23 +1,9 @@
-from antlr4_verilog import InputStream, CommonTokenStream, ParseTreeWalker
-from antlr4_verilog.verilog import (
-    VerilogLexer,
-    VerilogParser,
-    VerilogParserListener,
-    VerilogParserVisitor,
-)
-import antlr4
-from io import StringIO
-import os
-import re
-import copy
+import re, copy
 
-# This function is used to convert the verilog to a tree
-def design_to_tree(design):
-    lexer = VerilogLexer(InputStream(design))
-    stream = CommonTokenStream(lexer)
-    parser = VerilogParser(stream)
-    tree = parser.source_text()
-    return tree
+from antlr4.tree.Tree import TerminalNodeImpl
+from antlr4_verilog.verilog import VerilogParser, VerilogParserVisitor
+
+from design_parser import parse_design_to_tree
 
 # Return top module node
 class TopModuleNodeFinder(VerilogParserVisitor):
@@ -32,7 +18,7 @@ class TopModuleNodeFinder(VerilogParserVisitor):
 
 def pyflattenverilog(design: str, top_module: str):
     # 1. Specify the top module and convert the design to a tree
-    tree = design_to_tree(design)
+    tree = parse_design_to_tree(design)
 
     # 2. Get the top module node
     top_finder = TopModuleNodeFinder(top_module)
@@ -69,7 +55,7 @@ def pyflattenverilog(design: str, top_module: str):
                 # get ports connections
                 ports_connections = ctx.module_instance()[0].list_of_port_connections()
                 for child in ports_connections.getChildren():
-                    if isinstance(child, antlr4.tree.Tree.TerminalNodeImpl):
+                    if isinstance(child, TerminalNodeImpl):
                         pass
                     else:
                         # e.g. Special case: .a() -> no expression for port "a"
@@ -96,7 +82,7 @@ def pyflattenverilog(design: str, top_module: str):
                     )
 
                     for child in list_of_parameter_assignments.getChildren():
-                        if isinstance(child, antlr4.tree.Tree.TerminalNodeImpl):
+                        if isinstance(child, TerminalNodeImpl):
                             pass
                         else:
                             if isinstance(child, VerilogParser.Named_parameter_assignmentContext):
@@ -283,7 +269,7 @@ def pyflattenverilog(design: str, top_module: str):
             + visitor.ports_param_str
             + design[visitor.parameter_stop+1:]
         )
-        tree = design_to_tree(design)
+        tree = parse_design_to_tree(design)
         visitor = TopModuleNodeFinder(top_module)
         visitor.visit(tree)
         top_node_tree = visitor.top_module_node
@@ -313,7 +299,7 @@ def pyflattenverilog(design: str, top_module: str):
 
         # remove all text in the context and its children
         def empty_all_text(self, ctx):
-            if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
+            if isinstance(ctx, TerminalNodeImpl):
                 try:
                     ctx.start.text = ""
                     ctx.stop.text = ""
@@ -342,7 +328,7 @@ def pyflattenverilog(design: str, top_module: str):
                 except:
                     ctx.symbol.text = ""
                     pass
-            if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
+            if isinstance(ctx, TerminalNodeImpl):
                 # Handle '?' identification problem
                 if ctx.symbol.text == "?":
                     ctx.symbol.text = " ? "
@@ -394,7 +380,7 @@ def pyflattenverilog(design: str, top_module: str):
                     
 
         # def _traverse_param_assignment(self,ctx):
-        #   if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
+        #   if isinstance(ctx, TerminalNodeImpl):
         #     pass
         #   else:
         #     for child in ctx.getChildren():
@@ -427,7 +413,7 @@ def pyflattenverilog(design: str, top_module: str):
     inst_module_nodes = []
     no_port_parameter = False
     for k in range(0, len(cur_prefixs)):
-        tmp_inst_module_design = design_to_tree(inst_module_design)
+        tmp_inst_module_design = parse_design_to_tree(inst_module_design)
         visitor = InstModuleVisitor(k)
         visitor.visit(tmp_inst_module_design)
         inst_module_design_trees.append(tmp_inst_module_design)
@@ -445,7 +431,7 @@ def pyflattenverilog(design: str, top_module: str):
             self.list_of_ports_lhs = []
 
         def _traverse_children(self, ctx):
-            if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
+            if isinstance(ctx, TerminalNodeImpl):
                 if ctx.symbol.text == "?":
                     ctx.symbol.text = " ? "
             else:
@@ -704,11 +690,10 @@ def pyflattenverilog(design: str, top_module: str):
             if ctx.getChildCount() == 0:
                 return ""
 
-            with StringIO() as builder:
-                for child in ctx.getChildren():
-                    builder.write(child.getText() + " ")
+            temp = ""
+            for child in ctx.getChildren():
+                temp += child.getText() + " "
 
-                temp = builder.getvalue()
             for line in temp.splitlines():
                 for char in line:
                     if char == chr(31):
@@ -717,7 +702,7 @@ def pyflattenverilog(design: str, top_module: str):
                         self.text += char
 
         def _traverse_children(self, ctx, indent=0):
-            if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
+            if isinstance(ctx, TerminalNodeImpl):
                 pass
             else:
                 for child in ctx.getChildren():
@@ -774,13 +759,13 @@ def pyflattenverilog(design: str, top_module: str):
                             chr(31) + " " * indent + child.start.text + " "
                         )
                         # child.stop.text = chr(31) + ' ' * indent + child.stop.text + ' '
-                    if isinstance(child, antlr4.tree.Tree.TerminalNodeImpl) and (
+                    if isinstance(child, TerminalNodeImpl) and (
                         child.symbol.text == "else"
                     ):
                         child.symbol.text = (
                             chr(31) + " " * indent + child.symbol.text + " "
                         )
-                    elif isinstance(child, antlr4.tree.Tree.TerminalNodeImpl) and (
+                    elif isinstance(child, TerminalNodeImpl) and (
                         child.symbol.text == "or"
                     ):
                         child.symbol.text = " " * indent + child.symbol.text + " "
@@ -819,7 +804,7 @@ def pyflattenverilog(design: str, top_module: str):
         def visitModule_declaration(self, ctx: VerilogParser.Module_declarationContext):
             self.inst_module_node = ctx
             self.formatProcess(self.inst_module_node)
-            self.inst_module_node = design_to_tree(self.text)
+            self.inst_module_node = parse_design_to_tree(self.text)
 
     inst_module_designs = []
     for k in range(0, len(cur_prefixs)):
@@ -839,7 +824,7 @@ def pyflattenverilog(design: str, top_module: str):
         def ExtractStartAndStop(self, ctx):
             self.stop = ctx.ENDMODULE().getSymbol().start - 1
             for child in ctx.getChildren():
-                if isinstance(child, antlr4.tree.Tree.TerminalNodeImpl):
+                if isinstance(child, TerminalNodeImpl):
                     if self.firstTerminal == False:
                         self.start = child.symbol.stop + 1
                         self.firstTerminal = True
@@ -862,7 +847,7 @@ def pyflattenverilog(design: str, top_module: str):
             self.tmp_design = ''
 
         def _traverse_children(self, ctx):
-            if isinstance(ctx, antlr4.tree.Tree.TerminalNodeImpl):
+            if isinstance(ctx, TerminalNodeImpl):
                 pass
             else:
                 for child in ctx.getChildren():

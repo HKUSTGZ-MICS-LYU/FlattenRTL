@@ -6,6 +6,9 @@ FlattenRTL is a tool for flattening verilog design.
 
 ## How to use?
 
+### Requirements
+* ANTLR (ANother Tool for Language Recognition) ([https://www.antlr.org](https://www.antlr.org))
+
 ### Install
 ```
 python3 -m pip install antlr4-python3-runtime==4.7.2
@@ -14,7 +17,8 @@ python3 -m pip install antlr4-python3-runtime==4.7.2
 ### Usage
 For information about the command arguments type:
 ```shell
-python main.py --help
+$ cd FlattenRTL
+$ python main.py --help
 ```
 
 ```

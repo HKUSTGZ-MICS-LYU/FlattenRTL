@@ -1,5 +1,5 @@
 import argparse, pathlib
-import os
+import os, shutil
 
 import flatten
 import preprocess
@@ -32,23 +32,20 @@ def main():
     if os.path.exists(output_file):
         os.remove(path=output_file)
     
-    # preprocess input file and store it to output file
+    # preprocess the input file
     formatted_design = ''
     with open(input_file, 'r') as f:
         design = f.read()
         formatted_design = preprocess.format_file(design)
     
     # all intermediate flattened results will be stored in directory/tmp 
-    tmp_folder = pathlib.Path(directory, "tmp")
-    print(f'[INFO] Intermediate flattened files will be saved in {tmp_folder}')
+    if args.debug:
+        tmp_folder = pathlib.Path(directory, "tmp")
+        print(f'[INFO] Intermediate flattened files will be saved in {tmp_folder}')
 
-    if os.path.exists(tmp_folder):
-        file_list = os.listdir(tmp_folder)
-        print(f'[INFO] Removing existing files in {tmp_folder}')
-        for filename in file_list:
-            tmp_file_path = os.path.join(tmp_folder, filename)
-            os.remove(tmp_file_path)
-    else:
+        if os.path.exists(tmp_folder):
+            print(f'[INFO] Removing existing files in {tmp_folder}')
+            shutil.rmtree(tmp_folder)
         os.mkdir(tmp_folder)
 
     # flatten the preprocessed output file iteratively
@@ -59,6 +56,7 @@ def main():
         while not done:
             if args.debug:
                 tmp_output_file = pathlib.Path(tmp_folder, f'flatten_{tmp_idx}.v')
+                print(f'[INFO] Writing intermediate flattened design in {tmp_output_file}')
                 with open(tmp_output_file, 'w') as f:
                     f.write(tmp_flatten_design)
                 tmp_idx += 1
@@ -66,12 +64,14 @@ def main():
                 tmp_flatten_design, args.top
             )
     
-    # write to output file
-    with open(output_file, "w") as f:
-        f.write(tmp_flatten_design)
+        # write to output file
+        with open(output_file, "w") as f:
+            print(f'[INFO] Writing the final flattened design in {output_file}')
+            f.write(tmp_flatten_design)
     
-    # format
-    os.system("bin/iStyle -n --style=ansi " + str(output_file))
+        # format
+        print(f'[INFO] Formating the flattened design in {output_file} using iStyle')
+        os.system("bin/iStyle -n --style=ansi " + str(output_file))
 
 if __name__ == "__main__":
     main()
