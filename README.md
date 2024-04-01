@@ -326,6 +326,11 @@ endmodule
 
 ```
 
+## Authors
+* Ziyue Zheng ([GitHub](https://github.com/MrWater98))
+* Xiangchen Meng ([GitHub](https://github.com/Muxucao0812))
+* Yangdi Lyu ([GitHub](https://github.com/lvyangdi)) ([Personal Webpage](https://personal.hkust-gz.edu.cn/yangdilyu/index.html))
+
 ## Citation
 
 If you use this repository in your work, please cite:
