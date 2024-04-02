@@ -1,6 +1,6 @@
 # Known Issues
 ## Limitations and Features
-### Module Declaration
+### Module Declaration (Solved)
 
 The module declaration should be follow the standard style below without any parameters:
 
@@ -11,9 +11,8 @@ module decl(a, b, c);
    output [2:0] c;
 ```
 
-Currently we don't support definitions and parameters.
 
-### Port Connection
+### Port Connection (Solved)
 
 Ordered port connection, named port connection and no info at the rhs(right hand side) are supported.
 
@@ -76,7 +75,7 @@ module A(output X)
 wire X;
 ```
 
-### Bad Naming Problem
+### Bad Naming Problem (Solved by using "__")
 
 Assume you have a variable named `iq_a`, and there's an instance named `x`. After flattening, the variable name becomes `x_iq_a` to reflect its origin within the x instance.
 
