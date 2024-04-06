@@ -80,3 +80,7 @@ wire X;
 Assume you have a variable named `iq_a`, and there's an instance named `x`. After flattening, the variable name becomes `x_iq_a` to reflect its origin within the x instance.
 
 However, consider a situation where a variable is named `a`, and there's an instance named `x_iq`. In the flattened naming convention, this variable would also end up with the name `x_iq_a`, which is identical to the previous example despite originating from a different hierarchical structure.
+
+### Marco Definition
+
+The marco definition can be preprocessed by iverilog. Try `iverilog -E`. 
