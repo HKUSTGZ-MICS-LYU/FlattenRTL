@@ -715,6 +715,8 @@ def pyflattenverilog(design: str, top_module: str):
                     # Parameter defination
                     if isinstance(child, VerilogParser.Parameter_declarationContext):
                         child.start.text = chr(31) + " " * indent + child.start.text
+                    if isinstance(child, VerilogParser.Block_item_declarationContext):
+                        child.start.text = chr(31) + " " * indent + child.start.text
                     # Reg defination
                     if isinstance(child, VerilogParser.Reg_declarationContext):
                         child.start.text = chr(31) + " " * indent + child.start.text

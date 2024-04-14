@@ -5,11 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "b17",
+            "name": "b21",
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/main.py",
-            "args": ["tests/regression/b17", "b17.v", "--top=b17", "--output=flatten.v", "-g"],
+            "args": ["tests/regression/b21", "b21.v", "--top=b21", "--output=flatten.v", "-g"],
             "console": "integratedTerminal",
             "justMyCode": true
         },
@@ -21,6 +21,24 @@
             "args": ["tests/regression/_adder", "adder.v", "--top=adder_32bit", "--output=flatten.v", "-g"],
             "console": "integratedTerminal",
             "justMyCode": true
-        }
+        },
+        {
+            "name": "Rocket",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": ["tests/regression/rocket", "Rocket.v", "--top=ExampleRocketSystem", "--output=Rocket_Assert.v", "-g"],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Boom",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": ["tests/regression/boom", "boom.v", "--top=TLB", "--output=boom_assert.v", "-g"],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
     ]
 }

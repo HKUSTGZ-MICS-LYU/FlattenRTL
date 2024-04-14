@@ -303,8 +303,8 @@ class PortModifyVisitor(VerilogParserVisitor):
       self.__insert_parameter(ctx)
       self.__modify_module_declaration(ctx)
       self.__remove_signal_declaration(ctx)
-      # self._add_block_content(ctx)
       self.__remove_block_content(ctx)
+      # self._add_block_content(ctx)
       # if self.is_implicit_port_definition(ctx):
       self.module = ctx
    
@@ -385,7 +385,7 @@ class PortModifyVisitor(VerilogParserVisitor):
                   break
       return sig_name
    
-   def __add_block_content(self, ctx):
+   def _add_block_content(self, ctx):
       for child in ctx.getChildren():
          if isinstance(child, TerminalNodeImpl) and child.symbol.text == ';':
             index = ctx.children.index(child)
@@ -393,8 +393,8 @@ class PortModifyVisitor(VerilogParserVisitor):
             #    parameter = item
             #    ctx.children.insert(index + i + 1, Parameter2Tree(parameter))
             for key, value in self.block_port.items():
-               defination = value['port_type'] + ' ' + value['data_type'] + ' ' + value['port_width'] + ' ' + key + ';'
-               ctx.children.insert(index + len(self.block_parameter) + 1, parse_module_to_tree(defination))
+               definition = value['port_type'] + ' ' + value['data_type'] + ' ' + value['port_width'] + ' ' + key + ';'
+               ctx.children.insert(index + len(self.block_parameter) + 1, parse_module_to_tree(definition))
 
    def __remove_block_content(self, ctx):
       if isinstance(ctx, TerminalNodeImpl):
@@ -403,6 +403,9 @@ class PortModifyVisitor(VerilogParserVisitor):
          if ctx.children is not None:
             for child in list(ctx.children):
                if isinstance(child, VerilogParser.Block_item_declarationContext):
+                  var_identifier = child.list_of_block_variable_identifiers()
+                  if var_identifier is not None and var_identifier.getText() in self.block_port:
+                     continue
                   index_of_child = child.parentCtx.children.index(child)
                   del child.parentCtx.children[index_of_child]
                else:

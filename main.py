@@ -38,6 +38,12 @@ def main():
         design = f.read()
         formatted_design = preprocess.format_file(design)
     
+    # output the formatted design to file for debugging
+    # formatted_file = pathlib.Path(directory, 'formatted.v')
+    # print(f'[INFO] Writing the formatted design in {formatted_file}')
+    # with open(formatted_file, 'w') as f:
+    #     f.write(formatted_design)
+    
     # all intermediate flattened results will be stored in directory/tmp 
     if args.debug:
         tmp_folder = pathlib.Path(directory, "tmp")
