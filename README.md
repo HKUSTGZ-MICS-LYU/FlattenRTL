@@ -157,7 +157,7 @@ endmodule
 
 ### Flatten Design 
 ```verilog
-odule adder_32bit(a, b, cin, sum, cout);
+module adder_32bit(a, b, cin, sum, cout);
   input [31:0] a;
   input [31:0] b;
   input cin;
