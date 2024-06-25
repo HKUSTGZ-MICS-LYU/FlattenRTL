@@ -32,11 +32,20 @@
             "justMyCode": true
         },
         {
+            "name": "Rocket3",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": ["tests/regression/rocket3", "p_rockettile.v", "--top=RocketTile", "--output=f_rocket.v", "-g"],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
             "name": "Boom",
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/main.py",
-            "args": ["tests/regression/boom", "boom.v", "--top=TLB", "--output=boom_assert.v", "-g"],
+            "args": ["tests/regression/boom2", "p_boom.v", "--top=BoomTile", "--output=f_boom.v", "-g"],
             "console": "integratedTerminal",
             "justMyCode": true
         },
