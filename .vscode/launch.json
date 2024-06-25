@@ -18,7 +18,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/main.py",
-            "args": ["tests/regression/_adder", "adder.v", "--top=adder_32bit", "--output=flatten.v", "-g"],
+            "args": ["tests/regression/_adder", "adder.v", "--top=adder_32bit", "--output=_flatten.v", "-g"],
             "console": "integratedTerminal",
             "justMyCode": true
         },
