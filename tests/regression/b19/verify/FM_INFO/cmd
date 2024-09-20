@@ -1,6 +1,0 @@
-/hpc/Edatools/synopsys/formality/V-2023.12/linux64/fm/bin/fm_shell_exec -r /hpc/Edatools/synopsys/formality/V-2023.12 -f verify.fms 
-
-Version    = V-2023.12
-Build      = V-2023.12-formality_v2023.12_rel-8560677
-Build date = Nov 16, 2023
-Run date   = Sun Feb 18 20:51:29 2024 CST

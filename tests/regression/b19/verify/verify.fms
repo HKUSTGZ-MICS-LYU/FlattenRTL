@@ -1,8 +1,0 @@
-set_mismatch_message_filter -warn FMR_ELAB-147
-read_verilog -r /hpc/home/connect.zzheng989/researchlib/pyflattenverilog/tests/regression/b19/b19.v
-set_top b19
-read_verilog -i /hpc/home/connect.zzheng989/researchlib/pyflattenverilog/tests/regression/b19/flatten_f_b19.v
-set_top b19
-verify
-report_unverified_points 
-exit

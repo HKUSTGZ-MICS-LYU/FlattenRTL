@@ -12,12 +12,28 @@ assign sum = (a + b) << SHIFT;
 
 endmodule
 
+module Adder2 (a,b,sum);
+    input [1:0] a;
+    input [1:0] b;     // Two inputs
+    output [1:0] sum; // Output sum with shift
+
+// Compute the sum of the inputs and apply shift
+assign sum = (a + b) << SHIFT;
+
+endmodule
+
 // Top Level Module
 module TopModule(a1, b1, a2, b2, sum1, sum2);
     input [7:0] a1, b1;         // Inputs for the first adder
     input [15:0] a2, b2;         // Inputs for the second adder
     output [7:0] sum1;           // Output for the first adder (no shift applied, acts as before)
     output [15+1:0] sum2;         // Output for the second adder with an extra bit to accommodate for shift
+
+    Adder2 adder3 (
+        .a(a1[1:0]),
+        .b(b1[1:0]),
+        .sum(sum1[1:0])
+    );
 
 // Instantiate the first adder with a width of 8 bits and no shift
 Adder #(
@@ -28,6 +44,8 @@ Adder #(
     .b(b1),
     .sum(sum1)
 );
+
+
 
 // Instantiate the second adder with a width of 16 bits and a shift of 1 bit
 Adder #(

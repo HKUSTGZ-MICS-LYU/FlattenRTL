@@ -1,0 +1,27 @@
+Description
+
+    This is a project that flatten systemverilog.
+
+Install
+
+    pip install antlr4-python3-runtime==4.13.1
+
+Run
+
+    usage: main.py [-h] [-f FILELIST] [-t TOP] [-o OUTPUT] [-g] dir
+
+    positional arguments:
+    dir                   The working directory.
+
+    optional arguments:
+    -h, --help            show this help message and exit
+    -f FILELIST, --filelist FILELIST
+                            The filelist of design.
+    -t TOP, --top TOP     The name of the top module.
+    -o OUTPUT, --output OUTPUT
+                            The output file containint the flattened module. Default = flatten.v
+    -g, --debug           Enable debug mode.
+
+Example
+
+    python main.py tests/regression/adder4bit -f filelist.f -t adder_4bit -o f_adder_4bit.v -g
