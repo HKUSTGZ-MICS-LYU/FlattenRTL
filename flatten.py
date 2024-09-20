@@ -943,6 +943,7 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
                                 top_module = top_module, cur_new_variable=cur_new_variable,insert_parts = insert_parts,cur_new_assign=cur_new_assign)
     visitor.visit(top_node_tree)
 
-    flatten_design = replace_module(design, top_module ,visitor.tmp_design)
+    
+    flatten_design = replace_module(design, top_module, visitor.tmp_design)
 
     return False, flatten_design

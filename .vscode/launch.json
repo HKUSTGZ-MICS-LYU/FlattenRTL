@@ -1,0 +1,72 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Adder_4bit",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "args": ["tests/regression/adder4bit","-f","filelist.f","-t","adder_4bit","-o","f_adder_4bit.v","-g"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Debug Special Adder_4bit",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "args": ["tests/regression/_adder4bit","-f","filelist.f","-t","adder_4bit","-o","f_adder_4bit.v","-g"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Debug Adder Param",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "args": ["tests/regression/_adder_param","-f","filelist.f","-ex","Adder","-t","TopModule","-o","f_adder.v","-g"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Debug MIPS",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "args": ["tests/regression/mips","-f","filelist.f","-t","mips_16_core_top","-o","f_mips.v","-g"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Debug rocket",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "args": ["tests/regression/rocket","-f","filelist.f","-t","RocketTile","-o","f_rocket.v","-g"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Debug rocket sv",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "args": ["tests/regression/rocket_sv","-f","filelist.f","-t","RocketTile","-o","f_rocket.v","-g"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "adder_2bit",
+            "type": "antlr-debug",
+            "request": "launch",
+            "input": "tests/regression/adder4bit/adder_2bit.v",
+            "grammar": "g4/SystemVerilogParser.g4",
+            "startRule": "source_text",
+            "printParseTree": true,
+            "visualParseTree": true
+        }
+    ]
+}

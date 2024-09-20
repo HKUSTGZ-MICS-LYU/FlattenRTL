@@ -95,7 +95,7 @@ def extract_module(verilog_code: str, module_name: str) -> str:
      
 def replace_module(verilog_code: str, module_name: str, new_module_code: str) -> str:
     """
-    替换Verilog代码中的指定模块为新的模块定义。
+    替换Verilog代码中的指定模块为新的模块定义，并手动处理特殊字符。
 
     :param verilog_code: 包含整个芯片设计的Verilog代码字符串
     :param module_name: 要替换的模块名称
@@ -105,8 +105,11 @@ def replace_module(verilog_code: str, module_name: str, new_module_code: str) ->
     
     # 正则表达式匹配目标模块
     module_pattern = re.compile(rf'module\s+{module_name}\s*.*?endmodule', re.S)
-    
-    # 使用re.sub()进行替换
-    updated_verilog_code = re.sub(module_pattern, new_module_code, verilog_code)
-    
+
+    # 手动转义替换字符串中的百分号和反斜杠
+    safe_new_module_code = new_module_code.replace('\\', '\\\\')
+
+    # 使用 re.sub() 进行替换
+    updated_verilog_code = re.sub(module_pattern, safe_new_module_code, verilog_code)
+
     return updated_verilog_code
