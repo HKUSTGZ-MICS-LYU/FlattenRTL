@@ -59,6 +59,24 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "Debug gcd",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "args": ["tests/regression/gcd","-f","filelist.f","-t","gcd_remu","-o","f_gcd.v","-g"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Debug adder",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "args": ["tests/regression/adder","-f","filelist.f","-t","adder_32bit","-o","f_adder.v","-g"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "adder_2bit",
             "type": "antlr-debug",
             "request": "launch",

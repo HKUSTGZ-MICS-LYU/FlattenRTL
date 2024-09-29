@@ -103,6 +103,8 @@ def replace_module(verilog_code: str, module_name: str, new_module_code: str) ->
     :return: 返回替换后的完整Verilog代码
     """
     
+    new_module_code = extract_module(new_module_code, module_name)
+    
     # 正则表达式匹配目标模块
     module_pattern = re.compile(rf'module\s+{module_name}\s*.*?endmodule', re.S)
 

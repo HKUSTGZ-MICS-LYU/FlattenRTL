@@ -293,8 +293,8 @@ class RenameModuleVisitor(SystemVerilogParserVisitor):
                     ):
                         pass
                     elif isinstance(
-                        child.parentCtx.parentCtx,
-                        SystemVerilogParser.Instance_identifierContext,
+                        child.parentCtx.parentCtx.parentCtx,
+                        SystemVerilogParser.Module_program_interface_instantiationContext,
                     ):
                         pass
                     elif isinstance(
@@ -736,7 +736,7 @@ class IdentifierVisitor(SystemVerilogParserVisitor):
                 substring = " "*4+self.design[self.stop[i-1] + 1 : self.start[i]] + '\n'
                 if not substring.isspace():
                     self.tmp_design += substring
-                self.tmp_design += 4*" " + remove_leading_whitespace(self.insert_parts[0])+ '\n'
+                self.tmp_design += 4*" " + remove_leading_whitespace(self.insert_parts[i])+ '\n'
             for assign in self.cur_new_assign:
                 self.tmp_design += " "*4+assign +'\n'
             self.tmp_design += " "*4+self.design[self.stop[-1] + 1 :] + '\n'

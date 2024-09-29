@@ -1,4 +1,4 @@
-module adder_4bit ( // hello
+module adder_4bit (
     input [3:0] a,
     input [3:0] b,
     output [4:0] sum
