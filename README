@@ -88,3 +88,19 @@ Example Output
 
         assign sum = {sum_upper[2:0], sum_lower[1:0]};
     endmodule
+
+Authors
+    Ziyue Zheng (https://github.com/MrWater98)
+    Xiangchen Meng (https://github.com/Muxucao0812)
+    Yangdi Lyu (https://github.com/lvyangdi) [Personal Webpage](https://personal.hkust-gz.edu.cn/yangdilyu/index.html)
+
+Citation
+
+If you use this repository in your work, please cite:
+
+@inproceedings{flattenrtl2024,
+  title={FlattenRTL: An Open Source Tool for Flattening Verilog Module at RTL Level},
+  author={Meng, Xiangchen and Zheng, Ziyue and Lyu, Yangdi},
+  booktitle={International Symposium of EDA},
+  year={2024}
+}
