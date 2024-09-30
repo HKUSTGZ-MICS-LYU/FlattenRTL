@@ -96,6 +96,14 @@ class ParamVisitor(SystemVerilogParserVisitor):
         self.counter = 0
         self.cur_prefixs = cur_prefixs
         self.cur_dict_of_parameters = cur_dict_of_parameters
+    
+    def is_parents_parameter_port_list(self,ctx):
+        if ctx is None:
+            return False
+        if not isinstance(ctx,SystemVerilogParser.Parameter_port_listContext):
+            return self.is_parents_parameter_port_list(ctx.parentCtx)
+        else:
+            return True
 
     # A very special case:
     # "Parameter A = 3"
@@ -119,6 +127,11 @@ class ParamVisitor(SystemVerilogParserVisitor):
 
     # assign to cur_dict_of_parameters
     def visitParam_assignment(self, ctx: SystemVerilogParser.Param_assignmentContext):
+        # Whether current parameter assignment is under module header, if not, we should not collect it
+        # module xxx();
+        # parameter xxx; <- would not affect the header
+        if not self.is_parents_parameter_port_list(ctx):
+            return 
         if ctx.getChildCount() == 3:
             param_name = ctx.getChild(0).getText().replace(" ", "")
             param_value = ctx.getChild(2).getText().replace(" ", "")
@@ -794,12 +807,12 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
     if cur_dict_of_parameters != {}:
         visitor.visit(tree)
         # This can be optimized
-        instance_design_str = (
-            instance_design_str[: visitor.parameter_start]
+        top_instance_str = (
+            top_instance_str[: visitor.parameter_start]
             + visitor.ports_param_str
-            + instance_design_str[visitor.parameter_stop+1:]
+            + top_instance_str[visitor.parameter_stop+1:]
         )
-        tree = parse_design_to_tree(instance_design_str)
+        tree = parse_design_to_tree(top_instance_str)
         visitor = TopModuleNodeFinder(top_module)
         visitor.visit(tree)
         top_node_tree = visitor.top_module_node

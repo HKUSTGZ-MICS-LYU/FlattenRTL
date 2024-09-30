@@ -77,6 +77,15 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "Debug usb_phy",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "args": ["tests/regression/usb_phy","-f","filelist.f","-t","usb_phy","-o","f_usb_phy.v","-g"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "adder_2bit",
             "type": "antlr-debug",
             "request": "launch",
