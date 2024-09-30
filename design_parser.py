@@ -81,7 +81,8 @@ def extract_module(verilog_code: str, module_name: str) -> str:
     
     # 使用正则表达式匹配模块开头和结尾
     # 这个正则表达式匹配 "module module_name" 到 "endmodule" 之间的内容
-    module_pattern = re.compile(rf'module\s+{module_name}\s*.*?endmodule', re.S)
+    # \b 确保 module_name 是全词匹配，后面可以跟空白字符或括号等
+    module_pattern = re.compile(rf'\bmodule\s+{module_name}\b\s*.*?endmodule', re.S)
     
     # 搜索模块
     match = module_pattern.search(verilog_code)

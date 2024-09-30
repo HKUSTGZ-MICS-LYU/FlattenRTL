@@ -62,10 +62,12 @@ class MyModuleInstantiationVisitor(SystemVerilogParserVisitor):
                             if (self.dict_of_lhs_to_rhs.get(self.name_of_module_instances[-1])is None):
                                 self.dict_of_lhs_to_rhs[self.name_of_module_instances[-1]] = {}
                             if child.port_assign() is not None:
-                                self.dict_of_lhs_to_rhs[self.name_of_module_instances[-1]][child.port_identifier().getText()] = child.port_assign().expression().getText()
-                                
-                                self.dict_of_lhs_to_rhs[self.name_of_module_instances[-1]][child.port_identifier().getText()] = \
-                                    self.dict_of_lhs_to_rhs[self.name_of_module_instances[-1]][child.port_identifier().getText()].replace("?", " ? ")
+                                if child.port_assign().expression() is not None:
+                                    self.dict_of_lhs_to_rhs[self.name_of_module_instances[-1]][child.port_identifier().getText()] = child.port_assign().expression().getText()
+                                    self.dict_of_lhs_to_rhs[self.name_of_module_instances[-1]][child.port_identifier().getText()] = \
+                                        self.dict_of_lhs_to_rhs[self.name_of_module_instances[-1]][child.port_identifier().getText()].replace("?", " ? ")
+                                else:
+                                    self.dict_of_lhs_to_rhs[self.name_of_module_instances[-1]][child.port_identifier().getText()] = ""
                             else:
                                 self.dict_of_lhs_to_rhs[self.name_of_module_instances[-1]][child.port_identifier().getText()] = ""
                         if ctx.parameter_value_assignment() is not None:
@@ -207,7 +209,7 @@ class MoudleParameterPortVisitor(SystemVerilogParserVisitor):
     
 
 class InstModuleVisitor(SystemVerilogParserVisitor):
-    def __init__(self, cur_module_identifier, cur_dict_of_parameters, cur_prefixs, top_module):
+    def __init__(self, design, cur_module_identifier, cur_dict_of_parameters, cur_prefixs, top_module):
         self.inst_module_node = None
         self.inst_module_design = None
         self.start = None   
@@ -222,15 +224,18 @@ class InstModuleVisitor(SystemVerilogParserVisitor):
         self.parameter_stop = None
         self.ports_param_str = None
         
+        self.design = design
+        
     def visitModule_declaration(self, ctx: SystemVerilogParser.Module_declarationContext):
         module_name = ctx.module_header().module_identifier().getText()
         if module_name == self.cur_module_identifier:
             self.start = ctx.start.start
             self.stop = ctx.stop.stop
             self.inst_module_node = ctx
+            self.inst_module_design = self.design
             paramVisitor = ParamVisitor(self.cur_dict_of_parameters, self.cur_prefixs)
             paramVisitor.visit(ctx)
-        if self.start != None:
+        if self.start != None and self.cur_dict_of_parameters != {}:
             if module_name == self.top_module:
                 moduleParameterPortVisitor = MoudleParameterPortVisitor(self.inst_module_design, self.cur_prefixs, self.cur_dict_of_parameters, self.top_module)
                 moduleParameterPortVisitor.visit(ctx)
@@ -283,7 +288,7 @@ class RenameModuleVisitor(SystemVerilogParserVisitor):
                 pass
         if isinstance(ctx,TerminalNodeImpl):
             if ctx.symbol.text == "?":
-                ctx.symbol.text = "?"
+                ctx.symbol.text = " ? "
         else:
             for child in ctx.getChildren():
                 if isinstance(child,SystemVerilogParser.Simple_identifierContext):
@@ -354,7 +359,7 @@ class InstModulePortVisitor(SystemVerilogParserVisitor):
     def _traverse_children_in_header(self,ctx):
         if isinstance(ctx, TerminalNodeImpl):
             if ctx.symbol.text == "?":
-                ctx.symbol.text = "?"
+                ctx.symbol.text = " ? "
         else:
             for child in ctx.getChildren():
                 if isinstance(child, SystemVerilogParser.Port_directionContext) \
@@ -451,7 +456,7 @@ class InstModulePortVisitor(SystemVerilogParserVisitor):
     def _traverse_children_in_module_item(self,ctx):
         if isinstance(ctx, TerminalNodeImpl):
             if ctx.symbol.text == "?":
-                ctx.symbol.text = "?"
+                ctx.symbol.text = " ? "
         else:
             for child in ctx.getChildren():
                 if isinstance(child, SystemVerilogParser.Input_declarationContext) \
@@ -779,7 +784,7 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
     top_instance_str = top_design_str + '\n' + instance_design_str
     tree = parse_design_to_tree(top_instance_str)
     visitor = InstModuleVisitor(cur_module_identifier=cur_module_identifier, cur_dict_of_parameters=cur_dict_of_parameters, \
-        cur_prefixs=cur_prefixs, top_module=top_module)
+        cur_prefixs=cur_prefixs, top_module=top_module, design=top_instance_str)
     visitor.visit(tree)
     inst_module_design = top_instance_str[visitor.start : visitor.stop + 1]
       
