@@ -86,6 +86,15 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "Debug pico",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "args": ["tests/regression/pico","-f","filelist.f","-t","wrapper","-o","f_pico.v","-g"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "adder_2bit",
             "type": "antlr-debug",
             "request": "launch",

@@ -52,7 +52,7 @@ class MyModuleInstantiationVisitor(SystemVerilogParserVisitor):
                         pass
                     else:
                         if child.port_assign().expression() is not None:
-                            self.list_of_ports_rhs.append(child.port_assign().getText())
+                            self.list_of_ports_rhs.append(child.port_assign().expression().getText())
                         else:
                             self.list_of_ports_rhs.append("")
                         if isinstance(child, SystemVerilogParser.Ordered_port_connectionContext):
@@ -495,24 +495,44 @@ class InstModulePortVisitor(SystemVerilogParserVisitor):
                         
                 if isinstance(child, SystemVerilogParser.Output_declarationContext) \
                     and child.getChild(0).getText()=='output':
-                    for item in child.list_of_port_identifiers().port_id():
-                        self.list_of_ports_direction.append('output')
-                        self.list_of_ports_lhs.append(
-                            item.getText()
-                        )
-                        self.list_of_ports_type.append("wire")
-                        if child.implicit_data_type() is not None:
-                            if child.implicit_data_type().packed_dimension() is not None:
-                                self.list_of_ports_width.append(child.implicit_data_type().packed_dimension()[0].getText())
+                    if child.list_of_port_identifiers():
+                        for item in child.list_of_port_identifiers().port_id():
+                            self.list_of_ports_direction.append('output')
+                            self.list_of_ports_lhs.append(
+                                item.getText()
+                            )
+                            self.list_of_ports_type.append("wire")
+                            if child.implicit_data_type() is not None:
+                                if child.implicit_data_type().packed_dimension() is not None:
+                                    self.list_of_ports_width.append(child.implicit_data_type().packed_dimension()[0].getText())
+                                else:
+                                    self.list_of_ports_width.append("")
+                                if child.implicit_data_type().signing() is not None:
+                                    self.list_of_data_type.append(child.implicit_data_type().signing().getText())
+                                else:
+                                    self.list_of_data_type.append("")
                             else:
                                 self.list_of_ports_width.append("")
-                            if child.implicit_data_type().signing() is not None:
-                                self.list_of_data_type.append(child.implicit_data_type().signing().getText())
-                            else:
                                 self.list_of_data_type.append("")
-                        else:
-                            self.list_of_ports_width.append("")
-                            self.list_of_data_type.append("")
+                    elif child.list_of_variable_port_identifiers():
+                        for item in child.list_of_variable_port_identifiers().var_port_id():
+                            self.list_of_ports_direction.append('output')
+                            self.list_of_ports_lhs.append(
+                                item.getText()
+                            )
+                            self.list_of_ports_type.append("reg")
+                            if child.data_type() is not None:
+                                if child.data_type().packed_dimension() != []:
+                                    self.list_of_ports_width.append(child.data_type().packed_dimension()[0].getText())
+                                else:
+                                    self.list_of_ports_width.append("")
+                                if child.data_type().signing() is not None:
+                                    self.list_of_data_type.append(child.data_type().signing().getText())
+                                else:
+                                    self.list_of_data_type.append("")
+                            else:
+                                self.list_of_ports_width.append("")
+                                self.list_of_data_type.append("")
                     
                 # TODO: inout
                 if isinstance(child, SystemVerilogParser.Inout_declarationContext) \
@@ -701,10 +721,9 @@ class InstBodyVisitor2(SystemVerilogParserVisitor):
                         self.firstTerminal = True
         else:
             for child in ctx.module_item():
-                if not isinstance(child.getChild(0),SystemVerilogParser.Input_declarationContext) and \
-                    not isinstance(child.getChild(0),SystemVerilogParser.Output_declarationContext) and \
-                        not isinstance(child.getChild(0),SystemVerilogParser.Inout_declarationContext):
-                            self.start = child.start.start
+                if not isinstance(child.getChild(0),SystemVerilogParser.Port_declarationContext):
+                    self.start = child.start.start
+                    break
         
     def visitModule_declaration(self,ctx:SystemVerilogParser.Module_declarationContext):
         self.ExtractStartAndStop(ctx)
@@ -787,7 +806,7 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
     if cur_module_identifier == "":
         return True, top_design_str
     else:
-        print(
+        print(  
             "[Processing] MODULE: %s\tNAME:%s"
             % (cur_module_identifier, cur_name_of_module_instances)
         )
@@ -897,10 +916,10 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
                     rhs = dict_of_lhs_to_rhs[cur_prefixs[k]].get(
                         cur_list_of_ports_lhs[k * len_instance_port + i]
                     )
-                    if rhs == "":
-                        continue
                     if rhs is None:
                         rhs = cur_list_of_ports_rhs[k* len_instance_port +i]
+                    if rhs == "" or rhs.strip()=="":
+                        continue
                     cur_new_assign.append(
                         "assign "
                         + cur_prefixs[k]
@@ -914,10 +933,10 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
                     rhs = dict_of_lhs_to_rhs[cur_prefixs[k]].get(
                         cur_list_of_ports_lhs[k * len_instance_port + i]
                     )
-                    if rhs == "":
-                        continue
                     if rhs is None:
                         rhs = cur_list_of_ports_rhs[k * len_instance_port + i]
+                    if rhs == "" or rhs.strip()=="":
+                        continue
                     cur_new_assign.append(
                         "assign "
                         + rhs
@@ -942,7 +961,7 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
             print("cur_new_assign: ", cur_new_assign)
             print(f"index {i} & {k}: ")
             exit(0)
-    
+
     inst_module_designs = []
     for k in range(0,len(cur_prefixs)):
         visitor = InstBodyVisitor()
