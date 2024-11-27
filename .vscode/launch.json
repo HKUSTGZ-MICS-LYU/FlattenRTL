@@ -95,6 +95,15 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "Debug AES-T500",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "args": ["tests/regression/AES/AES-T500", "-f", "filelist.f", "-t", "top", "-o", "f_aes_500.v", "-g"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "adder_2bit",
             "type": "antlr-debug",
             "request": "launch",

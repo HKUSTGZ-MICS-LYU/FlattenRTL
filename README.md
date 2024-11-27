@@ -122,7 +122,22 @@ If you use this repository in your work, please cite:
 1. Cannot handle macros; requires preprocessing with iverilog.
 2. Bad support of `syscall` like `$display` or `$fwrite`.
 3. Some syntax is unsupported.
+4. Unable to handle mix using of named port assign and ordered port assign
+e.g.
+```
+AES a (.clk(clk), .reset(reset))
+AES b (clk, reset)
+```
 
+5. The input and output must keep togother, the wrong syntax woule like e.g.
+```
+module expand_key_128(clk, in, out_1, out_2, rcon);
+    input              clk;
+    input      [127:0] in;
+    input      [7:0]   rcon;
+    wire        xxxx; // Cannot add wire here
+    output     [127:0] out_2;
+```
 ## Verification
 
 1. Currently, benchmarks such as adder, usb_phy, and Rocket-Chip have passed equivalence checking with Formality.
