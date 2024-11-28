@@ -54,6 +54,8 @@ class MyModuleInstantiationVisitor(SystemVerilogParserVisitor):
                         else:
                             if hasattr(child,"port_assign") and child.port_assign().expression() is not None:
                                 self.list_of_ports_rhs.append(child.port_assign().expression().getText())
+                            elif isinstance(child,SystemVerilogParser.Ordered_port_connectionContext):
+                                self.list_of_ports_rhs.append(child.getText())
                             else:
                                 self.list_of_ports_rhs.append("")
                             if isinstance(child, SystemVerilogParser.Ordered_port_connectionContext):
@@ -154,34 +156,40 @@ class ParamVisitor(SystemVerilogParserVisitor):
             self.counter += 1
             
 class OrderedModulePortVisitor(SystemVerilogParserVisitor):
-    def __init__(self, dict_of_lhs_to_rhs, instance_name, cur_rhs):
+    def __init__(self, dict_of_lhs_to_rhs, instance_name, cur_lhs):
         self.instance_name = instance_name
         self.dict_of_lhs_to_rhs = dict_of_lhs_to_rhs
         self.port_var_list = dict_of_lhs_to_rhs[instance_name]
         self.dict_of_lhs_to_rhs[self.instance_name] = {}
         self.index = 0
-        self.cur_rhs = cur_rhs
+        self.cur_lhs = cur_lhs
 
-    def visitPort_declaration(self, ctx:SystemVerilogParser.Port_declarationContext):
-        if ctx.input_declaration() is not None:
-            for i in range(0, len(ctx.input_declaration().list_of_port_identifiers().port_id())):
-                self.dict_of_lhs_to_rhs[self.instance_name][self.port_var_list[self.index]] = \
-                    ctx.input_declaration().list_of_port_identifiers().port_id()[i].getText()
-                self.cur_rhs[self.index] = ctx.input_declaration().list_of_port_identifiers().port_id()[i].getText()
-                self.index += 1
-        elif ctx.output_declaration() is not None:
-            if ctx.output_declaration().list_of_port_identifiers() is not None:
-                for i in range(0, len(ctx.output_declaration().list_of_port_identifiers().port_id())):
-                    self.dict_of_lhs_to_rhs[self.instance_name][self.port_var_list[self.index]] = \
-                        ctx.output_declaration().list_of_port_identifiers().port_id()[i].getText()
-                    self.cur_rhs[self.index] = ctx.output_declaration().list_of_port_identifiers().port_id()[i].getText()
-                    self.index += 1
-            elif ctx.output_declaration().list_of_variable_port_identifiers() is not None:
-                for i in range(0, len(ctx.output_declaration().list_of_variable_port_identifiers().var_port_id())):
-                    self.dict_of_lhs_to_rhs[self.instance_name][self.port_var_list[self.index]] = \
-                        ctx.output_declaration().list_of_variable_port_identifiers().var_port_id()[i].getText()
-                    self.cur_rhs[self.index] = ctx.output_declaration().list_of_variable_port_identifiers().var_port_id()[i].getText()
-                    self.index += 1
+    def visitList_of_port_declarations(self, ctx:SystemVerilogParser.List_of_port_declarationsContext):
+        for item in ctx.port_decl():
+            self.dict_of_lhs_to_rhs[self.instance_name][item.ansi_port_declaration().port_identifier().getText()] = self.port_var_list[self.index]
+            self.cur_lhs.append(item.ansi_port_declaration().port_identifier().getText())
+            self.index += 1
+
+    # def visitPort_declaration(self, ctx:SystemVerilogParser.Port_declarationContext):
+    #     if ctx.input_declaration() is not None:
+    #         for i in range(0, len(ctx.input_declaration().list_of_port_identifiers().port_id())):
+    #             self.dict_of_lhs_to_rhs[self.instance_name][ctx.input_declaration().list_of_port_identifiers().port_id()[i].getText()] = \
+    #                 self.port_var_list[self.index]
+    #             self.cur_lhs.append(ctx.input_declaration().list_of_port_identifiers().port_id()[i].getText())
+    #             self.index += 1
+    #     elif ctx.output_declaration() is not None:
+    #         if ctx.output_declaration().list_of_port_identifiers() is not None:
+    #             for i in range(0, len(ctx.output_declaration().list_of_port_identifiers().port_id())):
+    #                 self.dict_of_lhs_to_rhs[self.instance_name][ctx.output_declaration().list_of_port_identifiers().port_id()[i].getText()] = \
+    #                     self.port_var_list[self.index]
+    #                 self.cur_lhs.append(ctx.output_declaration().list_of_port_identifiers().port_id()[i].getText())
+    #                 self.index += 1
+    #         elif ctx.output_declaration().list_of_variable_port_identifiers() is not None:
+    #             for i in range(0, len(ctx.output_declaration().list_of_variable_port_identifiers().var_port_id())):
+    #                 self.dict_of_lhs_to_rhs[self.instance_name][ctx.output_declaration().list_of_variable_port_identifiers().var_port_id()[i].getText()] = \
+    #                     self.port_var_list[self.index]
+    #                 self.cur_lhs.append(ctx.output_declaration().list_of_variable_port_identifiers().var_port_id()[i].getText())
+    #                 self.index += 1
 
 
         
@@ -259,7 +267,7 @@ class MoudleParameterPortVisitor(SystemVerilogParserVisitor):
     
 
 class InstModuleVisitor(SystemVerilogParserVisitor):
-    def __init__(self, design, cur_module_identifier, cur_dict_of_parameters, cur_prefixs, top_module, dict_of_lhs_to_rhs, cur_rhs):
+    def __init__(self, design, cur_module_identifier, cur_dict_of_parameters, cur_prefixs, top_module, dict_of_lhs_to_rhs, cur_lhs):
         self.inst_module_node = None
         self.inst_module_design = None
         self.start = None   
@@ -270,7 +278,7 @@ class InstModuleVisitor(SystemVerilogParserVisitor):
         self.cur_prefixs = cur_prefixs
         self.top_module = top_module
         self.dict_of_lhs_to_rhs = dict_of_lhs_to_rhs
-        self.cur_rhs = cur_rhs
+        self.cur_lhs = cur_lhs
 
         self.parameter_strat = None
         self.parameter_stop = None
@@ -290,7 +298,7 @@ class InstModuleVisitor(SystemVerilogParserVisitor):
             # Ordered port assign
             for key in self.dict_of_lhs_to_rhs.keys():
                 if type(self.dict_of_lhs_to_rhs[key])==list:
-                    ordered_port_visitor = OrderedModulePortVisitor(self.dict_of_lhs_to_rhs, key, self.cur_rhs)
+                    ordered_port_visitor = OrderedModulePortVisitor(self.dict_of_lhs_to_rhs, key, self.cur_lhs)
                     ordered_port_visitor.visit(ctx)
                 
         if self.start != None and self.cur_dict_of_parameters != {}:
@@ -794,9 +802,15 @@ class IdentifierVisitor(SystemVerilogParserVisitor):
             for child in ctx.getChildren():
                 if isinstance(child, SystemVerilogParser.Module_program_interface_instantiationContext):
                     for cur_name in self.cur_name_of_module_instance:
-                        if (child.hierarchical_instance()[0].name_of_instance().getText()== cur_name):
-                            self.start.append(child.start.start)
-                            self.stop.append(child.stop.stop)
+                        # Handle multiple instance in one declaration
+                        for i in range(0, len(child.children)):
+                            if isinstance(child.getChild(i), SystemVerilogParser.Hierarchical_instanceContext):
+                                if (child.getChild(i).name_of_instance().getText()== cur_name):
+                                    if i == 1:
+                                        self.start.append(child.getChild(i-1).start.start)
+                                    else:
+                                        self.start.append(child.getChild(i).start.start)
+                                    self.stop.append(child.getChild(i+1).symbol.stop)
                 self._traverse_children(child)
     
     
@@ -863,9 +877,10 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
     top_instance_str = top_design_str + '\n' + instance_design_str
     tree = parse_design_to_tree(top_instance_str)
     visitor = InstModuleVisitor(cur_module_identifier=cur_module_identifier, cur_dict_of_parameters=cur_dict_of_parameters, \
-        cur_prefixs=cur_prefixs, top_module=top_module, design=top_instance_str, dict_of_lhs_to_rhs=dict_of_lhs_to_rhs, cur_rhs=cur_list_of_ports_rhs)
+        cur_prefixs=cur_prefixs, top_module=top_module, design=top_instance_str, dict_of_lhs_to_rhs=dict_of_lhs_to_rhs, cur_lhs=[])
     visitor.visit(tree)
     inst_module_design = top_instance_str[visitor.start : visitor.stop + 1]
+    # cur_list_of_ports_rhs = visitor.cur_rhs
       
     # Step 3.1. 替换模块变量
     inst_module_design_trees = []

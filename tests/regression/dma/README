@@ -1,0 +1,2 @@
+malformed statement:
+	a = (b[4:0])[2:1]
