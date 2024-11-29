@@ -138,6 +138,8 @@ module expand_key_128(clk, in, out_1, out_2, rcon);
     wire        xxxx; // Cannot add wire here
     output     [127:0] out_2;
 ```
+
+6. filelist.f cannot contain empty line.
 ## Verification
 
 1. Currently, benchmarks such as adder, usb_phy, and Rocket-Chip have passed equivalence checking with Formality.
