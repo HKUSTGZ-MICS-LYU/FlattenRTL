@@ -102,7 +102,7 @@ module dma_axi64(clk,reset,scan_en,idle,INT,periph_tx_req,periph_tx_clr,periph_r
    input                 scan_en;
 
    output                 idle;
-   output                        INT;
+   output [1-1:0]                INT;
    
    input [31:1]             periph_tx_req;
    output [31:1]             periph_tx_clr;
@@ -119,30 +119,30 @@ module dma_axi64(clk,reset,scan_en,idle,INT,periph_tx_req,periph_tx_clr,periph_r
    output                               pslverr;
    output                               pready;
    
-    output                       AWID0;
-    output [31:0]             AWADDR0;
-    output [3:0]              AWLEN0;
-    output [1:0]      AWSIZE0;
+    output [1-1:0]               AWID0;
+    output [32-1:0]             AWADDR0;
+    output [4-1:0]              AWLEN0;
+    output [2-1:0]      AWSIZE0;
     output                              AWVALID0;
     input                               AWREADY0;
-    output                       WID0;
-    output [63:0]             WDATA0;
-    output [7:0]           WSTRB0;
+    output [1-1:0]               WID0;
+    output [64-1:0]             WDATA0;
+    output [64/8-1:0]           WSTRB0;
     output                              WLAST0;
     output                              WVALID0;
     input                               WREADY0;
-    input                        BID0;
+    input [1-1:0]                BID0;
     input [1:0]                         BRESP0;
     input                               BVALID0;
     output                              BREADY0;
-    output                       ARID0;
-    output [31:0]             ARADDR0;
-    output [3:0]              ARLEN0;
-    output [1:0]      ARSIZE0;
+    output [1-1:0]               ARID0;
+    output [32-1:0]             ARADDR0;
+    output [4-1:0]              ARLEN0;
+    output [2-1:0]      ARSIZE0;
     output                              ARVALID0;
     input                               ARREADY0;
-    input                        RID0;
-    input [63:0]              RDATA0;
+    input [1-1:0]                RID0;
+    input [64-1:0]              RDATA0;
     input [1:0]                         RRESP0;
     input                               RLAST0;
     input                               RVALID0;
@@ -162,30 +162,30 @@ module dma_axi64(clk,reset,scan_en,idle,INT,periph_tx_req,periph_tx_clr,periph_r
    assign M0_WID  = 1'b0;
    assign M0_ARID = 1'b0;
 
-   wire                          M0_AWID;
-   wire [31:0]           M0_AWADDR;
-   wire [3:0]                 M0_AWLEN;
-   wire [1:0]         M0_AWSIZE;
+   wire [1-1:0]                  M0_AWID;
+   wire [32-1:0]           M0_AWADDR;
+   wire [4-1:0]                 M0_AWLEN;
+   wire [2-1:0]         M0_AWSIZE;
    wire                                 M0_AWVALID;
    wire                                 M0_AWREADY;
-   wire                          M0_WID;
-   wire [63:0]           M0_WDATA;
-   wire [7:0]         M0_WSTRB;
+   wire [1-1:0]                  M0_WID;
+   wire [64-1:0]           M0_WDATA;
+   wire [64/8-1:0]         M0_WSTRB;
    wire                                 M0_WLAST;
    wire                                 M0_WVALID;
    wire                                 M0_WREADY;
-   wire                          M0_BID;
+   wire [1-1:0]                  M0_BID;
    wire [1:0]                           M0_BRESP;
    wire                                 M0_BVALID;
    wire                                 M0_BREADY;
-   wire                          M0_ARID;
-   wire [31:0]           M0_ARADDR;
-   wire [3:0]                 M0_ARLEN;
-   wire [1:0]         M0_ARSIZE;
+   wire [1-1:0]                  M0_ARID;
+   wire [32-1:0]           M0_ARADDR;
+   wire [4-1:0]                 M0_ARLEN;
+   wire [2-1:0]         M0_ARSIZE;
    wire                                 M0_ARVALID;
    wire                                 M0_ARREADY;
-   wire                          M0_RID;
-   wire [63:0]           M0_RDATA;
+   wire [1-1:0]                  M0_RID;
+   wire [64-1:0]           M0_RDATA;
    wire [1:0]                           M0_RRESP;
    wire                                 M0_RLAST;
    wire                                 M0_RVALID;
@@ -345,7 +345,7 @@ module dma_axi64_dual_core(clk,reset,scan_en,idle,INT,periph_tx_req,periph_tx_cl
    input                   scan_en;
 
    output                   idle;
-   output                          INT;
+   output [1-1:0]                  INT;
    
    input [31:1]               periph_tx_req;
    output [31:1]               periph_tx_clr;
@@ -367,30 +367,30 @@ module dma_axi64_dual_core(clk,reset,scan_en,idle,INT,periph_tx_req,periph_tx_cl
    output                   rd_port_num1;
    output                   wr_port_num1;
    
-   output                          M0_AWID;
-   output [31:0]           M0_AWADDR;
-   output [3:0]                 M0_AWLEN;
-   output [1:0]         M0_AWSIZE;
+   output [1-1:0]                  M0_AWID;
+   output [32-1:0]           M0_AWADDR;
+   output [4-1:0]                 M0_AWLEN;
+   output [2-1:0]         M0_AWSIZE;
    output                                 M0_AWVALID;
    input                                  M0_AWREADY;
-   output                          M0_WID;
-   output [63:0]           M0_WDATA;
-   output [7:0]         M0_WSTRB;
+   output [1-1:0]                  M0_WID;
+   output [64-1:0]           M0_WDATA;
+   output [64/8-1:0]         M0_WSTRB;
    output                                 M0_WLAST;
    output                                 M0_WVALID;
    input                                  M0_WREADY;
-   input                           M0_BID;
+   input [1-1:0]                   M0_BID;
    input [1:0]                            M0_BRESP;
    input                                  M0_BVALID;
    output                                 M0_BREADY;
-   output                          M0_ARID;
-   output [31:0]           M0_ARADDR;
-   output [3:0]                 M0_ARLEN;
-   output [1:0]         M0_ARSIZE;
+   output [1-1:0]                  M0_ARID;
+   output [32-1:0]           M0_ARADDR;
+   output [4-1:0]                 M0_ARLEN;
+   output [2-1:0]         M0_ARSIZE;
    output                                 M0_ARVALID;
    input                                  M0_ARREADY;
-   input                           M0_RID;
-   input [63:0]            M0_RDATA;
+   input [1-1:0]                   M0_RID;
+   input [64-1:0]            M0_RDATA;
    input [1:0]                            M0_RRESP;
    input                                  M0_RLAST;
    input                                  M0_RVALID;
@@ -410,10 +410,10 @@ module dma_axi64_dual_core(clk,reset,scan_en,idle,INT,periph_tx_req,periph_tx_cl
    wire [31:0]                   prdata_reg;
    wire                   pslverr_reg;
 
-   wire [7:0]                  ch_int_all_proc0;
+   wire [8*1-1:0]                  ch_int_all_proc0;
    
    //outputs of dma_axi64 reg
-   wire                            int_all_proc;
+   wire [1-1:0]                    int_all_proc;
    wire [3:0]                   core0_clkdiv;
    wire [7:0]                   core0_ch_start;
    wire                   joint_mode0;
@@ -744,8 +744,8 @@ module dma_axi64_reg(clk,reset,pclken,psel,penable,paddr,pwrite,pwdata,prdata,ps
    output                   pslverr;
 
    input                   core0_idle;
-   input [7:0]             ch_int_all_proc0;
-   output                      int_all_proc;
+   input [8*1-1:0]             ch_int_all_proc0;
+   output [1-1:0]              int_all_proc;
    output [3:0]               core0_clkdiv;
    output [7:0]               core0_ch_start;
    output                   joint_mode0;
@@ -801,6 +801,31 @@ module dma_axi64_reg(clk,reset,pclken,psel,penable,paddr,pwrite,pwdata,prdata,ps
 
   
    
+   parameter              PROC0_STATUS     = 8'h00;
+   parameter              PROC1_STATUS     = 8'h04;
+   parameter              PROC2_STATUS     = 8'h08;
+   parameter              PROC3_STATUS     = 8'h0C;
+   parameter              PROC4_STATUS     = 8'h10;
+   parameter              PROC5_STATUS     = 8'h14;
+   parameter              PROC6_STATUS     = 8'h18;
+   parameter              PROC7_STATUS     = 8'h1C;
+   parameter              CORE0_JOINT      = 8'h30;
+   parameter              CORE1_JOINT      = 8'h34;
+   parameter              CORE0_PRIO       = 8'h38;
+   parameter              CORE1_PRIO       = 8'h3C;
+   parameter              CORE0_CLKDIV     = 8'h40;
+   parameter              CORE1_CLKDIV     = 8'h44;
+   parameter              CORE0_START      = 8'h48;
+   parameter              CORE1_START      = 8'h4C;
+   parameter              PERIPH_RX_CTRL   = 8'h50;
+   parameter              PERIPH_TX_CTRL   = 8'h54;
+   parameter              IDLE             = 8'hD0;
+   parameter              USER_DEF_STAT    = 8'hE0;
+   parameter              USER_DEF0_STAT0  = 8'hF0;
+   parameter              USER_DEF0_STAT1  = 8'hF4;
+   parameter              USER_DEF1_STAT0  = 8'hF8;
+   parameter              USER_DEF1_STAT1  = 8'hFC;
+
 
 
 
@@ -840,8 +865,8 @@ module dma_axi64_reg(clk,reset,pclken,psel,penable,paddr,pwrite,pwdata,prdata,ps
    wire [7:0]                         proc0_int_stat0;
    wire [15:0]                        proc0_int_stat;
    wire                               proc0_int;
-   wire                        int_all_proc_pre;
-   reg                         int_all_proc;
+   wire [1-1:0]                int_all_proc_pre;
+   reg [1-1:0]                 int_all_proc;
    
    
    wire                   wr_periph_rx;
@@ -859,10 +884,10 @@ module dma_axi64_reg(clk,reset,pclken,psel,penable,paddr,pwrite,pwdata,prdata,ps
    reg                       pslverr;
    
 
-   assign wr_joint0  = gpwrite & (gpaddr == 8'h30);    // CORE0_JOINT
-   assign wr_clkdiv0 = gpwrite & (gpaddr == 8'h40);    // CORE0_CLKDIV
-   assign wr_start0  = gpwrite & (gpaddr == 8'h48);    // CORE0_START
-   assign wr_prio0   = gpwrite & (gpaddr == 8'h38);    // CORE0_PRIO
+   assign                              wr_joint0  = gpwrite & gpaddr == CORE0_JOINT;
+   assign                              wr_clkdiv0 = gpwrite & gpaddr == CORE0_CLKDIV;
+   assign                              wr_start0  = gpwrite & gpaddr == CORE0_START;
+   assign                              wr_prio0   = gpwrite & gpaddr == CORE0_PRIO;
    
 dma_axi64_reg_core0 dma_axi64_reg_core0(
                                .clk(clk),
@@ -922,8 +947,8 @@ dma_axi64_reg_core0 dma_axi64_reg_core0(
    
 
    
-   assign wr_periph_rx = gpwrite & (gpaddr == 8'h50);  // PERIPH_RX_CTRL
-   assign wr_periph_tx = gpwrite & (gpaddr == 8'h54);  // PERIPH_TX_CTRL
+   assign              wr_periph_rx = gpwrite & gpaddr == PERIPH_RX_CTRL;
+   assign              wr_periph_tx = gpwrite & gpaddr == PERIPH_TX_CTRL;
    
    always @(posedge clk or posedge reset)
      if (reset)
@@ -949,43 +974,61 @@ dma_axi64_reg_core0 dma_axi64_reg_core0(
      else
        int_all_proc <= #1 int_all_proc_pre;
 
+   
    always @(*)
      begin
     prdata_pre  = {32{1'b0}};
     
     case (gpaddr)
-      8'h00                    : prdata_pre  = {{16{1'b0}}, proc0_int_stat0};      // PROC0_STATUS
-      8'h30                    : prdata_pre  = {{31{1'b0}}, joint_mode0};          // CORE0_JOINT
-      8'h38                    : prdata_pre  = {{16{1'b0}}, wr_prio_high0, wr_prio_high_num0, wr_prio_top0, wr_prio_top_num0, rd_prio_high0, rd_prio_high_num0, rd_prio_top0, rd_prio_top_num0};  // CORE0_PRIO
-      8'h40                    : prdata_pre  = {{28{1'b0}}, core0_clkdiv};         // CORE0_CLKDIV
-      8'h48                    : prdata_pre  = {32{1'b0}};                         // CORE0_START
-      8'h50                    : prdata_pre  = {periph_rx_req_reg, 1'b0};          // PERIPH_RX_CTRL
-      8'h54                    : prdata_pre  = {periph_tx_req_reg, 1'b0};          // PERIPH_TX_CTRL
-      8'hD0                    : prdata_pre  = {{30{1'b0}}, core0_idle};           // IDLE
-      8'hE0                    : prdata_pre  = user_def_stat;                      // USER_DEF_STAT
-      8'hF0                    : prdata_pre  = user_def0_stat0;                    // USER_DEF0_STAT0
-      8'hF4                    : prdata_pre  = user_def0_stat1;                    // USER_DEF0_STAT1
-      default                  : prdata_pre  = {32{1'b0}};
+      PROC0_STATUS             : prdata_pre  = {{16{1'b0}}, proc0_int_stat0};
+      
+      CORE0_JOINT              : prdata_pre  = {{31{1'b0}}, joint_mode0};
+      
+      CORE0_PRIO               : prdata_pre  = {{16{1'b0}}, wr_prio_high0, wr_prio_high_num0, wr_prio_top0, wr_prio_top_num0, rd_prio_high0, rd_prio_high_num0, rd_prio_top0, rd_prio_top_num0};
+      
+      CORE0_CLKDIV             : prdata_pre  = {{28{1'b0}}, core0_clkdiv};
+      
+      CORE0_START              : prdata_pre  = {32{1'b0}};
+            
+      PERIPH_RX_CTRL            : prdata_pre  = {periph_rx_req_reg, 1'b0};
+      PERIPH_TX_CTRL            : prdata_pre  = {periph_tx_req_reg, 1'b0};
+
+      IDLE                      : prdata_pre  = {{30{1'b0}}, core0_idle};
+      
+      USER_DEF_STAT             : prdata_pre  = user_def_stat;
+      USER_DEF0_STAT0          : prdata_pre  = user_def0_stat0;
+      USER_DEF0_STAT1          : prdata_pre  = user_def0_stat1;
+      
+      default                   : prdata_pre  = {32{1'b0}};
     endcase
      end
 
+   
    always @(/*AUTOSENSE*/gpaddr or gpread or gpwrite or psel)
      begin
     pslverr_pre = 1'b0;
     
     case (gpaddr)
-      8'h00                    : pslverr_pre = gpwrite;  // PROC0_STATUS      (read only)
-      8'h30                    : pslverr_pre = 1'b0;     // CORE0_JOINT       (read and write)
-      8'h38                    : pslverr_pre = 1'b0;     // CORE0_PRIO        (read and write)
-      8'h40                    : pslverr_pre = 1'b0;     // CORE0_CLKDIV      (read and write)
-      8'h48                    : pslverr_pre = gpread;   // CORE0_START       (write only)
-      8'h50                    : pslverr_pre = 1'b0;     // PERIPH_RX_CTRL    (read and write)
-      8'h54                    : pslverr_pre = 1'b0;     // PERIPH_TX_CTRL    (read and write)
-      8'hD0                    : pslverr_pre = gpwrite;  // IDLE              (read only)
-      8'hE0                    : pslverr_pre = gpwrite;  // USER_DEF_STAT     (read only)
-      8'hF0                    : pslverr_pre = gpwrite;  // USER_DEF0_STAT0   (read only)
-      8'hF4                    : pslverr_pre = gpwrite;  // USER_DEF0_STAT1   (read only)
-      default                  : pslverr_pre = psel;     // decode error
+      PROC0_STATUS             : pslverr_pre = gpwrite; //read only
+      
+      CORE0_JOINT              : pslverr_pre = 1'b0;    //read and write
+      
+      CORE0_PRIO               : pslverr_pre = 1'b0;    //read and write  
+      
+      CORE0_CLKDIV             : pslverr_pre = 1'b0;    //read and write
+      
+      CORE0_START              : pslverr_pre = gpread;  //write only
+            
+      PERIPH_RX_CTRL            : pslverr_pre = 1'b0;    //read and write  
+      PERIPH_TX_CTRL            : pslverr_pre = 1'b0;    //read and write  
+      
+      IDLE                      : pslverr_pre = gpwrite; //read only
+      
+      USER_DEF_STAT             : pslverr_pre = gpwrite; //read only
+      USER_DEF0_STAT0          : pslverr_pre = gpwrite; //read only
+      USER_DEF0_STAT1          : pslverr_pre = gpwrite; //read only
+      
+      default                   : pslverr_pre = psel;    //decode error
     endcase
      end
 
@@ -1078,7 +1121,7 @@ module dma_axi64_reg_core0(clk,reset,wr_joint,wr_clkdiv,wr_start,wr_prio,pwdata,
    output [31:0]                      user_def_stat0;
    output [31:0]                      user_def_stat1;
    
-   input [7:0]             ch_int_all_proc;
+   input [8*1-1:0]             ch_int_all_proc;
    output [7:0]                       proc0_int_stat;
    
    
@@ -1237,22 +1280,25 @@ endmodule
 
 
 
-module prgen_scatter8_1
-  #(parameter CH_NUM = 0)    
-   (
-    input [7:0]     ch_x,
-    output [7:0]    x
-    );
+module prgen_scatter8_1(ch_x,x);
 
-   assign          x = {
-                    ch_x[CH_NUM+7],
-                    ch_x[CH_NUM+6],
-                    ch_x[CH_NUM+5],
-                    ch_x[CH_NUM+4],
-                    ch_x[CH_NUM+3],
-                    ch_x[CH_NUM+2],
-                    ch_x[CH_NUM+1],
-                    ch_x[CH_NUM]};
+   parameter                  CH_NUM     = 0;
+   
+   
+   input [8*1-1:0]    ch_x;
+   output [8-1:0]         x;
+
+
+   assign               x = {
+                  ch_x[CH_NUM+7],
+                  ch_x[CH_NUM+6],
+                  ch_x[CH_NUM+5],
+                  ch_x[CH_NUM+4],
+                  ch_x[CH_NUM+3],
+                  ch_x[CH_NUM+2],
+                  ch_x[CH_NUM+1],
+                  ch_x[CH_NUM+0]};
+
    
 endmodule
    
@@ -1302,7 +1348,7 @@ module dma_axi64_core0_top(clk,reset,scan_en,idle,ch_int_all_proc,ch_start,clkdi
    input             scan_en;
 
    output             idle;
-   output [7:0]  ch_int_all_proc;
+   output [8*1-1:0]  ch_int_all_proc;
    input [7:0]                 ch_start;
    input [3:0]             clkdiv;    
    
@@ -1336,12 +1382,12 @@ module dma_axi64_core0_top(clk,reset,scan_en,idle,ch_int_all_proc,ch_start,clkdi
    input [2:0]             wr_prio_high_num;
    
    output [31:0]            AWADDR;
-   output [3:0]   AWLEN;
-   output [1:0]                      AWSIZE;
+   output [4-1:0]   AWLEN;
+   output [2-1:0]                      AWSIZE;
    output                   AWVALID;
    input                    AWREADY;
    output [63:0]            WDATA;
-   output [7:0]        WSTRB;
+   output [64/8-1:0]        WSTRB;
    output                   WLAST;
    output                   WVALID;
    input                    WREADY;
@@ -1349,8 +1395,8 @@ module dma_axi64_core0_top(clk,reset,scan_en,idle,ch_int_all_proc,ch_start,clkdi
    input                    BVALID;
    output                   BREADY;
    output [31:0]            ARADDR;
-   output [3:0]   ARLEN;
-   output [1:0]                      ARSIZE;
+   output [4-1:0]   ARLEN;
+   output [2-1:0]                      ARSIZE;
    output                   ARVALID;
    input                    ARREADY;
    input [63:0]             RDATA;
@@ -1360,12 +1406,12 @@ module dma_axi64_core0_top(clk,reset,scan_en,idle,ch_int_all_proc,ch_start,clkdi
    output                   RREADY;
   
    wire [31:0]              slow_AWADDR;
-   wire [3:0]     slow_AWLEN;
-   wire [1:0]                      slow_AWSIZE;
+   wire [4-1:0]     slow_AWLEN;
+   wire [2-1:0]                      slow_AWSIZE;
    wire                     slow_AWVALID;
    wire                     slow_AWREADY;
    wire [63:0]              slow_WDATA;
-   wire [7:0]          slow_WSTRB;
+   wire [64/8-1:0]          slow_WSTRB;
    wire                     slow_WLAST;
    wire                     slow_WVALID;
    wire                     slow_WREADY;
@@ -1373,8 +1419,8 @@ module dma_axi64_core0_top(clk,reset,scan_en,idle,ch_int_all_proc,ch_start,clkdi
    wire                     slow_BVALID;
    wire                     slow_BREADY;
    wire [31:0]              slow_ARADDR;
-   wire [3:0]     slow_ARLEN;
-   wire [1:0]                      slow_ARSIZE;
+   wire [4-1:0]     slow_ARLEN;
+   wire [2-1:0]                      slow_ARSIZE;
    wire                     slow_ARVALID;
    wire                     slow_ARREADY;
    wire [63:0]              slow_RDATA;
@@ -1538,7 +1584,7 @@ module dma_axi64_core0(clk,reset,scan_en,idle,ch_int_all_proc,ch_start,periph_tx
    input                     scan_en;
 
    output                    idle;
-   output [7:0]   ch_int_all_proc;
+   output [8*1-1:0]   ch_int_all_proc;
    input [7:0]                  ch_start;
    
    input [31:1]          periph_tx_req;
@@ -1572,12 +1618,12 @@ module dma_axi64_core0(clk,reset,scan_en,idle,ch_int_all_proc,ch_start,periph_tx
    input [2:0]              wr_prio_high_num;
    
    output [31:0]             AWADDR;
-   output [3:0]    AWLEN;
-   output [1:0]                       AWSIZE;
+   output [4-1:0]    AWLEN;
+   output [2-1:0]                       AWSIZE;
    output                    AWVALID;
    input                     AWREADY;
    output [63:0]             WDATA;
-   output [7:0]         WSTRB;
+   output [64/8-1:0]         WSTRB;
    output                    WLAST;
    output                    WVALID;
    input                     WREADY;
@@ -1585,8 +1631,8 @@ module dma_axi64_core0(clk,reset,scan_en,idle,ch_int_all_proc,ch_start,periph_tx
    input                     BVALID;
    output                    BREADY;
    output [31:0]             ARADDR;
-   output [3:0]    ARLEN;
-   output [1:0]                       ARSIZE;
+   output [4-1:0]    ARLEN;
+   output [2-1:0]                       ARSIZE;
    output                    ARVALID;
    input                     ARREADY;
    input [63:0]              RDATA;
@@ -1634,25 +1680,25 @@ module dma_axi64_core0(clk,reset,scan_en,idle,ch_int_all_proc,ch_start,periph_tx
    wire [7:0]              ch_rd_ready;
    wire              rd_ready;
    wire              rd_ready_joint;
-   wire [31:0]      rd_burst_addr;
-   wire [7:0]     rd_burst_size;
-   wire [5:0]    rd_tokens;
+   wire [32-1:0]      rd_burst_addr;
+   wire [8-1:0]     rd_burst_size;
+   wire [6-1:0]    rd_tokens;
    wire              rd_port_num;
-   wire [2:0]    rd_periph_delay;
+   wire [3-1:0]    rd_periph_delay;
    wire              rd_clr_valid;  
    wire [2:0]              rd_transfer_num;  
    wire              rd_transfer;
-   wire [3:0]      rd_transfer_size;  
+   wire [4-1:0]      rd_transfer_size;  
    wire              rd_clr_stall;
    
    wire [7:0]              ch_wr_ready;
    wire              wr_ready;
    wire              wr_ready_joint;
-   wire [31:0]      wr_burst_addr;
-   wire [7:0]     wr_burst_size;
-   wire [5:0]    wr_tokens;
+   wire [32-1:0]      wr_burst_addr;
+   wire [8-1:0]     wr_burst_size;
+   wire [6-1:0]    wr_tokens;
    wire              wr_port_num;
-   wire [2:0]    wr_periph_delay;
+   wire [3-1:0]    wr_periph_delay;
    wire              wr_clr_valid;    
    wire              wr_clr_stall;
    wire [7:0]              ch_joint_req;
@@ -1682,12 +1728,12 @@ module dma_axi64_core0(clk,reset,scan_en,idle,ch_int_all_proc,ch_start,periph_tx
    wire              wr_cmd_pending;
    wire              wr_cmd_full_joint;
    wire              ch_fifo_rd;
-   wire [3:0]      ch_fifo_rsize;
+   wire [4-1:0]      ch_fifo_rsize;
    wire [2:0]              ch_fifo_rd_num;
    wire [2:0]              wr_transfer_num;
    wire              wr_transfer; 
-   wire [3:0]      wr_transfer_size;
-   wire [3:0]      wr_next_size;
+   wire [4-1:0]      wr_transfer_size;
+   wire [4-1:0]      wr_next_size;
    wire              wr_clr_line;
    wire [2:0]              wr_clr_line_num;
    wire              wr_cmd_full;
@@ -1711,7 +1757,7 @@ module dma_axi64_core0(clk,reset,scan_en,idle,ch_int_all_proc,ch_start,periph_tx
    wire              load_wr;
    wire [2:0]              load_wr_num;
    wire [1:0]              load_wr_cycle;
-   wire [63:0]      load_wdata;  
+   wire [64-1:0]      load_wdata;  
    wire              rd_cmd_split; 
    wire              rd_cmd_line;
    wire [2:0]              rd_cmd_num;
@@ -1719,8 +1765,8 @@ module dma_axi64_core0(clk,reset,scan_en,idle,ch_int_all_proc,ch_start,periph_tx
    wire              rd_cmd_pending;
    wire              rd_cmd_full_joint;
    wire              ch_fifo_wr;
-   wire [63:0]      ch_fifo_wdata;
-   wire [3:0]      ch_fifo_wsize;
+   wire [64-1:0]      ch_fifo_wdata;
+   wire [4-1:0]      ch_fifo_wsize;
    wire [2:0]              ch_fifo_wr_num;
    wire              rd_clr_line;
    wire [2:0]              rd_clr_line_num;
@@ -1748,18 +1794,18 @@ module dma_axi64_core0(clk,reset,scan_en,idle,ch_int_all_proc,ch_start,periph_tx
    wire              wr_cmd_port;
    
    //outputs of fifo ctrl
-   wire [63:0]      ch_fifo_rdata;
+   wire [64-1:0]      ch_fifo_rdata;
    wire              ch_fifo_rd_valid;
    wire              ch_fifo_wr_ready;
    wire              FIFO_WR;
    wire              FIFO_RD;
-   wire [6:0]  FIFO_WR_ADDR;
-   wire [6:0]  FIFO_RD_ADDR;
-   wire [63:0]      FIFO_DIN;
-   wire [7:0]      FIFO_BSEL;
+   wire [3+5-3-1:0]  FIFO_WR_ADDR;
+   wire [3+5-3-1:0]  FIFO_RD_ADDR;
+   wire [64-1:0]      FIFO_DIN;
+   wire [8-1:0]      FIFO_BSEL;
 
    //outputs of fifo wrap
-   wire [63:0]      FIFO_DOUT;
+   wire [64-1:0]      FIFO_DOUT;
 
    wire              clk_en;
    wire              gclk;
@@ -2217,7 +2263,7 @@ module dma_axi64_core0_wdt(clk,reset,ch_active,rd_burst_start,rd_ch_num,wr_burst
 
 
 
-   reg [10:0]           counter;
+   reg [11-1:0]           counter;
    reg [2:0]               wdt_ch_num;
    wire               current_ch_active;
    wire               current_burst_start;
@@ -2305,6 +2351,7 @@ endmodule
 
 module dma_axi64_core0_arbiter(clk,reset,enable,joint_mode,page_cross,joint_req,prio_top,prio_high,prio_top_num,prio_high_num,hold,ch_ready,ch_active,finish,ch_go_out,ch_num,ch_last);
    
+   parameter                CH_LAST       = 1-1;
    
    input             clk;
    input             reset;
@@ -2409,6 +2456,7 @@ endmodule
 //---------------------------------------------------------
 
 
+
 module dma_axi64_core0_ctrl(clk,reset,ch_go,cmd_full,cmd_pending,joint_req,ch_num,ch_num_resp,go_next_line,periph_clr_valid,periph_clr,periph_clr_last,periph_delay,clr_stall,tokens,ch_ready,ch_last,burst_start,finish,busy,hold);
 
 
@@ -2427,10 +2475,10 @@ module dma_axi64_core0_ctrl(clk,reset,ch_go,cmd_full,cmd_pending,joint_req,ch_nu
    input             periph_clr_valid;
    input             periph_clr;
    input             periph_clr_last;
-   input [2:0]  periph_delay;
+   input [3-1:0]  periph_delay;
 
    input             clr_stall;
-   input [5:0]  tokens;
+   input [6-1:0]  tokens;
    
    input             ch_ready;
    input             ch_last;
@@ -2444,12 +2492,12 @@ module dma_axi64_core0_ctrl(clk,reset,ch_go,cmd_full,cmd_pending,joint_req,ch_nu
    reg                 finish;
    wire             tokens_remain;
    reg                 tokens_remain_reg;
-   reg [5:0]    tokens_counter;
+   reg [6-1:0]    tokens_counter;
    wire             stall;
    reg                 joint_ctrl_reg;
    wire             joint_ctrl;
    
-   reg [2:0]    delay_counter;
+   reg [3-1:0]    delay_counter;
    
    wire             periph_clr_ch;
    wire             periph_clr_last_ch;   
@@ -2461,7 +2509,15 @@ module dma_axi64_core0_ctrl(clk,reset,ch_go,cmd_full,cmd_pending,joint_req,ch_nu
    reg [2:0]             ns;
 
 
-   assign             busy = ps != 3'd0;
+   
+   parameter                IDLE        = 3'd0;
+   parameter             CMD         = 3'd1;
+   parameter             WAIT_CLR    = 3'd2;
+   parameter             WAIT_DELAY  = 3'd3;
+   parameter             STALL       = 3'd4;
+   
+
+   assign             busy = ps != IDLE;
 
    assign             periph_clr_ch      = periph_clr_valid & periph_clr & (ch_num == ch_num_resp);
    assign             periph_clr_last_ch = periph_clr_valid & periph_clr_last & (ch_num == ch_num_resp);
@@ -2509,112 +2565,112 @@ module dma_axi64_core0_ctrl(clk,reset,ch_go,cmd_full,cmd_pending,joint_req,ch_nu
         or periph_clr_valid or periph_delay or ps or stall
         or tokens_remain)
      begin
-    ns          = 3'd0;
+    ns          = IDLE;
     burst_start = 1'b0;
     finish  = 1'b0;
     
     case (ps)
-      3'd0 :
+      IDLE :
         begin
            if (ch_go)
          begin
             if (!ch_ready)
               begin
-             ns = 3'd0;
+             ns = IDLE;
              finish = 1'b1;
               end
             else if (stall)
-              ns = 3'd4;
+              ns = STALL;
             else
-              ns = 3'd1;
+              ns = CMD;
          end
            else
-         ns = 3'd0;
+         ns = IDLE;
         end
       
-      3'd1 :
+      CMD :
         begin
            if (joint_req ^ joint_ctrl) //change in joint_req
          begin
-            ns = 3'd0;
+            ns = IDLE;
             finish = 1'b1;
          end
            else if ((clr_stall | hold) & tokens_remain)
-         ns = 3'd1;
+         ns = CMD;
            else if (ch_ready & tokens_remain)
          begin
                     if (stall)
-                      ns = 3'd4;
+                      ns = STALL;
                     else
                       begin
                          burst_start = 1'b1;
-                         ns = 3'd2;
+                         ns = WAIT_CLR;
                       end  
          end
            else if (ch_last & (~ch_ready))
-         ns = 3'd1;
+         ns = CMD;
            else
          begin
-            ns = 3'd0;
+            ns = IDLE;
             finish = 1'b1;
          end
         end 
       
-      3'd2 :
+      WAIT_CLR :
         begin
            if ((|periph_delay) & periph_clr_valid) //don't wait for clr if not valid (block clr)
          begin
             if (periph_clr_last_ch) //release if load cmd
               begin
-             ns = 3'd0;
+             ns = IDLE;
              finish = 1'b1;
               end
             else if (periph_clr_ch)
-              ns = 3'd3;
+              ns = WAIT_DELAY;
             else
-              ns = 3'd2;
+              ns = WAIT_CLR;
          end
            //memory - allow command depth
            else if (!tokens_remain)
          begin
-            ns = 3'd0;
+            ns = IDLE;
             finish = 1'b1;
          end
            else
-         ns = 3'd3;
+         ns = WAIT_DELAY;
         end
       
-      3'd3 :
+      WAIT_DELAY :
         begin
            if (go_next_line_d) //delay in case of cmd split (cross page)
-         ns = 3'd3;
+         ns = WAIT_DELAY;
            else if (delay_counter == 'd0)
-         ns = 3'd4;
+         ns = STALL;
            else
-         ns = 3'd3;
+         ns = WAIT_DELAY;
         end
 
-      3'd4 :
+      STALL :
         begin
            if (ch_ready & tokens_remain)
          begin
             if (stall)
-              ns = 3'd4;
+              ns = STALL;
             else
-              ns = 3'd1;
+              ns = CMD;
          end
            else if (ch_last & (~ch_ready))
-         ns = 3'd1;
+         ns = CMD;
            else
          begin
-            ns = 3'd0;
+            ns = IDLE;
             finish = 1'b1;
          end 
         end
 
       default :
         begin
-           ns = 3'd0;
+           ns = IDLE;
         end
       
     endcase
@@ -2622,13 +2678,12 @@ module dma_axi64_core0_ctrl(clk,reset,ch_go,cmd_full,cmd_pending,joint_req,ch_nu
    
    always @(posedge clk or posedge reset)
      if (reset)
-       ps <= #1 3'd0;
+       ps <= #1 IDLE;
      else
        ps <= #1 ns;
    
 
 endmodule
-
 
 
 
@@ -2683,25 +2738,25 @@ module dma_axi64_core0_axim_wr(clk,reset,wr_cmd_port,wr_last_cmd,wr_line_cmd,wr_
    input               wr_line_cmd;
    input [2:0]               wr_ch_num;
    input               wr_burst_start;
-   input [31:0]      wr_burst_addr;
-   input [7:0]     wr_burst_size;
+   input [32-1:0]      wr_burst_addr;
+   input [8-1:0]     wr_burst_size;
    output               wr_cmd_pending;
    output               wr_cmd_split;
    output [2:0]           wr_cmd_num;
 
    //data
    input               rd_transfer;
-   input [3:0]      rd_transfer_size;              
+   input [4-1:0]      rd_transfer_size;              
    output               ch_fifo_rd;
-   input [63:0]      ch_fifo_rdata;
+   input [64-1:0]      ch_fifo_rdata;
    input               ch_fifo_rd_valid;
-   output [3:0]     ch_fifo_rsize;
+   output [4-1:0]     ch_fifo_rsize;
    input               ch_fifo_wr_ready;
    output [2:0]           ch_fifo_rd_num;
    output [2:0]           wr_transfer_num;
    output               wr_transfer;
-   output [3:0]     wr_transfer_size;
-   output [3:0]     wr_next_size;
+   output [4-1:0]     wr_transfer_size;
+   output [4-1:0]     wr_next_size;
    output               wr_cmd_full;
    output               wr_clr_line;
    output [2:0]           wr_clr_line_num;
@@ -2715,14 +2770,14 @@ module dma_axi64_core0_axim_wr(clk,reset,wr_cmd_port,wr_last_cmd,wr_line_cmd,wr_
 
    output               page_cross;
    
-   output [31:0]     AWADDR;
+   output [32-1:0]     AWADDR;
    output               AWPORT;
-   output [3:0]     AWLEN;
+   output [4-1:0]     AWLEN;
    output [1:0]           AWSIZE;
    output               AWVALID;
    input               AWREADY;
-   output [63:0]     WDATA;
-   output [7:0]     WSTRB;
+   output [64-1:0]     WDATA;
+   output [8-1:0]     WSTRB;
    output               WLAST;
    output               WVALID;
    input               WREADY;
@@ -2740,10 +2795,10 @@ module dma_axi64_core0_axim_wr(clk,reset,wr_cmd_port,wr_last_cmd,wr_line_cmd,wr_
 
 
    
-   wire [6:0]       AWID;
+   wire [7-1:0]       AWID;
    wire               AJOINT;
    wire               BVALID_d;
-   wire [6:0]       BID;
+   wire [7-1:0]       BID;
    reg [1:0]               BRESP_d;
    wire               wr_resp_full;
    
@@ -2901,14 +2956,17 @@ endmodule
 
 module dma_axi64_core0_axim_cmd(clk,reset,ch_num,burst_start,burst_addr,burst_size,end_line_cmd,extra_bit,cmd_port,joint_req,joint_pending,cmd_pending,cmd_full,cmd_split,cmd_num,cmd_line,page_cross,AID,AADDR,APORT,ALEN,ASIZE,AVALID,AREADY,AWVALID,AJOINT,axim_timeout_num,axim_timeout);
 
+   parameter                  AXI_WORD_SIZE = 0 ? 2'b10 : 2'b11;
+   parameter                  AXI_3 = 0 ? 2 : 3;
+
    input               clk;
    input               reset;
    
    input [2:0]               ch_num;
    
    input               burst_start;
-   input [31:0]      burst_addr;
-   input [7:0]     burst_size;
+   input [32-1:0]      burst_addr;
+   input [8-1:0]     burst_size;
    input               end_line_cmd;
    input               extra_bit;
    input               cmd_port;
@@ -2923,10 +2981,10 @@ module dma_axi64_core0_axim_cmd(clk,reset,ch_num,burst_start,burst_addr,burst_si
    
    output               page_cross;
    
-   output [6:0]     AID;
-   output [31:0]     AADDR;
+   output [7-1:0]     AID;
+   output [32-1:0]     AADDR;
    output               APORT;
-   output [3:0]     ALEN;
+   output [4-1:0]     ALEN;
    output [1:0]           ASIZE;
    output               AVALID;
    input               AREADY;
@@ -2938,21 +2996,21 @@ module dma_axi64_core0_axim_cmd(clk,reset,ch_num,burst_start,burst_addr,burst_si
    
 
    
-   reg [6:0]           AID;
-   reg [6:0]           AID_reg;
-   reg [31:0]           AADDR;
+   reg [7-1:0]           AID;
+   reg [7-1:0]           AID_reg;
+   reg [32-1:0]           AADDR;
    reg                   APORT;
-   reg [3:0]           ALEN;
+   reg [4-1:0]           ALEN;
    reg [1:0]               ASIZE;
    reg                   AVALID_reg;
    reg                   AJOINT;
    
 
-   wire [6:0]       AID_pre;
-   wire [31:0]       AADDR_pre;
+   wire [7-1:0]       AID_pre;
+   wire [32-1:0]       AADDR_pre;
    wire [1:0]               ASIZE_pre;
-   wire [3:0]       ALEN_pre;
-   wire [7:0]      burst_length;
+   wire [4-1:0]       ALEN_pre;
+   wire [8-1:0]      burst_length;
 
    wire               cmd;
    reg                   cmd_pending;
@@ -2971,7 +3029,7 @@ module dma_axi64_core0_axim_cmd(clk,reset,ch_num,burst_start,burst_addr,burst_si
    wire [8:0]               max_burst;
    reg [8:0]               max_burst_d;
    reg                   next_burst;
-   reg [7:0]       next_burst_size;
+   reg [8-1:0]       next_burst_size;
    wire               next_burst_start;
       
 
@@ -3049,15 +3107,15 @@ module dma_axi64_core0_axim_cmd(clk,reset,ch_num,burst_start,burst_addr,burst_si
                   burst_size == 'd1 ? 2'b00 :
                   burst_size == 'd2 ? 2'b01 :
                   burst_size == 'd4 ? 2'b10 : 
-                  2'b11;
+                  AXI_WORD_SIZE;
    
    assign               burst_length =
                   next_burst    ? next_burst_size :
                   page_cross    ? max_burst       : burst_size;
    
    assign               ALEN_pre =
-                  burst_length[7:3] == 'd0 ? {4{1'b0}} :
-                  burst_length[7:3] - 1'b1;
+                  burst_length[8-1:AXI_3] == 'd0 ? {4{1'b0}} :
+                  burst_length[8-1:AXI_3] - 1'b1;
    
    
    always @(posedge clk or posedge reset)
@@ -3089,7 +3147,7 @@ module dma_axi64_core0_axim_cmd(clk,reset,ch_num,burst_start,burst_addr,burst_si
      if (reset)
        AADDR  <= #1 {32{1'b0}};
      else if (next_burst_start)
-       AADDR  <= #1 {AADDR[31:12], {12{1'b1}}} + 1'b1;
+       AADDR  <= #1 {AADDR[32-1:12], {12{1'b1}}} + 1'b1;
      else if (burst_start)
        AADDR  <= #1 AADDR_pre;
 
@@ -3177,14 +3235,14 @@ module dma_axi64_core0_axim_timeout(clk,reset,VALID,READY,ID,axim_timeout_num,ax
 
    input               VALID;
    input               READY;
-   input [6:0]      ID;
+   input [7-1:0]      ID;
 
    output [2:0]           axim_timeout_num;
    output               axim_timeout;
 
 
    
-   reg [9:0]    counter;
+   reg [10-1:0]    counter;
 
    
    assign               axim_timeout_num = ID[2:0];
@@ -3252,17 +3310,17 @@ module dma_axi64_core0_axim_wdata(clk,reset,rd_transfer,rd_transfer_size,ch_fifo
    input               reset;
 
    input               rd_transfer;
-   input [3:0]      rd_transfer_size;
+   input [4-1:0]      rd_transfer_size;
    output               ch_fifo_rd;
-   output [3:0]     ch_fifo_rsize;
-   input [63:0]      ch_fifo_rdata;
+   output [4-1:0]     ch_fifo_rsize;
+   input [64-1:0]      ch_fifo_rdata;
    input               ch_fifo_rd_valid;
    input               ch_fifo_wr_ready;
    output [2:0]           ch_fifo_rd_num;
    output [2:0]           wr_transfer_num;
    output               wr_transfer;
-   output [3:0]     wr_transfer_size;
-   output [3:0]     wr_next_size;
+   output [4-1:0]     wr_transfer_size;
+   output [4-1:0]     wr_next_size;
 
    input               wr_resp_full;
    output               wr_cmd_full;
@@ -3275,31 +3333,31 @@ module dma_axi64_core0_axim_wdata(clk,reset,rd_transfer,rd_transfer_size,ch_fifo
    output               axim_timeout;
    
    
-   input [6:0]       AWID;
-   input [31:0]      AWADDR;
-   input [3:0]      AWLEN;
+   input [7-1:0]       AWID;
+   input [32-1:0]      AWADDR;
+   input [4-1:0]      AWLEN;
    input [1:0]               AWSIZE;
    input               AWVALID;
    input               AWREADY;
    input               AJOINT;
    
-   output [63:0]     WDATA;
-   output [7:0]     WSTRB;
+   output [64-1:0]     WDATA;
+   output [8-1:0]     WSTRB;
    output               WLAST;
    output               WVALID;
    input               WREADY;
 
    
-   wire [6:0]       WID;
-   wire [6:0]       WID_pre;
-   reg [7:0]           WSTRB_pre;
+   wire [7-1:0]       WID;
+   wire [7-1:0]       WID_pre;
+   reg [8-1:0]           WSTRB_pre;
    wire [1:0]               WSIZE_pre;
-   wire [3:0]       WLEN_pre;
+   wire [4-1:0]       WLEN_pre;
    
-   wire [6:0]       WID_data;
-   wire [7:0]       WSTRB_data;
+   wire [7-1:0]       WID_data;
+   wire [8-1:0]       WSTRB_data;
    wire [1:0]               WSIZE_data;
-   wire [3:0]       WLEN_data;
+   wire [4-1:0]       WLEN_data;
    wire               WVALID;
    wire               WLAST;
    wire               valid_last;
@@ -3309,17 +3367,17 @@ module dma_axi64_core0_axim_wdata(clk,reset,rd_transfer,rd_transfer_size,ch_fifo
    reg [2:0]               wr_clr_line_num;
    wire [2:0]               wr_transfer_num_pre;
    wire               wr_transfer_pre;
-   wire [3:0]       wr_transfer_size_pre;
+   wire [4-1:0]       wr_transfer_size_pre;
    reg [2:0]               wr_transfer_num;
    wire               wr_transfer;
-   reg [3:0]           wr_transfer_size;
+   reg [4-1:0]           wr_transfer_size;
       
    reg [2:0]               last_channel;
    
-   wire [6:0]       WID_cmd;
+   wire [7-1:0]       WID_cmd;
    wire [1:0]               WSIZE_cmd;   
-   reg [3:0]           wr_next_size;
-   wire [3:0]       WLEN_cmd;
+   reg [4-1:0]           wr_next_size;
+   wire [4-1:0]       WLEN_cmd;
 
    wire               data_ready;
    wire [2:0]               data_fullness_pre;
@@ -3328,7 +3386,7 @@ module dma_axi64_core0_axim_wdata(clk,reset,rd_transfer,rd_transfer_size,ch_fifo
    wire               joint_req_out;
    wire               joint_stall;
    wire               rd_transfer_joint;
-   wire [3:0]       rd_transfer_size_joint;
+   wire [4-1:0]       rd_transfer_size_joint;
    wire               rd_transfer_full;
    
    wire               cmd_push;
@@ -3347,8 +3405,8 @@ module dma_axi64_core0_axim_wdata(clk,reset,rd_transfer,rd_transfer_size,ch_fifo
    wire               data_empty;
    wire               data_full;
    
-   reg [3:0]           rd_out_count;
-   reg [3:0]           rd_in_count;
+   reg [4-1:0]           rd_out_count;
+   reg [4-1:0]           rd_in_count;
 
    wire               data_pending_pre;
    wire               data_pending;
@@ -3520,7 +3578,7 @@ module dma_axi64_core0_axim_wdata(clk,reset,rd_transfer,rd_transfer_size,ch_fifo
      end
 
    
-   prgen_fifo #(14, 4) 
+   prgen_fifo #(7+4+2+1, 4) 
    cmd_fifo(
         .clk(clk),
         .reset(reset),
@@ -3565,7 +3623,7 @@ module dma_axi64_core0_axim_wdata(clk,reset,rd_transfer,rd_transfer_size,ch_fifo
    
 
    
-   prgen_fifo #(21, 4) 
+   prgen_fifo #(8+4+7+2, 4) 
    cmd_data_fifo(
          .clk(clk),
          .reset(reset),
@@ -3602,7 +3660,7 @@ module dma_axi64_core0_axim_wdata(clk,reset,rd_transfer,rd_transfer_size,ch_fifo
 
       
    //depth is set by maximum fifo read data latency
-   prgen_fifo #(64, 7)
+   prgen_fifo #(64, 5+2)
    data_fifo(
          .clk(clk),
          .reset(reset),
@@ -3676,19 +3734,20 @@ endmodule
 
 module prgen_joint_stall(clk,reset,joint_req_out,rd_transfer,rd_transfer_size,ch_fifo_rd,data_fullness_pre,HOLD,joint_fifo_rd_valid,rd_transfer_size_joint,rd_transfer_full,joint_stall);
 
+   parameter                  SIZE_BITS   = 1;
       
    input               clk;
    input               reset;
 
    input               joint_req_out;
    input               rd_transfer;
-   input       rd_transfer_size;
+   input [SIZE_BITS-1:0]      rd_transfer_size;
    input               ch_fifo_rd;
    input [2:0]               data_fullness_pre;
    input               HOLD;
    
    output               joint_fifo_rd_valid;
-   output      rd_transfer_size_joint;
+   output [SIZE_BITS-1:0]     rd_transfer_size_joint;
    output               rd_transfer_full;
    output               joint_stall;
      
@@ -3704,7 +3763,7 @@ module prgen_joint_stall(clk,reset,joint_req_out,rd_transfer,rd_transfer_size,ch
    reg                   joint_stall_reg;
    wire               joint_not_ready_pre;
    wire               joint_not_ready;
-   wire        rd_transfer_size_joint;
+   wire [SIZE_BITS-1:0]       rd_transfer_size_joint;
    wire               rd_transfer_full;
    reg [2:0]               joint_rd_stall_num;
    wire               joint_rd_stall;
@@ -3745,7 +3804,7 @@ module prgen_joint_stall(clk,reset,joint_req_out,rd_transfer,rd_transfer_size,ch
    prgen_delay #(1) delay_joint_not_ready (.clk(clk), .reset(reset), .din(joint_not_ready_pre), .dout(joint_not_ready));
 
    
-   prgen_fifo #(1, 2)
+   prgen_fifo #(SIZE_BITS, 2)
    rd_transfer_fifo(
             .clk(clk),
             .reset(reset),
@@ -3807,20 +3866,10 @@ endmodule
 
 
 
-module prgen_fifo
-  #(parameter WIDTH = 8,      
-    parameter DEPTH_FULL = 8)
-   (
-    input                      clk,
-    input                      reset,
-    input                      push,
-    input                      pop,
-    input [WIDTH-1:0]         din,
-    output reg [WIDTH-1:0]        dout,
-    //output                    next,
-    output                    empty,
-    output                    full
-    );
+module prgen_fifo(clk,reset,push,pop,din,dout,empty,full);
+
+   parameter                  WIDTH      = 8;
+   parameter                  DEPTH_FULL = 8;
 
    parameter               SINGLE     = DEPTH_FULL == 1;
    parameter               DEPTH      = SINGLE ? 1 : DEPTH_FULL -1;
@@ -3838,6 +3887,18 @@ module prgen_fifo
    
    
 
+   input                      clk;
+   input                      reset;
+
+   input               push;
+   input               pop;
+   input [WIDTH-1:0]           din;
+   output [WIDTH-1:0]           dout;
+   //output               next;
+   output               empty;
+   output               full;
+   
+
    wire               reg_push;
    wire               reg_pop;
    wire               fifo_push;
@@ -3849,7 +3910,7 @@ module prgen_fifo
    reg [WIDTH-1:0]           fifo [DEPTH-1:0];
    wire               fifo_empty;
    wire               next;
- 
+   reg [WIDTH-1:0]           dout;
    reg                   dout_empty;
    reg [DEPTH_BITS-1:0]       ptr_in;
    reg [DEPTH_BITS-1:0]       ptr_out;
@@ -3972,16 +4033,16 @@ endmodule
 
 
 
-module prgen_stall
-  #(parameter DEPTH = 1)
-   (
-    input               clk,
-    input               reset,
-    input               din,
-    input               stall,
-    output              dout
-    );
+module prgen_stall(clk,reset,din,stall,dout);
 
+   parameter                  DEPTH   = 1;
+      
+   input               clk;
+   input               reset;
+   
+   input               din;
+   input               stall;
+   output               dout;
 
 
    
@@ -4051,31 +4112,34 @@ endmodule
 
 
 
-module dma_axi64_core0_axim_resp
-  #(parameter CMD_DEPTH = 8)    
-   (
-    input               clk,
-    input               reset,
+module dma_axi64_core0_axim_resp(clk,reset,slverr,decerr,clr,clr_last,ch_num_resp,resp_full,AID,AVALID,AREADY,RESP,ID,VALID,READY,LAST);
 
-    output              slverr,
-    output              decerr,
-    output              clr,
-    output              clr_last,
-    output reg [2:0]        ch_num_resp,
-    output              resp_full,
+   parameter                  CMD_DEPTH = 8;
+      
+   input               clk;
+   input               reset;
+
+   output               slverr;
+   output               decerr;
+   output               clr;
+   output               clr_last;
+   output [2:0]           ch_num_resp;
+   output               resp_full;
    
-    input [6:0]         AID,
-    input               AVALID,
-    input               AREADY,
-    input [1:0]         RESP,
-    output [6:0]        ID,
-    input               VALID,
-    input               READY,
-    input               LAST
-    );
+   
+   input [7-1:0]      AID;
+   input               AVALID;
+   input               AREADY;
+   input [1:0]               RESP;
+   output [7-1:0]     ID;
+   input               VALID;
+   input               READY;
+   input               LAST;
 
 
-
+   
+   parameter                  RESP_SLVERR = 2'b10;
+   parameter                  RESP_DECERR = 2'b11;
 
 
    wire               clr_pre;
@@ -4083,13 +4147,13 @@ module dma_axi64_core0_axim_resp
    wire               clr_last_pre;
    wire               slverr_pre;
    wire               decerr_pre;
-
+   reg [2:0]               ch_num_resp;
 
    wire               resp_push;
    wire               resp_pop;
    wire               resp_empty;
-
-
+   wire               resp_full;
+   wire [7-1:0]       ID;
    
 
    assign               resp_push       = AVALID & AREADY;
@@ -4099,8 +4163,8 @@ module dma_axi64_core0_axim_resp
    
    assign               ch_num_resp_pre = ID[2:0] ;
    
-   assign               slverr_pre      = clr_pre & RESP == 2'b10;
-   assign               decerr_pre      = clr_pre & RESP == 2'b11;
+   assign               slverr_pre      = clr_pre & RESP == RESP_SLVERR;
+   assign               decerr_pre      = clr_pre & RESP == RESP_DECERR;
    
    assign               clr_last_pre    = clr_pre & ID[3];
    
@@ -4182,7 +4246,7 @@ module dma_axi64_core0_axim_rd(clk,reset,load_wr,load_wr_num,load_wr_cycle,load_
    output               load_wr;
    output [2:0]           load_wr_num;
    output [1:0]           load_wr_cycle;
-   output [63:0]     load_wdata;
+   output [64-1:0]     load_wdata;
 
    input               joint_stall;
    input               joint_req;
@@ -4193,8 +4257,8 @@ module dma_axi64_core0_axim_rd(clk,reset,load_wr,load_wr_num,load_wr_cycle,load_
    input               rd_cmd_port;
    input [2:0]               rd_ch_num;
    input               rd_burst_start;
-   input [31:0]      rd_burst_addr;
-   input [7:0]     rd_burst_size;
+   input [32-1:0]      rd_burst_addr;
+   input [8-1:0]     rd_burst_size;
    output               rd_cmd_pending;
    output               rd_cmd_split;
    output               rd_cmd_line;
@@ -4203,12 +4267,12 @@ module dma_axi64_core0_axim_rd(clk,reset,load_wr,load_wr_num,load_wr_cycle,load_
    
    //data
    output               ch_fifo_wr;
-   output [63:0]     ch_fifo_wdata;
-   output [3:0]     ch_fifo_wsize;
+   output [64-1:0]     ch_fifo_wdata;
+   output [4-1:0]     ch_fifo_wsize;
    output [2:0]           ch_fifo_wr_num;
    output [2:0]           rd_transfer_num;
    output               rd_transfer;
-   output [3:0]     rd_transfer_size;
+   output [4-1:0]     rd_transfer_size;
    output               rd_burst_cmd;
    output               rd_clr_line;
    output [2:0]           rd_clr_line_num;
@@ -4223,15 +4287,15 @@ module dma_axi64_core0_axim_rd(clk,reset,load_wr,load_wr_num,load_wr_cycle,load_
 
    output               page_cross;
    
-   output [31:0]     ARADDR;
+   output [32-1:0]     ARADDR;
    output               ARPORT;
-   output [3:0]     ARLEN;
+   output [4-1:0]     ARLEN;
    output [1:0]           ARSIZE;
    output               ARVALID;
    input               ARREADY;
    input               AWVALID;
    
-   input [63:0]      RDATA;
+   input [64-1:0]      RDATA;
    input [1:0]               RRESP;
    input               RLAST;
    input               RVALID;
@@ -4241,13 +4305,13 @@ module dma_axi64_core0_axim_rd(clk,reset,load_wr,load_wr_num,load_wr_cycle,load_
    output [2:0]           axim_timeout_num_ar;
 
 
-   wire [6:0]       ARID;
+   wire [7-1:0]       ARID;
    wire               RVALID_d;
-   wire [6:0]          RID;
-   reg [63:0]           RDATA_d;
+   wire [7-1:0]          RID;
+   reg [64-1:0]           RDATA_d;
    reg [1:0]               RRESP_d;
    reg                   RLAST_d;
-   reg [3:0]           rd_transfer_size;
+   reg [4-1:0]           rd_transfer_size;
 
    wire               rd_clr_pre;
    wire               RREADY;
@@ -4423,25 +4487,25 @@ module dma_axi64_core0_axim_rdata(clk,reset,joint_stall,ch_fifo_wr,ch_fifo_wdata
    input               joint_stall;
    
    output               ch_fifo_wr;
-   output [63:0]     ch_fifo_wdata;
-   output [3:0]     ch_fifo_wsize;
+   output [64-1:0]     ch_fifo_wdata;
+   output [4-1:0]     ch_fifo_wsize;
    output [2:0]           ch_fifo_wr_num;
    output [2:0]           rd_transfer_num;
    output               rd_transfer;
-   input [3:0]      rd_transfer_size;
+   input [4-1:0]      rd_transfer_size;
    output               rd_burst_cmd;
    output               load_wr;
    output [2:0]           load_wr_num;
    output [1:0]           load_wr_cycle;
-   output [63:0]     load_wdata;
+   output [64-1:0]     load_wdata;
    output               rd_clr_line;
    output [2:0]           rd_clr_line_num;
 
    input               ARVALID;
    input               ARREADY;
-   input [6:0]      ARID;
-   input [6:0]      RID;
-   input [63:0]      RDATA;
+   input [7-1:0]      ARID;
+   input [7-1:0]      RID;
+   input [64-1:0]      RDATA;
    input               RLAST;
    input               RVALID;
    input               RREADY; 
@@ -4595,7 +4659,7 @@ module dma_axi64_core0_channels(clk,reset,scan_en,pclk,clken,pclken,psel,penable
    input             load_wr;
    input [2:0]             load_wr_num;
    input [1:0]             load_wr_cycle;
-   input [63:0]    load_wdata;
+   input [64-1:0]    load_wdata;
 
    input [2:0]             rd_ch_num;
    output             load_req_in_prog;
@@ -4610,7 +4674,7 @@ module dma_axi64_core0_channels(clk,reset,scan_en,pclk,clken,pclken,psel,penable
    input [2:0]             rd_ch_num_resp;
    input [2:0]             wr_ch_num_resp;
    input             wr_clr_last;
-   output [7:0]  ch_int_all_proc;
+   output [8*1-1:0]  ch_int_all_proc;
    input [7:0]                ch_start;
    output [7:0]          ch_idle;
    output [7:0]          ch_active;
@@ -4634,39 +4698,39 @@ module dma_axi64_core0_channels(clk,reset,scan_en,pclk,clken,pclken,psel,penable
    input [2:0]              rd_transfer_num;
    input              rd_burst_start;
    input              rd_transfer;
-   input [3:0]     rd_transfer_size;
+   input [4-1:0]     rd_transfer_size;
    input              rd_clr_line;
    input [2:0]              rd_clr_line_num;
    input              fifo_rd;
-   input [3:0]     fifo_rsize;
+   input [4-1:0]     fifo_rsize;
    output              fifo_rd_valid;
-   output [63:0]    fifo_rdata;
+   output [64-1:0]    fifo_rdata;
    output              fifo_wr_ready;
    output [7:0]          ch_rd_ready;
-   output [31:0]    rd_burst_addr;
-   output [7:0]   rd_burst_size;
-   output [5:0]  rd_tokens;
+   output [32-1:0]    rd_burst_addr;
+   output [8-1:0]   rd_burst_size;
+   output [6-1:0]  rd_tokens;
    output              rd_cmd_port;
    
-   output [2:0]  rd_periph_delay; 
+   output [3-1:0]  rd_periph_delay; 
 
    input [2:0]              ch_fifo_rd_num;
    input [2:0]              wr_transfer_num;
    input              wr_burst_start; 
    input              wr_transfer;
-   input [3:0]     wr_transfer_size;
-   input [3:0]     wr_next_size;
+   input [4-1:0]     wr_transfer_size;
+   input [4-1:0]     wr_next_size;
    input              wr_clr_line;
    input [2:0]              wr_clr_line_num;
    input              fifo_wr;
-   input [63:0]     fifo_wdata;
-   input [3:0]     fifo_wsize;
+   input [64-1:0]     fifo_wdata;
+   input [4-1:0]     fifo_wsize;
    output [7:0]          ch_wr_ready;
-   output [31:0]    wr_burst_addr;
-   output [7:0]   wr_burst_size;
-   output [5:0]  wr_tokens;
+   output [32-1:0]    wr_burst_addr;
+   output [8-1:0]   wr_burst_size;
+   output [6-1:0]  wr_tokens;
    output              wr_cmd_port;
-   output [2:0]  wr_periph_delay;
+   output [3-1:0]  wr_periph_delay;
    
    input              joint_mode;
    input              joint_remote;
@@ -4678,10 +4742,21 @@ module dma_axi64_core0_channels(clk,reset,scan_en,pclk,clken,pclken,psel,penable
    output [7:0]          ch_joint_req;
 
    
+   
+   parameter              CH0 = 0;
+   parameter              CH1 = 1;
+   parameter              CH2 = 2;
+   parameter              CH3 = 3;
+   parameter              CH4 = 4;
+   parameter              CH5 = 5;
+   parameter              CH6 = 6;
+   parameter              CH7 = 7;
+   
+
    //apb buses
    wire [7:0]              ch_psel;
    wire [7:0]              ch_pslverr;
-   wire [224:0]          ch_prdata;
+   wire [32*8-1:0]          ch_prdata;
    
    wire [7:0]              ch_joint_end;
    wire [7:0]              ch_joint_in_prog;
@@ -4724,20 +4799,20 @@ module dma_axi64_core0_channels(clk,reset,scan_en,pclk,clken,pclken,psel,penable
       
    //rd ctrl signals
    wire [7:0]              ch_rd_burst_start;
-   wire [8*31:0]    ch_rd_burst_addr;
-   wire [56:0]   ch_rd_burst_size;
-   wire [8*5:0]  ch_rd_tokens;
+   wire [8*32-1:0]    ch_rd_burst_addr;
+   wire [8*8-1:0]   ch_rd_burst_size;
+   wire [8*6-1:0]  ch_rd_tokens;
    wire [7:0]              ch_rd_port_num;
-   wire [8*2:0]  ch_rd_periph_delay;
+   wire [8*3-1:0]  ch_rd_periph_delay;
    wire [7:0]              ch_rd_clr_valid;
    
    //wr ctrl signals
    wire [7:0]              ch_wr_burst_start;
-   wire [8*31:0]    ch_wr_burst_addr;
-   wire [56:0]   ch_wr_burst_size;
-   wire [8*5:0]  ch_wr_tokens;
+   wire [8*32-1:0]    ch_wr_burst_addr;
+   wire [8*8-1:0]   ch_wr_burst_size;
+   wire [8*6-1:0]  ch_wr_tokens;
    wire [7:0]              ch_wr_port_num;
-   wire [8*2:0]  ch_wr_periph_delay;
+   wire [8*3-1:0]  ch_wr_periph_delay;
    wire [7:0]              ch_wr_clr_valid;
    
    //CLR buses
@@ -4748,7 +4823,7 @@ module dma_axi64_core0_channels(clk,reset,scan_en,pclk,clken,pclken,psel,penable
    wire [7:0]              ch_fifo_wr;
    wire [7:0]              ch_fifo_rd;
    wire [7:0]              ch_fifo_rd_valid;
-   wire [8*63:0]    ch_fifo_rdata;
+   wire [8*64-1:0]    ch_fifo_rdata;
    wire [7:0]              ch_fifo_wr_ready;
 
    wire [7:0]              ch_wr_cmd_pending;
@@ -4954,14 +5029,14 @@ dma_axi64_core0_ch dma_axi64_core0_ch0 (
             .paddr(paddr[7:0]),
             .pwrite(pwrite),
             .pwdata(pwdata),
-            .prdata(ch_prdata[31:0]),
+            .prdata(ch_prdata[31+32*0:32*0]),
             .pslverr(ch_pslverr[0]),
 
             //PERIPH
             .periph_tx_req(periph_tx_req),
-            .periph_tx_clr(ch_periph_tx_clr[30:0]),
+            .periph_tx_clr(ch_periph_tx_clr[31*0+31-1:31*0]),
             .periph_rx_req(periph_rx_req),
-            .periph_rx_clr(ch_periph_rx_clr[30:0]),
+            .periph_rx_clr(ch_periph_rx_clr[31*0+31-1:31*0]),
 
             //RD AXIM
             .rd_cmd_split(ch_rd_cmd_split[0]),
@@ -5012,21 +5087,21 @@ dma_axi64_core0_ch dma_axi64_core0_ch0 (
             //RD CTRL
             .rd_burst_start(ch_rd_burst_start[0]),
             .rd_ready(ch_rd_ready[0]),
-            .rd_burst_addr(ch_rd_burst_addr[31:0]),
-            .rd_burst_size(ch_rd_burst_size[7:0]),
-            .rd_tokens(ch_rd_tokens[5:0]),
+            .rd_burst_addr(ch_rd_burst_addr[32-1+32*0:32*0]),
+            .rd_burst_size(ch_rd_burst_size[8-1+8*0:8*0]),
+            .rd_tokens(ch_rd_tokens[6-1+6*0:6*0]),
             .rd_port_num(ch_rd_port_num[0]),
-            .rd_periph_delay(ch_rd_periph_delay[2:0]),
+            .rd_periph_delay(ch_rd_periph_delay[3-1+3*0:3*0]),
             .rd_clr_valid(ch_rd_clr_valid[0]),
             
             //WR CTRL
             .wr_burst_start(ch_wr_burst_start[0]),
             .wr_ready(ch_wr_ready[0]),
-            .wr_burst_addr(ch_wr_burst_addr[31:0]),
-            .wr_burst_size(ch_wr_burst_size[7:0]),
-            .wr_tokens(ch_wr_tokens[5:0]),
+            .wr_burst_addr(ch_wr_burst_addr[32-1+32*0:32*0]),
+            .wr_burst_size(ch_wr_burst_size[8-1+8*0:8*0]),
+            .wr_tokens(ch_wr_tokens[6-1+6*0:6*0]),
             .wr_port_num(ch_wr_port_num[0]),
-            .wr_periph_delay(ch_wr_periph_delay[2:0]),
+            .wr_periph_delay(ch_wr_periph_delay[3-1+3*0:3*0]),
             .wr_clr_valid(ch_wr_clr_valid[0]),
 
             //FIFO
@@ -5036,7 +5111,7 @@ dma_axi64_core0_ch dma_axi64_core0_ch0 (
                     .fifo_rd(ch_fifo_rd[0]),                   
                     .fifo_rsize(fifo_rsize),                   
                     .fifo_rd_valid(ch_fifo_rd_valid[0]),                   
-                    .fifo_rdata(ch_fifo_rdata[63:0]),       
+                    .fifo_rdata(ch_fifo_rdata[(64-1)+64*0:64*0]),       
                     .fifo_wr_ready(ch_fifo_wr_ready[0]),     
 
                 .joint_mode(joint_mode),
@@ -5051,7 +5126,7 @@ dma_axi64_core0_ch dma_axi64_core0_ch0 (
             .ch_start(ch_start[0]),
 
             //INT
-            .int_all_proc(ch_int_all_proc[0:0])
+            .int_all_proc(ch_int_all_proc[1-1+(1*0):1*0])
             );
           
 dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty1 (
@@ -5127,21 +5202,21 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty1 (
             //RD CTRL
             .rd_burst_start(ch_rd_burst_start[1]),
             .rd_ready(ch_rd_ready[1]),
-            .rd_burst_addr(ch_rd_burst_addr[31+32*1:32*1]),
-            .rd_burst_size(ch_rd_burst_size[7+8:8]),
-            .rd_tokens(ch_rd_tokens[5+6*1:6*1]),
+            .rd_burst_addr(ch_rd_burst_addr[32-1+32*1:32*1]),
+            .rd_burst_size(ch_rd_burst_size[8-1+8*1:8*1]),
+            .rd_tokens(ch_rd_tokens[6-1+6*1:6*1]),
             .rd_port_num(ch_rd_port_num[1]),
-            .rd_periph_delay(ch_rd_periph_delay[2+3*1:3*1]),
+            .rd_periph_delay(ch_rd_periph_delay[3-1+3*1:3*1]),
             .rd_clr_valid(ch_rd_clr_valid[1]),
             
             //WR CTRL
             .wr_burst_start(ch_wr_burst_start[1]),
             .wr_ready(ch_wr_ready[1]),
-            .wr_burst_addr(ch_wr_burst_addr[31+32*1:32*1]),
-            .wr_burst_size(ch_wr_burst_size[7+8:8]),
-            .wr_tokens(ch_wr_tokens[5+6*1:6*1]),
+            .wr_burst_addr(ch_wr_burst_addr[32-1+32*1:32*1]),
+            .wr_burst_size(ch_wr_burst_size[8-1+8*1:8*1]),
+            .wr_tokens(ch_wr_tokens[6-1+6*1:6*1]),
             .wr_port_num(ch_wr_port_num[1]),
-            .wr_periph_delay(ch_wr_periph_delay[2+3*1:3*1]),
+            .wr_periph_delay(ch_wr_periph_delay[3-1+3*1:3*1]),
             .wr_clr_valid(ch_wr_clr_valid[1]),
 
             //FIFO
@@ -5151,7 +5226,7 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty1 (
                     .fifo_rd(ch_fifo_rd[1]),                   
                     .fifo_rsize(fifo_rsize),                   
                     .fifo_rd_valid(ch_fifo_rd_valid[1]),                   
-                    .fifo_rdata(ch_fifo_rdata[63+64*1:64*1]),       
+                    .fifo_rdata(ch_fifo_rdata[(64-1)+64*1:64*1]),       
                     .fifo_wr_ready(ch_fifo_wr_ready[1]),     
 
                 .joint_mode(joint_mode),
@@ -5166,7 +5241,7 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty1 (
             .ch_start(ch_start[1]),
 
             //INT
-            .int_all_proc(ch_int_all_proc[0+(1*1):1*1])
+            .int_all_proc(ch_int_all_proc[1-1+(1*1):1*1])
             );
           
 dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty2 (
@@ -5242,21 +5317,21 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty2 (
             //RD CTRL
             .rd_burst_start(ch_rd_burst_start[2]),
             .rd_ready(ch_rd_ready[2]),
-            .rd_burst_addr(ch_rd_burst_addr[31+32*2:32*2]),
-            .rd_burst_size(ch_rd_burst_size[7+8*2:8*2]),
-            .rd_tokens(ch_rd_tokens[5+6*2:6*2]),
+            .rd_burst_addr(ch_rd_burst_addr[32-1+32*2:32*2]),
+            .rd_burst_size(ch_rd_burst_size[8-1+8*2:8*2]),
+            .rd_tokens(ch_rd_tokens[6-1+6*2:6*2]),
             .rd_port_num(ch_rd_port_num[2]),
-            .rd_periph_delay(ch_rd_periph_delay[2+3*2:3*2]),
+            .rd_periph_delay(ch_rd_periph_delay[3-1+3*2:3*2]),
             .rd_clr_valid(ch_rd_clr_valid[2]),
             
             //WR CTRL
             .wr_burst_start(ch_wr_burst_start[2]),
             .wr_ready(ch_wr_ready[2]),
-            .wr_burst_addr(ch_wr_burst_addr[31+32*2:32*2]),
-            .wr_burst_size(ch_wr_burst_size[7+8*2:8*2]),
-            .wr_tokens(ch_wr_tokens[5+6*2:6*2]),
+            .wr_burst_addr(ch_wr_burst_addr[32-1+32*2:32*2]),
+            .wr_burst_size(ch_wr_burst_size[8-1+8*2:8*2]),
+            .wr_tokens(ch_wr_tokens[6-1+6*2:6*2]),
             .wr_port_num(ch_wr_port_num[2]),
-            .wr_periph_delay(ch_wr_periph_delay[2+3*2:3*2]),
+            .wr_periph_delay(ch_wr_periph_delay[3-1+3*2:3*2]),
             .wr_clr_valid(ch_wr_clr_valid[2]),
 
             //FIFO
@@ -5266,7 +5341,7 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty2 (
                     .fifo_rd(ch_fifo_rd[2]),                   
                     .fifo_rsize(fifo_rsize),                   
                     .fifo_rd_valid(ch_fifo_rd_valid[2]),                   
-                    .fifo_rdata(ch_fifo_rdata[63+64*2:64*2]),       
+                    .fifo_rdata(ch_fifo_rdata[(64-1)+64*2:64*2]),       
                     .fifo_wr_ready(ch_fifo_wr_ready[2]),     
 
                 .joint_mode(joint_mode),
@@ -5281,7 +5356,7 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty2 (
             .ch_start(ch_start[2]),
 
             //INT
-            .int_all_proc(ch_int_all_proc[0+(1*2):1*2])
+            .int_all_proc(ch_int_all_proc[1-1+(1*2):1*2])
             );
           
 dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty3 (
@@ -5357,21 +5432,21 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty3 (
             //RD CTRL
             .rd_burst_start(ch_rd_burst_start[3]),
             .rd_ready(ch_rd_ready[3]),
-            .rd_burst_addr(ch_rd_burst_addr[31+32*3:32*3]),
-            .rd_burst_size(ch_rd_burst_size[7+8*3:8*3]),
-            .rd_tokens(ch_rd_tokens[5+6*3:6*3]),
+            .rd_burst_addr(ch_rd_burst_addr[32-1+32*3:32*3]),
+            .rd_burst_size(ch_rd_burst_size[8-1+8*3:8*3]),
+            .rd_tokens(ch_rd_tokens[6-1+6*3:6*3]),
             .rd_port_num(ch_rd_port_num[3]),
-            .rd_periph_delay(ch_rd_periph_delay[2+3*3:3*3]),
+            .rd_periph_delay(ch_rd_periph_delay[3-1+3*3:3*3]),
             .rd_clr_valid(ch_rd_clr_valid[3]),
             
             //WR CTRL
             .wr_burst_start(ch_wr_burst_start[3]),
             .wr_ready(ch_wr_ready[3]),
-            .wr_burst_addr(ch_wr_burst_addr[31+32*3:32*3]),
-            .wr_burst_size(ch_wr_burst_size[7+8*3:8*3]),
-            .wr_tokens(ch_wr_tokens[5+6*3:6*3]),
+            .wr_burst_addr(ch_wr_burst_addr[32-1+32*3:32*3]),
+            .wr_burst_size(ch_wr_burst_size[8-1+8*3:8*3]),
+            .wr_tokens(ch_wr_tokens[6-1+6*3:6*3]),
             .wr_port_num(ch_wr_port_num[3]),
-            .wr_periph_delay(ch_wr_periph_delay[2+3*3:3*3]),
+            .wr_periph_delay(ch_wr_periph_delay[3-1+3*3:3*3]),
             .wr_clr_valid(ch_wr_clr_valid[3]),
 
             //FIFO
@@ -5381,7 +5456,7 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty3 (
                     .fifo_rd(ch_fifo_rd[3]),                   
                     .fifo_rsize(fifo_rsize),                   
                     .fifo_rd_valid(ch_fifo_rd_valid[3]),                   
-                    .fifo_rdata(ch_fifo_rdata[63+64*3:64*3]),       
+                    .fifo_rdata(ch_fifo_rdata[(64-1)+64*3:64*3]),       
                     .fifo_wr_ready(ch_fifo_wr_ready[3]),     
 
                 .joint_mode(joint_mode),
@@ -5396,7 +5471,7 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty3 (
             .ch_start(ch_start[3]),
 
             //INT
-            .int_all_proc(ch_int_all_proc[0+(1*3):1*3])
+            .int_all_proc(ch_int_all_proc[1-1+(1*3):1*3])
             );
           
 dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty4 (
@@ -5472,21 +5547,21 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty4 (
             //RD CTRL
             .rd_burst_start(ch_rd_burst_start[4]),
             .rd_ready(ch_rd_ready[4]),
-            .rd_burst_addr(ch_rd_burst_addr[31+32*4:32*4]),
-            .rd_burst_size(ch_rd_burst_size[7+8*4:8*4]),
-            .rd_tokens(ch_rd_tokens[5+6*4:6*4]),
+            .rd_burst_addr(ch_rd_burst_addr[32-1+32*4:32*4]),
+            .rd_burst_size(ch_rd_burst_size[8-1+8*4:8*4]),
+            .rd_tokens(ch_rd_tokens[6-1+6*4:6*4]),
             .rd_port_num(ch_rd_port_num[4]),
-            .rd_periph_delay(ch_rd_periph_delay[2+3*4:3*4]),
+            .rd_periph_delay(ch_rd_periph_delay[3-1+3*4:3*4]),
             .rd_clr_valid(ch_rd_clr_valid[4]),
             
             //WR CTRL
             .wr_burst_start(ch_wr_burst_start[4]),
             .wr_ready(ch_wr_ready[4]),
-            .wr_burst_addr(ch_wr_burst_addr[31+32*4:32*4]),
-            .wr_burst_size(ch_wr_burst_size[7+8*4:8*4]),
-            .wr_tokens(ch_wr_tokens[5+6*4:6*4]),
+            .wr_burst_addr(ch_wr_burst_addr[32-1+32*4:32*4]),
+            .wr_burst_size(ch_wr_burst_size[8-1+8*4:8*4]),
+            .wr_tokens(ch_wr_tokens[6-1+6*4:6*4]),
             .wr_port_num(ch_wr_port_num[4]),
-            .wr_periph_delay(ch_wr_periph_delay[2+3*4:3*4]),
+            .wr_periph_delay(ch_wr_periph_delay[3-1+3*4:3*4]),
             .wr_clr_valid(ch_wr_clr_valid[4]),
 
             //FIFO
@@ -5496,7 +5571,7 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty4 (
                     .fifo_rd(ch_fifo_rd[4]),                   
                     .fifo_rsize(fifo_rsize),                   
                     .fifo_rd_valid(ch_fifo_rd_valid[4]),                   
-                    .fifo_rdata(ch_fifo_rdata[63+64*4:64*4]),       
+                    .fifo_rdata(ch_fifo_rdata[(64-1)+64*4:64*4]),       
                     .fifo_wr_ready(ch_fifo_wr_ready[4]),     
 
                 .joint_mode(joint_mode),
@@ -5511,7 +5586,7 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty4 (
             .ch_start(ch_start[4]),
 
             //INT
-            .int_all_proc(ch_int_all_proc[0+(1*4):1*4])
+            .int_all_proc(ch_int_all_proc[1-1+(1*4):1*4])
             );
           
 dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty5 (
@@ -5587,21 +5662,21 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty5 (
             //RD CTRL
             .rd_burst_start(ch_rd_burst_start[5]),
             .rd_ready(ch_rd_ready[5]),
-            .rd_burst_addr(ch_rd_burst_addr[31+32*5:32*5]),
-            .rd_burst_size(ch_rd_burst_size[7+8*5:8*5]),
-            .rd_tokens(ch_rd_tokens[5+6*5:6*5]),
+            .rd_burst_addr(ch_rd_burst_addr[32-1+32*5:32*5]),
+            .rd_burst_size(ch_rd_burst_size[8-1+8*5:8*5]),
+            .rd_tokens(ch_rd_tokens[6-1+6*5:6*5]),
             .rd_port_num(ch_rd_port_num[5]),
-            .rd_periph_delay(ch_rd_periph_delay[2+3*5:3*5]),
+            .rd_periph_delay(ch_rd_periph_delay[3-1+3*5:3*5]),
             .rd_clr_valid(ch_rd_clr_valid[5]),
             
             //WR CTRL
             .wr_burst_start(ch_wr_burst_start[5]),
             .wr_ready(ch_wr_ready[5]),
-            .wr_burst_addr(ch_wr_burst_addr[31+32*5:32*5]),
-            .wr_burst_size(ch_wr_burst_size[7+8*5:8*5]),
-            .wr_tokens(ch_wr_tokens[5+6*5:6*5]),
+            .wr_burst_addr(ch_wr_burst_addr[32-1+32*5:32*5]),
+            .wr_burst_size(ch_wr_burst_size[8-1+8*5:8*5]),
+            .wr_tokens(ch_wr_tokens[6-1+6*5:6*5]),
             .wr_port_num(ch_wr_port_num[5]),
-            .wr_periph_delay(ch_wr_periph_delay[2+3*5:3*5]),
+            .wr_periph_delay(ch_wr_periph_delay[3-1+3*5:3*5]),
             .wr_clr_valid(ch_wr_clr_valid[5]),
 
             //FIFO
@@ -5611,7 +5686,7 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty5 (
                     .fifo_rd(ch_fifo_rd[5]),                   
                     .fifo_rsize(fifo_rsize),                   
                     .fifo_rd_valid(ch_fifo_rd_valid[5]),                   
-                    .fifo_rdata(ch_fifo_rdata[63+64*5:64*5]),       
+                    .fifo_rdata(ch_fifo_rdata[(64-1)+64*5:64*5]),       
                     .fifo_wr_ready(ch_fifo_wr_ready[5]),     
 
                 .joint_mode(joint_mode),
@@ -5626,7 +5701,7 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty5 (
             .ch_start(ch_start[5]),
 
             //INT
-            .int_all_proc(ch_int_all_proc[0+(1*5):1*5])
+            .int_all_proc(ch_int_all_proc[1-1+(1*5):1*5])
             );
           
 dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty6 (
@@ -5644,7 +5719,7 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty6 (
             .paddr(paddr[7:0]),
             .pwrite(pwrite),
             .pwdata(pwdata),
-            .prdata(ch_prdata[31+192:192]),
+            .prdata(ch_prdata[31+32*6:32*6]),
             .pslverr(ch_pslverr[6]),
 
             //PERIPH
@@ -5702,21 +5777,21 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty6 (
             //RD CTRL
             .rd_burst_start(ch_rd_burst_start[6]),
             .rd_ready(ch_rd_ready[6]),
-            .rd_burst_addr(ch_rd_burst_addr[31+192:192]),
-            .rd_burst_size(ch_rd_burst_size[7+48:48]),
-            .rd_tokens(ch_rd_tokens[5+36:36]),
+            .rd_burst_addr(ch_rd_burst_addr[32-1+32*6:32*6]),
+            .rd_burst_size(ch_rd_burst_size[8-1+8*6:8*6]),
+            .rd_tokens(ch_rd_tokens[6-1+6*6:6*6]),
             .rd_port_num(ch_rd_port_num[6]),
-            .rd_periph_delay(ch_rd_periph_delay[20:18]),
+            .rd_periph_delay(ch_rd_periph_delay[3-1+3*6:3*6]),
             .rd_clr_valid(ch_rd_clr_valid[6]),
             
             //WR CTRL
             .wr_burst_start(ch_wr_burst_start[6]),
             .wr_ready(ch_wr_ready[6]),
-            .wr_burst_addr(ch_wr_burst_addr[31+192:192]),
-            .wr_burst_size(ch_wr_burst_size[7+48:48]),
-            .wr_tokens(ch_wr_tokens[5+36:36]),
+            .wr_burst_addr(ch_wr_burst_addr[32-1+32*6:32*6]),
+            .wr_burst_size(ch_wr_burst_size[8-1+8*6:8*6]),
+            .wr_tokens(ch_wr_tokens[6-1+6*6:6*6]),
             .wr_port_num(ch_wr_port_num[6]),
-            .wr_periph_delay(ch_wr_periph_delay[20:18]),
+            .wr_periph_delay(ch_wr_periph_delay[3-1+3*6:3*6]),
             .wr_clr_valid(ch_wr_clr_valid[6]),
 
             //FIFO
@@ -5726,7 +5801,7 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty6 (
                     .fifo_rd(ch_fifo_rd[6]),                   
                     .fifo_rsize(fifo_rsize),                   
                     .fifo_rd_valid(ch_fifo_rd_valid[6]),                   
-                    .fifo_rdata(ch_fifo_rdata[4159:4096]),       
+                    .fifo_rdata(ch_fifo_rdata[(64-1)+64*6:64*6]),       
                     .fifo_wr_ready(ch_fifo_wr_ready[6]),     
 
                 .joint_mode(joint_mode),
@@ -5741,7 +5816,7 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty6 (
             .ch_start(ch_start[6]),
 
             //INT
-            .int_all_proc(ch_int_all_proc[6:6])
+            .int_all_proc(ch_int_all_proc[1-1+(1*6):1*6])
             );
           
 dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty7 (
@@ -5759,14 +5834,14 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty7 (
             .paddr(paddr[7:0]),
             .pwrite(pwrite),
             .pwdata(pwdata),
-            .prdata(ch_prdata[255:224]),
+            .prdata(ch_prdata[31+32*7:32*7]),
             .pslverr(ch_pslverr[7]),
 
             //PERIPH
             .periph_tx_req(periph_tx_req),
-            .periph_tx_clr(ch_periph_tx_clr[67:37]),
+            .periph_tx_clr(ch_periph_tx_clr[31*7+31-1:31*7]),
             .periph_rx_req(periph_rx_req),
-            .periph_rx_clr(ch_periph_rx_clr[67:37]),
+            .periph_rx_clr(ch_periph_rx_clr[31*7+31-1:31*7]),
 
             //RD AXIM
             .rd_cmd_split(ch_rd_cmd_split[7]),
@@ -5817,21 +5892,21 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty7 (
             //RD CTRL
             .rd_burst_start(ch_rd_burst_start[7]),
             .rd_ready(ch_rd_ready[7]),
-            .rd_burst_addr(ch_rd_burst_addr[255:224]),
-            .rd_burst_size(ch_rd_burst_size[63:56]),
-            .rd_tokens(ch_rd_tokens[47:42]),
+            .rd_burst_addr(ch_rd_burst_addr[32-1+32*7:32*7]),
+            .rd_burst_size(ch_rd_burst_size[8-1+8*7:8*7]),
+            .rd_tokens(ch_rd_tokens[6-1+6*7:6*7]),
             .rd_port_num(ch_rd_port_num[7]),
-            .rd_periph_delay(ch_rd_periph_delay[23:21]),
+            .rd_periph_delay(ch_rd_periph_delay[3-1+3*7:3*7]),
             .rd_clr_valid(ch_rd_clr_valid[7]),
             
             //WR CTRL
             .wr_burst_start(ch_wr_burst_start[7]),
             .wr_ready(ch_wr_ready[7]),
-            .wr_burst_addr(ch_wr_burst_addr[255:224]),
-            .wr_burst_size(ch_wr_burst_size[63:56]),
-            .wr_tokens(ch_wr_tokens[47:42]),
+            .wr_burst_addr(ch_wr_burst_addr[32-1+32*7:32*7]),
+            .wr_burst_size(ch_wr_burst_size[8-1+8*7:8*7]),
+            .wr_tokens(ch_wr_tokens[6-1+6*7:6*7]),
             .wr_port_num(ch_wr_port_num[7]),
-            .wr_periph_delay(ch_wr_periph_delay[23:21]),
+            .wr_periph_delay(ch_wr_periph_delay[3-1+3*7:3*7]),
             .wr_clr_valid(ch_wr_clr_valid[7]),
 
             //FIFO
@@ -5841,7 +5916,7 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty7 (
                     .fifo_rd(ch_fifo_rd[7]),                   
                     .fifo_rsize(fifo_rsize),                   
                     .fifo_rd_valid(ch_fifo_rd_valid[7]),                   
-                    .fifo_rdata(ch_fifo_rdata[511:448]),       
+                    .fifo_rdata(ch_fifo_rdata[(64-1)+64*7:64*7]),       
                     .fifo_wr_ready(ch_fifo_wr_ready[7]),     
 
                 .joint_mode(joint_mode),
@@ -5856,7 +5931,7 @@ dma_axi64_core0_ch_empty dma_axi64_core0_ch_empty7 (
             .ch_start(ch_start[7]),
 
             //INT
-            .int_all_proc(ch_int_all_proc[7:7])
+            .int_all_proc(ch_int_all_proc[1-1+(1*7):1*7])
             );
           
 
@@ -5916,7 +5991,7 @@ module  dma_axi64_core0_channels_apb_mux (clk,reset,pclken,psel,penable,paddr,pr
    output          pslverr;
 
    output [7:0]      ch_psel;
-   input [224:0]      ch_prdata;
+   input [32*8-1:0]      ch_prdata;
    input [7:0]          ch_pslverr;
 
  
@@ -6008,8 +6083,8 @@ module dma_axi64_core0_channels_mux(ch_fifo_rd_valid,fifo_rd_valid,ch_fifo_rdata
    //data
    input [7:0]               ch_fifo_rd_valid;
    output               fifo_rd_valid;
-   input [8*63:0]    ch_fifo_rdata;
-   output [63:0]     fifo_rdata;
+   input [8*64-1:0]    ch_fifo_rdata;
+   output [64-1:0]     fifo_rdata;
    
    //periph
    input [8*31-1:0]           ch_periph_rx_clr;
@@ -6055,11 +6130,11 @@ module dma_axi64_core0_channels_mux(ch_fifo_rd_valid,fifo_rd_valid,ch_fifo_rdata
    output               rd_line_cmd;
    output               rd_go_next_line;
    input               rd_burst_start;
-   output [31:0]     rd_burst_addr;
-   output [7:0]    rd_burst_size;
-   output [5:0]   rd_tokens;
+   output [32-1:0]     rd_burst_addr;
+   output [8-1:0]    rd_burst_size;
+   output [6-1:0]   rd_tokens;
    output               rd_cmd_port;
-   output [2:0]   rd_periph_delay;    
+   output [3-1:0]   rd_periph_delay;    
    output               rd_clr_valid;
    input               rd_cmd_split;
    input               rd_cmd_line;
@@ -6069,11 +6144,11 @@ module dma_axi64_core0_channels_mux(ch_fifo_rd_valid,fifo_rd_valid,ch_fifo_rdata
    input [7:0]               ch_rd_line_cmd;
    input [7:0]               ch_rd_go_next_line;
    output [7:0]           ch_rd_burst_start;
-   input [8*31:0]    ch_rd_burst_addr;
-   input [56:0]   ch_rd_burst_size;
-   input [8*5:0]  ch_rd_tokens;
+   input [8*32-1:0]    ch_rd_burst_addr;
+   input [8*8-1:0]   ch_rd_burst_size;
+   input [8*6-1:0]  ch_rd_tokens;
    input [7:0]               ch_rd_port_num;
-   input [8*2:0]  ch_rd_periph_delay;
+   input [8*3-1:0]  ch_rd_periph_delay;
    input [7:0]               ch_rd_clr_valid;
    output [7:0]           ch_rd_cmd_split;
    output [7:0]           ch_rd_cmd_line;
@@ -6120,11 +6195,11 @@ module dma_axi64_core0_channels_mux(ch_fifo_rd_valid,fifo_rd_valid,ch_fifo_rdata
    output               wr_line_cmd;
    output               wr_go_next_line;
    input               wr_burst_start;
-   output [31:0]     wr_burst_addr;
-   output [7:0]    wr_burst_size;
-   output [5:0]   wr_tokens;
+   output [32-1:0]     wr_burst_addr;
+   output [8-1:0]    wr_burst_size;
+   output [6-1:0]   wr_tokens;
    output               wr_cmd_port;    
-   output [2:0]   wr_periph_delay;    
+   output [3-1:0]   wr_periph_delay;    
    output               wr_clr_valid;
    input               wr_cmd_split;
    output               wr_clr_stall; 
@@ -6133,11 +6208,11 @@ module dma_axi64_core0_channels_mux(ch_fifo_rd_valid,fifo_rd_valid,ch_fifo_rdata
    input [7:0]               ch_wr_line_cmd;
    input [7:0]               ch_wr_go_next_line;
    output [7:0]           ch_wr_burst_start;
-   input [8*31:0]    ch_wr_burst_addr;
-   input [56:0]   ch_wr_burst_size;
-   input [8*5:0]  ch_wr_tokens;
+   input [8*32-1:0]    ch_wr_burst_addr;
+   input [8*8-1:0]   ch_wr_burst_size;
+   input [8*6-1:0]  ch_wr_tokens;
    input [7:0]               ch_wr_port_num;
-   input [8*2:0]  ch_wr_periph_delay;
+   input [8*3-1:0]  ch_wr_periph_delay;
    input [7:0]               ch_wr_clr_valid;
    output [7:0]           ch_wr_cmd_split;
    input [7:0]               ch_wr_clr_stall; 
@@ -6491,16 +6566,17 @@ endmodule
 
 
   
-module prgen_or8
-  #(parameter WIDTH = 8)    
-   (
-    input [8*WIDTH-1:0]     ch_x,
-    output [WIDTH-1:0]      x
-    );
+module prgen_or8(ch_x,x);
+
+   parameter                  WIDTH      = 8;
+   
+   
+   input [8*WIDTH-1:0]     ch_x;
+   output [WIDTH-1:0]           x;
    
 
    assign x = 
-        ch_x[WIDTH-1:0] |
+        ch_x[WIDTH-1+WIDTH*0:WIDTH*0] |
         ch_x[WIDTH-1+WIDTH*1:WIDTH*1] |
         ch_x[WIDTH-1+WIDTH*2:WIDTH*2] |
         ch_x[WIDTH-1+WIDTH*3:WIDTH*3] |
@@ -6552,19 +6628,23 @@ endmodule
 
   
 
-module prgen_mux8
-  #(parameter WIDTH = 8)    
-   (
-    input [2:0]             sel,
-    input [8*WIDTH-1:0]     ch_x,
-    output reg [WIDTH-1:0]      x
-    );
+module prgen_mux8(sel,ch_x,x);
+
+   parameter                  WIDTH      = 8;
+   
+   
+   input [3-1:0]     sel;
+   input [8*WIDTH-1:0]     ch_x;
+   output [WIDTH-1:0]           x;
+
+   
+   reg [WIDTH-1:0]              x;
    
 
    always @(/*AUTOSENSE*/ch_x or sel)
      begin
     case (sel)                                  
-      3'd0 :x = ch_x[WIDTH-1:0];
+      3'd0 :x = ch_x[WIDTH-1+WIDTH*0:WIDTH*0];
       3'd1 :x = ch_x[WIDTH-1+WIDTH*1:WIDTH*1];
       3'd2 :x = ch_x[WIDTH-1+WIDTH*2:WIDTH*2];
       3'd3 :x = ch_x[WIDTH-1+WIDTH*3:WIDTH*3];
@@ -6622,13 +6702,17 @@ endmodule
 
   
 
-module prgen_demux8
-  #(parameter WIDTH = 8)    
-   (
-    input [2:0]             sel,
-    input [WIDTH-1:0]       x,
-    output reg [8*WIDTH-1:0] ch_x
-    );
+module prgen_demux8(sel,x,ch_x);
+
+   parameter                  WIDTH      = 8;
+   
+   
+   input [3-1:0]     sel;
+   input [WIDTH-1:0]           x;
+   output [8*WIDTH-1:0]    ch_x;
+
+   
+   reg [8*WIDTH-1:0]       ch_x;
 
    
 
@@ -6637,7 +6721,7 @@ module prgen_demux8
     ch_x = {8*WIDTH{1'b0}};
     
     case (sel)                                  
-      3'd0 : ch_x[WIDTH-1:0] = x;
+      3'd0 : ch_x[WIDTH-1+WIDTH*0:WIDTH*0] = x;
       3'd1 : ch_x[WIDTH-1+WIDTH*1:WIDTH*1] = x;
       3'd2 : ch_x[WIDTH-1+WIDTH*2:WIDTH*2] = x;
       3'd3 : ch_x[WIDTH-1+WIDTH*3:WIDTH*3] = x;
@@ -6735,10 +6819,10 @@ module dma_axi64_core0_ch (clk,reset,scan_en,pclk,clken,pclken,psel,penable,padd
    
    input             load_wr;
    input [1:0]             load_wr_cycle;
-   input [63:0]    load_wdata;
+   input [64-1:0]    load_wdata;
    output             load_req_in_prog;
    
-   output            int_all_proc;
+   output [1-1:0]    int_all_proc;
    input              ch_start;
    output             idle;
    output             ch_active;
@@ -6752,27 +6836,27 @@ module dma_axi64_core0_ch (clk,reset,scan_en,pclk,clken,pclken,psel,penable,padd
    
    output             rd_ready;
    input             rd_burst_start;
-   output [31:0]   rd_burst_addr;
-   output [7:0]  rd_burst_size;
-   output [5:0] rd_tokens;
+   output [32-1:0]   rd_burst_addr;
+   output [8-1:0]  rd_burst_size;
+   output [6-1:0] rd_tokens;
    output             rd_port_num;
-   output [2:0] rd_periph_delay;
+   output [3-1:0] rd_periph_delay;
    output             rd_clr_valid;
    input             rd_transfer;
-   input [3:0]    rd_transfer_size;
+   input [4-1:0]    rd_transfer_size;
    output             rd_clr_stall;
    
    output             wr_ready;
    input             wr_burst_start;
-   output [31:0]   wr_burst_addr;
-   output [7:0]  wr_burst_size;
-   output [5:0] wr_tokens;
+   output [32-1:0]   wr_burst_addr;
+   output [8-1:0]  wr_burst_size;
+   output [6-1:0] wr_tokens;
    output             wr_port_num;
-   output [2:0] wr_periph_delay; 
+   output [3-1:0] wr_periph_delay; 
    output             wr_clr_valid;
    input             wr_transfer;
-   input [3:0]    wr_transfer_size;
-   input [3:0]    wr_next_size;
+   input [4-1:0]    wr_transfer_size;
+   input [4-1:0]    wr_next_size;
    output             wr_clr_stall;
    output             wr_incr;
    
@@ -6782,14 +6866,14 @@ module dma_axi64_core0_ch (clk,reset,scan_en,pclk,clken,pclken,psel,penable,padd
    input             wdt_timeout;
 
    input             fifo_wr;
-   input [63:0]    fifo_wdata;
-   input [3:0]    fifo_wsize;
+   input [64-1:0]    fifo_wdata;
+   input [4-1:0]    fifo_wsize;
    
    input             fifo_rd;
-   input [3:0]    fifo_rsize;
+   input [4-1:0]    fifo_rsize;
    
    output             fifo_rd_valid;
-   output [63:0]   fifo_rdata;
+   output [64-1:0]   fifo_rdata;
    output             fifo_wr_ready;
    
    input             joint_mode;
@@ -6805,34 +6889,34 @@ module dma_axi64_core0_ch (clk,reset,scan_en,pclk,clken,pclken,psel,penable,padd
 
    
    //outputs of reg
-   wire [31:0]     load_addr;
+   wire [32-1:0]     load_addr;
    wire             load_in_prog;
    wire             load_req_in_prog;
    wire             ch_update;
-   wire [31:0]     rd_start_addr;
-   wire [31:0]     wr_start_addr;
-   wire [9:0]     x_size;
-   wire [10-7:0]         y_size;
+   wire [32-1:0]     rd_start_addr;
+   wire [32-1:0]     wr_start_addr;
+   wire [10-1:0]     x_size;
+   wire [10-8-1:0]         y_size;
    wire             block;
    wire             joint;
-   wire [11:0]   frame_width;
-   wire [2:0]     width_align;
-   wire [2:0]   rd_periph_delay; 
-   wire [2:0]   wr_periph_delay;
+   wire [12-1:0]   frame_width;
+   wire [3-1:0]     width_align;
+   wire [3-1:0]   rd_periph_delay; 
+   wire [3-1:0]   wr_periph_delay;
    wire             rd_periph_block;
    wire             wr_periph_block;
-   wire [5:0]   rd_tokens;
-   wire [5:0]   wr_tokens;
+   wire [6-1:0]   rd_tokens;
+   wire [6-1:0]   wr_tokens;
    wire             rd_port_num;
    wire             wr_port_num;
-   wire [3:0]     rd_outs_max;
-   wire [3:0]     wr_outs_max;    
-   wire [11:0]    rd_wait_limit;
-   wire [11:0]    wr_wait_limit;
+   wire [4-1:0]     rd_outs_max;
+   wire [4-1:0]     wr_outs_max;    
+   wire [12-1:0]    rd_wait_limit;
+   wire [12-1:0]    wr_wait_limit;
    wire             rd_incr;
    wire             wr_incr;
-   wire [7:0]    rd_burst_max_size;
-   wire [7:0]    wr_burst_max_size;
+   wire [8-1:0]    rd_burst_max_size;
+   wire [8-1:0]    wr_burst_max_size;
    wire [4:0]             rd_periph_num;
    wire [4:0]             wr_periph_num;
    wire             wr_outstanding;
@@ -6844,26 +6928,26 @@ module dma_axi64_core0_ch (clk,reset,scan_en,pclk,clken,pclken,psel,penable,padd
    wire [1:0]             end_swap;
    
    //outputs of rd offsets
-   wire [9:0]     rd_x_offset;
-   wire [10-7:0]    rd_y_offset;        
-   wire [9:0]     rd_x_remain;
-   wire [10-7:0]    rd_clr_remain;
+   wire [10-1:0]     rd_x_offset;
+   wire [10-8-1:0]    rd_y_offset;        
+   wire [10-1:0]     rd_x_remain;
+   wire [10-8-1:0]    rd_clr_remain;
    wire             rd_ch_end;
    wire             rd_go_next_line;
    wire             rd_line_empty;
    wire             rd_empty;
-   wire [2:0]     rd_align;
+   wire [3-1:0]     rd_align;
    
    //outputs of wr offsets
-   wire [9:0]     wr_x_offset;
-   wire [10-7:0]    wr_y_offset;        
-   wire [9:0]     wr_x_remain;
-   wire [10-7:0]    wr_clr_remain;
+   wire [10-1:0]     wr_x_offset;
+   wire [10-8-1:0]    wr_y_offset;        
+   wire [10-1:0]     wr_x_remain;
+   wire [10-8-1:0]    wr_clr_remain;
    wire             wr_ch_end;
    wire             wr_go_next_line;
    wire             wr_line_empty;
    wire             wr_empty;
-   wire [2:0]     wr_align;
+   wire [3-1:0]     wr_align;
    wire             wr_ch_end_pre;
    reg                 wr_ch_end_reg;
 
@@ -6874,7 +6958,7 @@ module dma_axi64_core0_ch (clk,reset,scan_en,pclk,clken,pclken,psel,penable,padd
    //outputs of outs rd
    wire             rd_cmd_outs;
    wire             rd_clr_outs;
-   wire [3:0]     rd_outs;
+   wire [4-1:0]     rd_outs;
    wire             rd_outs_empty;
    wire             outs_empty;
    wire             rd_stall;
@@ -6883,7 +6967,7 @@ module dma_axi64_core0_ch (clk,reset,scan_en,pclk,clken,pclken,psel,penable,padd
    //outputs of outs wr
    wire             wr_cmd_outs;
    wire             wr_clr_outs;
-   wire [3:0]     wr_outs;
+   wire [4-1:0]     wr_outs;
    wire             wr_outs_empty;
    wire             wr_stall;
    wire             wr_stall_pre;
@@ -6891,8 +6975,8 @@ module dma_axi64_core0_ch (clk,reset,scan_en,pclk,clken,pclken,psel,penable,padd
    
    //outputs of calc rd
    wire             rd_burst_last;
-   wire [31:0]     rd_burst_addr;
-   wire [7:0]    rd_burst_size;
+   wire [32-1:0]     rd_burst_addr;
+   wire [8-1:0]    rd_burst_size;
    wire             rd_burst_ready;
    wire             rd_joint_ready;
    wire             rd_joint_flush;
@@ -6900,8 +6984,8 @@ module dma_axi64_core0_ch (clk,reset,scan_en,pclk,clken,pclken,psel,penable,padd
    
    //outputs of calc wr
    wire             wr_burst_last;             
-   wire [31:0]     wr_burst_addr;
-   wire [7:0]    wr_burst_size;
+   wire [32-1:0]     wr_burst_addr;
+   wire [8-1:0]    wr_burst_size;
    wire             wr_burst_ready;
    wire             wr_single; 
    wire             wr_joint_ready;
@@ -7208,7 +7292,7 @@ module dma_axi64_core0_ch (clk,reset,scan_en,pclk,clken,pclken,psel,penable,padd
              .clr_line(rd_clr_line),
              .line_empty(rd_line_empty),
              .empty(rd_empty),
-             .start_align(rd_start_addr[2:0]),
+             .start_align(rd_start_addr[3-1:0]),
              .width_align(width_align),
              .align(wr_align) //rd address writes to fifo
              );
@@ -7234,7 +7318,7 @@ module dma_axi64_core0_ch (clk,reset,scan_en,pclk,clken,pclken,psel,penable,padd
              .clr_line(wr_clr_line),
              .line_empty(wr_line_empty),
              .empty(wr_empty),
-             .start_align(wr_start_addr[2:0]),
+             .start_align(wr_start_addr[3-1:0]),
              .width_align(width_align),
              .align(rd_align) //wr address reads from fifo
              );
@@ -7310,7 +7394,7 @@ module dma_axi64_core0_ch (clk,reset,scan_en,pclk,clken,pclken,psel,penable,padd
               .start_addr(rd_start_addr),
               .incr(rd_incr),
               .frame_width(frame_width),
-              .x_size(x_size[7:0]),
+              .x_size(x_size[8-1:0]),
               .x_remain(rd_x_remain),
               .fifo_remain(rd_gap),
               .fifo_wr_ready(fifo_wr_ready),
@@ -7352,7 +7436,7 @@ module dma_axi64_core0_ch (clk,reset,scan_en,pclk,clken,pclken,psel,penable,padd
               .start_addr(wr_start_addr),
               .incr(wr_incr),
               .frame_width(frame_width),
-              .x_size(x_size[7:0]),
+              .x_size(x_size[8-1:0]),
               .x_remain(wr_x_remain),
               .fifo_wr_ready(1'b0),
               .fifo_remain(wr_fullness),
@@ -7482,7 +7566,11 @@ endmodule
 
 
 
-module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,pwdata,prdata,pslverr,timeout_bus,wdt_timeout,wdt_ch_num,load_addr,load_in_prog,load_req_in_prog,load_wr,load_wr_cycle,load_wdata,load_cmd,rd_ch_end,wr_ch_end,wr_clr_last,rd_slverr,rd_decerr,wr_slverr,wr_decerr,int_all_proc,ch_rd_active,ch_wr_active,ch_in_prog,rd_x_offset,rd_y_offset,wr_x_offset,wr_y_offset,wr_fullness,rd_gap,fifo_overflow,fifo_underflow,ch_update,rd_start_addr,wr_start_addr,x_size,y_size,rd_burst_max_size,wr_burst_max_size,block,allow_line_cmd,frame_width,width_align,rd_periph_delay,rd_periph_block,wr_periph_delay,wr_periph_block,rd_tokens,wr_tokens,rd_port_num,wr_port_num,rd_outs_max,wr_outs_max,rd_outs,wr_outs,outs_empty,rd_wait_limit,wr_wait_limit,rd_incr,wr_incr,rd_periph_num,wr_periph_num,wr_outstanding,rd_outstanding,ch_retry_wait,joint_mode,joint_remote,joint_cross,page_cross,joint,joint_flush,end_swap);
+  
+module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,pwdata,prdata,pslverr,timeout_bus,wdt_timeout,ch_start,load_addr,load_in_prog,load_req_in_prog,load_wr,load_wr_cycle,load_wdata,load_cmd,rd_ch_end,wr_ch_end,wr_clr_last,rd_slverr,rd_decerr,wr_slverr,wr_decerr,int_all_proc,ch_rd_active,ch_wr_active,ch_in_prog,rd_x_offset,rd_y_offset,wr_x_offset,wr_y_offset,wr_fullness,rd_gap,fifo_overflow,fifo_underflow,ch_update,rd_start_addr,wr_start_addr,x_size,y_size,rd_burst_max_size,wr_burst_max_size,block,allow_line_cmd,frame_width,width_align,rd_periph_delay,rd_periph_block,wr_periph_delay,wr_periph_block,rd_tokens,wr_tokens,rd_port_num,wr_port_num,rd_outs_max,wr_outs_max,rd_outs,wr_outs,outs_empty,rd_wait_limit,wr_wait_limit,rd_incr,wr_incr,rd_periph_num,wr_periph_num,wr_outstanding,rd_outstanding,ch_retry_wait,joint_mode,joint_remote,joint_cross,page_cross,joint,joint_flush,end_swap);
+
+   parameter              DATA_SHIFT    = 0 ? 32 : 0;
+   
    
    input                  clk;
    input              clken;
@@ -7500,14 +7588,14 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
    input [4:0]              timeout_bus;
    input              wdt_timeout;
 
-   input [2:0]              wdt_ch_num;
+   input              ch_start;
    
-   output [31:0]      load_addr;
+   output [32-1:0]      load_addr;
    output              load_in_prog;
    output              load_req_in_prog;
    input              load_wr;
    input [1:0]              load_wr_cycle;
-   input [63:0]      load_wdata;
+   input [64-1:0]      load_wdata;
    input              load_cmd;
    
    input              rd_ch_end;
@@ -7517,48 +7605,48 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
    input              rd_decerr;
    input              wr_slverr;
    input              wr_decerr;
-   output                 int_all_proc;
+   output [1-1:0]         int_all_proc;
    
    output              ch_rd_active;
    output              ch_wr_active;
    output              ch_in_prog;
 
-   input [9:0]      rd_x_offset;
-   input [10-7:0]          rd_y_offset;    
-   input [9:0]      wr_x_offset;
-   input [10-7:0]          wr_y_offset;    
+   input [10-1:0]      rd_x_offset;
+   input [10-8-1:0]          rd_y_offset;    
+   input [10-1:0]      wr_x_offset;
+   input [10-8-1:0]          wr_y_offset;    
    input [5:0]          wr_fullness;
    input [5:0]          rd_gap;
    input              fifo_overflow;
    input              fifo_underflow;
    
    output              ch_update;
-   output [31:0]      rd_start_addr;
-   output [31:0]      wr_start_addr;
-   output [9:0]      x_size;
-   output [10-7:0]          y_size;
+   output [32-1:0]      rd_start_addr;
+   output [32-1:0]      wr_start_addr;
+   output [10-1:0]      x_size;
+   output [10-8-1:0]          y_size;
    
-   output [7:0]      rd_burst_max_size;
-   output [7:0]      wr_burst_max_size;
+   output [8-1:0]      rd_burst_max_size;
+   output [8-1:0]      wr_burst_max_size;
    output              block;
    input              allow_line_cmd;
-   output [11:0]      frame_width;
-   output [2:0]      width_align;
-   output [2:0]      rd_periph_delay;
+   output [12-1:0]      frame_width;
+   output [3-1:0]      width_align;
+   output [3-1:0]      rd_periph_delay;
    output              rd_periph_block;
-   output [2:0]      wr_periph_delay;
+   output [3-1:0]      wr_periph_delay;
    output              wr_periph_block;
-   output [5:0]      rd_tokens;
-   output [5:0]      wr_tokens;
+   output [6-1:0]      rd_tokens;
+   output [6-1:0]      wr_tokens;
    output              rd_port_num;
    output              wr_port_num;
-   output [3:0]      rd_outs_max;
-   output [3:0]      wr_outs_max;
-   input [3:0]      rd_outs;
-   input [3:0]      wr_outs;
+   output [4-1:0]      rd_outs_max;
+   output [4-1:0]      wr_outs_max;
+   input [4-1:0]      rd_outs;
+   input [4-1:0]      wr_outs;
    input              outs_empty;
-   output [11:0]      rd_wait_limit;
-   output [11:0]      wr_wait_limit;
+   output [12-1:0]      rd_wait_limit;
+   output [12-1:0]      wr_wait_limit;
    output              rd_incr;
    output              wr_incr;
    output [4:0]          rd_periph_num;
@@ -7573,7 +7661,77 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
    output              joint;
    input              joint_flush;
    output [1:0]          end_swap;
-    
+      
+   
+/////////////////////////////////////////////////////////////////////
+////                                                             ////
+////  Author: Eyal Hochberg                                      ////
+////          eyal@provartec.com                                 ////
+////                                                             ////
+////  Downloaded from: http://www.opencores.org                  ////
+/////////////////////////////////////////////////////////////////////
+////                                                             ////
+//// Copyright (C) 2010 Provartec LTD                            ////
+//// www.provartec.com                                           ////
+//// info@provartec.com                                          ////
+////                                                             ////
+//// This source file may be used and distributed without        ////
+//// restriction provided that this copyright statement is not   ////
+//// removed from the file and that any derivative work contains ////
+//// the original copyright notice and the associated disclaimer.////
+////                                                             ////
+//// This source file is free software; you can redistribute it  ////
+//// and/or modify it under the terms of the GNU Lesser General  ////
+//// Public License as published by the Free Software Foundation.////
+////                                                             ////
+//// This source is distributed in the hope that it will be      ////
+//// useful, but WITHOUT ANY WARRANTY; without even the implied  ////
+//// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR     ////
+//// PURPOSE.  See the GNU Lesser General Public License for more////
+//// details. http://www.gnu.org/licenses/lgpl.html              ////
+////                                                             ////
+/////////////////////////////////////////////////////////////////////
+//---------------------------------------------------------
+//-- File generated by RobustVerilog parser
+//-- Version: 1.0
+//-- Invoked Fri Mar 25 23:36:56 2011
+//--
+//-- Source file: dma_ch_reg_params.v
+//---------------------------------------------------------
+
+
+  
+   parameter              CMD_LINE0      = 8'h00;
+   parameter              CMD_LINE1      = 8'h04;
+   parameter              CMD_LINE2      = 8'h08;
+   parameter              CMD_LINE3      = 8'h0C;
+   parameter              STATIC_LINE0   = 8'h10;
+   parameter              STATIC_LINE1   = 8'h14;
+   parameter              STATIC_LINE2   = 8'h18;
+   parameter              STATIC_LINE3   = 8'h1C;
+   parameter              STATIC_LINE4   = 8'h20;
+   
+   parameter              RESTRICT       = 8'h2C;
+   parameter              RD_OFFSETS     = 8'h30;
+   parameter              WR_OFFSETS     = 8'h34;
+   parameter              FIFO_FULLNESS  = 8'h38;
+   parameter              CMD_OUTS       = 8'h3C;
+   
+   parameter              CH_ENABLE      = 8'h40;
+   parameter              CH_START       = 8'h44;
+   parameter              CH_ACTIVE      = 8'h48;
+   parameter              CH_CMD_COUNTER = 8'h50;
+                 
+   parameter               INT_RAWSTAT    = 8'hA0;
+   parameter               INT_CLEAR      = 8'hA4;
+   parameter               INT_ENABLE     = 8'hA8;
+   parameter               INT_STATUS     = 8'hAC;
+
+
+
+   
+  parameter     INT_NUM = 13; 
+   
    
    wire [7:0]              gpaddr;
    wire              gpwrite;
@@ -7591,13 +7749,13 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
    reg                  load_req_in_prog_reg;
    
    //current cmd
-   reg [31:0]          rd_start_addr;
-   reg [31:0]          wr_start_addr;
-   reg [9:0]          buff_size;
-   wire [9:0]      x_size;
-   wire [10-7:0]          y_size;
+   reg [32-1:0]          rd_start_addr;
+   reg [32-1:0]          wr_start_addr;
+   reg [10-1:0]          buff_size;
+   wire [10-1:0]      x_size;
+   wire [10-8-1:0]          y_size;
 
-   reg [11:0]      frame_width_reg;  
+   reg [12-1:0]      frame_width_reg;  
    reg                  block_reg;
    reg                  joint_reg;
    reg                  simple_mem;
@@ -7608,13 +7766,13 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
    reg [1:0]              end_swap_reg;
    
    //static
-   wire [7:0]      rd_burst_max_size_rd;
-   wire [7:0]      rd_burst_max_size_pre;
-   reg [7:0]      rd_burst_max_size_reg;
-   reg [2:0]      rd_periph_delay_reg;
+   wire [8-1:0]      rd_burst_max_size_rd;
+   wire [8-1:0]      rd_burst_max_size_pre;
+   reg [8-1:0]      rd_burst_max_size_reg;
+   reg [3-1:0]      rd_periph_delay_reg;
    reg                  rd_periph_block_reg;
-   reg [5:0]      rd_tokens_reg;
-   reg [3:0]          rd_outs_max_reg;
+   reg [6-1:0]      rd_tokens_reg;
+   reg [4-1:0]          rd_outs_max_reg;
    reg                  rd_port_num_reg;
    reg                  cmd_port_num_reg;
    wire              rd_port_num_cfg;
@@ -7623,21 +7781,21 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
    wire              rd_outstanding_cfg;
    reg                  rd_incr_reg;
    reg [4:0]              rd_periph_num_reg;
-   reg [11:4]      rd_wait_limit_reg;
+   reg [12-1:4]      rd_wait_limit_reg;
    
-   wire [7:0]      wr_burst_max_size_rd;
-   wire [7:0]      wr_burst_max_size_pre;
-   reg [7:0]      wr_burst_max_size_reg;
-   reg [2:0]      wr_periph_delay_reg;
+   wire [8-1:0]      wr_burst_max_size_rd;
+   wire [8-1:0]      wr_burst_max_size_pre;
+   reg [8-1:0]      wr_burst_max_size_reg;
+   reg [3-1:0]      wr_periph_delay_reg;
    reg                  wr_periph_block_reg;
-   reg [5:0]      wr_tokens_reg;
-   reg [3:0]          wr_outs_max_reg;
+   reg [6-1:0]      wr_tokens_reg;
+   reg [4-1:0]          wr_outs_max_reg;
    reg                  wr_port_num_reg;
    reg                  wr_outstanding_reg;
    wire              wr_outstanding_cfg;
    reg                  wr_incr_reg;
    reg [4:0]              wr_periph_num_reg;
-   reg [11:4]      wr_wait_limit_reg;
+   reg [12-1:4]      wr_wait_limit_reg;
 
    wire              rd_allow_full_fifo;
    wire              wr_allow_full_fifo;
@@ -7649,14 +7807,14 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
       
    reg                  cmd_set_int_reg;
    reg                  cmd_last_reg;
-   reg [31:2]          cmd_next_addr_reg;
-   reg [11:0]      cmd_counter_reg;    
-   reg [3:0]      int_counter_reg;
+   reg [32-1:2]          cmd_next_addr_reg;
+   reg [12-1:0]      cmd_counter_reg;    
+   reg [4-1:0]      int_counter_reg;
    wire              cmd_set_int;
    wire              cmd_last;
-   wire [31:2]      cmd_next_addr;
-   wire [11:0]      cmd_counter;
-   wire [3:0]      int_counter;
+   wire [32-1:2]      cmd_next_addr;
+   wire [12-1:0]      cmd_counter;
+   wire [4-1:0]      int_counter;
    
    //interrupt
    wire              ch_end;
@@ -7665,10 +7823,10 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
    wire              ch_end_int;
    wire [2:0]              int_proc_num;              
    reg [2:0]              int_proc_num_reg;    
-   wire [11:0]          int_bus;    
-   wire [11:0]          int_rawstat;
-   reg [11:0]          int_enable;         
-   wire [11:0]          int_status;
+   wire [INT_NUM-1:0]          int_bus;    
+   wire [INT_NUM-1:0]          int_rawstat;
+   reg [INT_NUM-1:0]          int_enable;         
+   wire [INT_NUM-1:0]          int_status;
    wire [7:0]                    int_all_proc_bus;
    
    wire              wr_cmd_line0;
@@ -7746,20 +7904,20 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
 
    
    //---------------------- Write Operations ----------------------------------
-   assign             wr_cmd_line0      = gpwrite & gpaddr == 8'h00;
-   assign             wr_cmd_line1      = gpwrite & gpaddr == 8'h04;
-   assign             wr_cmd_line2      = gpwrite & gpaddr == 8'h08;
-   assign             wr_cmd_line3      = gpwrite & gpaddr == 8'h0C;
-   assign             wr_static_line0   = gpwrite & gpaddr == 8'h10;
-   assign             wr_static_line1   = gpwrite & gpaddr == 8'h14;
-   assign             wr_static_line2   = gpwrite & gpaddr == 8'h18;
-   assign             wr_static_line3   = gpwrite & gpaddr == 8'h1C;
-   assign             wr_static_line4   = gpwrite & gpaddr == 8'h20;
-   assign             wr_ch_enable      = gpwrite & gpaddr == 8'h40;
-   assign             wr_ch_start       = (gpwrite & gpaddr == 8'h44) | 8'h44;
-   assign             wr_int_rawstat    = gpwrite & gpaddr == 8'hA0;
-   assign             wr_int_clear      = gpwrite & gpaddr == 8'hA4;
-   assign             wr_int_enable     = gpwrite & gpaddr == 8'hA8;
+   assign             wr_cmd_line0      = gpwrite & gpaddr == CMD_LINE0;
+   assign             wr_cmd_line1      = gpwrite & gpaddr == CMD_LINE1;
+   assign             wr_cmd_line2      = gpwrite & gpaddr == CMD_LINE2;
+   assign             wr_cmd_line3      = gpwrite & gpaddr == CMD_LINE3;
+   assign             wr_static_line0   = gpwrite & gpaddr == STATIC_LINE0;
+   assign             wr_static_line1   = gpwrite & gpaddr == STATIC_LINE1;
+   assign             wr_static_line2   = gpwrite & gpaddr == STATIC_LINE2;
+   assign             wr_static_line3   = gpwrite & gpaddr == STATIC_LINE3;
+   assign             wr_static_line4   = gpwrite & gpaddr == STATIC_LINE4;
+   assign             wr_ch_enable      = gpwrite & gpaddr == CH_ENABLE;
+   assign             wr_ch_start       = (gpwrite & gpaddr == CH_START) | ch_start;
+   assign             wr_int_rawstat    = gpwrite & gpaddr == INT_RAWSTAT;
+   assign             wr_int_clear      = gpwrite & gpaddr == INT_CLEAR;
+   assign             wr_int_enable     = gpwrite & gpaddr == INT_ENABLE;
    
    assign             load_wr_cycle0 = load_wr & load_wr_cycle == 2'd0;
    assign             load_wr_cycle1 = load_wr & load_wr_cycle == 2'd1;
@@ -7783,11 +7941,11 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
        end
      else if (wr_cmd_line0)
        begin
-      rd_start_addr <= #1 pwdata[31:0];
+      rd_start_addr <= #1 pwdata[32-1:0];
        end
      else if (load_wr0)
        begin
-      rd_start_addr <= #1 load_wdata[31:0];
+      rd_start_addr <= #1 load_wdata[32-1:0];
        end
    
    always @(posedge clk or posedge reset)
@@ -7797,11 +7955,11 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
        end
      else if (wr_cmd_line1)
        begin
-      wr_start_addr <= #1 pwdata[31:0];
+      wr_start_addr <= #1 pwdata[32-1:0];
        end
      else if (load_wr1)
        begin
-      wr_start_addr <= #1 load_wdata[63:32];
+      wr_start_addr <= #1 load_wdata[32+32-DATA_SHIFT-1:32-DATA_SHIFT];
        end
 
    always @(posedge clk or posedge reset)
@@ -7811,11 +7969,11 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
        end
      else if (wr_cmd_line2)
        begin
-      buff_size <= #1 pwdata[9:0];
+      buff_size <= #1 pwdata[10-1:0];
        end
      else if (load_wr2)
        begin
-      buff_size <= #1 load_wdata[9:0];
+      buff_size <= #1 load_wdata[10-1:0];
        end
 
    always @(posedge clk or posedge reset)
@@ -7829,13 +7987,13 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
        begin
       cmd_set_int_reg   <= #1 pwdata[0];
       cmd_last_reg      <= #1 pwdata[1];
-      cmd_next_addr_reg <= #1 pwdata[31:2];
+      cmd_next_addr_reg <= #1 pwdata[32-1:2];
        end
      else if (load_wr3)
        begin
-      cmd_set_int_reg   <= #1 load_wdata[32];
-      cmd_last_reg      <= #1 load_wdata[33];
-      cmd_next_addr_reg <= #1 load_wdata[32+32-1:34];
+      cmd_set_int_reg   <= #1 load_wdata[32-DATA_SHIFT];
+      cmd_last_reg      <= #1 load_wdata[33-DATA_SHIFT];
+      cmd_next_addr_reg <= #1 load_wdata[32+32-DATA_SHIFT-1:34-DATA_SHIFT];
        end
 
    always @(posedge clk or posedge reset)
@@ -7863,8 +8021,8 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
    assign int_counter   = int_counter_reg;
    
    
-   assign x_size = block ? {{10-8{1'b0}}, buff_size[7:0]} : buff_size;
-   assign y_size = block ? buff_size[9:8] : 'd1;
+   assign x_size = block ? {{10-8{1'b0}}, buff_size[8-1:0]} : buff_size;
+   assign y_size = block ? buff_size[10-1:8] : 'd1;
    
    
    always @(posedge clk or posedge reset)
@@ -7877,9 +8035,9 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
        end
      else if (wr_static_line0)
        begin
-            rd_burst_max_size_reg <= #1 pwdata[7:0];
-  rd_tokens_reg         <= #1 pwdata[21:16]; 
-     rd_outs_max_reg       <= #1 pwdata[27:24]; 
+            rd_burst_max_size_reg <= #1 pwdata[8-1:0];
+  rd_tokens_reg         <= #1 pwdata[6+16-1:16]; 
+     rd_outs_max_reg       <= #1 pwdata[4+24-1:24]; 
             rd_incr_reg           <= #1 pwdata[31];
        end
    
@@ -7894,9 +8052,9 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
        end
      else if (wr_static_line1)
        begin
-      wr_burst_max_size_reg <= #1 pwdata[7:0];
-  wr_tokens_reg         <= #1 pwdata[21:16]; 
-     wr_outs_max_reg       <= #1 pwdata[27:24]; 
+      wr_burst_max_size_reg <= #1 pwdata[8-1:0];
+  wr_tokens_reg         <= #1 pwdata[6+16-1:16]; 
+     wr_outs_max_reg       <= #1 pwdata[4+24-1:24]; 
       wr_incr_reg           <= #1 pwdata[31];
        end
 
@@ -7995,7 +8153,7 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
    assign frame_width = {12{1'b0}};
    assign block       = 1'b0;
    
-   assign width_align = frame_width[2:0];
+   assign width_align = frame_width[3-1:0];
    
 
    assign rd_wait_limit = {12-4{1'b0}};
@@ -8014,9 +8172,9 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
      else if (wr_static_line4)
        begin
           rd_periph_num_reg   <= #1 pwdata[4:0];
-          rd_periph_delay_reg <= #1 pwdata[10:8];
+          rd_periph_delay_reg <= #1 pwdata[3+8-1:8];
           wr_periph_num_reg   <= #1 pwdata[20:16];
-          wr_periph_delay_reg <= #1 pwdata[26:24];
+          wr_periph_delay_reg <= #1 pwdata[3+24-1:24];
        end
 
    assign rd_periph_num   = rd_periph_num_reg;
@@ -8102,14 +8260,14 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
    
    prgen_delay #(1) delay_ch_update (.clk(clk), .reset(reset), .din(ch_update), .dout(ch_update_d));
 
-   assign load_req       = (8'h40 & ch_end & (~cmd_last)) | (ch_update & (x_size == 'd0));
-   assign load_addr      = {cmd_next_addr[31:2], 2'b00};
+   assign load_req       = (ch_enable & ch_end & (~cmd_last)) | (ch_update & (x_size == 'd0));
+   assign load_addr      = {cmd_next_addr[32-1:2], 2'b00};
 
    assign ch_end         = rd_ch_end & wr_ch_end & wr_clr_last & (~ch_retry_wait);
 
-   assign ch_end_int     = 8'h40 & ch_end & cmd_set_int;
-   assign ch_rd_active   = 8'h40 & (rd_ch_in_prog | load_req_in_prog);
-   assign ch_wr_active   = 8'h40 & wr_ch_in_prog;
+   assign ch_end_int     = ch_enable & ch_end & cmd_set_int;
+   assign ch_rd_active   = ch_enable & (rd_ch_in_prog | load_req_in_prog);
+   assign ch_wr_active   = ch_enable & wr_ch_in_prog;
    
    assign ch_end_set     = |int_counter;
    assign ch_end_clear   = wr_int_clear & pwdata[0];
@@ -8122,7 +8280,7 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
    
    
    
-   assign int_bus        = {13{clken}} & {
+   assign int_bus        = {INT_NUM{clken}} & {
                            wdt_timeout,
                            timeout_aw,
                            timeout_w,
@@ -8138,12 +8296,12 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
                            ch_end_set
                            };
 
-   prgen_rawstat #(13) rawstat(
+   prgen_rawstat #(INT_NUM) rawstat(
                     .clk(clk),
                     .reset(reset),
                     .clear(wr_int_clear),
                     .write(wr_int_rawstat),
-                    .pwdata(pwdata[11:0]),
+                    .pwdata(pwdata[INT_NUM-1:0]),
                     .int_bus(int_bus),
                     .rawstat(int_rawstat)
                     );
@@ -8151,9 +8309,9 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
    
    always @(posedge clk or posedge reset)
      if (reset)
-       int_enable <= #1 {13{1'b1}};
+       int_enable <= #1 {INT_NUM{1'b1}};
      else if (wr_int_enable)
-       int_enable <= #1 pwdata[11:0];
+       int_enable <= #1 pwdata[INT_NUM-1:0];
 
    assign int_status = int_rawstat & int_enable;
 
@@ -8172,7 +8330,7 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
    //always @(/*AUTOSENSE*/) - no AUTOSENSE because of include file  
    always @(allow_full_burst or allow_full_fifo
         or allow_joint_burst or allow_line_cmd or auto_retry
-        or block or buff_size or 8'h40 or ch_rd_active
+        or block or buff_size or ch_enable or ch_rd_active
         or ch_wr_active or cmd_counter or cmd_last
         or cmd_next_addr or cmd_port_num or cmd_set_int
         or end_swap or frame_width or int_counter or int_enable
@@ -8212,29 +8370,29 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
     rd_int_status    = {32{1'b0}};
 
     
-    rd_cmd_line0[31:0]           = rd_start_addr;
+    rd_cmd_line0[32-1:0]           = rd_start_addr;
     
-    rd_cmd_line1[31:0]           = wr_start_addr;
+    rd_cmd_line1[32-1:0]           = wr_start_addr;
     
-    rd_cmd_line2[9:0]           = buff_size;
+    rd_cmd_line2[10-1:0]           = buff_size;
     
     rd_cmd_line3[0]                       = cmd_set_int;
     rd_cmd_line3[1]                       = cmd_last;
-    rd_cmd_line3[31:2]           = cmd_next_addr;
+    rd_cmd_line3[32-1:2]           = cmd_next_addr;
     
-    rd_static_line0[7:0]       = rd_burst_max_size_rd;
-    rd_static_line0[21:16]  = rd_tokens;
-    rd_static_line0[27:24]    = rd_outs_max;
+    rd_static_line0[8-1:0]       = rd_burst_max_size_rd;
+    rd_static_line0[6+16-1:16]  = rd_tokens;
+    rd_static_line0[4+24-1:24]    = rd_outs_max;
     rd_static_line0[30]                   = rd_outstanding_cfg;
     rd_static_line0[31]                   = rd_incr;
     
-    rd_static_line1[7:0]       = wr_burst_max_size_rd;
-    rd_static_line1[21:16]  = wr_tokens;
-    rd_static_line1[27:24]    = wr_outs_max;
+    rd_static_line1[8-1:0]       = wr_burst_max_size_rd;
+    rd_static_line1[6+16-1:16]  = wr_tokens;
+    rd_static_line1[4+24-1:24]    = wr_outs_max;
     rd_static_line1[30]                   = wr_outstanding_cfg;
     rd_static_line1[31]                   = wr_incr;
     
-    rd_static_line2[11:0]      = frame_width;
+    rd_static_line2[12-1:0]      = frame_width;
     rd_static_line2[15]                   = block;
     rd_static_line2[16]                   = joint_reg;
     rd_static_line2[17]                   = auto_retry;
@@ -8246,9 +8404,9 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
     
     
     rd_static_line4[4:0]                  = rd_periph_num;
-    rd_static_line4[10:8]    = rd_periph_delay;
+    rd_static_line4[3+8-1:8]    = rd_periph_delay;
     rd_static_line4[20:16]                = wr_periph_num;
-    rd_static_line4[26:24]  = wr_periph_delay;
+    rd_static_line4[3+24-1:24]  = wr_periph_delay;
     
     rd_restrict[0]                        = rd_allow_full_fifo;
     rd_restrict[1]                        = wr_allow_full_fifo;
@@ -8260,31 +8418,31 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
     rd_restrict[7]                        = allow_line_cmd;
     rd_restrict[8]                        = simple_mem;
         
-    rd_rd_offsets[9:0]          = rd_x_offset;
-    rd_rd_offsets[17:16]     = rd_y_offset;
+    rd_rd_offsets[10-1:0]          = rd_x_offset;
+    rd_rd_offsets[10-8+16-1:16]     = rd_y_offset;
 
-    rd_wr_offsets[9:0]          = wr_x_offset;
-    rd_wr_offsets[17:16]     = wr_y_offset;
+    rd_wr_offsets[10-1:0]          = wr_x_offset;
+    rd_wr_offsets[10-8+16-1:16]     = wr_y_offset;
 
     rd_fifo_fullness[5:0]           = rd_gap;
-    rd_fifo_fullness[21:16]     = wr_fullness;
+    rd_fifo_fullness[5+16:16]     = wr_fullness;
 
-    rd_cmd_outs[3:0]            = rd_outs;
-    rd_cmd_outs[11:8]          = wr_outs;
+    rd_cmd_outs[4-1:0]            = rd_outs;
+    rd_cmd_outs[4-1+8:8]          = wr_outs;
     
-    rd_ch_enable[0]                       = 8'h40;
+    rd_ch_enable[0]                       = ch_enable;
     
     rd_ch_active[0]                       = ch_rd_active;
     rd_ch_active[1]                       = ch_wr_active;
     
-    rd_cmd_counter[11:0]     = cmd_counter;
-    rd_cmd_counter[19:16] = int_counter;
+    rd_cmd_counter[12-1:0]     = cmd_counter;
+    rd_cmd_counter[4-1+16:16] = int_counter;
         
-    rd_int_rawstat[11:0]           = int_rawstat;
+    rd_int_rawstat[INT_NUM-1:0]           = int_rawstat;
     
-    rd_int_enable[11:0]            = int_enable;
+    rd_int_enable[INT_NUM-1:0]            = int_enable;
     
-    rd_int_status[11:0]            = int_status;
+    rd_int_status[INT_NUM-1:0]            = int_status;
      end
    
                
@@ -8300,32 +8458,32 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
     prdata_pre  = {32{1'b0}};
       
     case (gpaddr)
-      8'h00                 : prdata_pre  = rd_cmd_line0;
-      8'h04                 : prdata_pre  = rd_cmd_line1;
-      8'h08                 : prdata_pre  = rd_cmd_line2;
-      8'h0C                 : prdata_pre  = rd_cmd_line3;
+      CMD_LINE0                 : prdata_pre  = rd_cmd_line0;
+      CMD_LINE1                 : prdata_pre  = rd_cmd_line1;
+      CMD_LINE2                 : prdata_pre  = rd_cmd_line2;
+      CMD_LINE3                 : prdata_pre  = rd_cmd_line3;
       
-      8'h10              : prdata_pre  = rd_static_line0;
-      8'h14              : prdata_pre  = rd_static_line1;
-      8'h18              : prdata_pre  = rd_static_line2;
-      8'h1C              : prdata_pre  = rd_static_line3;
-      8'h20              : prdata_pre  = rd_static_line4;
+      STATIC_LINE0              : prdata_pre  = rd_static_line0;
+      STATIC_LINE1              : prdata_pre  = rd_static_line1;
+      STATIC_LINE2              : prdata_pre  = rd_static_line2;
+      STATIC_LINE3              : prdata_pre  = rd_static_line3;
+      STATIC_LINE4              : prdata_pre  = rd_static_line4;
 
-      8'h2C                  : prdata_pre  = rd_restrict;
-      8'h30                : prdata_pre  = rd_rd_offsets;
-      8'h34                : prdata_pre  = rd_wr_offsets;
-      8'h38             : prdata_pre  = rd_fifo_fullness;
-      8'h3C                  : prdata_pre  = rd_cmd_outs;
+      RESTRICT                  : prdata_pre  = rd_restrict;
+      RD_OFFSETS                : prdata_pre  = rd_rd_offsets;
+      WR_OFFSETS                : prdata_pre  = rd_wr_offsets;
+      FIFO_FULLNESS             : prdata_pre  = rd_fifo_fullness;
+      CMD_OUTS                  : prdata_pre  = rd_cmd_outs;
       
-      8'h40                 : prdata_pre  = rd_ch_enable;
-      8'h44                  : prdata_pre  = {32{1'b0}};
-      8'h48                 : prdata_pre  = rd_ch_active;
-      8'h50            : prdata_pre  = rd_cmd_counter;
+      CH_ENABLE                 : prdata_pre  = rd_ch_enable;
+      CH_START                  : prdata_pre  = {32{1'b0}};
+      CH_ACTIVE                 : prdata_pre  = rd_ch_active;
+      CH_CMD_COUNTER            : prdata_pre  = rd_cmd_counter;
       
-      8'hA0               : prdata_pre  = rd_int_rawstat;
-      8'hA4                 : prdata_pre  = {32{1'b0}};
-      8'hA8                : prdata_pre  = rd_int_enable;
-      8'hAC                : prdata_pre  = rd_int_status;
+      INT_RAWSTAT               : prdata_pre  = rd_int_rawstat;
+      INT_CLEAR                 : prdata_pre  = {32{1'b0}};
+      INT_ENABLE                : prdata_pre  = rd_int_enable;
+      INT_STATUS                : prdata_pre  = rd_int_status;
       
       default                   : prdata_pre  = {32{1'b0}};
     endcase
@@ -8338,32 +8496,32 @@ module dma_axi64_core0_ch_reg(clk,clken,pclken,reset,psel,penable,paddr,pwrite,p
     pslverr_pre = 1'b0;
       
     case (gpaddr)
-      8'h00                 : pslverr_pre = 1'b0;    //read and write  
-      8'h04                 : pslverr_pre = 1'b0;    //read and write  
-      8'h08                 : pslverr_pre = 1'b0;    //read and write  
-      8'h0C                 : pslverr_pre = 1'b0;    //read and write  
+      CMD_LINE0                 : pslverr_pre = 1'b0;    //read and write  
+      CMD_LINE1                 : pslverr_pre = 1'b0;    //read and write  
+      CMD_LINE2                 : pslverr_pre = 1'b0;    //read and write  
+      CMD_LINE3                 : pslverr_pre = 1'b0;    //read and write  
       
-      8'h10              : pslverr_pre = 1'b0;    //read and write  
-      8'h14              : pslverr_pre = 1'b0;    //read and write  
-      8'h18              : pslverr_pre = 1'b0;    //read and write   
-      8'h1C              : pslverr_pre = 1'b0;    //read and write   
-      8'h20              : pslverr_pre = 1'b0;    //read and write  
+      STATIC_LINE0              : pslverr_pre = 1'b0;    //read and write  
+      STATIC_LINE1              : pslverr_pre = 1'b0;    //read and write  
+      STATIC_LINE2              : pslverr_pre = 1'b0;    //read and write   
+      STATIC_LINE3              : pslverr_pre = 1'b0;    //read and write   
+      STATIC_LINE4              : pslverr_pre = 1'b0;    //read and write  
       
-      8'h2C                  : pslverr_pre = gpwrite; //read only
-      8'h30                : pslverr_pre = gpwrite; //read only
-      8'h34                : pslverr_pre = gpwrite; //read only
-      8'h38             : pslverr_pre = gpwrite; //read only
-      8'h3C                  : pslverr_pre = gpwrite; //read only
+      RESTRICT                  : pslverr_pre = gpwrite; //read only
+      RD_OFFSETS                : pslverr_pre = gpwrite; //read only
+      WR_OFFSETS                : pslverr_pre = gpwrite; //read only
+      FIFO_FULLNESS             : pslverr_pre = gpwrite; //read only
+      CMD_OUTS                  : pslverr_pre = gpwrite; //read only
       
-      8'h40                 : pslverr_pre = 1'b0;    //read and write  
-      8'h44                  : pslverr_pre = gpread;  //write only
-      8'h48                 : pslverr_pre = gpwrite; //read only
-      8'h50            : pslverr_pre = gpwrite; //read only
+      CH_ENABLE                 : pslverr_pre = 1'b0;    //read and write  
+      CH_START                  : pslverr_pre = gpread;  //write only
+      CH_ACTIVE                 : pslverr_pre = gpwrite; //read only
+      CH_CMD_COUNTER            : pslverr_pre = gpwrite; //read only
       
-      8'hA0               : pslverr_pre = 1'b0;    //read and write  
-      8'hA4                 : pslverr_pre = gpread;  //write only
-      8'hA8                : pslverr_pre = 1'b0;    //read and write  
-      8'hAC                : pslverr_pre = gpwrite; //read only
+      INT_RAWSTAT               : pslverr_pre = 1'b0;    //read and write  
+      INT_CLEAR                 : pslverr_pre = gpread;  //write only
+      INT_ENABLE                : pslverr_pre = 1'b0;    //read and write  
+      INT_STATUS                : pslverr_pre = gpwrite; //read only
       
       default                   : pslverr_pre = psel;    //decode error
     endcase
@@ -8429,36 +8587,41 @@ endmodule
 
   
 module dma_axi64_core0_ch_reg_size(clk,reset,update,start_addr,burst_max_size_reg,burst_max_size_other,allow_full_burst,allow_full_fifo,joint_flush,burst_max_size);
+
+   parameter              MAX_BURST     = 0 ? 64 : 128; //16 strobes
+   parameter              HALF_BYTES    = 32/2;
+   parameter              LARGE_FIFO    = 32 > MAX_BURST;
+   parameter              SMALL_FIFO    = 32 == 16;
    
    input                  clk;
    input              reset;
 
    input              update;
 
-   input [31:0]      start_addr;
-   input [7:0]      burst_max_size_reg;
-   input [7:0]      burst_max_size_other;
+   input [32-1:0]      start_addr;
+   input [8-1:0]      burst_max_size_reg;
+   input [8-1:0]      burst_max_size_other;
 
    input              allow_full_burst;
    input              allow_full_fifo;
    input              joint_flush;
-   output [7:0]      burst_max_size;
+   output [8-1:0]      burst_max_size;
 
    
    
-   wire [7:0]      burst_max_size_fifo;
-   wire [7:0]      burst_max_size_pre;
-   reg [7:0]      burst_max_size;
+   wire [8-1:0]      burst_max_size_fifo;
+   wire [8-1:0]      burst_max_size_pre;
+   reg [8-1:0]      burst_max_size;
 
    
   
    
    assign              burst_max_size_fifo = 
-                 allow_full_burst | 0 ? 128  :
-                 joint_flush & 0      ? 16 :
-                 (burst_max_size_other > 16) & (burst_max_size_reg > 16) & (burst_max_size_other != burst_max_size_reg) 
-                                                               ? 16 :
-                 allow_full_fifo               ? 32 : 16;
+                 allow_full_burst | LARGE_FIFO ? MAX_BURST  :
+                 joint_flush & SMALL_FIFO      ? HALF_BYTES :
+                 (burst_max_size_other > HALF_BYTES) & (burst_max_size_reg > HALF_BYTES) & (burst_max_size_other != burst_max_size_reg) 
+                                                               ? HALF_BYTES :
+                 allow_full_fifo               ? 32 : HALF_BYTES;
    
    
    prgen_min2 #(8) min2_max(
@@ -8471,7 +8634,7 @@ module dma_axi64_core0_ch_reg_size(clk,reset,update,start_addr,burst_max_size_re
      if (reset)
        burst_max_size <= #1 {8{1'b0}};
      else if (update)
-       burst_max_size <= #1 burst_max_size_pre > 128 ? 128 : burst_max_size_pre;
+       burst_max_size <= #1 burst_max_size_pre > MAX_BURST ? MAX_BURST : burst_max_size_pre;
 
    
 endmodule
@@ -8515,20 +8678,23 @@ endmodule
 
 
   
-module prgen_rawstat
-  #(parameter SIZE = 32)
-   (
-    input                 clk,
-    input                 reset,
-    input                 clear,
-    input                 write,
-    input [SIZE-1:0]     pwdata,
-    input [SIZE-1:0]     int_bus,
-    output reg [SIZE-1:0]    rawstat
-    );
+module  prgen_rawstat (clk,reset,clear,write,pwdata,int_bus,rawstat);
+
+   parameter           SIZE = 32;
+   
+   input            clk;
+   input            reset;
+   
+   input            clear;
+   input            write;
+   input [SIZE-1:0]    pwdata;
+   input [SIZE-1:0]    int_bus;
+   
+   output [SIZE-1:0]   rawstat;
    
    
    
+   reg [SIZE-1:0]      rawstat;
    wire [SIZE-1:0]     write_bus;
    wire [SIZE-1:0]     clear_bus;
    
@@ -8593,16 +8759,16 @@ module dma_axi64_core0_ch_offsets(clk,reset,ch_update,burst_start,burst_last,bur
    input             ch_update;
    input             burst_start; 
    input             burst_last; 
-   input [7:0]   burst_size;
+   input [8-1:0]   burst_size;
    input             load_req_in_prog;
    
-   input [9:0]    x_size;
-   input [10-7:0]         y_size;
+   input [10-1:0]    x_size;
+   input [10-8-1:0]         y_size;
 
-   output [9:0]   x_offset;
-   output [10-7:0]         y_offset;        
-   output [9:0]   x_remain;
-   output [10-7:0]         clr_remain;
+   output [10-1:0]   x_offset;
+   output [10-8-1:0]         y_offset;        
+   output [10-1:0]   x_remain;
+   output [10-8-1:0]         clr_remain;
    output             ch_end;
    output             go_next_line;
    input             incr;
@@ -8610,16 +8776,16 @@ module dma_axi64_core0_ch_offsets(clk,reset,ch_update,burst_start,burst_last,bur
    output             line_empty;
    output             empty;
    
-   input [2:0]    start_align;
-   input [2:0]    width_align;
-   output [2:0]   align;
+   input [3-1:0]    start_align;
+   input [3-1:0]    width_align;
+   output [3-1:0]   align;
    
    
    wire             update_line;             
    wire             go_next_line;
    wire             line_end_pre;
    wire             line_empty;
-   reg [9:0]         x_remain;
+   reg [10-1:0]         x_remain;
    wire             ch_end_pre;
    reg                 ch_end;
    wire             ch_update_d;
@@ -8712,15 +8878,15 @@ module dma_axi64_core0_ch_remain(clk,reset,ch_update,wr_outstanding,rd_outstandi
    
    input             rd_line_cmd;
    input             rd_burst_start; 
-   input [7:0]   rd_burst_size; 
+   input [8-1:0]   rd_burst_size; 
    input             rd_transfer;
-   input [3:0]    rd_transfer_size;
+   input [4-1:0]    rd_transfer_size;
    
    input             wr_clr_line;
    input             wr_burst_start;
-   input [7:0]   wr_burst_size;  
+   input [8-1:0]   wr_burst_size;  
    input             wr_transfer;
-   input [3:0]    wr_transfer_size;
+   input [4-1:0]    wr_transfer_size;
    
    output [5:0]     rd_gap;
    output [5:0]     wr_fullness; 
@@ -8728,15 +8894,15 @@ module dma_axi64_core0_ch_remain(clk,reset,ch_update,wr_outstanding,rd_outstandi
 
 
    wire             rd_line_cmd_valid;
-   reg [6:0]         rd_gap_reg; //signed
-   reg [6:0]         wr_fullness_reg; //signed
+   reg [5+1:0]         rd_gap_reg; //signed
+   reg [5+1:0]         wr_fullness_reg; //signed
 
    wire             rd_burst_qual;
    wire             wr_burst_qual;
-   reg [7:0]     rd_burst_size_valid; 
-   wire [3:0]     rd_transfer_size_valid;
-   wire [3:0]     wr_transfer_size_valid;
-   reg [7:0]     wr_burst_size_valid; 
+   reg [8-1:0]     rd_burst_size_valid; 
+   wire [4-1:0]     rd_transfer_size_valid;
+   wire [4-1:0]     wr_transfer_size_valid;
+   reg [8-1:0]     wr_burst_size_valid; 
 
 
 
@@ -8778,22 +8944,22 @@ module dma_axi64_core0_ch_remain(clk,reset,ch_update,wr_outstanding,rd_outstandi
              wr_transfer_size_valid;
    
    
-   assign rd_gap = rd_gap_reg[6] ? 'd0 : rd_gap_reg[5:0];
+   assign rd_gap = rd_gap_reg[5+1] ? 'd0 : rd_gap_reg[5:0];
 
    
    //for wr bursts
    always @(posedge clk or posedge reset)
      if (reset)
-       wr_fullness_reg <= #1 {6{1'b0}};
+       wr_fullness_reg <= #1 {5+1{1'b0}};
      else if (ch_update)
-       wr_fullness_reg <= #1 {6{1'b0}};
+       wr_fullness_reg <= #1 {5+1{1'b0}};
      else
        wr_fullness_reg <= #1 wr_fullness_reg -
               wr_burst_size_valid +
               rd_transfer_size_valid; 
 
    
-   assign wr_fullness = wr_fullness_reg[6] ? 'd0 : wr_fullness_reg[5:0];
+   assign wr_fullness = wr_fullness_reg[5+1] ? 'd0 : wr_fullness_reg[5:0];
    
 endmodule
 
@@ -8846,17 +9012,17 @@ module dma_axi64_core0_ch_outs(clk,reset,cmd,clr,outs_max,outs,outs_empty,stall,
 
    input             cmd;
    input             clr;
-   input [3:0]    outs_max;
-   output [3:0]   outs;
+   input [4-1:0]    outs_max;
+   output [4-1:0]   outs;
    output             outs_empty;
    output             stall;
    output             timeout;
    
 
-   reg [3:0]         outs;
-   wire [3:0]     outs_pre;
+   reg [4-1:0]         outs;
+   wire [4-1:0]     outs_pre;
    reg                 stall;
-   reg [9:0]  counter;
+   reg [10-1:0]  counter;
 
 
    
@@ -8940,47 +9106,55 @@ endmodule
 
 
  
-module dma_axi64_core0_ch_calc
-  #(parameter READ = 0)
-   (
-    input                  clk,
-    input                  reset,
-    input                  load_in_prog,
-    input                  load_req_in_prog,
-    input [31:0]          load_addr,
-    input                  ch_update,
-    input                  ch_end,
-    input                  ch_end_flush,
-    input                  go_next_line,
-    input                  burst_start,
-    input                  incr,
-    input                  wr_cmd_pending,
-    input                  outs_empty,
-    input [7:0]           burst_max_size,
-    input [31:0]          start_addr,
-    input [11:0]        frame_width,
-    input [7:0]           x_size,
-    input [9:0]           x_remain,
-    input                  fifo_wr_ready,
-    input [5:0]           fifo_remain,
-    output                 burst_last,
-    output [31:0]         burst_addr,
-    output [7:0]          burst_size,
-    output                 burst_ready,
-    output reg                single,
-    output                 joint_ready_out,
-    input                  joint_ready_in,
-    input                  joint_line_req_in,
-    output                 joint_line_req_out,
-    input                  joint_burst_req_in,
-    output                 joint_burst_req_out,
-    input                  joint_line_req_clr,
-    input                  joint,
-    input                  page_cross,
-    input                  joint_cross,
-    output                 joint_flush,
-    input                  joint_flush_in
-    );
+module dma_axi64_core0_ch_calc(clk,reset,load_in_prog,load_req_in_prog,load_addr,ch_update,ch_end,ch_end_flush,go_next_line,burst_start,incr,wr_cmd_pending,outs_empty,burst_max_size,start_addr,frame_width,x_size,x_remain,fifo_wr_ready,fifo_remain,burst_last,burst_addr,burst_size,burst_ready,single,joint_ready_out,joint_ready_in,joint_line_req_in,joint_line_req_out,joint_burst_req_in,joint_burst_req_out,joint_line_req_clr,joint,page_cross,joint_cross,joint_flush,joint_flush_in);
+
+   parameter                READ = 0;
+      
+   parameter             SINGLE_SIZE   = 8;
+   
+   
+   input             clk;
+   input             reset;
+
+   input             load_in_prog;
+   input             load_req_in_prog;
+   input [32-1:0]    load_addr;
+   
+   input             ch_update;
+   input             ch_end;
+   input             ch_end_flush;
+   input             go_next_line;
+   input             burst_start;
+   input             incr;
+
+   input             wr_cmd_pending;
+   input             outs_empty;
+   input [8-1:0]   burst_max_size;
+   input [32-1:0]    start_addr;
+   input [12-1:0]  frame_width;
+   input [8-1:0]         x_size;
+   input [10-1:0]    x_remain;
+   input             fifo_wr_ready;
+   input [5:0]         fifo_remain;
+
+   output             burst_last;
+   output [32-1:0]   burst_addr;
+   output [8-1:0]  burst_size;
+   output             burst_ready;
+   output             single;
+
+   output             joint_ready_out;
+   input             joint_ready_in;
+   input             joint_line_req_in;
+   output             joint_line_req_out;
+   input             joint_burst_req_in;
+   output             joint_burst_req_out;
+   input             joint_line_req_clr;
+   input             joint;
+   input             page_cross;
+   input             joint_cross;
+   output             joint_flush;
+   input             joint_flush_in;
    
 
 
@@ -8988,10 +9162,13 @@ module dma_axi64_core0_ch_calc
    wire             ch_update_d2;
    wire             ch_update_d3;
    
+   //outputs of calc_addr
+   wire [32-1:0]     burst_addr;
    
    //outputs of calc_size
-
+   wire [8-1:0]    burst_size;
    
+   reg                 single;
    
 
    
@@ -9004,7 +9181,7 @@ module dma_axi64_core0_ch_calc
      if (reset)
        single <= #1 1'b0;
      else if (burst_start)
-       single <= #1 (burst_size <= 8);
+       single <= #1 (burst_size <= SINGLE_SIZE);
 
            
    dma_axi64_core0_ch_calc_addr
@@ -9118,23 +9295,23 @@ module dma_axi64_core0_ch_calc_addr(clk,reset,ch_update_d,load_in_prog,load_addr
    
    input             ch_update_d;
    input             load_in_prog;
-   input [31:0]    load_addr;
+   input [32-1:0]    load_addr;
    
    input             go_next_line;
    input             burst_start;
    input             incr;
-   input [31:0]    start_addr;
-   input [11:0]  frame_width;
-   input [7:0]         x_size;
-   input [7:0]   burst_size;
-   output [31:0]   burst_addr;
+   input [32-1:0]    start_addr;
+   input [12-1:0]  frame_width;
+   input [8-1:0]         x_size;
+   input [8-1:0]   burst_size;
+   output [32-1:0]   burst_addr;
    
    
-   reg [31:0]         burst_addr;
+   reg [32-1:0]         burst_addr;
    
    wire             go_next_line_d;
-   reg [11:0]    frame_width_diff_reg;
-   wire [11:0]   frame_width_diff;
+   reg [12-1:0]    frame_width_diff_reg;
+   wire [12-1:0]   frame_width_diff;
    
 
    
@@ -9196,70 +9373,78 @@ endmodule
 
 
 
-module dma_axi64_core0_ch_calc_size
-  #(parameter READ = 0)
-   (
-    input                   clk,
-    input                   reset,
-    input                   ch_update,
-    input                   ch_update_d,
-    input                   ch_update_d2,
-    input                   ch_update_d3,
-    input                   ch_end,
-    input                   ch_end_flush,
-    input                   load_in_prog,
-    input                   load_req_in_prog,
-    input                   joint_line_req_clr,
-    input                   wr_cmd_pending,
-    input                   outs_empty,
-    input                   burst_start,
-    input [31:0]           burst_addr,
-    input [7:0]            burst_max_size,
-    input [9:0]            x_remain,
-    input                   fifo_wr_ready,
-    input [5:0]            fifo_remain,
-    output                  burst_last,
-    output reg [7:0]           burst_size,
-    output reg                 burst_ready,
-    input                   joint_ready_in,
-    output                  joint_ready_out,
-    input                   joint,
-    input                   joint_line_req_in,
-    output                  joint_line_req_out,
-    input                   joint_burst_req_in,
-    output                  joint_burst_req_out,
-    input                   page_cross,
-    input                   joint_cross,
-    output                  joint_flush,
-    input                   joint_flush_in
-    );
-      
-   
-   wire [7:0]   burst_size_pre;
-   wire [7:0]   x_remain_fifo;    
-   wire [7:0]   max_burst_align;
-   wire [7:0]   burst_size_pre2;
+module  dma_axi64_core0_ch_calc_size (clk,reset,ch_update,ch_update_d,ch_update_d2,ch_update_d3,ch_end,ch_end_flush,load_in_prog,load_req_in_prog,joint_line_req_clr,wr_cmd_pending,outs_empty,burst_start,burst_addr,burst_max_size,x_remain,fifo_wr_ready,fifo_remain,burst_last,burst_size,burst_ready,joint_ready_in,joint_ready_out,joint,joint_line_req_in,joint_line_req_out,joint_burst_req_in,joint_burst_req_out,page_cross,joint_cross,joint_flush,joint_flush_in);
 
+   parameter               READ          = 0;
+   
+   input                   clk;
+   input            reset;
+   
+   input            ch_update;
+   input            ch_update_d;
+   input            ch_update_d2;
+   input            ch_update_d3;
+   input            ch_end;
+   input            ch_end_flush;
+   
+   input            load_in_prog;
+   input            load_req_in_prog;
+
+   input            joint_line_req_clr;
+   input            wr_cmd_pending;
+   input            outs_empty;
+   input            burst_start;
+   input [32-1:0]   burst_addr;
+   input [8-1:0]  burst_max_size;
+   input [10-1:0]   x_remain;
+   input            fifo_wr_ready;
+   input [5:0]        fifo_remain;
+
+   output            burst_last;
+   output [8-1:0] burst_size;
+   output            burst_ready;
+   input            joint_ready_in;
+   output            joint_ready_out;
+   input            joint;
+   input            joint_line_req_in;
+   output            joint_line_req_out;
+   input            joint_burst_req_in;
+   output            joint_burst_req_out;
+   input            page_cross;
+   input            joint_cross;
+   output            joint_flush;
+   input            joint_flush_in;
+   
+
+   parameter            CMD_SIZE       = 16; //4*32 bit
+   
+   
+   wire [8-1:0]   burst_size_pre;
+   wire [8-1:0]   x_remain_fifo;    
+   wire [8-1:0]   max_burst_align;
+   wire [8-1:0]   burst_size_pre2;
+   reg [8-1:0]    burst_size;
+   reg                burst_ready;
    wire            fifo_not_ready_pre;
    wire            fifo_not_ready;
    
    wire            joint_update;
-
-
-
+   wire            joint_ready_out;
+   wire            joint_line_req_out;
+   wire            joint_burst_req_out;
    wire            joint_wait;
    reg [1:0]            joint_burst_req_reg;
    wire [1:0]            joint_burst_req;
-   wire [7:0]   joint_burst_req_size;
+   wire [8-1:0]   joint_burst_req_size;
    reg                joint_line_req_reg;
    wire            joint_line_req;
-   wire [7:0]   joint_line_req_size;
+   wire [8-1:0]   joint_line_req_size;
    wire            joint_buffer_small;
    wire            release_fifo;
    
    
    
-   assign            x_remain_fifo = |x_remain[9:8] ? {1'b1, {7{1'b0}}} : x_remain[7:0];
+   assign            x_remain_fifo = |x_remain[10-1:8] ? {1'b1, {8-1{1'b0}}} : x_remain[8-1:0];
       
    
    prgen_min3 #(8) min3(
@@ -9277,11 +9462,11 @@ module dma_axi64_core0_ch_calc_size
                           burst_addr[0] ? 'd1 : // byte
                           burst_addr[1] ? 'd2 : // 16 bit
                           burst_addr[2] ? 'd4 : // 32 bit
-                          {1'b1, {7{1'b0}}}; //no restriction
+                          {1'b1, {8-1{1'b0}}}; //no restriction
    
    
    assign            burst_size_pre2 =
-               |burst_size_pre[7:3] ? {burst_size_pre[7:3], 3'b000} : //burst
+               |burst_size_pre[8-1:3] ? {burst_size_pre[8-1:3], 3'b000} : //burst
                burst_size_pre[2]               ? 'd4 :
                
                burst_size_pre[1]               ? 'd2 :
@@ -9316,7 +9501,7 @@ module dma_axi64_core0_ch_calc_size
      if (reset)
        burst_size  <= #1 {8{1'b0}};
      else if (load_req_in_prog)
-       burst_size  <= #1 16;
+       burst_size  <= #1 CMD_SIZE;
      else if (|joint_burst_req)
        burst_size  <= #1 joint_burst_req_size;
      else if (joint_line_req & (~joint_buffer_small))
@@ -9438,20 +9623,22 @@ endmodule
 
 
 
-module prgen_min3
-  #(parameter WIDTH = 8)
-   (
-    input                clk,
-    input                reset,
-    input [WIDTH-1:0]    a,
-    input [WIDTH-1:0]    b, 
-    input [WIDTH-1:0]    c,
-    output [WIDTH-1:0]   min
-    );
+module prgen_min3(clk,reset,a,b,c,min);
+
+   parameter             WIDTH = 8;
+
+   input          clk;
+   input          reset;
+   input [WIDTH-1:0]      a;
+   input [WIDTH-1:0]      b;
+   input [WIDTH-1:0]      c;
+
+   output [WIDTH-1:0]      min;
 
    wire [WIDTH-1:0]      min_ab_pre;
-   reg [WIDTH-1:0]       min_ab;
-   reg [WIDTH-1:0]       min_c;
+   reg [WIDTH-1:0]      min_ab;
+   reg [WIDTH-1:0]      min_c;
+     
 
    prgen_min2 #(WIDTH) min2_ab(
                  .a(a),
@@ -9468,13 +9655,13 @@ module prgen_min3
    always @(posedge clk or posedge reset)
      if (reset)
        begin
-          min_ab <= #1 {WIDTH{1'b0}};
-          min_c  <= #1 {WIDTH{1'b0}};
+      min_ab <= #1 {WIDTH{1'b0}};
+      min_c  <= #1 {WIDTH{1'b0}};
        end
      else
        begin
-          min_ab <= #1 min_ab_pre;
-          min_c  <= #1 c;
+      min_ab <= #1 min_ab_pre;
+      min_c  <= #1 c;
        end
    
 endmodule
@@ -9521,56 +9708,120 @@ endmodule
 
 
 
-module prgen_min2
-  #(parameter WIDTH = 8)    
-   (
-    input [WIDTH-1:0]      a,
-    input [WIDTH-1:0]      b,
-    output [WIDTH-1:0]     min
-    );
+module prgen_min2(a,b,min);
 
-   assign                  min = a < b ? a : b;   
+   parameter             WIDTH = 8;
+   
+   input [WIDTH-1:0]      a;
+   input [WIDTH-1:0]      b;
+
+   output [WIDTH-1:0]      min;
+
+   
+   assign          min = a < b ? a : b;   
    
 endmodule
 
 
-
-module dma_axi64_core0_ch_calc_joint
-  #(parameter READ = 0,
-    parameter WRITE = !READ)
-   (
-    input                   clk,
-    input                   reset,
-    input                   joint_update,
-    input                   ch_end,
-    input                   ch_end_flush,
-    input                   joint_line_req_clr,
-    input                   wr_cmd_pending,
-    input [7:0]            burst_size_pre2,
-    input [7:0]            burst_max_size,
-    input                   fifo_not_ready,
-    input                   outs_empty,
-    input [9:0]            x_remain,
-    input                   fifo_wr_ready,
-    input [5:0]            fifo_remain,
-    input                   joint,
-    input                   page_cross,
-    input                   joint_cross,
-    input                   joint_ready_in,
-    output reg                  joint_ready_out,
-    output reg                 joint_line_req,
-    output reg                 joint_burst_req,
-    output reg                 joint_wait,
-    output reg                 joint_flush,
-    input                   joint_flush_in,
-    output                  joint_buffer_small
-    );
    
-      
+
+/////////////////////////////////////////////////////////////////////
+////                                                             ////
+////  Author: Eyal Hochberg                                      ////
+////          eyal@provartec.com                                 ////
+////                                                             ////
+////  Downloaded from: http://www.opencores.org                  ////
+/////////////////////////////////////////////////////////////////////
+////                                                             ////
+//// Copyright (C) 2010 Provartec LTD                            ////
+//// www.provartec.com                                           ////
+//// info@provartec.com                                          ////
+////                                                             ////
+//// This source file may be used and distributed without        ////
+//// restriction provided that this copyright statement is not   ////
+//// removed from the file and that any derivative work contains ////
+//// the original copyright notice and the associated disclaimer.////
+////                                                             ////
+//// This source file is free software; you can redistribute it  ////
+//// and/or modify it under the terms of the GNU Lesser General  ////
+//// Public License as published by the Free Software Foundation.////
+////                                                             ////
+//// This source is distributed in the hope that it will be      ////
+//// useful, but WITHOUT ANY WARRANTY; without even the implied  ////
+//// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR     ////
+//// PURPOSE.  See the GNU Lesser General Public License for more////
+//// details. http://www.gnu.org/licenses/lgpl.html              ////
+////                                                             ////
+/////////////////////////////////////////////////////////////////////
+//---------------------------------------------------------
+//-- File generated by RobustVerilog parser
+//-- Version: 1.0
+//-- Invoked Fri Mar 25 23:36:57 2011
+//--
+//-- Source file: dma_ch_calc_joint.v
+//---------------------------------------------------------
+
+
+
+module dma_axi64_core0_ch_calc_joint(clk,reset,joint_update,ch_end,ch_end_flush,joint_line_req_clr,wr_cmd_pending,burst_size_pre2,burst_max_size,fifo_not_ready,outs_empty,x_remain,fifo_wr_ready,fifo_remain,joint,page_cross,joint_cross,joint_ready_in,joint_ready_out,joint_line_req,joint_burst_req,joint_wait,joint_flush,joint_flush_in,joint_buffer_small);
+
+
+   parameter               READ          = 0;
+   parameter            WRITE         = !READ;
+   
+   input                   clk;
+   input            reset;
+
+   input            joint_update;
+   input            ch_end;
+   input            ch_end_flush;
+
+   input            joint_line_req_clr;
+   input            wr_cmd_pending;
+   input [8-1:0]  burst_size_pre2;
+   input [8-1:0]  burst_max_size;
+   input            fifo_not_ready;
+   input            outs_empty;
+   input [10-1:0]   x_remain;
+   input            fifo_wr_ready;
+   input [5:0]        fifo_remain;
+   
+   input            joint;
+   input            page_cross;
+   input            joint_cross;
+   input            joint_ready_in;
+   output            joint_ready_out;
+   output            joint_line_req;
+   output            joint_burst_req;
+   output            joint_wait;
+   output            joint_flush;
+   input            joint_flush_in;
+   output            joint_buffer_small;
+   
+   
+   
+
+   parameter            IDLE        = 3'd0;
+   parameter            REQ_LINE    = 3'd1;
+   parameter            READY_OUT   = 3'd2;
+   parameter            READY       = 3'd3;
+   parameter            CROSS       = 3'd4;
+   parameter            BURST_REQ   = 3'd5;
+   parameter            RECHK       = 3'd6;
+   parameter            FLUSH       = 3'd7;
+
+
+   
    reg [2:0]            ps;
    reg [2:0]            ns;
 
    wire            joint_ready_out_pre;
+   reg                joint_ready_out;
+   reg                joint_line_req;
+   reg                joint_burst_req;
+   reg                joint_flush;
+   reg                joint_wait;
+   wire            joint_buffer_small;
    
    
    
@@ -9595,7 +9846,7 @@ module dma_axi64_core0_ch_calc_joint
         or joint_flush_in or joint_line_req_clr or joint_ready_in
         or joint_ready_out or outs_empty or page_cross or ps)
      begin
-    ns              = 3'd0;
+    ns              = IDLE;
     joint_line_req  = 1'b0;
     joint_burst_req = 1'b0;
     joint_flush     = 1'b0;
@@ -9603,97 +9854,97 @@ module dma_axi64_core0_ch_calc_joint
     
     case (ps)
       
-      3'd0 :
+      IDLE :
         begin
            if (joint_flush_in | joint_buffer_small)
-         ns = 3'd7;
+         ns = FLUSH;
            else if (joint_ready_out & joint_ready_in & outs_empty)
-         ns = 3'd3;
+         ns = READY;
            else if (joint_ready_out)
          begin
             joint_wait = 1'b1;
-            ns = 3'd2;
+            ns = READY_OUT;
          end
            else if (fifo_not_ready & joint_ready_in & outs_empty)
          if (WRITE)
            begin
               joint_line_req = 1'b1; //from write to read - fill fifo at begining
-              ns = 3'd1;
+              ns = REQ_LINE;
            end
          else
            begin
               joint_burst_req = 1'b1; //from read to write - empty fifo after cross
-              ns = 3'd1; //1 cycle pulse
+              ns = REQ_LINE; //1 cycle pulse
            end
            else
-         ns = 3'd0;
+         ns = IDLE;
         end
       
-      3'd1 :
+      REQ_LINE :
         begin
            if (joint_flush_in)
-         ns = 3'd7;
+         ns = FLUSH;
            else if (joint_line_req_clr)
          begin
-            ns = 3'd0;
+            ns = IDLE;
             joint_wait = 1'b0;
          end
            else
          begin
-            ns = 3'd1;
+            ns = REQ_LINE;
             joint_wait = 1'b1;
          end
         end
 
-      3'd2 :
+      READY_OUT :
         begin
            joint_wait = 1'b1;
 
            if (joint_cross | page_cross)
-         ns = 3'd4;
+         ns = CROSS;
            else if ((~joint_ready_out) | joint_flush_in | joint_buffer_small)
-         ns = 3'd7;
+         ns = FLUSH;
            else if (joint_ready_in & outs_empty)
          begin
             joint_wait = 1'b0;
-            ns = 3'd6;
+            ns = RECHK;
          end
            else
-         ns = 3'd2;
+         ns = READY_OUT;
         end
 
-      3'd6 :
+      RECHK :
         begin
            if (joint_flush_in | joint_buffer_small)
-         ns = 3'd7;
+         ns = FLUSH;
            else if (joint_ready_in & joint_ready_out)
-         ns = 3'd3;
+         ns = READY;
            else if (WRITE)
          begin
             joint_line_req = 1'b1; //from write to read - read more data when AHB gets out of align address
-            ns = 3'd1;
+            ns = REQ_LINE;
          end
            else if (READ)
-         ns = 3'd6;
+         ns = RECHK;
         end
       
-      3'd3 :
+      READY :
         begin
            if (joint_cross)
          begin
             joint_wait = 1'b1;
-            ns = 3'd2;
+            ns = READY_OUT;
          end
            else if ((~joint_ready_out) | (~joint_ready_in) | ch_end_flush)
-           ns = 3'd7;
+           ns = FLUSH;
            else
-         ns = 3'd3;
+         ns = READY;
         end
 
-      3'd4 :
+      CROSS :
         begin
            if (joint_buffer_small)
-         ns = 3'd7;
+         ns = FLUSH;
            else if (joint_ready_out & (~joint_cross) & outs_empty)
          begin
             if (fifo_wr_ready & (fifo_remain <= 'd16)) //rd_gap
@@ -9701,31 +9952,31 @@ module dma_axi64_core0_ch_calc_joint
              joint_burst_req = 1'b1; //from read to write - empty fifo after cross
              
              if (fifo_remain == 'd0)
-               ns = 3'd5; //2 cycles pulse
+               ns = BURST_REQ; //2 cycles pulse
              else
-               ns = 3'd1; //1 cycle pulse
+               ns = REQ_LINE; //1 cycle pulse
               end
             else
-              ns = 3'd0;
+              ns = IDLE;
          end
            else
-         ns = 3'd4;
+         ns = CROSS;
         end
 
-      3'd5 :
+      BURST_REQ :
         begin
            joint_burst_req = 1'b1; //from read to write - empty fifo after cross
-           ns = 3'd1;
+           ns = REQ_LINE;
         end
       
-      3'd7 :
+      FLUSH :
         begin
            joint_flush = 1'b1;
-           ns = 3'd7;
+           ns = FLUSH;
         end
 
       default :
-        ns = 3'd0;
+        ns = IDLE;
       
     endcase
      end
@@ -9734,9 +9985,9 @@ module dma_axi64_core0_ch_calc_joint
    
    always @(posedge clk or posedge reset)
      if (reset)
-       ps <= #1 3'd0;
+       ps <= #1 IDLE;
      else if (joint_update)
-       ps <= #1 3'd0;
+       ps <= #1 IDLE;
      else
        ps <= #1 ns;
 
@@ -9875,24 +10126,24 @@ module dma_axi64_core0_ch_fifo_ctrl (clk,reset,end_swap,joint_in_prog,wr_outstan
    input               ch_update;
 
    input               fifo_wr;
-   input [63:0]      fifo_wdata;
-   input [3:0]      fifo_wsize;
-   input [2:0]      wr_align;
+   input [64-1:0]      fifo_wdata;
+   input [4-1:0]      fifo_wsize;
+   input [3-1:0]      wr_align;
    input               rd_incr;
    
    input               fifo_rd;
-   input [3:0]      fifo_rsize;
-   input [2:0]      rd_align;
+   input [4-1:0]      fifo_rsize;
+   input [3-1:0]      rd_align;
    input               wr_incr;
    input               wr_single;
-   input [7:0]     wr_burst_size;
+   input [8-1:0]     wr_burst_size;
 
    input               rd_clr_line;
    input               wr_clr_line;
-   input [3:0]      wr_next_size;
+   input [4-1:0]      wr_next_size;
 
    output               fifo_rd_valid;
-   output [63:0]     fifo_rdata;
+   output [64-1:0]     fifo_rdata;
    output               fifo_wr_ready;
    output               fifo_overflow;
    output               fifo_underflow;
@@ -9903,33 +10154,33 @@ module dma_axi64_core0_ch_fifo_ctrl (clk,reset,end_swap,joint_in_prog,wr_outstan
    wire               slice_wr;
    wire               slice_wr_fifo;
    wire [5-1:0]       slice_wr_ptr;
-   wire [7:0]       slice_bsel;
-   wire [63:0]       slice_wdata;
-   wire [3:0]       slice_wsize;
+   wire [8-1:0]       slice_bsel;
+   wire [64-1:0]       slice_wdata;
+   wire [4-1:0]       slice_wsize;
 
    //outputs of rd slicer
    wire               slice_rd;
-   wire [63:0]       slice_rdata;
-   wire [3:0]       slice_rsize;
+   wire [64-1:0]       slice_rdata;
+   wire [4-1:0]       slice_rsize;
    wire [5-1:0]       slice_rd_ptr;
    wire               slice_rd_valid;
 
    //outputs of fifo ptr
    wire [5-1:0]       rd_ptr;
    wire [5-1:0]       wr_ptr;
-   wire [3:0]       rd_line_remain;
+   wire [4-1:0]       rd_line_remain;
    wire               joint_delay;
    wire               fifo_wr_ready;
    wire               fifo_overflow;
    wire               fifo_underflow;
    
    //outputs of fifo
-   wire [63:0]       DOUT;
+   wire [64-1:0]       DOUT;
 
    wire               fifo_wr_d;
-   reg [63:0]           fifo_wdata_d;
+   reg [64-1:0]           fifo_wdata_d;
    wire               fifo_wr_valid;
-   wire [63:0]       fifo_wdata_valid;
+   wire [64-1:0]       fifo_wdata_valid;
    
 
    assign               fifo_wr_valid    = fifo_wr;
@@ -10077,9 +10328,9 @@ module  dma_axi64_core0_ch_wr_slicer (clk,reset,ch_update,rd_clr_line,fifo_wr,fi
    input               rd_clr_line;
    
    input               fifo_wr;
-   input [63:0]      fifo_wdata;
-   input [3:0]      fifo_wsize;
-   input [2:0]      wr_align;
+   input [64-1:0]      fifo_wdata;
+   input [4-1:0]      fifo_wsize;
+   input [3-1:0]      wr_align;
    input [5-1:0]      wr_ptr;
    input               rd_incr;
    input [1:0]               end_swap;
@@ -10087,43 +10338,43 @@ module  dma_axi64_core0_ch_wr_slicer (clk,reset,ch_update,rd_clr_line,fifo_wr,fi
    output               slice_wr;
    output               slice_wr_fifo;
    output [5-1:0]     slice_wr_ptr;
-   output [7:0]     slice_bsel;
-   output [63:0]     slice_wdata;
-   output [3:0]     slice_wsize;
+   output [8-1:0]     slice_bsel;
+   output [64-1:0]     slice_wdata;
+   output [4-1:0]     slice_wsize;
    
 
    
-   reg [3:0]           line_remain;                  
-   wire [3:0]       join_wsize;
-   wire [3:0]       append_wsize;
-   wire [3:0]       direct_wsize;
+   reg [4-1:0]           line_remain;                  
+   wire [4-1:0]       join_wsize;
+   wire [4-1:0]       append_wsize;
+   wire [4-1:0]       direct_wsize;
    reg                   append;
-   reg [3:0]           next_size;
+   reg [4-1:0]           next_size;
    
-   reg [63:0]           align_wdata;
-   reg [63:0]           align_wdata_d;
-   wire [2:0]       wr_align_valid;
-   reg [63:0]           next_wdata;
-   wire [7:0]       bsel_dec;
-   reg [7:0]           bsel_shift;
+   reg [64-1:0]           align_wdata;
+   reg [64-1:0]           align_wdata_d;
+   wire [3-1:0]       wr_align_valid;
+   reg [64-1:0]           next_wdata;
+   wire [8-1:0]       bsel_dec;
+   reg [8-1:0]           bsel_shift;
 
    wire               next_wr;
    
    wire               slice_wr_pre;
    wire [5-1:0]       slice_wr_ptr_pre;
-   wire [7:0]       slice_bsel_pre;
-   wire [7:0]       slice_bsel_swap;
-   wire [63:0]       slice_wdata_pre;
-   reg [63:0]           slice_wdata_pre_d;
-   wire [63:0]       slice_wdata_swap;
-   wire [3:0]       slice_wsize_pre;
+   wire [8-1:0]       slice_bsel_pre;
+   wire [8-1:0]       slice_bsel_swap;
+   wire [64-1:0]       slice_wdata_pre;
+   reg [64-1:0]           slice_wdata_pre_d;
+   wire [64-1:0]       slice_wdata_swap;
+   wire [4-1:0]       slice_wsize_pre;
 
    wire               slice_wr;
    wire               slice_wr_fifo;
    reg [5-1:0]           slice_wr_ptr;
-   reg [7:0]           slice_bsel;
-   reg [63:0]           slice_wdata;
-   reg [3:0]           slice_wsize;
+   reg [8-1:0]           slice_bsel;
+   reg [64-1:0]           slice_wdata;
+   reg [4-1:0]           slice_wsize;
 
 
    always @(posedge clk or posedge reset)
@@ -10183,12 +10434,12 @@ module  dma_axi64_core0_ch_wr_slicer (clk,reset,ch_update,rd_clr_line,fifo_wr,fi
    
    assign               wr_align_valid = 
                   rd_incr ? wr_align : 
-                  wr_align - wr_ptr[2:0];
+                  wr_align - wr_ptr[3-1:0];
 
    //always @(/*AUTOSENSE*/) - no AUTOSENSE because of fifo_wr
    always @(fifo_wdata or wr_align_valid or fifo_wr)
      begin
-    case (wr_align_valid[2:0])
+    case (wr_align_valid[3-1:0])
       3'd0 : align_wdata = fifo_wdata;
       3'd1 : align_wdata = {fifo_wdata[7:0],  fifo_wdata[63:8]};
       3'd2 : align_wdata = {fifo_wdata[15:0], fifo_wdata[63:16]};
@@ -10203,7 +10454,7 @@ module  dma_axi64_core0_ch_wr_slicer (clk,reset,ch_update,rd_clr_line,fifo_wr,fi
 
    always @(/*AUTOSENSE*/align_wdata or align_wdata_d or next_size)
      begin
-    case (next_size[2:0])
+    case (next_size[3-1:0])
       3'd0 : next_wdata = align_wdata_d;
       3'd1 : next_wdata = {align_wdata[63:8],  align_wdata_d[7:0]};
       3'd2 : next_wdata = {align_wdata[63:16], align_wdata_d[15:0]};
@@ -10231,7 +10482,7 @@ module  dma_axi64_core0_ch_wr_slicer (clk,reset,ch_update,rd_clr_line,fifo_wr,fi
    
    always @(/*AUTOSENSE*/bsel_dec or wr_ptr)
      begin
-    case (wr_ptr[2:0])
+    case (wr_ptr[3-1:0])
       3'd0 : bsel_shift = bsel_dec;
       3'd1 : bsel_shift = {bsel_dec[6:0], 1'b0};
       3'd2 : bsel_shift = {bsel_dec[5:0], 2'b0};
@@ -10515,17 +10766,17 @@ module  dma_axi64_core0_ch_rd_slicer (clk,reset,fifo_rd,fifo_rdata,fifo_rsize,rd
    input               reset;
 
    input               fifo_rd;
-   input [63:0]      fifo_rdata;
-   input [3:0]      fifo_rsize;
-   input [2:0]      rd_align;
+   input [64-1:0]      fifo_rdata;
+   input [4-1:0]      fifo_rsize;
+   input [3-1:0]      rd_align;
    input [5-1:0]      rd_ptr;
-   input [3:0]      rd_line_remain;
+   input [4-1:0]      rd_line_remain;
    input               wr_incr;
    input               wr_single;
    
    output               slice_rd;
-   output [63:0]     slice_rdata;
-   output [3:0]     slice_rsize;
+   output [64-1:0]     slice_rdata;
+   output [4-1:0]     slice_rsize;
    output [5-1:0]     slice_rd_ptr;
    output               slice_rd_valid;
    
@@ -10534,22 +10785,22 @@ module  dma_axi64_core0_ch_rd_slicer (clk,reset,fifo_rd,fifo_rdata,fifo_rsize,rd
    wire               slice_rd_pre;
    wire               slice_rd;
    wire [5-1:0]       slice_rd_ptr;
-   reg [63:0]           slice_rdata;
-   wire [3:0]       slice_rsize;
+   reg [64-1:0]           slice_rdata;
+   wire [4-1:0]       slice_rsize;
 
    wire               fifo_rd_d;
    wire               slice_rd_d;
-   wire [2:0]       rd_align_valid_pre;
-   reg [2:0]           rd_align_valid;
-   reg [2:0]           rd_align_d;
+   wire [3-1:0]       rd_align_valid_pre;
+   reg [3-1:0]           rd_align_valid;
+   reg [3-1:0]           rd_align_d;
    
-   reg [63:0]           next_rdata_pre;
-   reg [63:0]           next_rdata;
+   reg [64-1:0]           next_rdata_pre;
+   reg [64-1:0]           next_rdata;
    
-   reg [3:0]           actual_rsize;
-   wire [3:0]       actual_rsize_pre;
-   reg [3:0]           next_rsize_reg;
-   wire [3:0]       next_rsize;
+   reg [4-1:0]           actual_rsize;
+   wire [4-1:0]       actual_rsize_pre;
+   reg [4-1:0]           next_rsize_reg;
+   wire [4-1:0]       next_rsize;
    wire               next_rd;
    
    
@@ -10561,7 +10812,7 @@ module  dma_axi64_core0_ch_rd_slicer (clk,reset,fifo_rd,fifo_rdata,fifo_rsize,rd
    
 
    assign               rd_align_valid_pre = 
-                  (~wr_incr) & wr_single ? rd_align - rd_ptr[2:0] :
+                  (~wr_incr) & wr_single ? rd_align - rd_ptr[3-1:0] :
                   rd_align;
    
    
@@ -10579,7 +10830,7 @@ module  dma_axi64_core0_ch_rd_slicer (clk,reset,fifo_rd,fifo_rdata,fifo_rsize,rd
    
    always @(/*AUTOSENSE*/fifo_rdata or next_rdata or rd_align_d)
      begin
-    case(rd_align_d[2:0])
+    case(rd_align_d[3-1:0])
       3'd0 : slice_rdata = next_rdata[63:0];
       3'd1 : slice_rdata = {fifo_rdata[55:0], next_rdata[7:0]};
       3'd2 : slice_rdata = {fifo_rdata[47:0], next_rdata[15:0]};
@@ -10594,7 +10845,7 @@ module  dma_axi64_core0_ch_rd_slicer (clk,reset,fifo_rd,fifo_rdata,fifo_rsize,rd
 
    always @(/*AUTOSENSE*/fifo_rdata or rd_align_valid)
      begin
-    case(rd_align_valid[2:0])
+    case(rd_align_valid[3-1:0])
       3'd0 : next_rdata_pre = fifo_rdata[63:0];
       3'd1 : next_rdata_pre = {{56{1'b0}}, fifo_rdata[63:56]};
       3'd2 : next_rdata_pre = {{48{1'b0}}, fifo_rdata[63:48]};
@@ -10703,20 +10954,20 @@ module dma_axi64_core0_ch_fifo_ptr(clk,reset,joint_in_prog,wr_outstanding,ch_upd
    input               wr_outstanding;
    input               ch_update;
    input               fifo_rd;
-   input [3:0]      fifo_rsize;
+   input [4-1:0]      fifo_rsize;
    input               slice_wr;
    input               slice_wr_fifo;
-   input [3:0]      slice_wsize;
+   input [4-1:0]      slice_wsize;
    input               slice_rd;
-   input [3:0]      slice_rsize;
+   input [4-1:0]      slice_rsize;
    input               rd_clr_line;
    input               wr_clr_line;
-   input [3:0]      wr_next_size;
-   input [7:0]     wr_burst_size;
+   input [4-1:0]      wr_next_size;
+   input [8-1:0]     wr_burst_size;
 
    output [5-1:0]     rd_ptr;
    output [5-1:0]     wr_ptr;
-   output [3:0]     rd_line_remain;
+   output [4-1:0]     rd_line_remain;
    output               joint_delay;
    output               fifo_wr_ready;
    output               fifo_overflow;
@@ -10727,9 +10978,9 @@ module dma_axi64_core0_ch_fifo_ptr(clk,reset,joint_in_prog,wr_outstanding,ch_upd
    wire [5-1:0]       wr_ptr_pre;
    reg [5-1:0]           rd_ptr;
    reg [5-1:0]           wr_ptr;
-   wire [6:0]       fullness_pre; //signed
-   reg [6:0]           fullness; //signed
-   reg [3:0]           rd_line_remain;
+   wire [5+1:0]       fullness_pre; //signed
+   reg [5+1:0]           fullness; //signed
+   reg [4-1:0]           rd_line_remain;
    wire               joint_in_prog_d;
    reg                   joint_delay_reg;
    reg                   fifo_wr_ready;
@@ -10806,9 +11057,9 @@ module dma_axi64_core0_ch_fifo_ptr(clk,reset,joint_in_prog,wr_outstanding,ch_upd
        fifo_wr_ready <= #1 fullness_pre >= wr_next_size;
 
    assign               fifo_underflow_pre = 
-                              fullness[6];
+                              fullness[5+1];
    
-   assign               fifo_overflow_pre  = (~fullness[6]) & (fullness[5:0] > 32);
+   assign               fifo_overflow_pre  = (~fullness[5+1]) & (fullness[5:0] > 32);
 
    always @(posedge clk or posedge reset)
      if (reset)
@@ -10881,17 +11132,17 @@ module dma_axi64_core0_ch_fifo (CLK,WR,RD,WR_ADDR,RD_ADDR,DIN,BSEL,DOUT);
    
    input               WR;
    input               RD;
-   input [5-2:0] WR_ADDR;
-   input [5-2:0] RD_ADDR;
-   input [63:0]      DIN;
-   input [7:0]      BSEL;
-   output [63:0]     DOUT;
+   input [5-3-1:0] WR_ADDR;
+   input [5-3-1:0] RD_ADDR;
+   input [64-1:0]      DIN;
+   input [8-1:0]      BSEL;
+   output [64-1:0]     DOUT;
    
    
-   reg [63:0]           Mem [3:0];
-   wire [63:0]       BitSEL;
-   wire [63:0]       DIN_BitSEL;
-   reg [63:0]           DOUT;
+   reg [64-1:0]           Mem [4-1:0];
+   wire [64-1:0]       BitSEL;
+   wire [64-1:0]       DIN_BitSEL;
+   reg [64-1:0]           DOUT;
    
      assign               BitSEL = {{8{BSEL[7]}} , {8{BSEL[6]}} , {8{BSEL[5]}} , {8{BSEL[4]}} , {8{BSEL[3]}} , {8{BSEL[2]}} , {8{BSEL[1]}} , {8{BSEL[0]}}};
 
@@ -10990,10 +11241,10 @@ module dma_axi64_core0_ch_empty (clk,reset,scan_en,pclk,clken,pclken,psel,penabl
    
    input             load_wr;
    input [1:0]             load_wr_cycle;
-   input [63:0]    load_wdata;
+   input [64-1:0]    load_wdata;
    output             load_req_in_prog;
    
-   output            int_all_proc;
+   output [1-1:0]    int_all_proc;
    input              ch_start;
    output             idle;
    output             ch_active;
@@ -11007,27 +11258,27 @@ module dma_axi64_core0_ch_empty (clk,reset,scan_en,pclk,clken,pclken,psel,penabl
    
    output             rd_ready;
    input             rd_burst_start;
-   output [31:0]   rd_burst_addr;
-   output [7:0]  rd_burst_size;
-   output [5:0] rd_tokens;
+   output [32-1:0]   rd_burst_addr;
+   output [8-1:0]  rd_burst_size;
+   output [6-1:0] rd_tokens;
    output             rd_port_num;
-   output [2:0] rd_periph_delay;
+   output [3-1:0] rd_periph_delay;
    output             rd_clr_valid;
    input             rd_transfer;
-   input [3:0]    rd_transfer_size;
+   input [4-1:0]    rd_transfer_size;
    output             rd_clr_stall;
    
    output             wr_ready;
    input             wr_burst_start;
-   output [31:0]   wr_burst_addr;
-   output [7:0]  wr_burst_size;
-   output [5:0] wr_tokens;
+   output [32-1:0]   wr_burst_addr;
+   output [8-1:0]  wr_burst_size;
+   output [6-1:0] wr_tokens;
    output             wr_port_num;
-   output [2:0] wr_periph_delay; 
+   output [3-1:0] wr_periph_delay; 
    output             wr_clr_valid;
    input             wr_transfer;
-   input [3:0]    wr_transfer_size;
-   input [3:0]    wr_next_size;
+   input [4-1:0]    wr_transfer_size;
+   input [4-1:0]    wr_next_size;
    output             wr_clr_stall;
    output             wr_incr;
    
@@ -11037,14 +11288,14 @@ module dma_axi64_core0_ch_empty (clk,reset,scan_en,pclk,clken,pclken,psel,penabl
    input             wdt_timeout;
 
    input             fifo_wr;
-   input [63:0]    fifo_wdata;
-   input [3:0]    fifo_wsize;
+   input [64-1:0]    fifo_wdata;
+   input [4-1:0]    fifo_wsize;
    
    input             fifo_rd;
-   input [3:0]    fifo_rsize;
+   input [4-1:0]    fifo_rsize;
    
    output             fifo_rd_valid;
-   output [63:0]   fifo_rdata;
+   output [64-1:0]   fifo_rdata;
    output             fifo_wr_ready;
    
    input             joint_mode;
@@ -11139,14 +11390,18 @@ endmodule
 //---------------------------------------------------------
 
 
-module prgen_delay
-  #(parameter DELAY = 1)    
-   (
-    input               clk,
-    input               reset,
-    input               din,
-    output              dout
-    );
+
+module prgen_delay(clk,reset,din,dout);
+   
+   
+   input               clk;
+   input               reset;
+   
+   input               din;
+   output               dout;
+   
+   parameter               DELAY = 2;
+
 
    reg [DELAY:0]           shift_reg;
    
@@ -11157,6 +11412,7 @@ module prgen_delay
        shift_reg <= #1 {shift_reg[DELAY-1:0], din};
 
    assign               dout = shift_reg[DELAY-1];
+   
    
 endmodule
 

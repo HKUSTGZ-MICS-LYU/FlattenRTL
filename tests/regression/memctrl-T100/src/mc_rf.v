@@ -1,4 +1,4 @@
-`include "./src/mc_defines.v"
+`include "mc_defines.v"
 
 module mc_rf(clk, rst,
 
@@ -392,7 +392,7 @@ assign spec_req_cs_d = {spec_req_cs_t[7] & !( |spec_req_cs_t[6:0] ),
 						spec_req_cs_t[3] & !( |spec_req_cs_t[2:0] ),
 						spec_req_cs_t[2] & !( |spec_req_cs_t[1:0] ),
 						spec_req_cs_t[1] & !spec_req_cs_t[0],
-						spec_req_cs_t[0]}
+						spec_req_cs_t[0]};
 
 
 // Request Tracking

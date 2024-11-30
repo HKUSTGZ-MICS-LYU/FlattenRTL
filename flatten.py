@@ -801,13 +801,15 @@ class IdentifierVisitor(SystemVerilogParserVisitor):
         else:
             for child in ctx.getChildren():
                 if isinstance(child, SystemVerilogParser.Module_program_interface_instantiationContext):
+                    FIRST_HIER_INST = True
                     for cur_name in self.cur_name_of_module_instance:
                         # Handle multiple instance in one declaration
                         for i in range(0, len(child.children)):
                             if isinstance(child.getChild(i), SystemVerilogParser.Hierarchical_instanceContext):
                                 if (child.getChild(i).name_of_instance().getText()== cur_name):
-                                    if i == 1:
-                                        self.start.append(child.getChild(i-1).start.start)
+                                    if FIRST_HIER_INST:
+                                        self.start.append(child.getChild(0).start.start)
+                                        FIRST_HIER_INST = False
                                     else:
                                         self.start.append(child.getChild(i).start.start)
                                     self.stop.append(child.getChild(i+1).symbol.stop)

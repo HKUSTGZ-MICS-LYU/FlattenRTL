@@ -1,4 +1,4 @@
-`include "./src/mc_defines.v"
+`include "mc_defines.v"
 
 module mc_mem_if(clk, rst, mc_clk, mc_br, mc_bg, 
 		mc_addr, mc_data_o, mc_dp_o, mc_data_oe,
@@ -27,7 +27,7 @@ output		mc_we_;
 output		mc_cas_;
 output		mc_ras_;
 output		mc_cke_;
-output	[7:0]	mc_cs_;
+output [7:0]	mc_cs_;
 output		mc_adsc_;
 output		mc_adv_;
 input		mc_ack;
@@ -87,7 +87,6 @@ reg		mc_we_;
 reg		mc_cas_;
 reg		mc_ras_;
 wire		mc_cke_;
-//reg	[7:0]	mc_cs_;
 reg		mc_bg;
 reg		mc_adsc_;
 reg		mc_adv_;
@@ -169,16 +168,6 @@ always @(posedge mc_clk)
 	mc_ras_ <= #1 ras_;
 
 assign	mc_cke_ = cke_;
-
-always @(posedge mc_clk or posedge rst) begin
-	if(rst) begin
-		mc_cs_ <= {
-		};
-	end
-	else begin
-	
-	end
-end
 
 reg mc_cs_0, mc_cs_1, mc_cs_2, mc_cs_3, mc_cs_4, mc_cs_5, mc_cs_6, mc_cs_7;
 assign mc_cs_ = {mc_cs_7, mc_cs_6, mc_cs_5, mc_cs_4, mc_cs_3, mc_cs_2, mc_cs_1, mc_cs_0};

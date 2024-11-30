@@ -1,4 +1,4 @@
-`include "./src/mc_defines.v"
+`include "mc_defines.v"
 
 module mc_top(clk_i, rst_i,
 

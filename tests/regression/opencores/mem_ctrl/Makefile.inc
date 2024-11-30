@@ -7,7 +7,7 @@ RESET_EDGE 	= 1
 UNROLL_CYC	= 50
 OBJ_SRC 	= 	./src/mc_adr_sel.v		\
 				./src/mc_cs_rf.v		\
-				./src/mc_defines.v		\
+				mc_defines.v		\
 				./src/mc_dp.v			\
 				./src/mc_incn_r.v		\
 				./src/mc_mem_if.v		\

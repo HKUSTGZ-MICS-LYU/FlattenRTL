@@ -1,4 +1,4 @@
-`include "./src/mc_defines.v"
+`include "mc_defines.v"
 
 module mc_obct_top(clk, rst, cs, row_adr, bank_adr, bank_set, bank_clr, bank_clr_all,
 		bank_open, any_bank_open, row_same, rfr_ack);

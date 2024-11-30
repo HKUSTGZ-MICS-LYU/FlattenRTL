@@ -1,4 +1,4 @@
-`include "./src/mc_defines.v"
+`include "mc_defines.v"
 
 module mc_wb_if(clk, rst,
 		wb_addr_i, wb_cyc_i, wb_stb_i, wb_we_i, wb_err, wb_ack_o,

@@ -1,4 +1,4 @@
-`include "./src/mc_defines.v"
+`include "mc_defines.v"
 
 module mc_refresh(clk, rst, 
 		cs_need_rfr, ref_int, rfr_req, rfr_ack,

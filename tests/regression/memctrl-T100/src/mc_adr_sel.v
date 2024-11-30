@@ -1,4 +1,4 @@
-`include "./src/mc_defines.v"
+`include "mc_defines.v"
 
 module mc_adr_sel(clk, csc, tms, wb_ack_o, wb_stb_i, wb_addr_i, wb_we_i,
 		wb_write_go, wr_hold, cas_,
