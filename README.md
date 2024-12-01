@@ -140,6 +140,7 @@ module expand_key_128(clk, in, out_1, out_2, rcon);
 ```
 
 6. filelist.f cannot contain empty line.
+7. Unable to handle port like input [32-1]
 ## Verification
 
 1. Currently, benchmarks such as adder, usb_phy, and Rocket-Chip have passed equivalence checking with Formality.

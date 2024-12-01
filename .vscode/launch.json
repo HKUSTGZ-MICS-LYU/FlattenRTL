@@ -50,6 +50,15 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "Debug VGA LCD",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "args": ["tests/regression/opencores/vga_lcd", "-f", "filelist.f", "-t", "vga_enh_top", "-o", "f_vga_lcd.v", "-g"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "Debug rocket sv",
             "type": "debugpy",
             "request": "launch",

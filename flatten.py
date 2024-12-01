@@ -86,7 +86,7 @@ class MyModuleInstantiationVisitor(SystemVerilogParserVisitor):
                                                 self.dict_of_parameters[self.name_of_module_instances[-1]] = {}
                                             self.dict_of_parameters[self.name_of_module_instances[-1]][
                                                 self.name_of_module_instances[-1]
-                                                + "_"
+                                                + "__"
                                                 + child.parameter_identifier().getText()
                                             ] = child.param_expression().getText()
                                         elif isinstance(child, SystemVerilogParser.Ordered_parameter_assignmentContext):
@@ -144,15 +144,15 @@ class ParamVisitor(SystemVerilogParserVisitor):
             for item in self.cur_prefixs:
                 if self.cur_dict_of_parameters.get(item) is None:
                     self.cur_dict_of_parameters[item] = {}
-                if (self.cur_dict_of_parameters[item].get(item + "_" + param_name)is None):
+                if (self.cur_dict_of_parameters[item].get(item + "__" + param_name)is None):
                     # Handle the ordered parameter
                     if (self.cur_dict_of_parameters[item].get(self.counter)is not None):
-                        self.cur_dict_of_parameters[item][item + "_" + param_name] = self.cur_dict_of_parameters[item].get(self.counter)
+                        self.cur_dict_of_parameters[item][item + "__" + param_name] = self.cur_dict_of_parameters[item].get(self.counter)
                     else:
                         param_value = self.find_and_repalce_param_in_param_value(
                             param_value, item, self.cur_dict_of_parameters
                         )
-                        self.cur_dict_of_parameters[item][item + "_" + param_name] = param_value
+                        self.cur_dict_of_parameters[item][item + "__" + param_name] = param_value
             self.counter += 1
             
 class OrderedModulePortVisitor(SystemVerilogParserVisitor):
@@ -376,7 +376,7 @@ class RenameModuleVisitor(SystemVerilogParserVisitor):
                             child.start.text = (
                                 ""
                                 + self.cur_prefixs[self.cur_prefixs_index]
-                                + "_"
+                                + "__"
                                 + child.start.text
                                 + ""
                             )
@@ -391,7 +391,7 @@ class RenameModuleVisitor(SystemVerilogParserVisitor):
                         child.start.text = (
                             ""
                             + self.cur_prefixs[self.cur_prefixs_index]
-                            + "_"
+                            + "__"
                             +child.start.text
                             + ""
                         )
@@ -951,7 +951,7 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
                         + ports_lhs_width[k * len_instance_port + i]
                         + " "
                         + cur_prefixs[k]
-                        + "_"
+                        + "__"
                         + cur_list_of_ports_lhs[k * len_instance_port +i]
                         +";"
                     )
@@ -962,7 +962,7 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
                             + ports_lhs_width[k * len_instance_port +i]
                             + " "
                             + cur_prefixs[k]
-                            + "_"
+                            + "__"
                             + cur_list_of_ports_lhs[k * len_instance_port + i]
                             + ";"
                         )
@@ -972,7 +972,7 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
                         + ports_lhs_width[k *len_instance_port +i]
                         + " "
                         +cur_prefixs[k]
-                        + "_"
+                        + "__"
                         + cur_list_of_ports_lhs[k * len_instance_port +i]
                         + ";"
                     )
@@ -987,7 +987,7 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
                     cur_new_assign.append(
                         "assign "
                         + cur_prefixs[k]
-                        + "_" 
+                        + "__" 
                         + cur_list_of_ports_lhs[k * len_instance_port +i]
                         + " = "
                         + rhs
@@ -1006,7 +1006,7 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
                         + rhs
                         + " = "
                         + cur_prefixs[k]
-                        + "_"
+                        + "__"
                         + cur_list_of_ports_lhs[k * len_instance_port + i]
                         + ";"
                     )
