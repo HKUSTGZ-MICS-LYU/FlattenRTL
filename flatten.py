@@ -389,6 +389,9 @@ class RenameModuleVisitor(SystemVerilogParserVisitor):
                     elif isinstance(
                         child.parentCtx.parentCtx,
                         SystemVerilogParser.Param_assignmentContext,
+                    ) or isinstance(
+                        child.parentCtx.parentCtx.parentCtx,
+                        SystemVerilogParser.Named_parameter_assignmentContext,
                     ):
                         pass
                     elif isinstance(

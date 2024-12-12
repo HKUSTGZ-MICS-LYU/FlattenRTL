@@ -1,71 +1,71 @@
 module wrapper #(
-    parameter RTL__csr_regfile__f_reset_rsps__RTL__csr_regfile__guarded=32'd1,
-    parameter RTL__stage1_f_reset_reqs__RTL__guarded=32'd1,
-    parameter RTL__stage1_f_reset_rsps__RTL__guarded=32'd1,
-    parameter RTL__stage2_f_reset_reqs__RTL__guarded=32'd1,
-    parameter RTL__stage2_f_reset_rsps__RTL__guarded=32'd1,
-    parameter RTL__stage3_f_reset_reqs__RTL__guarded=32'd1,
-    parameter RTL__stage3_f_reset_rsps__RTL__guarded=32'd1,
-parameter RTL__f_reset_reqs__RTL__width=32'd1,
-parameter RTL__f_reset_reqs__RTL__guarded=32'd1,
-parameter RTL__f_reset_rsps__RTL__width=32'd1,
-parameter RTL__f_reset_rsps__RTL__guarded=32'd1,
-parameter RTL__gpr_regfile__f_reset_rsps__RTL__gpr_regfile__guarded=32'd1,
-parameter RTL__gpr_regfile__regfile__RTL__gpr_regfile__addr_width=32'd5,
-parameter RTL__gpr_regfile__regfile__RTL__gpr_regfile__data_width=32'd32,
-parameter RTL__gpr_regfile__regfile__RTL__gpr_regfile__lo=5'h0,
-parameter RTL__gpr_regfile__regfile__RTL__gpr_regfile__hi=5'd31,
-parameter RTL__near_mem__dcache__RTL__near_mem__dmem_not_imem=1'd1,
-parameter RTL__near_mem__icache__RTL__near_mem__dmem_not_imem=1'd0,
-parameter RTL__near_mem__dcache__f_fabric_write_reqs__RTL__near_mem__dcache__width=32'd99,
-parameter RTL__near_mem__dcache__f_fabric_write_reqs__RTL__near_mem__dcache__guarded=32'd1,
-parameter RTL__near_mem__dcache__f_reset_reqs__RTL__near_mem__dcache__width=32'd1,
-parameter RTL__near_mem__dcache__f_reset_reqs__RTL__near_mem__dcache__guarded=32'd1,
-parameter RTL__near_mem__dcache__f_reset_rsps__RTL__near_mem__dcache__width=32'd1,
-parameter RTL__near_mem__dcache__f_reset_rsps__RTL__near_mem__dcache__guarded=32'd1,
-parameter RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__near_mem__dcache__width=32'd97,
-parameter RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__near_mem__dcache__guarded=32'd1,
-parameter RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__near_mem__dcache__width=32'd71,
-parameter RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__near_mem__dcache__guarded=32'd1,
-parameter RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__near_mem__dcache__width=32'd97,
-parameter RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__near_mem__dcache__guarded=32'd1,
-parameter RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__near_mem__dcache__width=32'd73,
-parameter RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__near_mem__dcache__guarded=32'd1,
-parameter RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__near_mem__dcache__width=32'd6,
-parameter RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__near_mem__dcache__guarded=32'd1,
-parameter RTL__near_mem__icache__f_fabric_write_reqs__RTL__near_mem__icache__width=32'd99,
-parameter RTL__near_mem__icache__f_fabric_write_reqs__RTL__near_mem__icache__guarded=32'd1,
-parameter RTL__near_mem__icache__f_reset_reqs__RTL__near_mem__icache__width=32'd1,
-parameter RTL__near_mem__icache__f_reset_reqs__RTL__near_mem__icache__guarded=32'd1,
-parameter RTL__near_mem__icache__f_reset_rsps__RTL__near_mem__icache__width=32'd1,
-parameter RTL__near_mem__icache__f_reset_rsps__RTL__near_mem__icache__guarded=32'd1,
-parameter RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__near_mem__icache__width=32'd97,
-parameter RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__near_mem__icache__guarded=32'd1,
-parameter RTL__near_mem__icache__master_xactor_f_rd_data__RTL__near_mem__icache__width=32'd71,
-parameter RTL__near_mem__icache__master_xactor_f_rd_data__RTL__near_mem__icache__guarded=32'd1,
-parameter RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__near_mem__icache__width=32'd97,
-parameter RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__near_mem__icache__guarded=32'd1,
-parameter RTL__near_mem__icache__master_xactor_f_wr_data__RTL__near_mem__icache__width=32'd73,
-parameter RTL__near_mem__icache__master_xactor_f_wr_data__RTL__near_mem__icache__guarded=32'd1,
-parameter RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__near_mem__icache__width=32'd6,
-parameter RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__near_mem__icache__guarded=32'd1,
-parameter RTL__near_mem__dcache__ram_state_and_ctag_cset__RTL__near_mem__dcache__PIPELINED=1'd0,
-parameter RTL__near_mem__dcache__ram_state_and_ctag_cset__RTL__near_mem__dcache__ADDR_WIDTH=32'd7,
-parameter RTL__near_mem__dcache__ram_state_and_ctag_cset__RTL__near_mem__dcache__DATA_WIDTH=32'd23,
-parameter RTL__near_mem__dcache__ram_state_and_ctag_cset__RTL__near_mem__dcache__MEMSIZE=8'd128,
-parameter RTL__near_mem__dcache__ram_word64_set__RTL__near_mem__dcache__PIPELINED=1'd0,
-parameter RTL__near_mem__dcache__ram_word64_set__RTL__near_mem__dcache__ADDR_WIDTH=32'd9,
-parameter RTL__near_mem__dcache__ram_word64_set__RTL__near_mem__dcache__DATA_WIDTH=32'd64,
-parameter RTL__near_mem__dcache__ram_word64_set__RTL__near_mem__dcache__MEMSIZE=10'd512,
-parameter RTL__near_mem__icache__ram_state_and_ctag_cset__RTL__near_mem__icache__PIPELINED=1'd0,
-parameter RTL__near_mem__icache__ram_state_and_ctag_cset__RTL__near_mem__icache__ADDR_WIDTH=32'd7,
-parameter RTL__near_mem__icache__ram_state_and_ctag_cset__RTL__near_mem__icache__DATA_WIDTH=32'd23,
-parameter RTL__near_mem__icache__ram_state_and_ctag_cset__RTL__near_mem__icache__MEMSIZE=8'd128,
-parameter RTL__near_mem__icache__ram_word64_set__RTL__near_mem__icache__PIPELINED=1'd0,
-parameter RTL__near_mem__icache__ram_word64_set__RTL__near_mem__icache__ADDR_WIDTH=32'd9,
-parameter RTL__near_mem__icache__ram_word64_set__RTL__near_mem__icache__DATA_WIDTH=32'd64,
-parameter RTL__near_mem__icache__ram_word64_set__RTL__near_mem__icache__MEMSIZE=10'd512,
-parameter RTL__near_mem__f_reset_rsps__RTL__near_mem__guarded=32'd1)(
+    parameter RTL__csr_regfile__f_reset_rsps__guarded=32'd1,
+    parameter RTL__stage1_f_reset_reqs__guarded=32'd1,
+    parameter RTL__stage1_f_reset_rsps__guarded=32'd1,
+    parameter RTL__stage2_f_reset_reqs__guarded=32'd1,
+    parameter RTL__stage2_f_reset_rsps__guarded=32'd1,
+    parameter RTL__stage3_f_reset_reqs__guarded=32'd1,
+    parameter RTL__stage3_f_reset_rsps__guarded=32'd1,
+parameter RTL__f_reset_reqs__width=32'd1,
+parameter RTL__f_reset_reqs__guarded=32'd1,
+parameter RTL__f_reset_rsps__width=32'd1,
+parameter RTL__f_reset_rsps__guarded=32'd1,
+parameter RTL__gpr_regfile__f_reset_rsps__guarded=32'd1,
+parameter RTL__gpr_regfile__regfile__addr_width=32'd5,
+parameter RTL__gpr_regfile__regfile__data_width=32'd32,
+parameter RTL__gpr_regfile__regfile__lo=5'h0,
+parameter RTL__gpr_regfile__regfile__hi=5'd31,
+parameter RTL__near_mem__dcache__dmem_not_imem=1'd1,
+parameter RTL__near_mem__icache__dmem_not_imem=1'd0,
+parameter RTL__near_mem__dcache__f_fabric_write_reqs__width=32'd99,
+parameter RTL__near_mem__dcache__f_fabric_write_reqs__guarded=32'd1,
+parameter RTL__near_mem__dcache__f_reset_reqs__width=32'd1,
+parameter RTL__near_mem__dcache__f_reset_reqs__guarded=32'd1,
+parameter RTL__near_mem__dcache__f_reset_rsps__width=32'd1,
+parameter RTL__near_mem__dcache__f_reset_rsps__guarded=32'd1,
+parameter RTL__near_mem__dcache__master_xactor_f_rd_addr__width=32'd97,
+parameter RTL__near_mem__dcache__master_xactor_f_rd_addr__guarded=32'd1,
+parameter RTL__near_mem__dcache__master_xactor_f_rd_data__width=32'd71,
+parameter RTL__near_mem__dcache__master_xactor_f_rd_data__guarded=32'd1,
+parameter RTL__near_mem__dcache__master_xactor_f_wr_addr__width=32'd97,
+parameter RTL__near_mem__dcache__master_xactor_f_wr_addr__guarded=32'd1,
+parameter RTL__near_mem__dcache__master_xactor_f_wr_data__width=32'd73,
+parameter RTL__near_mem__dcache__master_xactor_f_wr_data__guarded=32'd1,
+parameter RTL__near_mem__dcache__master_xactor_f_wr_resp__width=32'd6,
+parameter RTL__near_mem__dcache__master_xactor_f_wr_resp__guarded=32'd1,
+parameter RTL__near_mem__icache__f_fabric_write_reqs__width=32'd99,
+parameter RTL__near_mem__icache__f_fabric_write_reqs__guarded=32'd1,
+parameter RTL__near_mem__icache__f_reset_reqs__width=32'd1,
+parameter RTL__near_mem__icache__f_reset_reqs__guarded=32'd1,
+parameter RTL__near_mem__icache__f_reset_rsps__width=32'd1,
+parameter RTL__near_mem__icache__f_reset_rsps__guarded=32'd1,
+parameter RTL__near_mem__icache__master_xactor_f_rd_addr__width=32'd97,
+parameter RTL__near_mem__icache__master_xactor_f_rd_addr__guarded=32'd1,
+parameter RTL__near_mem__icache__master_xactor_f_rd_data__width=32'd71,
+parameter RTL__near_mem__icache__master_xactor_f_rd_data__guarded=32'd1,
+parameter RTL__near_mem__icache__master_xactor_f_wr_addr__width=32'd97,
+parameter RTL__near_mem__icache__master_xactor_f_wr_addr__guarded=32'd1,
+parameter RTL__near_mem__icache__master_xactor_f_wr_data__width=32'd73,
+parameter RTL__near_mem__icache__master_xactor_f_wr_data__guarded=32'd1,
+parameter RTL__near_mem__icache__master_xactor_f_wr_resp__width=32'd6,
+parameter RTL__near_mem__icache__master_xactor_f_wr_resp__guarded=32'd1,
+parameter RTL__near_mem__dcache__ram_state_and_ctag_cset__PIPELINED=1'd0,
+parameter RTL__near_mem__dcache__ram_state_and_ctag_cset__ADDR_WIDTH=32'd7,
+parameter RTL__near_mem__dcache__ram_state_and_ctag_cset__DATA_WIDTH=32'd23,
+parameter RTL__near_mem__dcache__ram_state_and_ctag_cset__MEMSIZE=8'd128,
+parameter RTL__near_mem__dcache__ram_word64_set__PIPELINED=1'd0,
+parameter RTL__near_mem__dcache__ram_word64_set__ADDR_WIDTH=32'd9,
+parameter RTL__near_mem__dcache__ram_word64_set__DATA_WIDTH=32'd64,
+parameter RTL__near_mem__dcache__ram_word64_set__MEMSIZE=10'd512,
+parameter RTL__near_mem__icache__ram_state_and_ctag_cset__PIPELINED=1'd0,
+parameter RTL__near_mem__icache__ram_state_and_ctag_cset__ADDR_WIDTH=32'd7,
+parameter RTL__near_mem__icache__ram_state_and_ctag_cset__DATA_WIDTH=32'd23,
+parameter RTL__near_mem__icache__ram_state_and_ctag_cset__MEMSIZE=8'd128,
+parameter RTL__near_mem__icache__ram_word64_set__PIPELINED=1'd0,
+parameter RTL__near_mem__icache__ram_word64_set__ADDR_WIDTH=32'd9,
+parameter RTL__near_mem__icache__ram_word64_set__DATA_WIDTH=32'd64,
+parameter RTL__near_mem__icache__ram_word64_set__MEMSIZE=10'd512,
+parameter RTL__near_mem__f_reset_rsps__guarded=32'd1)(
 __ILA_I_inst,
 __ISSUE__,
 __VLG_I_EN_hart0_server_reset_request_put,
@@ -2061,12 +2061,6 @@ end
 assign __auxvar0__delay = __auxvar0__delay_d_1 ;
 assign monitor_s1_already_exit_cond = 1'b0 ;
 assign monitor_s4_exit_cond = 1'b0 ;
-    wire ILA____START__;
-    wire ILA__clk;
-    wire[31:0] ILA__inst;
-    wire ILA__rst;
-    wire ILA____ILA_riscv_decode_of_ADD__;
-    wire ILA____ILA_riscv_valid__;
     reg[31:0] ILA__pc;
     reg ILA__load_en;
     reg[31:0] ILA__load_addr;
@@ -3354,88 +3348,29 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__RST_N;
     wire RTL__hart0_server_reset_request_put;
     wire RTL__EN_hart0_server_reset_request_put;
-    wire RTL__RDY_hart0_server_reset_request_put;
     wire RTL__EN_hart0_server_reset_response_get;
-    wire RTL__hart0_server_reset_response_get;
-    wire RTL__RDY_hart0_server_reset_response_get;
-    wire RTL__imem_master_awvalid;
-    wire[3:0] RTL__imem_master_awid;
-    wire[63:0] RTL__imem_master_awaddr;
-    wire[7:0] RTL__imem_master_awlen;
-    wire[2:0] RTL__imem_master_awsize;
-    wire[1:0] RTL__imem_master_awburst;
-    wire RTL__imem_master_awlock;
-    wire[3:0] RTL__imem_master_awcache;
-    wire[2:0] RTL__imem_master_awprot;
-    wire[3:0] RTL__imem_master_awqos;
-    wire[3:0] RTL__imem_master_awregion;
     wire RTL__imem_master_awready;
-    wire RTL__imem_master_wvalid;
-    wire[63:0] RTL__imem_master_wdata;
-    wire[7:0] RTL__imem_master_wstrb;
-    wire RTL__imem_master_wlast;
     wire RTL__imem_master_wready;
     wire RTL__imem_master_bvalid;
     wire[3:0] RTL__imem_master_bid;
     wire[1:0] RTL__imem_master_bresp;
-    wire RTL__imem_master_bready;
-    wire RTL__imem_master_arvalid;
-    wire[3:0] RTL__imem_master_arid;
-    wire[63:0] RTL__imem_master_araddr;
-    wire[7:0] RTL__imem_master_arlen;
-    wire[2:0] RTL__imem_master_arsize;
-    wire[1:0] RTL__imem_master_arburst;
-    wire RTL__imem_master_arlock;
-    wire[3:0] RTL__imem_master_arcache;
-    wire[2:0] RTL__imem_master_arprot;
-    wire[3:0] RTL__imem_master_arqos;
-    wire[3:0] RTL__imem_master_arregion;
     wire RTL__imem_master_arready;
     wire RTL__imem_master_rvalid;
     wire[3:0] RTL__imem_master_rid;
     wire[63:0] RTL__imem_master_rdata;
     wire[1:0] RTL__imem_master_rresp;
     wire RTL__imem_master_rlast;
-    wire RTL__imem_master_rready;
-    wire RTL__dmem_master_awvalid;
-    wire[3:0] RTL__dmem_master_awid;
-    wire[63:0] RTL__dmem_master_awaddr;
-    wire[7:0] RTL__dmem_master_awlen;
-    wire[2:0] RTL__dmem_master_awsize;
-    wire[1:0] RTL__dmem_master_awburst;
-    wire RTL__dmem_master_awlock;
-    wire[3:0] RTL__dmem_master_awcache;
-    wire[2:0] RTL__dmem_master_awprot;
-    wire[3:0] RTL__dmem_master_awqos;
-    wire[3:0] RTL__dmem_master_awregion;
     wire RTL__dmem_master_awready;
-    wire RTL__dmem_master_wvalid;
-    wire[63:0] RTL__dmem_master_wdata;
-    wire[7:0] RTL__dmem_master_wstrb;
-    wire RTL__dmem_master_wlast;
     wire RTL__dmem_master_wready;
     wire RTL__dmem_master_bvalid;
     wire[3:0] RTL__dmem_master_bid;
     wire[1:0] RTL__dmem_master_bresp;
-    wire RTL__dmem_master_bready;
-    wire RTL__dmem_master_arvalid;
-    wire[3:0] RTL__dmem_master_arid;
-    wire[63:0] RTL__dmem_master_araddr;
-    wire[7:0] RTL__dmem_master_arlen;
-    wire[2:0] RTL__dmem_master_arsize;
-    wire[1:0] RTL__dmem_master_arburst;
-    wire RTL__dmem_master_arlock;
-    wire[3:0] RTL__dmem_master_arcache;
-    wire[2:0] RTL__dmem_master_arprot;
-    wire[3:0] RTL__dmem_master_arqos;
-    wire[3:0] RTL__dmem_master_arregion;
     wire RTL__dmem_master_arready;
     wire RTL__dmem_master_rvalid;
     wire[3:0] RTL__dmem_master_rid;
     wire[63:0] RTL__dmem_master_rdata;
     wire[1:0] RTL__dmem_master_rresp;
     wire RTL__dmem_master_rlast;
-    wire RTL__dmem_master_rready;
     wire RTL__m_external_interrupt_req_set_not_clear;
     wire RTL__s_external_interrupt_req_set_not_clear;
     wire RTL__software_interrupt_req_set_not_clear;
@@ -3444,7 +3379,6 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire[3:0] RTL__set_verbosity_verbosity;
     wire[63:0] RTL__set_verbosity_logdelay;
     wire RTL__EN_set_verbosity;
-    wire RTL__RDY_set_verbosity;
 
     wire[63:0] RTL__dmem_master_araddr , RTL__dmem_master_awaddr , RTL__dmem_master_wdata , RTL__imem_master_araddr , RTL__imem_master_awaddr , RTL__imem_master_wdata ; 
     wire[7:0] RTL__dmem_master_arlen , RTL__dmem_master_awlen , RTL__dmem_master_wstrb , RTL__imem_master_arlen , RTL__imem_master_awlen , RTL__imem_master_wstrb ; 
@@ -3650,24 +3584,14 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__csr_regfile__CLK;
     wire RTL__csr_regfile__RST_N;
     wire RTL__csr_regfile__EN_server_reset_request_put;
-    wire RTL__csr_regfile__RDY_server_reset_request_put;
     wire RTL__csr_regfile__EN_server_reset_response_get;
-    wire RTL__csr_regfile__RDY_server_reset_response_get;
     wire[11:0] RTL__csr_regfile__read_csr_csr_addr;
-    wire[32:0] RTL__csr_regfile__read_csr;
     wire[11:0] RTL__csr_regfile__read_csr_port2_csr_addr;
-    wire[32:0] RTL__csr_regfile__read_csr_port2;
     wire[11:0] RTL__csr_regfile__mav_read_csr_csr_addr;
     wire RTL__csr_regfile__EN_mav_read_csr;
-    wire[32:0] RTL__csr_regfile__mav_read_csr;
     wire[11:0] RTL__csr_regfile__mav_csr_write_csr_addr;
     wire[31:0] RTL__csr_regfile__mav_csr_write_word;
     wire RTL__csr_regfile__EN_mav_csr_write;
-    wire[31:0] RTL__csr_regfile__mav_csr_write;
-    wire[27:0] RTL__csr_regfile__read_misa;
-    wire[31:0] RTL__csr_regfile__read_mstatus;
-    wire[31:0] RTL__csr_regfile__read_ustatus;
-    wire[31:0] RTL__csr_regfile__read_satp;
     wire[1:0] RTL__csr_regfile__csr_trap_actions_from_priv;
     wire[31:0] RTL__csr_regfile__csr_trap_actions_pc;
     wire RTL__csr_regfile__csr_trap_actions_nmi;
@@ -3675,39 +3599,24 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire[3:0] RTL__csr_regfile__csr_trap_actions_exc_code;
     wire[31:0] RTL__csr_regfile__csr_trap_actions_xtval;
     wire RTL__csr_regfile__EN_csr_trap_actions;
-    wire[97:0] RTL__csr_regfile__csr_trap_actions;
-    wire RTL__csr_regfile__RDY_csr_trap_actions;
     wire[1:0] RTL__csr_regfile__csr_ret_actions_from_priv;
     wire RTL__csr_regfile__EN_csr_ret_actions;
-    wire[65:0] RTL__csr_regfile__csr_ret_actions;
-    wire RTL__csr_regfile__RDY_csr_ret_actions;
-    wire[63:0] RTL__csr_regfile__read_csr_minstret;
     wire RTL__csr_regfile__EN_csr_minstret_incr;
-    wire[63:0] RTL__csr_regfile__read_csr_mcycle;
-    wire[63:0] RTL__csr_regfile__read_csr_mtime;
     wire[1:0] RTL__csr_regfile__access_permitted_1_priv;
     wire[11:0] RTL__csr_regfile__access_permitted_1_csr_addr;
     wire RTL__csr_regfile__access_permitted_1_read_not_write;
-    wire RTL__csr_regfile__access_permitted_1;
     wire[1:0] RTL__csr_regfile__access_permitted_2_priv;
     wire[11:0] RTL__csr_regfile__access_permitted_2_csr_addr;
     wire RTL__csr_regfile__access_permitted_2_read_not_write;
-    wire RTL__csr_regfile__access_permitted_2;
     wire[1:0] RTL__csr_regfile__csr_counter_read_fault_priv;
     wire[11:0] RTL__csr_regfile__csr_counter_read_fault_csr_addr;
-    wire RTL__csr_regfile__csr_counter_read_fault;
-    wire[31:0] RTL__csr_regfile__csr_mip_read;
     wire RTL__csr_regfile__m_external_interrupt_req_set_not_clear;
     wire RTL__csr_regfile__s_external_interrupt_req_set_not_clear;
     wire RTL__csr_regfile__timer_interrupt_req_set_not_clear;
     wire RTL__csr_regfile__software_interrupt_req_set_not_clear;
     wire[1:0] RTL__csr_regfile__interrupt_pending_cur_priv;
-    wire[4:0] RTL__csr_regfile__interrupt_pending;
-    wire RTL__csr_regfile__wfi_resume;
     wire RTL__csr_regfile__nmi_req_set_not_clear;
-    wire RTL__csr_regfile__nmi_pending;
     wire RTL__csr_regfile__EN_debug;
-    wire RTL__csr_regfile__RDY_debug;
 
     wire[97:0] RTL__csr_regfile__csr_trap_actions ; 
     wire[65:0] RTL__csr_regfile__csr_ret_actions ; 
@@ -3833,11 +3742,9 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__csr_regfile__csr_mie__CLK;
     wire RTL__csr_regfile__csr_mie__RST_N;
     wire RTL__csr_regfile__csr_mie__EN_reset;
-    wire[31:0] RTL__csr_regfile__csr_mie__fv_read;
     wire[27:0] RTL__csr_regfile__csr_mie__fav_write_misa;
     wire[31:0] RTL__csr_regfile__csr_mie__fav_write_wordxl;
     wire RTL__csr_regfile__csr_mie__EN_fav_write;
-    wire[31:0] RTL__csr_regfile__csr_mie__fav_write;
 
     wire[31:0] RTL__csr_regfile__csr_mie__fav_write , RTL__csr_regfile__csr_mie__fv_read ; reg[11:0] RTL__csr_regfile__csr_mie__rg_mie ; 
     wire[11:0] RTL__csr_regfile__csr_mie__rg_mie$D_IN ; 
@@ -3885,11 +3792,9 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__csr_regfile__csr_mip__CLK;
     wire RTL__csr_regfile__csr_mip__RST_N;
     wire RTL__csr_regfile__csr_mip__EN_reset;
-    wire[31:0] RTL__csr_regfile__csr_mip__fv_read;
     wire[27:0] RTL__csr_regfile__csr_mip__fav_write_misa;
     wire[31:0] RTL__csr_regfile__csr_mip__fav_write_wordxl;
     wire RTL__csr_regfile__csr_mip__EN_fav_write;
-    wire[31:0] RTL__csr_regfile__csr_mip__fav_write;
     wire RTL__csr_regfile__csr_mip__m_external_interrupt_req_req;
     wire RTL__csr_regfile__csr_mip__s_external_interrupt_req_req;
     wire RTL__csr_regfile__csr_mip__software_interrupt_req_req;
@@ -4142,62 +4047,14 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
       
     wire RTL__csr_regfile__soc_map__CLK;
     wire RTL__csr_regfile__soc_map__RST_N;
-    wire[63:0] RTL__csr_regfile__soc_map__m_near_mem_io_addr_base;
-    wire[63:0] RTL__csr_regfile__soc_map__m_near_mem_io_addr_size;
-    wire[63:0] RTL__csr_regfile__soc_map__m_near_mem_io_addr_lim;
-    wire[63:0] RTL__csr_regfile__soc_map__m_plic_addr_base;
-    wire[63:0] RTL__csr_regfile__soc_map__m_plic_addr_size;
-    wire[63:0] RTL__csr_regfile__soc_map__m_plic_addr_lim;
-    wire[63:0] RTL__csr_regfile__soc_map__m_uart0_addr_base;
-    wire[63:0] RTL__csr_regfile__soc_map__m_uart0_addr_size;
-    wire[63:0] RTL__csr_regfile__soc_map__m_uart0_addr_lim;
-    wire[63:0] RTL__csr_regfile__soc_map__m_boot_rom_addr_base;
-    wire[63:0] RTL__csr_regfile__soc_map__m_boot_rom_addr_size;
-    wire[63:0] RTL__csr_regfile__soc_map__m_boot_rom_addr_lim;
-    wire[63:0] RTL__csr_regfile__soc_map__m_mem0_controller_addr_base;
-    wire[63:0] RTL__csr_regfile__soc_map__m_mem0_controller_addr_size;
-    wire[63:0] RTL__csr_regfile__soc_map__m_mem0_controller_addr_lim;
-    wire[63:0] RTL__csr_regfile__soc_map__m_tcm_addr_base;
-    wire[63:0] RTL__csr_regfile__soc_map__m_tcm_addr_size;
-    wire[63:0] RTL__csr_regfile__soc_map__m_tcm_addr_lim;
     wire[63:0] RTL__csr_regfile__soc_map__m_is_mem_addr_addr;
-    wire RTL__csr_regfile__soc_map__m_is_mem_addr;
     wire[63:0] RTL__csr_regfile__soc_map__m_is_IO_addr_addr;
-    wire RTL__csr_regfile__soc_map__m_is_IO_addr;
     wire[63:0] RTL__csr_regfile__soc_map__m_is_near_mem_IO_addr_addr;
-    wire RTL__csr_regfile__soc_map__m_is_near_mem_IO_addr;
-    wire[63:0] RTL__csr_regfile__soc_map__m_pc_reset_value;
-    wire[63:0] RTL__csr_regfile__soc_map__m_mtvec_reset_value;
-    wire[63:0] RTL__csr_regfile__soc_map__m_nmivec_reset_value;
     wire RTL__soc_map__CLK;
     wire RTL__soc_map__RST_N;
-    wire[63:0] RTL__soc_map__m_near_mem_io_addr_base;
-    wire[63:0] RTL__soc_map__m_near_mem_io_addr_size;
-    wire[63:0] RTL__soc_map__m_near_mem_io_addr_lim;
-    wire[63:0] RTL__soc_map__m_plic_addr_base;
-    wire[63:0] RTL__soc_map__m_plic_addr_size;
-    wire[63:0] RTL__soc_map__m_plic_addr_lim;
-    wire[63:0] RTL__soc_map__m_uart0_addr_base;
-    wire[63:0] RTL__soc_map__m_uart0_addr_size;
-    wire[63:0] RTL__soc_map__m_uart0_addr_lim;
-    wire[63:0] RTL__soc_map__m_boot_rom_addr_base;
-    wire[63:0] RTL__soc_map__m_boot_rom_addr_size;
-    wire[63:0] RTL__soc_map__m_boot_rom_addr_lim;
-    wire[63:0] RTL__soc_map__m_mem0_controller_addr_base;
-    wire[63:0] RTL__soc_map__m_mem0_controller_addr_size;
-    wire[63:0] RTL__soc_map__m_mem0_controller_addr_lim;
-    wire[63:0] RTL__soc_map__m_tcm_addr_base;
-    wire[63:0] RTL__soc_map__m_tcm_addr_size;
-    wire[63:0] RTL__soc_map__m_tcm_addr_lim;
     wire[63:0] RTL__soc_map__m_is_mem_addr_addr;
-    wire RTL__soc_map__m_is_mem_addr;
     wire[63:0] RTL__soc_map__m_is_IO_addr_addr;
-    wire RTL__soc_map__m_is_IO_addr;
     wire[63:0] RTL__soc_map__m_is_near_mem_IO_addr_addr;
-    wire RTL__soc_map__m_is_near_mem_IO_addr;
-    wire[63:0] RTL__soc_map__m_pc_reset_value;
-    wire[63:0] RTL__soc_map__m_mtvec_reset_value;
-    wire[63:0] RTL__soc_map__m_nmivec_reset_value;
 
     wire[63:0] RTL__csr_regfile__soc_map__m_boot_rom_addr_base , RTL__csr_regfile__soc_map__m_boot_rom_addr_lim , RTL__csr_regfile__soc_map__m_boot_rom_addr_size , RTL__csr_regfile__soc_map__m_mem0_controller_addr_base , RTL__csr_regfile__soc_map__m_mem0_controller_addr_lim , RTL__csr_regfile__soc_map__m_mem0_controller_addr_size , RTL__csr_regfile__soc_map__m_mtvec_reset_value , RTL__csr_regfile__soc_map__m_near_mem_io_addr_base , RTL__csr_regfile__soc_map__m_near_mem_io_addr_lim , RTL__csr_regfile__soc_map__m_near_mem_io_addr_size , RTL__csr_regfile__soc_map__m_nmivec_reset_value , RTL__csr_regfile__soc_map__m_pc_reset_value , RTL__csr_regfile__soc_map__m_plic_addr_base , RTL__csr_regfile__soc_map__m_plic_addr_lim , RTL__csr_regfile__soc_map__m_plic_addr_size , RTL__csr_regfile__soc_map__m_tcm_addr_base , RTL__csr_regfile__soc_map__m_tcm_addr_lim , RTL__csr_regfile__soc_map__m_tcm_addr_size , RTL__csr_regfile__soc_map__m_uart0_addr_base , RTL__csr_regfile__soc_map__m_uart0_addr_lim , RTL__csr_regfile__soc_map__m_uart0_addr_size ; 
     wire RTL__csr_regfile__soc_map__m_is_IO_addr , RTL__csr_regfile__soc_map__m_is_mem_addr , RTL__csr_regfile__soc_map__m_is_near_mem_IO_addr ; 
@@ -4874,28 +4731,28 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     assign RTL__csr_regfile$nmi_pending = RTL__csr_regfile__nmi_pending;
     assign RTL__csr_regfile__EN_debug = RTL__csr_regfile$EN_debug;
       
+    wire RTL__f_reset_reqs__CLK;
+    wire RTL__f_reset_reqs__RST;
+    wire[RTL__f_reset_reqs__width-1:0] RTL__f_reset_reqs__D_IN;
+    wire RTL__f_reset_reqs__ENQ;
+    wire RTL__f_reset_reqs__DEQ;
+    wire RTL__f_reset_reqs__CLR;
     wire RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
     wire RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
     wire RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg;
     wire RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__empty_reg;
     wire RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__full_reg;
-    wire RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__full_reg;
-    wire RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg;
-    wire RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg;
-    wire RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg;
-    wire RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
-    wire RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
+    wire RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__full_reg;
+    wire RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg;
+    wire RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg;
+    wire RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg;
+    wire RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
+    wire RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
     wire RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg;
     wire RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
     wire RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__full_reg;
     wire RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
     wire RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__empty_reg;
-    wire RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
-    wire RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
-    wire RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
-    wire RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
-    wire RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
-    wire RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
 
     parameter RTL__f_reset_reqs__width =1; parameter RTL__f_reset_reqs__guarded =1; 
     reg RTL__f_reset_reqs__full_reg ; 
@@ -5093,28 +4950,28 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg = RTL__f_reset_rsps__empty_reg ; 
   assign  RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__f_reset_rsps__full_reg ; 
   assign  RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__f_reset_rsps__empty_reg ;
-    assign RTL__RST_N = RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
-    assign RTL__CLK = RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
-    assign RTL__f_reset_reqs$D_IN = RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg;
-    assign RTL__f_reset_reqs$ENQ = RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__f_reset_reqs$DEQ = RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__full_reg;
-    assign RTL__f_reset_reqs$CLR = RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__full_reg;
-    assign RTL__f_reset_reqs$D_OUT = RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg;
-    assign RTL__f_reset_reqs$FULL_N = RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg;
-    assign RTL__f_reset_reqs$EMPTY_N = RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__RTL__DOT__f_reset_reqs__DOT__full_reg = RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
-    assign RTL__RTL__DOT__f_reset_reqs__DOT__empty_reg = RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
-    assign RTL__RST_N = RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg;
-    assign RTL__CLK = RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
-    assign RTL__f_reset_rsps$D_IN = RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__full_reg;
-    assign RTL__f_reset_rsps$ENQ = RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
-    assign RTL__f_reset_rsps$DEQ = RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__f_reset_rsps$CLR = RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
-    assign RTL__f_reset_rsps$D_OUT = RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
-    assign RTL__f_reset_rsps$FULL_N = RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
-    assign RTL__f_reset_rsps$EMPTY_N = RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
-    assign RTL__RTL__DOT__f_reset_rsps__DOT__empty_reg = RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
-    assign RTL__RTL__DOT__f_reset_rsps__DOT__full_reg = RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
+    assign RTL__f_reset_reqs__CLK = RTL__CLK;
+    assign RTL__f_reset_reqs__RST = RTL__RST_N;
+    assign RTL__f_reset_reqs__D_IN = RTL__f_reset_reqs$D_IN;
+    assign RTL__f_reset_reqs__ENQ = RTL__f_reset_reqs$ENQ;
+    assign RTL__f_reset_reqs__DEQ = RTL__f_reset_reqs$DEQ;
+    assign RTL__f_reset_reqs__CLR = RTL__f_reset_reqs$CLR;
+    assign RTL__f_reset_reqs$D_OUT = RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
+    assign RTL__f_reset_reqs$FULL_N = RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
+    assign RTL__f_reset_reqs$EMPTY_N = RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg;
+    assign RTL__RTL__DOT__f_reset_reqs__DOT__full_reg = RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__RTL__DOT__f_reset_reqs__DOT__empty_reg = RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__full_reg;
+    assign RTL__RST_N = RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__full_reg;
+    assign RTL__CLK = RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg;
+    assign RTL__f_reset_rsps$D_IN = RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg;
+    assign RTL__f_reset_rsps$ENQ = RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg;
+    assign RTL__f_reset_rsps$DEQ = RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
+    assign RTL__f_reset_rsps$CLR = RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
+    assign RTL__f_reset_rsps$D_OUT = RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg;
+    assign RTL__f_reset_rsps$FULL_N = RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
+    assign RTL__f_reset_rsps$EMPTY_N = RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__full_reg;
+    assign RTL__RTL__DOT__f_reset_rsps__DOT__empty_reg = RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
+    assign RTL__RTL__DOT__f_reset_rsps__DOT__full_reg = RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__empty_reg;
       
     wire RTL__gpr_regfile__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__full_reg;
     wire[31:0] RTL__gpr_regfile__RTL__DOT__gpr_regfile__DOT__regfile__DOT__arr_2_;
@@ -5152,15 +5009,10 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__gpr_regfile__CLK;
     wire RTL__gpr_regfile__RST_N;
     wire RTL__gpr_regfile__EN_server_reset_request_put;
-    wire RTL__gpr_regfile__RDY_server_reset_request_put;
     wire RTL__gpr_regfile__EN_server_reset_response_get;
-    wire RTL__gpr_regfile__RDY_server_reset_response_get;
     wire[4:0] RTL__gpr_regfile__read_rs1_rs1;
-    wire[31:0] RTL__gpr_regfile__read_rs1;
     wire[4:0] RTL__gpr_regfile__read_rs1_port2_rs1;
-    wire[31:0] RTL__gpr_regfile__read_rs1_port2;
     wire[4:0] RTL__gpr_regfile__read_rs2_rs2;
-    wire[31:0] RTL__gpr_regfile__read_rs2;
     wire[4:0] RTL__gpr_regfile__write_rd_rd;
     wire[31:0] RTL__gpr_regfile__write_rd_rd_val;
     wire RTL__gpr_regfile__EN_write_rd;
@@ -5544,9 +5396,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__near_mem__CLK;
     wire RTL__near_mem__RST_N;
     wire RTL__near_mem__EN_server_reset_request_put;
-    wire RTL__near_mem__RDY_server_reset_request_put;
     wire RTL__near_mem__EN_server_reset_response_get;
-    wire RTL__near_mem__RDY_server_reset_response_get;
     wire[2:0] RTL__near_mem__imem_req_f3;
     wire[31:0] RTL__near_mem__imem_req_addr;
     wire[1:0] RTL__near_mem__imem_req_priv;
@@ -5554,52 +5404,17 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__near_mem__imem_req_mstatus_MXR;
     wire[31:0] RTL__near_mem__imem_req_satp;
     wire RTL__near_mem__EN_imem_req;
-    wire RTL__near_mem__imem_valid;
-    wire RTL__near_mem__imem_is_i32_not_i16;
-    wire[31:0] RTL__near_mem__imem_pc;
-    wire[31:0] RTL__near_mem__imem_instr;
-    wire RTL__near_mem__imem_exc;
-    wire[3:0] RTL__near_mem__imem_exc_code;
-    wire[31:0] RTL__near_mem__imem_tval;
-    wire RTL__near_mem__imem_master_awvalid;
-    wire[3:0] RTL__near_mem__imem_master_awid;
-    wire[63:0] RTL__near_mem__imem_master_awaddr;
-    wire[7:0] RTL__near_mem__imem_master_awlen;
-    wire[2:0] RTL__near_mem__imem_master_awsize;
-    wire[1:0] RTL__near_mem__imem_master_awburst;
-    wire RTL__near_mem__imem_master_awlock;
-    wire[3:0] RTL__near_mem__imem_master_awcache;
-    wire[2:0] RTL__near_mem__imem_master_awprot;
-    wire[3:0] RTL__near_mem__imem_master_awqos;
-    wire[3:0] RTL__near_mem__imem_master_awregion;
     wire RTL__near_mem__imem_master_awready;
-    wire RTL__near_mem__imem_master_wvalid;
-    wire[63:0] RTL__near_mem__imem_master_wdata;
-    wire[7:0] RTL__near_mem__imem_master_wstrb;
-    wire RTL__near_mem__imem_master_wlast;
     wire RTL__near_mem__imem_master_wready;
     wire RTL__near_mem__imem_master_bvalid;
     wire[3:0] RTL__near_mem__imem_master_bid;
     wire[1:0] RTL__near_mem__imem_master_bresp;
-    wire RTL__near_mem__imem_master_bready;
-    wire RTL__near_mem__imem_master_arvalid;
-    wire[3:0] RTL__near_mem__imem_master_arid;
-    wire[63:0] RTL__near_mem__imem_master_araddr;
-    wire[7:0] RTL__near_mem__imem_master_arlen;
-    wire[2:0] RTL__near_mem__imem_master_arsize;
-    wire[1:0] RTL__near_mem__imem_master_arburst;
-    wire RTL__near_mem__imem_master_arlock;
-    wire[3:0] RTL__near_mem__imem_master_arcache;
-    wire[2:0] RTL__near_mem__imem_master_arprot;
-    wire[3:0] RTL__near_mem__imem_master_arqos;
-    wire[3:0] RTL__near_mem__imem_master_arregion;
     wire RTL__near_mem__imem_master_arready;
     wire RTL__near_mem__imem_master_rvalid;
     wire[3:0] RTL__near_mem__imem_master_rid;
     wire[63:0] RTL__near_mem__imem_master_rdata;
     wire[1:0] RTL__near_mem__imem_master_rresp;
     wire RTL__near_mem__imem_master_rlast;
-    wire RTL__near_mem__imem_master_rready;
     wire RTL__near_mem__dmem_req_op;
     wire[2:0] RTL__near_mem__dmem_req_f3;
     wire[31:0] RTL__near_mem__dmem_req_addr;
@@ -5609,61 +5424,23 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__near_mem__dmem_req_mstatus_MXR;
     wire[31:0] RTL__near_mem__dmem_req_satp;
     wire RTL__near_mem__EN_dmem_req;
-    wire RTL__near_mem__dmem_valid;
-    wire[63:0] RTL__near_mem__dmem_word64;
-    wire[63:0] RTL__near_mem__dmem_st_amo_val;
-    wire RTL__near_mem__dmem_exc;
-    wire[3:0] RTL__near_mem__dmem_exc_code;
-    wire RTL__near_mem__dmem_master_awvalid;
-    wire[3:0] RTL__near_mem__dmem_master_awid;
-    wire[63:0] RTL__near_mem__dmem_master_awaddr;
-    wire[7:0] RTL__near_mem__dmem_master_awlen;
-    wire[2:0] RTL__near_mem__dmem_master_awsize;
-    wire[1:0] RTL__near_mem__dmem_master_awburst;
-    wire RTL__near_mem__dmem_master_awlock;
-    wire[3:0] RTL__near_mem__dmem_master_awcache;
-    wire[2:0] RTL__near_mem__dmem_master_awprot;
-    wire[3:0] RTL__near_mem__dmem_master_awqos;
-    wire[3:0] RTL__near_mem__dmem_master_awregion;
     wire RTL__near_mem__dmem_master_awready;
-    wire RTL__near_mem__dmem_master_wvalid;
-    wire[63:0] RTL__near_mem__dmem_master_wdata;
-    wire[7:0] RTL__near_mem__dmem_master_wstrb;
-    wire RTL__near_mem__dmem_master_wlast;
     wire RTL__near_mem__dmem_master_wready;
     wire RTL__near_mem__dmem_master_bvalid;
     wire[3:0] RTL__near_mem__dmem_master_bid;
     wire[1:0] RTL__near_mem__dmem_master_bresp;
-    wire RTL__near_mem__dmem_master_bready;
-    wire RTL__near_mem__dmem_master_arvalid;
-    wire[3:0] RTL__near_mem__dmem_master_arid;
-    wire[63:0] RTL__near_mem__dmem_master_araddr;
-    wire[7:0] RTL__near_mem__dmem_master_arlen;
-    wire[2:0] RTL__near_mem__dmem_master_arsize;
-    wire[1:0] RTL__near_mem__dmem_master_arburst;
-    wire RTL__near_mem__dmem_master_arlock;
-    wire[3:0] RTL__near_mem__dmem_master_arcache;
-    wire[2:0] RTL__near_mem__dmem_master_arprot;
-    wire[3:0] RTL__near_mem__dmem_master_arqos;
-    wire[3:0] RTL__near_mem__dmem_master_arregion;
     wire RTL__near_mem__dmem_master_arready;
     wire RTL__near_mem__dmem_master_rvalid;
     wire[3:0] RTL__near_mem__dmem_master_rid;
     wire[63:0] RTL__near_mem__dmem_master_rdata;
     wire[1:0] RTL__near_mem__dmem_master_rresp;
     wire RTL__near_mem__dmem_master_rlast;
-    wire RTL__near_mem__dmem_master_rready;
     wire RTL__near_mem__EN_server_fence_i_request_put;
-    wire RTL__near_mem__RDY_server_fence_i_request_put;
     wire RTL__near_mem__EN_server_fence_i_response_get;
-    wire RTL__near_mem__RDY_server_fence_i_response_get;
     wire[7:0] RTL__near_mem__server_fence_request_put;
     wire RTL__near_mem__EN_server_fence_request_put;
-    wire RTL__near_mem__RDY_server_fence_request_put;
     wire RTL__near_mem__EN_server_fence_response_get;
-    wire RTL__near_mem__RDY_server_fence_response_get;
     wire RTL__near_mem__EN_sfence_vma;
-    wire RTL__near_mem__RDY_sfence_vma;
 
     wire[63:0] RTL__near_mem__dmem_master_araddr , RTL__near_mem__dmem_master_awaddr , RTL__near_mem__dmem_master_wdata , RTL__near_mem__dmem_st_amo_val , RTL__near_mem__dmem_word64 , RTL__near_mem__imem_master_araddr , RTL__near_mem__imem_master_awaddr , RTL__near_mem__imem_master_wdata ; 
     wire[31:0] RTL__near_mem__imem_instr , RTL__near_mem__imem_pc , RTL__near_mem__imem_tval ; 
@@ -5845,11 +5622,8 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__near_mem__dcache__RST_N;
     wire[3:0] RTL__near_mem__dcache__set_verbosity_verbosity;
     wire RTL__near_mem__dcache__EN_set_verbosity;
-    wire RTL__near_mem__dcache__RDY_set_verbosity;
     wire RTL__near_mem__dcache__EN_server_reset_request_put;
-    wire RTL__near_mem__dcache__RDY_server_reset_request_put;
     wire RTL__near_mem__dcache__EN_server_reset_response_get;
-    wire RTL__near_mem__dcache__RDY_server_reset_response_get;
     wire RTL__near_mem__dcache__req_op;
     wire[2:0] RTL__near_mem__dcache__req_f3;
     wire[31:0] RTL__near_mem__dcache__req_addr;
@@ -5859,57 +5633,20 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__near_mem__dcache__req_mstatus_MXR;
     wire[31:0] RTL__near_mem__dcache__req_satp;
     wire RTL__near_mem__dcache__EN_req;
-    wire RTL__near_mem__dcache__valid;
-    wire[31:0] RTL__near_mem__dcache__addr;
-    wire[63:0] RTL__near_mem__dcache__word64;
-    wire[63:0] RTL__near_mem__dcache__st_amo_val;
-    wire RTL__near_mem__dcache__exc;
-    wire[3:0] RTL__near_mem__dcache__exc_code;
     wire RTL__near_mem__dcache__EN_server_flush_request_put;
-    wire RTL__near_mem__dcache__RDY_server_flush_request_put;
     wire RTL__near_mem__dcache__EN_server_flush_response_get;
-    wire RTL__near_mem__dcache__RDY_server_flush_response_get;
     wire RTL__near_mem__dcache__EN_tlb_flush;
-    wire RTL__near_mem__dcache__RDY_tlb_flush;
-    wire RTL__near_mem__dcache__mem_master_awvalid;
-    wire[3:0] RTL__near_mem__dcache__mem_master_awid;
-    wire[63:0] RTL__near_mem__dcache__mem_master_awaddr;
-    wire[7:0] RTL__near_mem__dcache__mem_master_awlen;
-    wire[2:0] RTL__near_mem__dcache__mem_master_awsize;
-    wire[1:0] RTL__near_mem__dcache__mem_master_awburst;
-    wire RTL__near_mem__dcache__mem_master_awlock;
-    wire[3:0] RTL__near_mem__dcache__mem_master_awcache;
-    wire[2:0] RTL__near_mem__dcache__mem_master_awprot;
-    wire[3:0] RTL__near_mem__dcache__mem_master_awqos;
-    wire[3:0] RTL__near_mem__dcache__mem_master_awregion;
     wire RTL__near_mem__dcache__mem_master_awready;
-    wire RTL__near_mem__dcache__mem_master_wvalid;
-    wire[63:0] RTL__near_mem__dcache__mem_master_wdata;
-    wire[7:0] RTL__near_mem__dcache__mem_master_wstrb;
-    wire RTL__near_mem__dcache__mem_master_wlast;
     wire RTL__near_mem__dcache__mem_master_wready;
     wire RTL__near_mem__dcache__mem_master_bvalid;
     wire[3:0] RTL__near_mem__dcache__mem_master_bid;
     wire[1:0] RTL__near_mem__dcache__mem_master_bresp;
-    wire RTL__near_mem__dcache__mem_master_bready;
-    wire RTL__near_mem__dcache__mem_master_arvalid;
-    wire[3:0] RTL__near_mem__icache__mem_master_arid;
-    wire[63:0] RTL__near_mem__icache__mem_master_araddr;
-    wire[7:0] RTL__near_mem__icache__mem_master_arlen;
-    wire[2:0] RTL__near_mem__icache__mem_master_arsize;
-    wire[1:0] RTL__near_mem__icache__mem_master_arburst;
-    wire RTL__near_mem__icache__mem_master_arlock;
-    wire[3:0] RTL__near_mem__icache__mem_master_arcache;
-    wire[2:0] RTL__near_mem__icache__mem_master_arprot;
-    wire[3:0] RTL__near_mem__icache__mem_master_arqos;
-    wire[3:0] RTL__near_mem__icache__mem_master_arregion;
     wire RTL__near_mem__icache__mem_master_arready;
     wire RTL__near_mem__icache__mem_master_rvalid;
     wire[3:0] RTL__near_mem__icache__mem_master_rid;
     wire[63:0] RTL__near_mem__icache__mem_master_rdata;
     wire[1:0] RTL__near_mem__icache__mem_master_rresp;
     wire RTL__near_mem__icache__mem_master_rlast;
-    wire RTL__near_mem__icache__mem_master_rready;
     wire RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
     wire RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg;
     wire RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__empty_reg;
@@ -5948,11 +5685,8 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__near_mem__icache__RST_N;
     wire[3:0] RTL__near_mem__icache__set_verbosity_verbosity;
     wire RTL__near_mem__icache__EN_set_verbosity;
-    wire RTL__near_mem__icache__RDY_set_verbosity;
     wire RTL__near_mem__icache__EN_server_reset_request_put;
-    wire RTL__near_mem__icache__RDY_server_reset_request_put;
     wire RTL__near_mem__icache__EN_server_reset_response_get;
-    wire RTL__near_mem__icache__RDY_server_reset_response_get;
     wire RTL__near_mem__icache__req_op;
     wire[2:0] RTL__near_mem__icache__req_f3;
     wire[31:0] RTL__near_mem__icache__req_addr;
@@ -5962,23 +5696,9 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__near_mem__icache__req_mstatus_MXR;
     wire[31:0] RTL__near_mem__icache__req_satp;
     wire RTL__near_mem__icache__EN_req;
-    wire RTL__near_mem__icache__valid;
-    wire[31:0] RTL__near_mem__icache__addr;
-    wire[63:0] RTL__near_mem__icache__word64;
-    wire[63:0] RTL__near_mem__icache__st_amo_val;
-    wire RTL__near_mem__icache__exc;
-    wire[3:0] RTL__near_mem__icache__exc_code;
     wire RTL__near_mem__icache__EN_server_flush_request_put;
-    wire RTL__near_mem__icache__RDY_server_flush_request_put;
     wire RTL__near_mem__icache__EN_server_flush_response_get;
-    wire RTL__near_mem__icache__RDY_server_flush_response_get;
     wire RTL__near_mem__icache__EN_tlb_flush;
-    wire RTL__near_mem__icache__RDY_tlb_flush;
-    wire RTL__near_mem__icache__mem_master_awvalid;
-    wire[3:0] RTL__near_mem__icache__mem_master_awid;
-    wire[63:0] RTL__near_mem__icache__mem_master_awaddr;
-    wire[7:0] RTL__near_mem__icache__mem_master_awlen;
-    wire[2:0] RTL__near_mem__icache__mem_master_awsize;
 
     parameter RTL__near_mem__dcache__dmem_not_imem =1'b0; reg[63:0] RTL__near_mem__dcache__word64 ; 
     wire[63:0] RTL__near_mem__dcache__mem_master_araddr , RTL__near_mem__dcache__mem_master_awaddr , RTL__near_mem__dcache__mem_master_wdata , RTL__near_mem__dcache__st_amo_val ; 
@@ -6133,6 +5853,12 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__near_mem__dcache__CAN_FIRE_mem_master_m_rvalid =1'd1; 
   assign  RTL__near_mem__dcache__WILL_FIRE_mem_master_m_rvalid =1'd1; 
   assign  RTL__near_mem__dcache__mem_master_rready = RTL__near_mem__dcache__master_xactor_f_rd_data$FULL_N ;  
+    wire RTL__near_mem__dcache__f_fabric_write_reqs__CLK;
+    wire RTL__near_mem__dcache__f_fabric_write_reqs__RST;
+    wire[RTL__near_mem__dcache__f_fabric_write_reqs__width-1:0] RTL__near_mem__dcache__f_fabric_write_reqs__D_IN;
+    wire RTL__near_mem__dcache__f_fabric_write_reqs__ENQ;
+    wire RTL__near_mem__dcache__f_fabric_write_reqs__DEQ;
+    wire RTL__near_mem__dcache__f_fabric_write_reqs__CLR;
     wire RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
     wire RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
     wire RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg;
@@ -6140,12 +5866,12 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__full_reg;
     wire RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__full_reg;
     wire RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg;
-    wire RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg;
-    wire RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg;
-    wire RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
-    wire RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
-    wire RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg;
-    wire RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
+    wire RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg;
+    wire RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg;
+    wire RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
+    wire RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
+    wire RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg;
+    wire RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
     wire RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__full_reg;
     wire RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
     wire RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__empty_reg;
@@ -6153,12 +5879,12 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
     wire RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
     wire RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
-    wire RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
-    wire RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
-    wire RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
-    wire RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
-    wire RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__full_reg;
-    wire RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
+    wire RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
+    wire RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
+    wire RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
+    wire RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
+    wire RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__full_reg;
+    wire RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
     wire RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__empty_reg;
     wire RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__full_reg;
     wire RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__full_reg;
@@ -6166,25 +5892,25 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
     wire RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__empty_reg;
     wire RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__f_reset_rsps__DOT__empty_reg;
-    wire RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__f_reset_reqs__DOT__empty_reg;
-    wire RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__full_reg;
-    wire RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__f_reset_rsps__DOT__full_reg;
-    wire RTL__near_mem__dcache__f_reset_rsps__CLK;
-    wire RTL__near_mem__dcache__f_reset_rsps__RST;
-    wire[RTL__near_mem__dcache__f_fabric_write_reqs__width-1:0] RTL__near_mem__dcache__f_reset_rsps__D_IN;
-    wire RTL__near_mem__dcache__master_xactor_f_rd_addr__ENQ;
-    wire RTL__near_mem__dcache__master_xactor_f_rd_addr__DEQ;
-    wire RTL__near_mem__dcache__master_xactor_f_rd_addr__CLR;
+    wire RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__DOT__f_reset_reqs__DOT__empty_reg;
+    wire RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__full_reg;
+    wire RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__DOT__f_reset_rsps__DOT__full_reg;
     wire RTL__near_mem__dcache__master_xactor_f_rd_addr__FULL_N;
     wire RTL__near_mem__dcache__master_xactor_f_rd_addr__EMPTY_N;
     wire[RTL__near_mem__dcache__f_fabric_write_reqs__width-1:0] RTL__near_mem__dcache__master_xactor_f_rd_addr__D_OUT;
+    wire RTL__near_mem__dcache__master_xactor_f_rd_addr__CLK;
+    wire RTL__near_mem__dcache__master_xactor_f_rd_addr__RST;
+    wire[RTL__near_mem__dcache__f_reset_reqs__width-1:0] RTL__near_mem__dcache__master_xactor_f_rd_addr__D_IN;
+    wire RTL__near_mem__dcache__master_xactor_f_rd_addr__ENQ;
+    wire RTL__near_mem__dcache__master_xactor_f_rd_addr__DEQ;
+    wire RTL__near_mem__dcache__master_xactor_f_rd_addr__CLR;
     wire RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__empty_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__full_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__full_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg;
+    wire RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
+    wire RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg;
+    wire RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__empty_reg;
+    wire RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__full_reg;
+    wire RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__full_reg;
+    wire RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg;
     wire RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg;
     wire RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg;
     wire RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
@@ -6192,12 +5918,12 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg;
     wire RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
     wire RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__full_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__empty_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
+    wire RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
+    wire RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__empty_reg;
+    wire RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
+    wire RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
+    wire RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
+    wire RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
     wire RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
     wire RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
     wire RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
@@ -6205,25 +5931,25 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__full_reg;
     wire RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
     wire RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__empty_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__full_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__full_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__f_reset_reqs__DOT__full_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__empty_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__f_reset_rsps__DOT__empty_reg;
+    wire RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__full_reg;
+    wire RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__full_reg;
+    wire RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__f_reset_reqs__DOT__full_reg;
+    wire RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
+    wire RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__empty_reg;
+    wire RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__f_reset_rsps__DOT__empty_reg;
     wire RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__f_reset_reqs__DOT__empty_reg;
     wire RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__full_reg;
     wire RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__f_reset_rsps__DOT__full_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_wr_data__CLK;
-    wire RTL__near_mem__dcache__master_xactor_f_wr_data__RST;
-    wire[RTL__near_mem__dcache__f_reset_reqs__width-1:0] RTL__near_mem__dcache__master_xactor_f_wr_data__D_IN;
-    wire RTL__near_mem__dcache__master_xactor_f_wr_data__ENQ;
-    wire RTL__near_mem__dcache__master_xactor_f_wr_data__DEQ;
-    wire RTL__near_mem__dcache__master_xactor_f_wr_data__CLR;
     wire RTL__near_mem__dcache__master_xactor_f_wr_data__FULL_N;
     wire RTL__near_mem__dcache__master_xactor_f_wr_data__EMPTY_N;
     wire[RTL__near_mem__dcache__f_reset_reqs__width-1:0] RTL__near_mem__dcache__master_xactor_f_wr_data__D_OUT;
-    wire RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
+    wire RTL__near_mem__dcache__master_xactor_f_wr_data__CLK;
+    wire RTL__near_mem__dcache__master_xactor_f_wr_resp__RST;
+    wire[RTL__near_mem__dcache__f_reset_rsps__width-1:0] RTL__near_mem__dcache__master_xactor_f_wr_resp__D_IN;
+    wire RTL__near_mem__dcache__master_xactor_f_wr_resp__ENQ;
+    wire RTL__near_mem__dcache__master_xactor_f_wr_resp__DEQ;
+    wire RTL__near_mem__dcache__master_xactor_f_wr_resp__CLR;
+    wire RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
     wire RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
     wire RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg;
     wire RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__empty_reg;
@@ -6231,12 +5957,12 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__full_reg;
     wire RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg;
     wire RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
-    wire RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__full_reg;
+    wire RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg;
+    wire RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
+    wire RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
+    wire RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg;
+    wire RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
+    wire RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__full_reg;
     wire RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
     wire RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__empty_reg;
     wire RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
@@ -6244,12 +5970,12 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
     wire RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
     wire RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
-    wire RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
-    wire RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
-    wire RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
-    wire RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__full_reg;
-    wire RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
-    wire RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__empty_reg;
+    wire RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
+    wire RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
+    wire RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
+    wire RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__full_reg;
+    wire RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
+    wire RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__empty_reg;
     wire RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__full_reg;
     wire RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__full_reg;
     wire RTL__near_mem__icache__f_reset_reqs__RTL__DOT__f_reset_reqs__DOT__full_reg;
@@ -6257,25 +5983,25 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__empty_reg;
     wire RTL__near_mem__icache__f_reset_reqs__RTL__DOT__f_reset_rsps__DOT__empty_reg;
     wire RTL__near_mem__icache__f_reset_reqs__RTL__DOT__f_reset_reqs__DOT__empty_reg;
-    wire RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__full_reg;
-    wire RTL__near_mem__icache__f_reset_reqs__RTL__DOT__f_reset_rsps__DOT__full_reg;
-    wire RTL__near_mem__icache__f_reset_reqs__CLK;
-    wire RTL__near_mem__icache__f_reset_reqs__RST;
-    wire[RTL__near_mem__dcache__f_reset_rsps__width-1:0] RTL__near_mem__icache__f_reset_reqs__D_IN;
-    wire RTL__near_mem__icache__f_reset_reqs__ENQ;
-    wire RTL__near_mem__icache__f_reset_rsps__DEQ;
-    wire RTL__near_mem__icache__f_reset_rsps__CLR;
+    wire RTL__near_mem__icache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__full_reg;
+    wire RTL__near_mem__icache__f_reset_rsps__RTL__DOT__f_reset_rsps__DOT__full_reg;
     wire RTL__near_mem__icache__f_reset_rsps__FULL_N;
     wire RTL__near_mem__icache__f_reset_rsps__EMPTY_N;
     wire[RTL__near_mem__dcache__f_reset_rsps__width-1:0] RTL__near_mem__icache__f_reset_rsps__D_OUT;
+    wire RTL__near_mem__icache__f_reset_rsps__CLK;
+    wire RTL__near_mem__icache__f_reset_rsps__RST;
+    wire[RTL__near_mem__dcache__master_xactor_f_rd_addr__width-1:0] RTL__near_mem__icache__f_reset_rsps__D_IN;
+    wire RTL__near_mem__icache__f_reset_rsps__ENQ;
+    wire RTL__near_mem__icache__f_reset_rsps__DEQ;
+    wire RTL__near_mem__icache__f_reset_rsps__CLR;
     wire RTL__near_mem__icache__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
     wire RTL__near_mem__icache__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
-    wire RTL__near_mem__icache__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg;
-    wire RTL__near_mem__icache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__empty_reg;
-    wire RTL__near_mem__icache__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__full_reg;
-    wire RTL__near_mem__icache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__full_reg;
-    wire RTL__near_mem__icache__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg;
-    wire RTL__near_mem__icache__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg;
+    wire RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg;
+    wire RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__empty_reg;
+    wire RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__full_reg;
+    wire RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__full_reg;
+    wire RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg;
+    wire RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg;
     wire RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg;
     wire RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
     wire RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
@@ -6283,12 +6009,12 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
     wire RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__full_reg;
     wire RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
-    wire RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__empty_reg;
-    wire RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
-    wire RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
-    wire RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
-    wire RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
-    wire RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
+    wire RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__empty_reg;
+    wire RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
+    wire RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
+    wire RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
+    wire RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
+    wire RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
     wire RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
     wire RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
     wire RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
@@ -6296,25 +6022,25 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
     wire RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__empty_reg;
     wire RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__full_reg;
-    wire RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__full_reg;
-    wire RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__f_reset_reqs__DOT__full_reg;
-    wire RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
-    wire RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__empty_reg;
-    wire RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__f_reset_rsps__DOT__empty_reg;
-    wire RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__f_reset_reqs__DOT__empty_reg;
+    wire RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__full_reg;
+    wire RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__f_reset_reqs__DOT__full_reg;
+    wire RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
+    wire RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__empty_reg;
+    wire RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__f_reset_rsps__DOT__empty_reg;
+    wire RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__f_reset_reqs__DOT__empty_reg;
     wire RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__full_reg;
     wire RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__f_reset_rsps__DOT__full_reg;
-    wire RTL__near_mem__icache__master_xactor_f_wr_addr__CLK;
-    wire RTL__near_mem__icache__master_xactor_f_wr_addr__RST;
-    wire[RTL__near_mem__dcache__master_xactor_f_rd_addr__width-1:0] RTL__near_mem__icache__master_xactor_f_wr_addr__D_IN;
-    wire RTL__near_mem__icache__master_xactor_f_wr_addr__ENQ;
-    wire RTL__near_mem__icache__master_xactor_f_wr_addr__DEQ;
-    wire RTL__near_mem__icache__master_xactor_f_wr_addr__CLR;
     wire RTL__near_mem__icache__master_xactor_f_wr_addr__FULL_N;
     wire RTL__near_mem__icache__master_xactor_f_wr_addr__EMPTY_N;
     wire[RTL__near_mem__dcache__master_xactor_f_rd_addr__width-1:0] RTL__near_mem__icache__master_xactor_f_wr_addr__D_OUT;
-    wire RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
-    wire RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
+    wire RTL__near_mem__icache__master_xactor_f_wr_addr__CLK;
+    wire RTL__near_mem__icache__master_xactor_f_wr_addr__RST;
+    wire[RTL__near_mem__dcache__master_xactor_f_rd_data__width-1:0] RTL__near_mem__icache__master_xactor_f_wr_data__D_IN;
+    wire RTL__near_mem__icache__master_xactor_f_wr_data__ENQ;
+    wire RTL__near_mem__icache__master_xactor_f_wr_data__DEQ;
+    wire RTL__near_mem__icache__master_xactor_f_wr_data__CLR;
+    wire RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
+    wire RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
     wire RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg;
     wire RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__empty_reg;
     wire RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__full_reg;
@@ -6322,12 +6048,12 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg;
     wire RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg;
     wire RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg;
-    wire RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
-    wire RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
-    wire RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg;
-    wire RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
-    wire RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__full_reg;
-    wire RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
+    wire RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
+    wire RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
+    wire RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg;
+    wire RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
+    wire RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__full_reg;
+    wire RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
     wire RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__empty_reg;
     wire RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
     wire RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
@@ -6335,12 +6061,6 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
     wire RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
     wire RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
-    wire RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
-    wire RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
-    wire RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__full_reg;
-    wire RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
-    wire RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__empty_reg;
-    wire RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__full_reg;
 
     parameter RTL__near_mem__dcache__f_fabric_write_reqs__width =1; parameter RTL__near_mem__dcache__f_fabric_write_reqs__guarded =1; 
     reg RTL__near_mem__dcache__f_fabric_write_reqs__full_reg ; 
@@ -7249,91 +6969,19 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
       
     wire RTL__near_mem__dcache__soc_map__CLK;
     wire RTL__near_mem__dcache__soc_map__RST_N;
-    wire[63:0] RTL__near_mem__dcache__soc_map__m_near_mem_io_addr_base;
-    wire[63:0] RTL__near_mem__dcache__soc_map__m_near_mem_io_addr_size;
-    wire[63:0] RTL__near_mem__dcache__soc_map__m_near_mem_io_addr_lim;
-    wire[63:0] RTL__near_mem__dcache__soc_map__m_plic_addr_base;
-    wire[63:0] RTL__near_mem__dcache__soc_map__m_plic_addr_size;
-    wire[63:0] RTL__near_mem__dcache__soc_map__m_plic_addr_lim;
-    wire[63:0] RTL__near_mem__dcache__soc_map__m_uart0_addr_base;
-    wire[63:0] RTL__near_mem__dcache__soc_map__m_uart0_addr_size;
-    wire[63:0] RTL__near_mem__dcache__soc_map__m_uart0_addr_lim;
-    wire[63:0] RTL__near_mem__dcache__soc_map__m_boot_rom_addr_base;
-    wire[63:0] RTL__near_mem__dcache__soc_map__m_boot_rom_addr_size;
-    wire[63:0] RTL__near_mem__dcache__soc_map__m_boot_rom_addr_lim;
-    wire[63:0] RTL__near_mem__dcache__soc_map__m_mem0_controller_addr_base;
-    wire[63:0] RTL__near_mem__dcache__soc_map__m_mem0_controller_addr_size;
-    wire[63:0] RTL__near_mem__dcache__soc_map__m_mem0_controller_addr_lim;
-    wire[63:0] RTL__near_mem__dcache__soc_map__m_tcm_addr_base;
-    wire[63:0] RTL__near_mem__dcache__soc_map__m_tcm_addr_size;
-    wire[63:0] RTL__near_mem__dcache__soc_map__m_tcm_addr_lim;
     wire[63:0] RTL__near_mem__dcache__soc_map__m_is_mem_addr_addr;
-    wire RTL__near_mem__dcache__soc_map__m_is_mem_addr;
     wire[63:0] RTL__near_mem__dcache__soc_map__m_is_IO_addr_addr;
-    wire RTL__near_mem__dcache__soc_map__m_is_IO_addr;
     wire[63:0] RTL__near_mem__dcache__soc_map__m_is_near_mem_IO_addr_addr;
-    wire RTL__near_mem__dcache__soc_map__m_is_near_mem_IO_addr;
-    wire[63:0] RTL__near_mem__dcache__soc_map__m_pc_reset_value;
-    wire[63:0] RTL__near_mem__dcache__soc_map__m_mtvec_reset_value;
-    wire[63:0] RTL__near_mem__dcache__soc_map__m_nmivec_reset_value;
     wire RTL__near_mem__icache__soc_map__CLK;
     wire RTL__near_mem__icache__soc_map__RST_N;
-    wire[63:0] RTL__near_mem__icache__soc_map__m_near_mem_io_addr_base;
-    wire[63:0] RTL__near_mem__icache__soc_map__m_near_mem_io_addr_size;
-    wire[63:0] RTL__near_mem__icache__soc_map__m_near_mem_io_addr_lim;
-    wire[63:0] RTL__near_mem__icache__soc_map__m_plic_addr_base;
-    wire[63:0] RTL__near_mem__icache__soc_map__m_plic_addr_size;
-    wire[63:0] RTL__near_mem__icache__soc_map__m_plic_addr_lim;
-    wire[63:0] RTL__near_mem__icache__soc_map__m_uart0_addr_base;
-    wire[63:0] RTL__near_mem__icache__soc_map__m_uart0_addr_size;
-    wire[63:0] RTL__near_mem__icache__soc_map__m_uart0_addr_lim;
-    wire[63:0] RTL__near_mem__icache__soc_map__m_boot_rom_addr_base;
-    wire[63:0] RTL__near_mem__icache__soc_map__m_boot_rom_addr_size;
-    wire[63:0] RTL__near_mem__icache__soc_map__m_boot_rom_addr_lim;
-    wire[63:0] RTL__near_mem__icache__soc_map__m_mem0_controller_addr_base;
-    wire[63:0] RTL__near_mem__icache__soc_map__m_mem0_controller_addr_size;
-    wire[63:0] RTL__near_mem__icache__soc_map__m_mem0_controller_addr_lim;
-    wire[63:0] RTL__near_mem__icache__soc_map__m_tcm_addr_base;
-    wire[63:0] RTL__near_mem__icache__soc_map__m_tcm_addr_size;
-    wire[63:0] RTL__near_mem__icache__soc_map__m_tcm_addr_lim;
     wire[63:0] RTL__near_mem__icache__soc_map__m_is_mem_addr_addr;
-    wire RTL__near_mem__icache__soc_map__m_is_mem_addr;
     wire[63:0] RTL__near_mem__icache__soc_map__m_is_IO_addr_addr;
-    wire RTL__near_mem__icache__soc_map__m_is_IO_addr;
     wire[63:0] RTL__near_mem__icache__soc_map__m_is_near_mem_IO_addr_addr;
-    wire RTL__near_mem__icache__soc_map__m_is_near_mem_IO_addr;
-    wire[63:0] RTL__near_mem__icache__soc_map__m_pc_reset_value;
-    wire[63:0] RTL__near_mem__icache__soc_map__m_mtvec_reset_value;
-    wire[63:0] RTL__near_mem__icache__soc_map__m_nmivec_reset_value;
     wire RTL__near_mem__soc_map__CLK;
     wire RTL__near_mem__soc_map__RST_N;
-    wire[63:0] RTL__near_mem__soc_map__m_near_mem_io_addr_base;
-    wire[63:0] RTL__near_mem__soc_map__m_near_mem_io_addr_size;
-    wire[63:0] RTL__near_mem__soc_map__m_near_mem_io_addr_lim;
-    wire[63:0] RTL__near_mem__soc_map__m_plic_addr_base;
-    wire[63:0] RTL__near_mem__soc_map__m_plic_addr_size;
-    wire[63:0] RTL__near_mem__soc_map__m_plic_addr_lim;
-    wire[63:0] RTL__near_mem__soc_map__m_uart0_addr_base;
-    wire[63:0] RTL__near_mem__soc_map__m_uart0_addr_size;
-    wire[63:0] RTL__near_mem__soc_map__m_uart0_addr_lim;
-    wire[63:0] RTL__near_mem__soc_map__m_boot_rom_addr_base;
-    wire[63:0] RTL__near_mem__soc_map__m_boot_rom_addr_size;
-    wire[63:0] RTL__near_mem__soc_map__m_boot_rom_addr_lim;
-    wire[63:0] RTL__near_mem__soc_map__m_mem0_controller_addr_base;
-    wire[63:0] RTL__near_mem__soc_map__m_mem0_controller_addr_size;
-    wire[63:0] RTL__near_mem__soc_map__m_mem0_controller_addr_lim;
-    wire[63:0] RTL__near_mem__soc_map__m_tcm_addr_base;
-    wire[63:0] RTL__near_mem__soc_map__m_tcm_addr_size;
-    wire[63:0] RTL__near_mem__soc_map__m_tcm_addr_lim;
     wire[63:0] RTL__near_mem__soc_map__m_is_mem_addr_addr;
-    wire RTL__near_mem__soc_map__m_is_mem_addr;
     wire[63:0] RTL__near_mem__soc_map__m_is_IO_addr_addr;
-    wire RTL__near_mem__soc_map__m_is_IO_addr;
     wire[63:0] RTL__near_mem__soc_map__m_is_near_mem_IO_addr_addr;
-    wire RTL__near_mem__soc_map__m_is_near_mem_IO_addr;
-    wire[63:0] RTL__near_mem__soc_map__m_pc_reset_value;
-    wire[63:0] RTL__near_mem__soc_map__m_mtvec_reset_value;
-    wire[63:0] RTL__near_mem__soc_map__m_nmivec_reset_value;
 
     wire[63:0] RTL__near_mem__dcache__soc_map__m_boot_rom_addr_base , RTL__near_mem__dcache__soc_map__m_boot_rom_addr_lim , RTL__near_mem__dcache__soc_map__m_boot_rom_addr_size , RTL__near_mem__dcache__soc_map__m_mem0_controller_addr_base , RTL__near_mem__dcache__soc_map__m_mem0_controller_addr_lim , RTL__near_mem__dcache__soc_map__m_mem0_controller_addr_size , RTL__near_mem__dcache__soc_map__m_mtvec_reset_value , RTL__near_mem__dcache__soc_map__m_near_mem_io_addr_base , RTL__near_mem__dcache__soc_map__m_near_mem_io_addr_lim , RTL__near_mem__dcache__soc_map__m_near_mem_io_addr_size , RTL__near_mem__dcache__soc_map__m_nmivec_reset_value , RTL__near_mem__dcache__soc_map__m_pc_reset_value , RTL__near_mem__dcache__soc_map__m_plic_addr_base , RTL__near_mem__dcache__soc_map__m_plic_addr_lim , RTL__near_mem__dcache__soc_map__m_plic_addr_size , RTL__near_mem__dcache__soc_map__m_tcm_addr_base , RTL__near_mem__dcache__soc_map__m_tcm_addr_lim , RTL__near_mem__dcache__soc_map__m_tcm_addr_size , RTL__near_mem__dcache__soc_map__m_uart0_addr_base , RTL__near_mem__dcache__soc_map__m_uart0_addr_lim , RTL__near_mem__dcache__soc_map__m_uart0_addr_size ; 
     wire RTL__near_mem__dcache__soc_map__m_is_IO_addr , RTL__near_mem__dcache__soc_map__m_is_mem_addr , RTL__near_mem__dcache__soc_map__m_is_near_mem_IO_addr ; 
@@ -9601,214 +9249,214 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_wr_resp__empty_reg ; 
   assign  RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_wr_resp__full_reg ; 
   assign  RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_wr_resp__empty_reg ;
-    assign RTL__near_mem__dcache__RST_N = RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
-    assign RTL__near_mem__dcache__CLK = RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
-    assign RTL__near_mem__dcache__f_fabric_write_reqs$D_IN = RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg;
-    assign RTL__near_mem__dcache__f_fabric_write_reqs$ENQ = RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__near_mem__dcache__f_fabric_write_reqs$DEQ = RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__full_reg;
+    assign RTL__near_mem__dcache__f_fabric_write_reqs__CLK = RTL__near_mem__dcache__CLK;
+    assign RTL__near_mem__dcache__f_fabric_write_reqs__RST = RTL__near_mem__dcache__RST_N;
+    assign RTL__near_mem__dcache__f_fabric_write_reqs__D_IN = RTL__near_mem__dcache__f_fabric_write_reqs$D_IN;
+    assign RTL__near_mem__dcache__f_fabric_write_reqs__ENQ = RTL__near_mem__dcache__f_fabric_write_reqs$ENQ;
+    assign RTL__near_mem__dcache__f_fabric_write_reqs__DEQ = RTL__near_mem__dcache__f_fabric_write_reqs$DEQ;
+    assign RTL__near_mem__dcache__f_fabric_write_reqs__CLR = RTL__near_mem__dcache__f_fabric_write_reqs$CLR;
+    assign RTL__near_mem__dcache__f_fabric_write_reqs$D_OUT = RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
+    assign RTL__near_mem__dcache__f_fabric_write_reqs$FULL_N = RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
+    assign RTL__near_mem__dcache__f_fabric_write_reqs$EMPTY_N = RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg;
+    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg = RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg = RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__full_reg;
     assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__full_reg = RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__full_reg;
     assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg = RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg = RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg;
-    assign RTL__near_mem__dcache__f_fabric_write_reqs$EMPTY_N = RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg = RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg = RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__full_reg = RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__empty_reg = RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
-    assign RTL__near_mem__dcache__RST_N = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__full_reg;
-    assign RTL__near_mem__dcache__CLK = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
-    assign RTL__near_mem__dcache__f_reset_reqs$D_IN = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__near_mem__dcache__f_reset_reqs$ENQ = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
-    assign RTL__near_mem__dcache__f_reset_reqs$DEQ = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
-    assign RTL__near_mem__dcache__f_reset_reqs$CLR = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
-    assign RTL__near_mem__dcache__f_reset_reqs$D_OUT = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
-    assign RTL__near_mem__dcache__f_reset_reqs$FULL_N = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
-    assign RTL__near_mem__dcache__f_reset_reqs$EMPTY_N = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__full_reg = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__full_reg = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__full_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__empty_reg = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
-    assign RTL__near_mem__dcache__RST_N = RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__empty_reg;
-    assign RTL__near_mem__dcache__CLK = RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__full_reg;
+    assign RTL__near_mem__dcache__RST_N = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg;
+    assign RTL__near_mem__dcache__CLK = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg;
+    assign RTL__near_mem__dcache__f_reset_reqs$D_IN = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
+    assign RTL__near_mem__dcache__f_reset_reqs$ENQ = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
+    assign RTL__near_mem__dcache__f_reset_reqs$DEQ = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg;
+    assign RTL__near_mem__dcache__f_reset_reqs$CLR = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
+    assign RTL__near_mem__dcache__f_reset_reqs$D_OUT = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__full_reg;
+    assign RTL__near_mem__dcache__f_reset_reqs$FULL_N = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
+    assign RTL__near_mem__dcache__f_reset_reqs$EMPTY_N = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__full_reg = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
+    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
+    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__full_reg = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
+    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__empty_reg = RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
+    assign RTL__near_mem__dcache__RST_N = RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
+    assign RTL__near_mem__dcache__CLK = RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
+    assign RTL__near_mem__dcache__f_reset_rsps$D_IN = RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
+    assign RTL__near_mem__dcache__f_reset_rsps$ENQ = RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
+    assign RTL__near_mem__dcache__f_reset_rsps$DEQ = RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__full_reg;
+    assign RTL__near_mem__dcache__f_reset_rsps$CLR = RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
+    assign RTL__near_mem__dcache__f_reset_rsps$D_OUT = RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__empty_reg;
+    assign RTL__near_mem__dcache__f_reset_rsps$FULL_N = RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__full_reg;
     assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__full_reg = RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__near_mem__dcache__f_reset_rsps$ENQ = RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__f_reset_reqs__DOT__full_reg;
-    assign RTL__near_mem__dcache__f_reset_rsps$DEQ = RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
-    assign RTL__near_mem__dcache__f_reset_rsps$CLR = RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__empty_reg;
-    assign RTL__near_mem__dcache__f_reset_rsps$D_OUT = RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__near_mem__dcache__f_reset_rsps$FULL_N = RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__f_reset_reqs__DOT__empty_reg;
-    assign RTL__near_mem__dcache__f_reset_rsps$EMPTY_N = RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__full_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__empty_reg = RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__near_mem__dcache__f_reset_rsps__CLK = RTL__near_mem__dcache__CLK;
-    assign RTL__near_mem__dcache__f_reset_rsps__RST = RTL__near_mem__dcache__RST_N;
-    assign RTL__near_mem__dcache__f_reset_rsps__D_IN = RTL__near_mem__dcache__f_reset_rsps$D_IN;
-    assign RTL__near_mem__dcache__master_xactor_f_rd_addr__ENQ = RTL__near_mem__dcache__master_xactor_f_rd_addr$ENQ;
-    assign RTL__near_mem__dcache__master_xactor_f_rd_addr__DEQ = RTL__near_mem__dcache__master_xactor_f_rd_addr$DEQ;
-    assign RTL__near_mem__dcache__master_xactor_f_rd_addr__CLR = RTL__near_mem__dcache__master_xactor_f_rd_addr$CLR;
+    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__empty_reg = RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__f_reset_reqs__DOT__full_reg;
+    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__empty_reg = RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
+    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg = RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__empty_reg;
+    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__full_reg = RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__near_mem__dcache__RST_N = RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__DOT__f_reset_reqs__DOT__empty_reg;
+    assign RTL__near_mem__dcache__CLK = RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__full_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_rd_addr$D_IN = RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__DOT__f_reset_rsps__DOT__full_reg;
     assign RTL__near_mem__dcache__master_xactor_f_rd_addr$FULL_N = RTL__near_mem__dcache__master_xactor_f_rd_addr__FULL_N;
     assign RTL__near_mem__dcache__master_xactor_f_rd_addr$EMPTY_N = RTL__near_mem__dcache__master_xactor_f_rd_addr__EMPTY_N;
     assign RTL__near_mem__dcache__master_xactor_f_rd_addr$D_OUT = RTL__near_mem__dcache__master_xactor_f_rd_addr__D_OUT;
+    assign RTL__near_mem__dcache__master_xactor_f_rd_addr__CLK = RTL__near_mem__dcache__CLK;
+    assign RTL__near_mem__dcache__master_xactor_f_rd_addr__RST = RTL__near_mem__dcache__RST_N;
+    assign RTL__near_mem__dcache__master_xactor_f_rd_addr__D_IN = RTL__near_mem__dcache__master_xactor_f_rd_addr$D_IN;
+    assign RTL__near_mem__dcache__master_xactor_f_rd_addr__ENQ = RTL__near_mem__dcache__master_xactor_f_rd_addr$ENQ;
+    assign RTL__near_mem__dcache__master_xactor_f_rd_addr__DEQ = RTL__near_mem__dcache__master_xactor_f_rd_addr$DEQ;
+    assign RTL__near_mem__dcache__master_xactor_f_rd_addr__CLR = RTL__near_mem__dcache__master_xactor_f_rd_addr$CLR;
     assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
-    assign RTL__near_mem__dcache__master_xactor_f_rd_addr$EMPTY_N = RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__full_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__full_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg;
-    assign RTL__near_mem__dcache__RST_N = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg;
-    assign RTL__near_mem__dcache__CLK = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__near_mem__dcache__master_xactor_f_rd_data$D_IN = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
+    assign RTL__near_mem__dcache__RST_N = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
+    assign RTL__near_mem__dcache__CLK = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_rd_data$D_IN = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_rd_data$ENQ = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__full_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_rd_data$DEQ = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__full_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_rd_data$CLR = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_rd_data$D_OUT = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_rd_data$FULL_N = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_rd_data$EMPTY_N = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
     assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
     assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg;
-    assign RTL__near_mem__dcache__master_xactor_f_rd_data$CLR = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
-    assign RTL__near_mem__dcache__master_xactor_f_rd_data$D_OUT = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__full_reg;
-    assign RTL__near_mem__dcache__master_xactor_f_rd_data$FULL_N = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
-    assign RTL__near_mem__dcache__master_xactor_f_rd_data$EMPTY_N = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__full_reg = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
-    assign RTL__near_mem__dcache__RST_N = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
-    assign RTL__near_mem__dcache__CLK = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
+    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
+    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__full_reg;
+    assign RTL__near_mem__dcache__RST_N = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
+    assign RTL__near_mem__dcache__CLK = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_wr_addr$D_IN = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_wr_addr$ENQ = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_wr_addr$DEQ = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
+    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__full_reg = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_wr_addr$D_OUT = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_wr_addr$FULL_N = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
     assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
-    assign RTL__near_mem__dcache__master_xactor_f_wr_addr$ENQ = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
-    assign RTL__near_mem__dcache__master_xactor_f_wr_addr$DEQ = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__full_reg;
+    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
+    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__full_reg = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__full_reg;
     assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__full_reg = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
-    assign RTL__near_mem__dcache__master_xactor_f_wr_addr$D_OUT = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__empty_reg;
-    assign RTL__near_mem__dcache__master_xactor_f_wr_addr$FULL_N = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__full_reg;
-    assign RTL__near_mem__dcache__master_xactor_f_wr_addr$EMPTY_N = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__f_reset_reqs__DOT__full_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__full_reg = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__full_reg = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__empty_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__near_mem__dcache__RST_N = RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__f_reset_reqs__DOT__empty_reg;
-    assign RTL__near_mem__dcache__CLK = RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__full_reg;
-    assign RTL__near_mem__dcache__master_xactor_f_wr_data$D_IN = RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__near_mem__dcache__master_xactor_f_wr_data__CLK = RTL__near_mem__dcache__CLK;
-    assign RTL__near_mem__dcache__master_xactor_f_wr_data__RST = RTL__near_mem__dcache__RST_N;
-    assign RTL__near_mem__dcache__master_xactor_f_wr_data__D_IN = RTL__near_mem__dcache__master_xactor_f_wr_data$D_IN;
-    assign RTL__near_mem__dcache__master_xactor_f_wr_data__ENQ = RTL__near_mem__dcache__master_xactor_f_wr_data$ENQ;
-    assign RTL__near_mem__dcache__master_xactor_f_wr_data__DEQ = RTL__near_mem__dcache__master_xactor_f_wr_data$DEQ;
-    assign RTL__near_mem__dcache__master_xactor_f_wr_data__CLR = RTL__near_mem__dcache__master_xactor_f_wr_data$CLR;
+    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__empty_reg;
+    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__full_reg = RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__full_reg;
+    assign RTL__near_mem__dcache__CLK = RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__full_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_wr_data$D_IN = RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__f_reset_reqs__DOT__full_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_wr_data$ENQ = RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_wr_data$DEQ = RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__empty_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_wr_data$CLR = RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_wr_data$D_OUT = RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__f_reset_reqs__DOT__empty_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_wr_data$FULL_N = RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__full_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_wr_data$EMPTY_N = RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__f_reset_rsps__DOT__full_reg;
     assign RTL__near_mem__dcache__master_xactor_f_wr_data$FULL_N = RTL__near_mem__dcache__master_xactor_f_wr_data__FULL_N;
     assign RTL__near_mem__dcache__master_xactor_f_wr_data$EMPTY_N = RTL__near_mem__dcache__master_xactor_f_wr_data__EMPTY_N;
     assign RTL__near_mem__dcache__master_xactor_f_wr_data$D_OUT = RTL__near_mem__dcache__master_xactor_f_wr_data__D_OUT;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__full_reg = RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
-    assign RTL__near_mem__dcache__RST_N = RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
-    assign RTL__near_mem__dcache__CLK = RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg;
-    assign RTL__near_mem__dcache__master_xactor_f_wr_resp$D_IN = RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__near_mem__dcache__master_xactor_f_wr_resp$ENQ = RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__full_reg;
-    assign RTL__near_mem__dcache__master_xactor_f_wr_resp$DEQ = RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__full_reg;
-    assign RTL__near_mem__dcache__master_xactor_f_wr_resp$CLR = RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg;
-    assign RTL__near_mem__dcache__master_xactor_f_wr_resp$D_OUT = RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg;
-    assign RTL__near_mem__dcache__master_xactor_f_wr_resp$FULL_N = RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__near_mem__dcache__master_xactor_f_wr_resp$EMPTY_N = RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__full_reg = RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__full_reg = RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
-    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__full_reg;
-    assign RTL__near_mem__icache__RST_N = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
-    assign RTL__near_mem__icache__CLK = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__near_mem__icache__f_fabric_write_reqs$D_IN = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
-    assign RTL__near_mem__icache__f_fabric_write_reqs$ENQ = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
-    assign RTL__near_mem__icache__f_fabric_write_reqs$DEQ = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
-    assign RTL__near_mem__icache__f_fabric_write_reqs$CLR = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
-    assign RTL__near_mem__icache__f_fabric_write_reqs$D_OUT = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
-    assign RTL__near_mem__icache__f_fabric_write_reqs$FULL_N = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
-    assign RTL__near_mem__icache__f_fabric_write_reqs$EMPTY_N = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__full_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__full_reg = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__empty_reg = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__empty_reg;
-    assign RTL__near_mem__icache__RST_N = RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__full_reg;
-    assign RTL__near_mem__icache__CLK = RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__near_mem__icache__f_reset_reqs$D_IN = RTL__near_mem__icache__f_reset_reqs__RTL__DOT__f_reset_reqs__DOT__full_reg;
-    assign RTL__near_mem__icache__f_reset_reqs$ENQ = RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_wr_data__CLK = RTL__near_mem__dcache__CLK;
+    assign RTL__near_mem__dcache__master_xactor_f_wr_resp__RST = RTL__near_mem__dcache__RST_N;
+    assign RTL__near_mem__dcache__master_xactor_f_wr_resp__D_IN = RTL__near_mem__dcache__master_xactor_f_wr_resp$D_IN;
+    assign RTL__near_mem__dcache__master_xactor_f_wr_resp__ENQ = RTL__near_mem__dcache__master_xactor_f_wr_resp$ENQ;
+    assign RTL__near_mem__dcache__master_xactor_f_wr_resp__DEQ = RTL__near_mem__dcache__master_xactor_f_wr_resp$DEQ;
+    assign RTL__near_mem__dcache__master_xactor_f_wr_resp__CLR = RTL__near_mem__dcache__master_xactor_f_wr_resp$CLR;
+    assign RTL__near_mem__dcache__master_xactor_f_wr_resp$CLR = RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_wr_resp$D_OUT = RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_wr_resp$FULL_N = RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg;
+    assign RTL__near_mem__dcache__master_xactor_f_wr_resp$EMPTY_N = RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__full_reg = RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__full_reg;
+    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__full_reg;
+    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__full_reg = RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg;
+    assign RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg;
+    assign RTL__near_mem__icache__RST_N = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg;
+    assign RTL__near_mem__icache__CLK = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
+    assign RTL__near_mem__icache__f_fabric_write_reqs$D_IN = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
+    assign RTL__near_mem__icache__f_fabric_write_reqs$ENQ = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg;
+    assign RTL__near_mem__icache__f_fabric_write_reqs$DEQ = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
+    assign RTL__near_mem__icache__f_fabric_write_reqs$CLR = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__full_reg;
+    assign RTL__near_mem__icache__f_fabric_write_reqs$D_OUT = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
+    assign RTL__near_mem__icache__f_fabric_write_reqs$FULL_N = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__near_mem__icache__f_fabric_write_reqs$EMPTY_N = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__full_reg = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__empty_reg = RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
+    assign RTL__near_mem__icache__RST_N = RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
+    assign RTL__near_mem__icache__CLK = RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
+    assign RTL__near_mem__icache__f_reset_reqs$D_IN = RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
+    assign RTL__near_mem__icache__f_reset_reqs$ENQ = RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__full_reg;
+    assign RTL__near_mem__icache__f_reset_reqs$DEQ = RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
+    assign RTL__near_mem__icache__f_reset_reqs$CLR = RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__empty_reg;
+    assign RTL__near_mem__icache__f_reset_reqs$D_OUT = RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__full_reg;
+    assign RTL__near_mem__icache__f_reset_reqs$FULL_N = RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__full_reg;
+    assign RTL__near_mem__icache__f_reset_reqs$EMPTY_N = RTL__near_mem__icache__f_reset_reqs__RTL__DOT__f_reset_reqs__DOT__full_reg;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__full_reg = RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
     assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__empty_reg = RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__empty_reg;
-    assign RTL__near_mem__icache__f_reset_reqs$CLR = RTL__near_mem__icache__f_reset_reqs__RTL__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__near_mem__icache__f_reset_reqs$D_OUT = RTL__near_mem__icache__f_reset_reqs__RTL__DOT__f_reset_reqs__DOT__empty_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__full_reg = RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__full_reg;
-    assign RTL__near_mem__icache__f_reset_reqs$EMPTY_N = RTL__near_mem__icache__f_reset_reqs__RTL__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__near_mem__icache__f_reset_reqs__CLK = RTL__near_mem__icache__CLK;
-    assign RTL__near_mem__icache__f_reset_reqs__RST = RTL__near_mem__icache__RST_N;
-    assign RTL__near_mem__icache__f_reset_reqs__D_IN = RTL__near_mem__icache__f_reset_reqs$D_IN;
-    assign RTL__near_mem__icache__f_reset_reqs__ENQ = RTL__near_mem__icache__f_reset_reqs$ENQ;
-    assign RTL__near_mem__icache__f_reset_rsps__DEQ = RTL__near_mem__icache__f_reset_rsps$DEQ;
-    assign RTL__near_mem__icache__f_reset_rsps__CLR = RTL__near_mem__icache__f_reset_rsps$CLR;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__full_reg = RTL__near_mem__icache__f_reset_reqs__RTL__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__empty_reg = RTL__near_mem__icache__f_reset_reqs__RTL__DOT__f_reset_reqs__DOT__empty_reg;
+    assign RTL__near_mem__icache__RST_N = RTL__near_mem__icache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__full_reg;
+    assign RTL__near_mem__icache__CLK = RTL__near_mem__icache__f_reset_rsps__RTL__DOT__f_reset_rsps__DOT__full_reg;
     assign RTL__near_mem__icache__f_reset_rsps$FULL_N = RTL__near_mem__icache__f_reset_rsps__FULL_N;
     assign RTL__near_mem__icache__f_reset_rsps$EMPTY_N = RTL__near_mem__icache__f_reset_rsps__EMPTY_N;
     assign RTL__near_mem__icache__f_reset_rsps$D_OUT = RTL__near_mem__icache__f_reset_rsps__D_OUT;
-    assign RTL__near_mem__icache__f_reset_rsps$CLR = RTL__near_mem__icache__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
-    assign RTL__near_mem__icache__f_reset_rsps$D_OUT = RTL__near_mem__icache__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
-    assign RTL__near_mem__icache__f_reset_rsps$FULL_N = RTL__near_mem__icache__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__empty_reg = RTL__near_mem__icache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__empty_reg = RTL__near_mem__icache__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__full_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__empty_reg = RTL__near_mem__icache__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__full_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg = RTL__near_mem__icache__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__full_reg = RTL__near_mem__icache__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg;
-    assign RTL__near_mem__icache__RST_N = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__near_mem__icache__CLK = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
-    assign RTL__near_mem__icache__master_xactor_f_rd_addr$D_IN = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
-    assign RTL__near_mem__icache__master_xactor_f_rd_addr$ENQ = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg;
-    assign RTL__near_mem__icache__master_xactor_f_rd_addr$DEQ = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
-    assign RTL__near_mem__icache__master_xactor_f_rd_addr$CLR = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__full_reg;
-    assign RTL__near_mem__icache__master_xactor_f_rd_addr$D_OUT = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
-    assign RTL__near_mem__icache__master_xactor_f_rd_addr$FULL_N = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__near_mem__icache__master_xactor_f_rd_addr$EMPTY_N = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
+    assign RTL__near_mem__icache__f_reset_rsps__CLK = RTL__near_mem__icache__CLK;
+    assign RTL__near_mem__icache__f_reset_rsps__RST = RTL__near_mem__icache__RST_N;
+    assign RTL__near_mem__icache__f_reset_rsps__D_IN = RTL__near_mem__icache__f_reset_rsps$D_IN;
+    assign RTL__near_mem__icache__f_reset_rsps__ENQ = RTL__near_mem__icache__f_reset_rsps$ENQ;
+    assign RTL__near_mem__icache__f_reset_rsps__DEQ = RTL__near_mem__icache__f_reset_rsps$DEQ;
+    assign RTL__near_mem__icache__f_reset_rsps__CLR = RTL__near_mem__icache__f_reset_rsps$CLR;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg = RTL__near_mem__icache__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__full_reg = RTL__near_mem__icache__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
+    assign RTL__near_mem__icache__RST_N = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg;
+    assign RTL__near_mem__icache__CLK = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__near_mem__icache__master_xactor_f_rd_addr$D_IN = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__full_reg;
+    assign RTL__near_mem__icache__master_xactor_f_rd_addr$ENQ = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__full_reg;
+    assign RTL__near_mem__icache__master_xactor_f_rd_addr$DEQ = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg;
+    assign RTL__near_mem__icache__master_xactor_f_rd_addr$CLR = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg;
+    assign RTL__near_mem__icache__master_xactor_f_rd_addr$D_OUT = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg;
+    assign RTL__near_mem__icache__master_xactor_f_rd_addr$FULL_N = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
+    assign RTL__near_mem__icache__master_xactor_f_rd_addr$EMPTY_N = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__full_reg;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
+    assign RTL__near_mem__icache__RST_N = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__near_mem__icache__CLK = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
+    assign RTL__near_mem__icache__master_xactor_f_rd_data$D_IN = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
+    assign RTL__near_mem__icache__master_xactor_f_rd_data$ENQ = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
+    assign RTL__near_mem__icache__master_xactor_f_rd_data$DEQ = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
+    assign RTL__near_mem__icache__master_xactor_f_rd_data$CLR = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
     assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
-    assign RTL__near_mem__icache__CLK = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
-    assign RTL__near_mem__icache__master_xactor_f_rd_data$D_IN = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
+    assign RTL__near_mem__icache__master_xactor_f_rd_data$FULL_N = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
+    assign RTL__near_mem__icache__master_xactor_f_rd_data$EMPTY_N = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
     assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__full_reg;
-    assign RTL__near_mem__icache__master_xactor_f_rd_data$DEQ = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
-    assign RTL__near_mem__icache__master_xactor_f_rd_data$CLR = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__empty_reg;
-    assign RTL__near_mem__icache__master_xactor_f_rd_data$D_OUT = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__full_reg;
-    assign RTL__near_mem__icache__master_xactor_f_rd_data$FULL_N = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__near_mem__icache__master_xactor_f_rd_data$EMPTY_N = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__f_reset_reqs__DOT__full_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__empty_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__f_reset_reqs__DOT__empty_reg;
-    assign RTL__near_mem__icache__RST_N = RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__full_reg;
-    assign RTL__near_mem__icache__CLK = RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__near_mem__icache__master_xactor_f_wr_addr__CLK = RTL__near_mem__icache__CLK;
-    assign RTL__near_mem__icache__master_xactor_f_wr_addr__RST = RTL__near_mem__icache__RST_N;
-    assign RTL__near_mem__icache__master_xactor_f_wr_addr__D_IN = RTL__near_mem__icache__master_xactor_f_wr_addr$D_IN;
-    assign RTL__near_mem__icache__master_xactor_f_wr_addr__ENQ = RTL__near_mem__icache__master_xactor_f_wr_addr$ENQ;
-    assign RTL__near_mem__icache__master_xactor_f_wr_addr__DEQ = RTL__near_mem__icache__master_xactor_f_wr_addr$DEQ;
-    assign RTL__near_mem__icache__master_xactor_f_wr_addr__CLR = RTL__near_mem__icache__master_xactor_f_wr_addr$CLR;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__empty_reg;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__full_reg;
+    assign RTL__near_mem__icache__RST_N = RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__full_reg;
+    assign RTL__near_mem__icache__CLK = RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__f_reset_reqs__DOT__full_reg;
+    assign RTL__near_mem__icache__master_xactor_f_wr_addr$D_IN = RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
+    assign RTL__near_mem__icache__master_xactor_f_wr_addr$ENQ = RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__empty_reg;
+    assign RTL__near_mem__icache__master_xactor_f_wr_addr$DEQ = RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__near_mem__icache__master_xactor_f_wr_addr$CLR = RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__f_reset_reqs__DOT__empty_reg;
+    assign RTL__near_mem__icache__master_xactor_f_wr_addr$D_OUT = RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__full_reg;
+    assign RTL__near_mem__icache__master_xactor_f_wr_addr$FULL_N = RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__f_reset_rsps__DOT__full_reg;
     assign RTL__near_mem__icache__master_xactor_f_wr_addr$FULL_N = RTL__near_mem__icache__master_xactor_f_wr_addr__FULL_N;
     assign RTL__near_mem__icache__master_xactor_f_wr_addr$EMPTY_N = RTL__near_mem__icache__master_xactor_f_wr_addr__EMPTY_N;
     assign RTL__near_mem__icache__master_xactor_f_wr_addr$D_OUT = RTL__near_mem__icache__master_xactor_f_wr_addr__D_OUT;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
-    assign RTL__near_mem__icache__RST_N = RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg;
-    assign RTL__near_mem__icache__CLK = RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__near_mem__icache__master_xactor_f_wr_data$D_IN = RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__full_reg;
-    assign RTL__near_mem__icache__master_xactor_f_wr_data$ENQ = RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__full_reg;
-    assign RTL__near_mem__icache__master_xactor_f_wr_data$DEQ = RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg;
-    assign RTL__near_mem__icache__master_xactor_f_wr_data$CLR = RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg;
-    assign RTL__near_mem__icache__master_xactor_f_wr_data$D_OUT = RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
-    assign RTL__near_mem__icache__master_xactor_f_wr_data$EMPTY_N = RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__full_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
-    assign RTL__near_mem__icache__RST_N = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__near_mem__icache__master_xactor_f_wr_addr__CLK = RTL__near_mem__icache__CLK;
+    assign RTL__near_mem__icache__master_xactor_f_wr_addr__RST = RTL__near_mem__icache__RST_N;
+    assign RTL__near_mem__icache__master_xactor_f_wr_data__D_IN = RTL__near_mem__icache__master_xactor_f_wr_data$D_IN;
+    assign RTL__near_mem__icache__master_xactor_f_wr_data__ENQ = RTL__near_mem__icache__master_xactor_f_wr_data$ENQ;
+    assign RTL__near_mem__icache__master_xactor_f_wr_data__DEQ = RTL__near_mem__icache__master_xactor_f_wr_data$DEQ;
+    assign RTL__near_mem__icache__master_xactor_f_wr_data__CLR = RTL__near_mem__icache__master_xactor_f_wr_data$CLR;
+    assign RTL__near_mem__icache__master_xactor_f_wr_data$DEQ = RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
+    assign RTL__near_mem__icache__master_xactor_f_wr_data$CLR = RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
+    assign RTL__near_mem__icache__master_xactor_f_wr_data$D_OUT = RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg;
+    assign RTL__near_mem__icache__master_xactor_f_wr_data$FULL_N = RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__near_mem__icache__master_xactor_f_wr_data$EMPTY_N = RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__full_reg;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__full_reg;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__empty_reg;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__f_fabric_write_reqs__DOT__full_reg;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__full_reg;
+    assign RTL__near_mem__icache__RST_N = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
+    assign RTL__near_mem__icache__CLK = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
+    assign RTL__near_mem__icache__master_xactor_f_wr_resp$D_IN = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_data__DOT__full_reg;
+    assign RTL__near_mem__icache__master_xactor_f_wr_resp$ENQ = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
+    assign RTL__near_mem__icache__master_xactor_f_wr_resp$DEQ = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__full_reg;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
+    assign RTL__near_mem__icache__master_xactor_f_wr_resp$D_OUT = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_rsps__DOT__empty_reg;
     assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__full_reg;
     assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__empty_reg;
-    assign RTL__near_mem__icache__master_xactor_f_wr_resp$ENQ = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
-    assign RTL__near_mem__icache__master_xactor_f_wr_resp$DEQ = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
-    assign RTL__near_mem__icache__master_xactor_f_wr_resp$CLR = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
-    assign RTL__near_mem__icache__master_xactor_f_wr_resp$D_OUT = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
-    assign RTL__near_mem__icache__master_xactor_f_wr_resp$FULL_N = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__empty_reg;
-    assign RTL__near_mem__icache__master_xactor_f_wr_resp$EMPTY_N = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__full_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__full_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__empty_reg;
-    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__full_reg;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_addr__DOT__empty_reg;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_addr__DOT__full_reg;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_resp__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
+    assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
       
     
     reg[ RTL__near_mem__icache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_state_and_ctag_cset__DOA_R ; reg[ RTL__near_mem__icache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_state_and_ctag_cset__DOB_R ; reg[ RTL__near_mem__icache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_state_and_ctag_cset__DOA_R2 ; reg[ RTL__near_mem__icache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_state_and_ctag_cset__DOB_R2 ; parameter RTL__near_mem__icache__ram_state_and_ctag_cset__PIPELINED =0; parameter RTL__near_mem__icache__ram_state_and_ctag_cset__ADDR_WIDTH =1; parameter RTL__near_mem__icache__ram_state_and_ctag_cset__DATA_WIDTH =1; parameter RTL__near_mem__icache__ram_state_and_ctag_cset__MEMSIZE =1; (* RTL__near_mem__icache__ram_state_and_ctag_cset__keep *)
@@ -13872,14 +13520,14 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     assign RTL__EN_set_verbosity = __VLG_I_EN_set_verbosity;
     assign __VLG_O_RDY_set_verbosity = RTL__RDY_set_verbosity;
     
-assign __all_assert_wire__ = (variable_map_assert__p118__) && (variable_map_assert__p119__) && (variable_map_assert__p120__) && (variable_map_assert__p121__) && (variable_map_assert__p122__) && (variable_map_assert__p123__) && (variable_map_assert__p124__) && (variable_map_assert__p125__) && (variable_map_assert__p126__) && (variable_map_assert__p127__) && (variable_map_assert__p128__) && (variable_map_assert__p129__) && (variable_map_assert__p130__) && (variable_map_assert__p131__) && (variable_map_assert__p132__) && (variable_map_assert__p133__) && (variable_map_assert__p134__) && (variable_map_assert__p135__) && (variable_map_assert__p136__) && (variable_map_assert__p137__) && (variable_map_assert__p138__) && (variable_map_assert__p139__) && (variable_map_assert__p140__) && (variable_map_assert__p141__) && (variable_map_assert__p142__) && (variable_map_assert__p143__) && (variable_map_assert__p144__) && (variable_map_assert__p145__) && (variable_map_assert__p146__) && (variable_map_assert__p147__) && (variable_map_assert__p148__) && (variable_map_assert__p149__) && (variable_map_assert__p150__) && (variable_map_assert__p151__) && (variable_map_assert__p152__) ;
-normalassert: assert property ( __all_assert_wire__ ); // the only assertion 
+// assign __all_assert_wire__ = (variable_map_assert__p118__) && (variable_map_assert__p119__) && (variable_map_assert__p120__) && (variable_map_assert__p121__) && (variable_map_assert__p122__) && (variable_map_assert__p123__) && (variable_map_assert__p124__) && (variable_map_assert__p125__) && (variable_map_assert__p126__) && (variable_map_assert__p127__) && (variable_map_assert__p128__) && (variable_map_assert__p129__) && (variable_map_assert__p130__) && (variable_map_assert__p131__) && (variable_map_assert__p132__) && (variable_map_assert__p133__) && (variable_map_assert__p134__) && (variable_map_assert__p135__) && (variable_map_assert__p136__) && (variable_map_assert__p137__) && (variable_map_assert__p138__) && (variable_map_assert__p139__) && (variable_map_assert__p140__) && (variable_map_assert__p141__) && (variable_map_assert__p142__) && (variable_map_assert__p143__) && (variable_map_assert__p144__) && (variable_map_assert__p145__) && (variable_map_assert__p146__) && (variable_map_assert__p147__) && (variable_map_assert__p148__) && (variable_map_assert__p149__) && (variable_map_assert__p150__) && (variable_map_assert__p151__) && (variable_map_assert__p152__) ;
+// normalassert: assert property ( __all_assert_wire__ ); // the only assertion 
 
-assign __all_assume_wire__ = (input_map_assume___p0__)&& (invariant_assume__p1__)&& (invariant_assume__p2__)&& (invariant_assume__p3__)&& (invariant_assume__p4__)&& (invariant_assume__p5__)&& (invariant_assume__p6__)&& (invariant_assume__p7__)&& (invariant_assume__p8__)&& (invariant_assume__p9__)&& (invariant_assume__p10__)&& (invariant_assume__p11__)&& (invariant_assume__p12__)&& (invariant_assume__p13__)&& (invariant_assume__p14__)&& (invariant_assume__p15__)&& (invariant_assume__p16__)&& (invariant_assume__p17__)&& (invariant_assume__p18__)&& (invariant_assume__p19__)&& (invariant_assume__p20__)&& (invariant_assume__p21__)&& (invariant_assume__p22__)&& (invariant_assume__p23__)&& (invariant_assume__p24__)&& (invariant_assume__p25__)&& (invariant_assume__p26__)&& (invariant_assume__p27__)&& (invariant_assume__p28__)&& (invariant_assume__p29__)&& (invariant_assume__p30__)&& (invariant_assume__p31__)&& (invariant_assume__p32__)&& (issue_decode__p33__)&& (issue_valid__p34__)&& (noreset__p35__)&& (post_value_holder__p36__)&& (post_value_holder__p37__)&& (post_value_holder__p38__)&& (post_value_holder__p39__)&& (post_value_holder__p40__)&& (post_value_holder__p41__)&& (post_value_holder__p42__)&& (post_value_holder__p43__)&& (post_value_holder__p44__)&& (post_value_holder__p45__)&& (post_value_holder__p46__)&& (post_value_holder__p47__)&& (post_value_holder__p48__)&& (post_value_holder__p49__)&& (post_value_holder__p50__)&& (post_value_holder__p51__)&& (post_value_holder__p52__)&& (post_value_holder__p53__)&& (post_value_holder__p54__)&& (post_value_holder__p55__)&& (post_value_holder__p56__)&& (post_value_holder__p57__)&& (post_value_holder__p58__)&& (post_value_holder__p59__)&& (post_value_holder__p60__)&& (post_value_holder__p61__)&& (post_value_holder__p62__)&& (post_value_holder__p63__)&& (post_value_holder__p64__)&& (post_value_holder__p65__)&& (post_value_holder__p66__)&& (post_value_holder__p67__)&& (post_value_holder__p68__)&& (post_value_holder__p69__)&& (post_value_holder__p70__)&& (post_value_holder__p71__)&& (post_value_holder__p72__)&& (post_value_holder__p73__)&& (rfassumptions__p74__)&& (rfassumptions__p75__)&& (rfassumptions__p76__)&& (variable_map_assume___p77__)&& (variable_map_assume___p78__)&& (variable_map_assume___p79__)&& (variable_map_assume___p80__)&& (variable_map_assume___p81__)&& (variable_map_assume___p82__)&& (variable_map_assume___p83__)&& (variable_map_assume___p84__)&& (variable_map_assume___p85__)&& (variable_map_assume___p86__)&& (variable_map_assume___p87__)&& (variable_map_assume___p88__)&& (variable_map_assume___p89__)&& (variable_map_assume___p90__)&& (variable_map_assume___p91__)&& (variable_map_assume___p92__)&& (variable_map_assume___p93__)&& (variable_map_assume___p94__)&& (variable_map_assume___p95__)&& (variable_map_assume___p96__)&& (variable_map_assume___p97__)&& (variable_map_assume___p98__)&& (variable_map_assume___p99__)&& (variable_map_assume___p100__)&& (variable_map_assume___p101__)&& (variable_map_assume___p102__)&& (variable_map_assume___p103__)&& (variable_map_assume___p104__)&& (variable_map_assume___p105__)&& (variable_map_assume___p106__)&& (variable_map_assume___p107__)&& (variable_map_assume___p108__)&& (variable_map_assume___p109__)&& (variable_map_assume___p110__)&& (variable_map_assume___p111__)&& (variable_map_assume___p112__)&& (variable_map_assume___p113__)&& (variable_map_assume___p114__)&& (variable_map_assume___p115__)&& (variable_map_assume___p116__)&& (variable_map_assume___p117__) ;
-all_assume: assume property ( __all_assume_wire__ ); // the only sanity assertion 
+// assign __all_assume_wire__ = (input_map_assume___p0__)&& (invariant_assume__p1__)&& (invariant_assume__p2__)&& (invariant_assume__p3__)&& (invariant_assume__p4__)&& (invariant_assume__p5__)&& (invariant_assume__p6__)&& (invariant_assume__p7__)&& (invariant_assume__p8__)&& (invariant_assume__p9__)&& (invariant_assume__p10__)&& (invariant_assume__p11__)&& (invariant_assume__p12__)&& (invariant_assume__p13__)&& (invariant_assume__p14__)&& (invariant_assume__p15__)&& (invariant_assume__p16__)&& (invariant_assume__p17__)&& (invariant_assume__p18__)&& (invariant_assume__p19__)&& (invariant_assume__p20__)&& (invariant_assume__p21__)&& (invariant_assume__p22__)&& (invariant_assume__p23__)&& (invariant_assume__p24__)&& (invariant_assume__p25__)&& (invariant_assume__p26__)&& (invariant_assume__p27__)&& (invariant_assume__p28__)&& (invariant_assume__p29__)&& (invariant_assume__p30__)&& (invariant_assume__p31__)&& (invariant_assume__p32__)&& (issue_decode__p33__)&& (issue_valid__p34__)&& (noreset__p35__)&& (post_value_holder__p36__)&& (post_value_holder__p37__)&& (post_value_holder__p38__)&& (post_value_holder__p39__)&& (post_value_holder__p40__)&& (post_value_holder__p41__)&& (post_value_holder__p42__)&& (post_value_holder__p43__)&& (post_value_holder__p44__)&& (post_value_holder__p45__)&& (post_value_holder__p46__)&& (post_value_holder__p47__)&& (post_value_holder__p48__)&& (post_value_holder__p49__)&& (post_value_holder__p50__)&& (post_value_holder__p51__)&& (post_value_holder__p52__)&& (post_value_holder__p53__)&& (post_value_holder__p54__)&& (post_value_holder__p55__)&& (post_value_holder__p56__)&& (post_value_holder__p57__)&& (post_value_holder__p58__)&& (post_value_holder__p59__)&& (post_value_holder__p60__)&& (post_value_holder__p61__)&& (post_value_holder__p62__)&& (post_value_holder__p63__)&& (post_value_holder__p64__)&& (post_value_holder__p65__)&& (post_value_holder__p66__)&& (post_value_holder__p67__)&& (post_value_holder__p68__)&& (post_value_holder__p69__)&& (post_value_holder__p70__)&& (post_value_holder__p71__)&& (post_value_holder__p72__)&& (post_value_holder__p73__)&& (rfassumptions__p74__)&& (rfassumptions__p75__)&& (rfassumptions__p76__)&& (variable_map_assume___p77__)&& (variable_map_assume___p78__)&& (variable_map_assume___p79__)&& (variable_map_assume___p80__)&& (variable_map_assume___p81__)&& (variable_map_assume___p82__)&& (variable_map_assume___p83__)&& (variable_map_assume___p84__)&& (variable_map_assume___p85__)&& (variable_map_assume___p86__)&& (variable_map_assume___p87__)&& (variable_map_assume___p88__)&& (variable_map_assume___p89__)&& (variable_map_assume___p90__)&& (variable_map_assume___p91__)&& (variable_map_assume___p92__)&& (variable_map_assume___p93__)&& (variable_map_assume___p94__)&& (variable_map_assume___p95__)&& (variable_map_assume___p96__)&& (variable_map_assume___p97__)&& (variable_map_assume___p98__)&& (variable_map_assume___p99__)&& (variable_map_assume___p100__)&& (variable_map_assume___p101__)&& (variable_map_assume___p102__)&& (variable_map_assume___p103__)&& (variable_map_assume___p104__)&& (variable_map_assume___p105__)&& (variable_map_assume___p106__)&& (variable_map_assume___p107__)&& (variable_map_assume___p108__)&& (variable_map_assume___p109__)&& (variable_map_assume___p110__)&& (variable_map_assume___p111__)&& (variable_map_assume___p112__)&& (variable_map_assume___p113__)&& (variable_map_assume___p114__)&& (variable_map_assume___p115__)&& (variable_map_assume___p116__)&& (variable_map_assume___p117__) ;
+// all_assume: assume property ( __all_assume_wire__ ); // the only sanity assertion 
 
-assign __sanitycheck_wire__ = (post_value_holder_overly_constrained__p153__) && (post_value_holder_overly_constrained__p154__) && (post_value_holder_overly_constrained__p155__) && (post_value_holder_overly_constrained__p156__) && (post_value_holder_overly_constrained__p157__) && (post_value_holder_overly_constrained__p158__) && (post_value_holder_overly_constrained__p159__) && (post_value_holder_overly_constrained__p160__) && (post_value_holder_overly_constrained__p161__) && (post_value_holder_overly_constrained__p162__) && (post_value_holder_overly_constrained__p163__) && (post_value_holder_overly_constrained__p164__) && (post_value_holder_overly_constrained__p165__) && (post_value_holder_overly_constrained__p166__) && (post_value_holder_overly_constrained__p167__) && (post_value_holder_overly_constrained__p168__) && (post_value_holder_overly_constrained__p169__) && (post_value_holder_overly_constrained__p170__) && (post_value_holder_overly_constrained__p171__) && (post_value_holder_overly_constrained__p172__) && (post_value_holder_overly_constrained__p173__) && (post_value_holder_overly_constrained__p174__) && (post_value_holder_overly_constrained__p175__) && (post_value_holder_overly_constrained__p176__) && (post_value_holder_overly_constrained__p177__) && (post_value_holder_overly_constrained__p178__) && (post_value_holder_overly_constrained__p179__) && (post_value_holder_overly_constrained__p180__) && (post_value_holder_overly_constrained__p181__) && (post_value_holder_overly_constrained__p182__) && (post_value_holder_overly_constrained__p183__) && (post_value_holder_overly_constrained__p184__) && (post_value_holder_overly_constrained__p185__) && (post_value_holder_overly_constrained__p186__) && (post_value_holder_overly_constrained__p187__) && (post_value_holder_overly_constrained__p188__) && (post_value_holder_overly_constrained__p189__) && (post_value_holder_overly_constrained__p190__) && (post_value_holder_triggered__p191__) && (post_value_holder_triggered__p192__) && (post_value_holder_triggered__p193__) && (post_value_holder_triggered__p194__) && (post_value_holder_triggered__p195__) && (post_value_holder_triggered__p196__) && (post_value_holder_triggered__p197__) && (post_value_holder_triggered__p198__) && (post_value_holder_triggered__p199__) && (post_value_holder_triggered__p200__) && (post_value_holder_triggered__p201__) && (post_value_holder_triggered__p202__) && (post_value_holder_triggered__p203__) && (post_value_holder_triggered__p204__) && (post_value_holder_triggered__p205__) && (post_value_holder_triggered__p206__) && (post_value_holder_triggered__p207__) && (post_value_holder_triggered__p208__) && (post_value_holder_triggered__p209__) && (post_value_holder_triggered__p210__) && (post_value_holder_triggered__p211__) && (post_value_holder_triggered__p212__) && (post_value_holder_triggered__p213__) && (post_value_holder_triggered__p214__) && (post_value_holder_triggered__p215__) && (post_value_holder_triggered__p216__) && (post_value_holder_triggered__p217__) && (post_value_holder_triggered__p218__) && (post_value_holder_triggered__p219__) && (post_value_holder_triggered__p220__) && (post_value_holder_triggered__p221__) && (post_value_holder_triggered__p222__) && (post_value_holder_triggered__p223__) && (post_value_holder_triggered__p224__) && (post_value_holder_triggered__p225__) && (post_value_holder_triggered__p226__) && (post_value_holder_triggered__p227__) && (post_value_holder_triggered__p228__) ;
-sanitycheck: assert property ( __sanitycheck_wire__ ); // the only assumption 
+// assign __sanitycheck_wire__ = (post_value_holder_overly_constrained__p153__) && (post_value_holder_overly_constrained__p154__) && (post_value_holder_overly_constrained__p155__) && (post_value_holder_overly_constrained__p156__) && (post_value_holder_overly_constrained__p157__) && (post_value_holder_overly_constrained__p158__) && (post_value_holder_overly_constrained__p159__) && (post_value_holder_overly_constrained__p160__) && (post_value_holder_overly_constrained__p161__) && (post_value_holder_overly_constrained__p162__) && (post_value_holder_overly_constrained__p163__) && (post_value_holder_overly_constrained__p164__) && (post_value_holder_overly_constrained__p165__) && (post_value_holder_overly_constrained__p166__) && (post_value_holder_overly_constrained__p167__) && (post_value_holder_overly_constrained__p168__) && (post_value_holder_overly_constrained__p169__) && (post_value_holder_overly_constrained__p170__) && (post_value_holder_overly_constrained__p171__) && (post_value_holder_overly_constrained__p172__) && (post_value_holder_overly_constrained__p173__) && (post_value_holder_overly_constrained__p174__) && (post_value_holder_overly_constrained__p175__) && (post_value_holder_overly_constrained__p176__) && (post_value_holder_overly_constrained__p177__) && (post_value_holder_overly_constrained__p178__) && (post_value_holder_overly_constrained__p179__) && (post_value_holder_overly_constrained__p180__) && (post_value_holder_overly_constrained__p181__) && (post_value_holder_overly_constrained__p182__) && (post_value_holder_overly_constrained__p183__) && (post_value_holder_overly_constrained__p184__) && (post_value_holder_overly_constrained__p185__) && (post_value_holder_overly_constrained__p186__) && (post_value_holder_overly_constrained__p187__) && (post_value_holder_overly_constrained__p188__) && (post_value_holder_overly_constrained__p189__) && (post_value_holder_overly_constrained__p190__) && (post_value_holder_triggered__p191__) && (post_value_holder_triggered__p192__) && (post_value_holder_triggered__p193__) && (post_value_holder_triggered__p194__) && (post_value_holder_triggered__p195__) && (post_value_holder_triggered__p196__) && (post_value_holder_triggered__p197__) && (post_value_holder_triggered__p198__) && (post_value_holder_triggered__p199__) && (post_value_holder_triggered__p200__) && (post_value_holder_triggered__p201__) && (post_value_holder_triggered__p202__) && (post_value_holder_triggered__p203__) && (post_value_holder_triggered__p204__) && (post_value_holder_triggered__p205__) && (post_value_holder_triggered__p206__) && (post_value_holder_triggered__p207__) && (post_value_holder_triggered__p208__) && (post_value_holder_triggered__p209__) && (post_value_holder_triggered__p210__) && (post_value_holder_triggered__p211__) && (post_value_holder_triggered__p212__) && (post_value_holder_triggered__p213__) && (post_value_holder_triggered__p214__) && (post_value_holder_triggered__p215__) && (post_value_holder_triggered__p216__) && (post_value_holder_triggered__p217__) && (post_value_holder_triggered__p218__) && (post_value_holder_triggered__p219__) && (post_value_holder_triggered__p220__) && (post_value_holder_triggered__p221__) && (post_value_holder_triggered__p222__) && (post_value_holder_triggered__p223__) && (post_value_holder_triggered__p224__) && (post_value_holder_triggered__p225__) && (post_value_holder_triggered__p226__) && (post_value_holder_triggered__p227__) && (post_value_holder_triggered__p228__) ;
+// sanitycheck: assert property ( __sanitycheck_wire__ ); // the only assumption 
 
 always @(posedge clk) begin
    if(rst) begin
