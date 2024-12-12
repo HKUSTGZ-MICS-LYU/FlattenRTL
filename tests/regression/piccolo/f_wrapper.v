@@ -4007,71 +4007,71 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     assign RTL__csr_regfile__csr_mip__software_interrupt_req_req = RTL__csr_regfile__csr_mip$software_interrupt_req_req;
     assign RTL__csr_regfile__csr_mip__timer_interrupt_req_req = RTL__csr_regfile__csr_mip$timer_interrupt_req_req;
       
+    wire RTL__csr_regfile__f_reset_rsps__RST;
+    wire RTL__csr_regfile__f_reset_rsps__CLK;
+    wire RTL__csr_regfile__f_reset_rsps__ENQ;
+    wire RTL__csr_regfile__f_reset_rsps__CLR;
+    wire RTL__csr_regfile__f_reset_rsps__DEQ;
     wire RTL__csr_regfile__f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg;
     wire RTL__csr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg;
     wire RTL__csr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg;
     wire RTL__csr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_reqs__DOT__full_reg;
-    wire RTL__csr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_reqs__DOT__empty_reg;
-    wire RTL__csr_regfile__f_reset_rsps__RTL__DOT__stage3_f_reset_reqs__DOT__full_reg;
-    wire RTL__csr_regfile__f_reset_rsps__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
-    wire RTL__csr_regfile__f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__full_reg;
-    wire RTL__csr_regfile__f_reset_rsps__RTL__DOT__stage2_f_reset_reqs__DOT__empty_reg;
+    wire RTL__stage1_f_reset_reqs__RTL__DOT__stage1_f_reset_reqs__DOT__empty_reg;
+    wire RTL__stage1_f_reset_reqs__RTL__DOT__stage3_f_reset_reqs__DOT__full_reg;
+    wire RTL__stage1_f_reset_reqs__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
+    wire RTL__stage1_f_reset_reqs__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__full_reg;
+    wire RTL__stage1_f_reset_reqs__RTL__DOT__stage2_f_reset_reqs__DOT__empty_reg;
     wire RTL__stage1_f_reset_reqs__RTL__DOT__stage3_f_reset_rsps__DOT__full_reg;
     wire RTL__stage1_f_reset_reqs__RTL__DOT__csr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
     wire RTL__stage1_f_reset_reqs__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__full_reg;
     wire RTL__stage1_f_reset_reqs__RTL__DOT__stage3_f_reset_reqs__DOT__empty_reg;
-    wire RTL__stage1_f_reset_reqs__RTL__DOT__csr_regfile__DOT__f_reset_rsps__DOT__full_reg;
-    wire RTL__stage1_f_reset_reqs__RTL__DOT__stage2_f_reset_reqs__DOT__full_reg;
-    wire RTL__stage1_f_reset_reqs__RTL__DOT__stage3_f_reset_rsps__DOT__empty_reg;
-    wire RTL__stage1_f_reset_reqs__RTL__DOT__stage2_f_reset_rsps__DOT__empty_reg;
-    wire RTL__stage1_f_reset_reqs__RTL__DOT__stage2_f_reset_rsps__DOT__full_reg;
-    wire RTL__stage1_f_reset_rsps__RST;
-    wire RTL__stage1_f_reset_rsps__CLK;
-    wire RTL__stage1_f_reset_rsps__ENQ;
-    wire RTL__stage1_f_reset_rsps__CLR;
-    wire RTL__stage1_f_reset_rsps__DEQ;
+    wire RTL__stage1_f_reset_rsps__RTL__DOT__csr_regfile__DOT__f_reset_rsps__DOT__full_reg;
+    wire RTL__stage1_f_reset_rsps__RTL__DOT__stage2_f_reset_reqs__DOT__full_reg;
+    wire RTL__stage1_f_reset_rsps__RTL__DOT__stage3_f_reset_rsps__DOT__empty_reg;
+    wire RTL__stage1_f_reset_rsps__RTL__DOT__stage2_f_reset_rsps__DOT__empty_reg;
+    wire RTL__stage1_f_reset_rsps__RTL__DOT__stage2_f_reset_rsps__DOT__full_reg;
     wire RTL__stage1_f_reset_rsps__FULL_N;
     wire RTL__stage1_f_reset_rsps__EMPTY_N;
-    wire RTL__stage1_f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg;
-    wire RTL__stage1_f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg;
+    wire RTL__stage1_f_reset_rsps__RST;
+    wire RTL__stage1_f_reset_rsps__CLK;
+    wire RTL__stage2_f_reset_reqs__ENQ;
+    wire RTL__stage2_f_reset_reqs__CLR;
+    wire RTL__stage2_f_reset_reqs__DEQ;
+    wire RTL__stage2_f_reset_reqs__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg;
+    wire RTL__stage2_f_reset_reqs__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg;
     wire RTL__stage2_f_reset_reqs__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg;
     wire RTL__stage2_f_reset_reqs__RTL__DOT__stage1_f_reset_reqs__DOT__full_reg;
     wire RTL__stage2_f_reset_reqs__RTL__DOT__stage1_f_reset_reqs__DOT__empty_reg;
     wire RTL__stage2_f_reset_reqs__RTL__DOT__stage3_f_reset_reqs__DOT__full_reg;
-    wire RTL__stage2_f_reset_reqs__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
-    wire RTL__stage2_f_reset_reqs__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__full_reg;
-    wire RTL__stage2_f_reset_reqs__RTL__DOT__stage2_f_reset_reqs__DOT__empty_reg;
-    wire RTL__stage2_f_reset_reqs__RTL__DOT__stage3_f_reset_rsps__DOT__full_reg;
-    wire RTL__stage2_f_reset_reqs__RTL__DOT__csr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
+    wire RTL__stage2_f_reset_rsps__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
+    wire RTL__stage2_f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__full_reg;
+    wire RTL__stage2_f_reset_rsps__RTL__DOT__stage2_f_reset_reqs__DOT__empty_reg;
+    wire RTL__stage2_f_reset_rsps__RTL__DOT__stage3_f_reset_rsps__DOT__full_reg;
+    wire RTL__stage2_f_reset_rsps__RTL__DOT__csr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
     wire RTL__stage2_f_reset_rsps__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__full_reg;
     wire RTL__stage2_f_reset_rsps__RTL__DOT__stage3_f_reset_reqs__DOT__empty_reg;
     wire RTL__stage2_f_reset_rsps__RTL__DOT__csr_regfile__DOT__f_reset_rsps__DOT__full_reg;
     wire RTL__stage2_f_reset_rsps__RTL__DOT__stage2_f_reset_reqs__DOT__full_reg;
-    wire RTL__stage2_f_reset_rsps__RTL__DOT__stage3_f_reset_rsps__DOT__empty_reg;
-    wire RTL__stage2_f_reset_rsps__RTL__DOT__stage2_f_reset_rsps__DOT__empty_reg;
-    wire RTL__stage2_f_reset_rsps__RTL__DOT__stage2_f_reset_rsps__DOT__full_reg;
-    wire RTL__stage2_f_reset_rsps__RST;
-    wire RTL__stage2_f_reset_rsps__CLK;
-    wire RTL__stage3_f_reset_reqs__ENQ;
-    wire RTL__stage3_f_reset_reqs__CLR;
-    wire RTL__stage3_f_reset_reqs__DEQ;
+    wire RTL__stage3_f_reset_reqs__RTL__DOT__stage3_f_reset_rsps__DOT__empty_reg;
+    wire RTL__stage3_f_reset_reqs__RTL__DOT__stage2_f_reset_rsps__DOT__empty_reg;
+    wire RTL__stage3_f_reset_reqs__RTL__DOT__stage2_f_reset_rsps__DOT__full_reg;
     wire RTL__stage3_f_reset_reqs__FULL_N;
     wire RTL__stage3_f_reset_reqs__EMPTY_N;
-    wire RTL__stage3_f_reset_reqs__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg;
-    wire RTL__stage3_f_reset_reqs__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg;
-    wire RTL__stage3_f_reset_reqs__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg;
-    wire RTL__stage3_f_reset_reqs__RTL__DOT__stage1_f_reset_reqs__DOT__full_reg;
+    wire RTL__stage3_f_reset_reqs__RST;
+    wire RTL__stage3_f_reset_reqs__CLK;
+    wire RTL__stage3_f_reset_reqs__ENQ;
+    wire RTL__stage3_f_reset_reqs__CLR;
+    wire RTL__stage3_f_reset_rsps__DEQ;
+    wire RTL__stage3_f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg;
+    wire RTL__stage3_f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg;
+    wire RTL__stage3_f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg;
+    wire RTL__stage3_f_reset_rsps__RTL__DOT__stage1_f_reset_reqs__DOT__full_reg;
     wire RTL__stage3_f_reset_rsps__RTL__DOT__stage1_f_reset_reqs__DOT__empty_reg;
     wire RTL__stage3_f_reset_rsps__RTL__DOT__stage3_f_reset_reqs__DOT__full_reg;
     wire RTL__stage3_f_reset_rsps__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
     wire RTL__stage3_f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__full_reg;
-    wire RTL__stage3_f_reset_rsps__RTL__DOT__stage2_f_reset_reqs__DOT__empty_reg;
-    wire RTL__stage3_f_reset_rsps__RTL__DOT__stage3_f_reset_rsps__DOT__full_reg;
-    wire RTL__stage3_f_reset_rsps__RTL__DOT__csr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
-    wire RTL__stage3_f_reset_rsps__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__full_reg;
-    wire RTL__stage3_f_reset_rsps__RTL__DOT__stage3_f_reset_reqs__DOT__empty_reg;
 
-    parameter RTL__csr_regfile__f_reset_rsps__guarded =1; input RST ; input CLK ; input ENQ ; input CLR ; input DEQ ; output FULL_N ; output EMPTY_N ; 
+    parameter RTL__csr_regfile__f_reset_rsps__guarded =1; 
     reg RTL__csr_regfile__f_reset_rsps__empty_reg ; 
     reg RTL__csr_regfile__f_reset_rsps__full_reg ; 
   assign  RTL__csr_regfile__f_reset_rsps__FULL_N = RTL__csr_regfile__f_reset_rsps__full_reg ; 
@@ -4897,7 +4897,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
     wire RTL__f_reset_rsps__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_rd_data__DOT__empty_reg;
 
-    parameter RTL__f_reset_reqs__width =1; parameter RTL__f_reset_reqs__guarded =1; input CLK ; input RST ; input[ RTL__f_reset_reqs__width -1:0] D_IN ; input ENQ ; input DEQ ; input CLR ; output FULL_N ; output EMPTY_N ; output[ RTL__f_reset_reqs__width -1:0] D_OUT ; 
+    parameter RTL__f_reset_reqs__width =1; parameter RTL__f_reset_reqs__guarded =1; 
     reg RTL__f_reset_reqs__full_reg ; 
     reg RTL__f_reset_reqs__empty_reg ; reg[ RTL__f_reset_reqs__width -1:0] RTL__f_reset_reqs__data0_reg ; reg[ RTL__f_reset_reqs__width -1:0] RTL__f_reset_reqs__data1_reg ; 
   assign  RTL__f_reset_reqs__FULL_N = RTL__f_reset_reqs__full_reg ; 
@@ -4995,7 +4995,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg = RTL__f_reset_reqs__empty_reg ; 
   assign  RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__f_reset_reqs__full_reg ; 
   assign  RTL__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__f_reset_reqs__empty_reg ;
-    parameter RTL__f_reset_rsps__width =1; parameter RTL__f_reset_rsps__guarded =1; input CLK ; input RST ; input[ RTL__f_reset_rsps__width -1:0] D_IN ; input ENQ ; input DEQ ; input CLR ; output FULL_N ; output EMPTY_N ; output[ RTL__f_reset_rsps__width -1:0] D_OUT ; 
+    parameter RTL__f_reset_rsps__width =1; parameter RTL__f_reset_rsps__guarded =1; 
     reg RTL__f_reset_rsps__full_reg ; 
     reg RTL__f_reset_rsps__empty_reg ; reg[ RTL__f_reset_rsps__width -1:0] RTL__f_reset_rsps__data0_reg ; reg[ RTL__f_reset_rsps__width -1:0] RTL__f_reset_rsps__data1_reg ; 
   assign  RTL__f_reset_rsps__FULL_N = RTL__f_reset_rsps__full_reg ; 
@@ -5184,17 +5184,17 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__gpr_regfile__read_rs2 =( RTL__gpr_regfile__read_rs2_rs2 ==5'd0) ? 32'd0: RTL__gpr_regfile__regfile$D_OUT_1 ; 
   assign  RTL__gpr_regfile__CAN_FIRE_write_rd =1'd1; 
   assign  RTL__gpr_regfile__WILL_FIRE_write_rd = RTL__gpr_regfile__EN_write_rd ;  
+    wire RTL__gpr_regfile__f_reset_rsps__RST;
+    wire RTL__gpr_regfile__f_reset_rsps__CLK;
+    wire RTL__gpr_regfile__f_reset_rsps__ENQ;
+    wire RTL__gpr_regfile__f_reset_rsps__CLR;
+    wire RTL__gpr_regfile__f_reset_rsps__DEQ;
     wire RTL__gpr_regfile__f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg;
     wire RTL__gpr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg;
     wire RTL__gpr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg;
     wire RTL__gpr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_reqs__DOT__full_reg;
-    wire RTL__gpr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_reqs__DOT__empty_reg;
-    wire RTL__gpr_regfile__f_reset_rsps__RTL__DOT__stage3_f_reset_reqs__DOT__full_reg;
-    wire RTL__gpr_regfile__f_reset_rsps__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
-    wire RTL__gpr_regfile__f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__full_reg;
-    wire RTL__gpr_regfile__f_reset_rsps__RTL__DOT__stage2_f_reset_reqs__DOT__empty_reg;
 
-    parameter RTL__gpr_regfile__f_reset_rsps__guarded =1; input RST ; input CLK ; input ENQ ; input CLR ; input DEQ ; output FULL_N ; output EMPTY_N ; 
+    parameter RTL__gpr_regfile__f_reset_rsps__guarded =1; 
     reg RTL__gpr_regfile__f_reset_rsps__empty_reg ; 
     reg RTL__gpr_regfile__f_reset_rsps__full_reg ; 
   assign  RTL__gpr_regfile__f_reset_rsps__FULL_N = RTL__gpr_regfile__f_reset_rsps__full_reg ; 
@@ -5262,15 +5262,15 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__gpr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg = RTL__gpr_regfile__f_reset_rsps__empty_reg ; 
   assign  RTL__gpr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg = RTL__gpr_regfile__f_reset_rsps__full_reg ; 
   assign  RTL__gpr_regfile__f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg = RTL__gpr_regfile__f_reset_rsps__empty_reg ;
-    assign RTL__gpr_regfile__RST_N = RTL__gpr_regfile__f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__gpr_regfile__CLK = RTL__gpr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg;
-    assign RTL__gpr_regfile__f_reset_rsps$ENQ = RTL__gpr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg;
-    assign RTL__gpr_regfile__f_reset_rsps$DEQ = RTL__gpr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_reqs__DOT__full_reg;
-    assign RTL__gpr_regfile__f_reset_rsps$CLR = RTL__gpr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_reqs__DOT__empty_reg;
-    assign RTL__gpr_regfile__f_reset_rsps$FULL_N = RTL__gpr_regfile__f_reset_rsps__RTL__DOT__stage3_f_reset_reqs__DOT__full_reg;
-    assign RTL__gpr_regfile__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__empty_reg = RTL__gpr_regfile__f_reset_rsps__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__gpr_regfile__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__empty_reg = RTL__gpr_regfile__f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__gpr_regfile__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__full_reg = RTL__gpr_regfile__f_reset_rsps__RTL__DOT__stage2_f_reset_reqs__DOT__empty_reg;
+    assign RTL__gpr_regfile__f_reset_rsps__RST = RTL__gpr_regfile__RST_N;
+    assign RTL__gpr_regfile__f_reset_rsps__CLK = RTL__gpr_regfile__CLK;
+    assign RTL__gpr_regfile__f_reset_rsps__ENQ = RTL__gpr_regfile__f_reset_rsps$ENQ;
+    assign RTL__gpr_regfile__f_reset_rsps__CLR = RTL__gpr_regfile__f_reset_rsps$CLR;
+    assign RTL__gpr_regfile__f_reset_rsps__DEQ = RTL__gpr_regfile__f_reset_rsps$DEQ;
+    assign RTL__gpr_regfile__f_reset_rsps$FULL_N = RTL__gpr_regfile__f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__gpr_regfile__f_reset_rsps$EMPTY_N = RTL__gpr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg;
+    assign RTL__gpr_regfile__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__empty_reg = RTL__gpr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg;
+    assign RTL__gpr_regfile__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__full_reg = RTL__gpr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_reqs__DOT__full_reg;
       
     wire[31:0] RTL__gpr_regfile__regfile__RTL__DOT__gpr_regfile__DOT__regfile__DOT__arr_17_;
     wire[31:0] RTL__gpr_regfile__regfile__RTL__DOT__gpr_regfile__DOT__regfile__DOT__arr_14_;
@@ -5318,7 +5318,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire[RTL__gpr_regfile__regfile__addr_width-1:0] RTL__gpr_regfile__regfile__ADDR_5;
     wire[RTL__gpr_regfile__regfile__data_width-1:0] RTL__gpr_regfile__regfile__D_OUT_5;
 
-    parameter RTL__gpr_regfile__regfile__addr_width =1; parameter RTL__gpr_regfile__regfile__data_width =1; parameter RTL__gpr_regfile__regfile__lo =0; parameter RTL__gpr_regfile__regfile__hi =1; input CLK ; input[ RTL__gpr_regfile__regfile__addr_width -1:0] ADDR_IN ; input[ RTL__gpr_regfile__regfile__data_width -1:0] D_IN ; input WE ; input[ RTL__gpr_regfile__regfile__addr_width -1:0] ADDR_1 ; output[ RTL__gpr_regfile__regfile__data_width -1:0] D_OUT_1 ; input[ RTL__gpr_regfile__regfile__addr_width -1:0] ADDR_2 ; output[ RTL__gpr_regfile__regfile__data_width -1:0] D_OUT_2 ; input[ RTL__gpr_regfile__regfile__addr_width -1:0] ADDR_3 ; output[ RTL__gpr_regfile__regfile__data_width -1:0] D_OUT_3 ; input[ RTL__gpr_regfile__regfile__addr_width -1:0] ADDR_4 ; output[ RTL__gpr_regfile__regfile__data_width -1:0] D_OUT_4 ; input[ RTL__gpr_regfile__regfile__addr_width -1:0] ADDR_5 ; output[ RTL__gpr_regfile__regfile__data_width -1:0] D_OUT_5 ; reg[ RTL__gpr_regfile__regfile__data_width -1:0] RTL__gpr_regfile__regfile__arr [ RTL__gpr_regfile__regfile__lo : RTL__gpr_regfile__regfile__hi ]; 
+    parameter RTL__gpr_regfile__regfile__addr_width =1; parameter RTL__gpr_regfile__regfile__data_width =1; parameter RTL__gpr_regfile__regfile__lo =0; parameter RTL__gpr_regfile__regfile__hi =1; reg[ RTL__gpr_regfile__regfile__data_width -1:0] RTL__gpr_regfile__regfile__arr [ RTL__gpr_regfile__regfile__lo : RTL__gpr_regfile__regfile__hi ]; 
   always @( posedge  RTL__gpr_regfile__regfile__CLK )
          begin 
              if ( RTL__gpr_regfile__regfile__WE ) 
@@ -5980,7 +5980,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire[7:0] RTL__near_mem__icache__mem_master_awlen;
     wire[2:0] RTL__near_mem__icache__mem_master_awsize;
 
-    parameter RTL__near_mem__dcache__dmem_not_imem =1'b0; input CLK ; input RST_N ; input[3:0] set_verbosity_verbosity ; input EN_set_verbosity ; output RDY_set_verbosity ; input EN_server_reset_request_put ; output RDY_server_reset_request_put ; input EN_server_reset_response_get ; output RDY_server_reset_response_get ; input req_op ; input[2:0] req_f3 ; input[31:0] req_addr ; input[63:0] req_st_value ; input[1:0] req_priv ; input req_sstatus_SUM ; input req_mstatus_MXR ; input[31:0] req_satp ; input EN_req ; output valid ; output[31:0] addr ; output[63:0] word64 ; output[63:0] st_amo_val ; output exc ; output[3:0] exc_code ; input EN_server_flush_request_put ; output RDY_server_flush_request_put ; input EN_server_flush_response_get ; output RDY_server_flush_response_get ; input EN_tlb_flush ; output RDY_tlb_flush ; output mem_master_awvalid ; output[3:0] mem_master_awid ; output[63:0] mem_master_awaddr ; output[7:0] mem_master_awlen ; output[2:0] mem_master_awsize ; output[1:0] mem_master_awburst ; output mem_master_awlock ; output[3:0] mem_master_awcache ; output[2:0] mem_master_awprot ; output[3:0] mem_master_awqos ; output[3:0] mem_master_awregion ; input mem_master_awready ; output mem_master_wvalid ; output[63:0] mem_master_wdata ; output[7:0] mem_master_wstrb ; output mem_master_wlast ; input mem_master_wready ; input mem_master_bvalid ; input[3:0] mem_master_bid ; input[1:0] mem_master_bresp ; output mem_master_bready ; output mem_master_arvalid ; output[3:0] mem_master_arid ; output[63:0] mem_master_araddr ; output[7:0] mem_master_arlen ; output[2:0] mem_master_arsize ; output[1:0] mem_master_arburst ; output mem_master_arlock ; output[3:0] mem_master_arcache ; output[2:0] mem_master_arprot ; output[3:0] mem_master_arqos ; output[3:0] mem_master_arregion ; input mem_master_arready ; input mem_master_rvalid ; input[3:0] mem_master_rid ; input[63:0] mem_master_rdata ; input[1:0] mem_master_rresp ; input mem_master_rlast ; output mem_master_rready ; reg[63:0] RTL__near_mem__dcache__word64 ; 
+    parameter RTL__near_mem__dcache__dmem_not_imem =1'b0; reg[63:0] RTL__near_mem__dcache__word64 ; 
     wire[63:0] RTL__near_mem__dcache__mem_master_araddr , RTL__near_mem__dcache__mem_master_awaddr , RTL__near_mem__dcache__mem_master_wdata , RTL__near_mem__dcache__st_amo_val ; 
     wire[31:0] RTL__near_mem__dcache__addr ; 
     wire[7:0] RTL__near_mem__dcache__mem_master_arlen , RTL__near_mem__dcache__mem_master_awlen , RTL__near_mem__dcache__mem_master_wstrb ; 
@@ -6342,7 +6342,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__f_fabric_write_reqs__DOT__empty_reg;
     wire RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__full_reg;
 
-    parameter RTL__near_mem__dcache__f_fabric_write_reqs__width =1; parameter RTL__near_mem__dcache__f_fabric_write_reqs__guarded =1; input CLK ; input RST ; input[ RTL__near_mem__dcache__f_fabric_write_reqs__width -1:0] D_IN ; input ENQ ; input DEQ ; input CLR ; output FULL_N ; output EMPTY_N ; output[ RTL__near_mem__dcache__f_fabric_write_reqs__width -1:0] D_OUT ; 
+    parameter RTL__near_mem__dcache__f_fabric_write_reqs__width =1; parameter RTL__near_mem__dcache__f_fabric_write_reqs__guarded =1; 
     reg RTL__near_mem__dcache__f_fabric_write_reqs__full_reg ; 
     reg RTL__near_mem__dcache__f_fabric_write_reqs__empty_reg ; reg[ RTL__near_mem__dcache__f_fabric_write_reqs__width -1:0] RTL__near_mem__dcache__f_fabric_write_reqs__data0_reg ; reg[ RTL__near_mem__dcache__f_fabric_write_reqs__width -1:0] RTL__near_mem__dcache__f_fabric_write_reqs__data1_reg ; 
   assign  RTL__near_mem__dcache__f_fabric_write_reqs__FULL_N = RTL__near_mem__dcache__f_fabric_write_reqs__full_reg ; 
@@ -6440,7 +6440,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg = RTL__near_mem__dcache__f_fabric_write_reqs__empty_reg ; 
   assign  RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__near_mem__dcache__f_fabric_write_reqs__full_reg ; 
   assign  RTL__near_mem__dcache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__near_mem__dcache__f_fabric_write_reqs__empty_reg ;
-    parameter RTL__near_mem__dcache__f_reset_reqs__width =1; parameter RTL__near_mem__dcache__f_reset_reqs__guarded =1; input CLK ; input RST ; input[ RTL__near_mem__dcache__f_reset_reqs__width -1:0] D_IN ; input ENQ ; input DEQ ; input CLR ; output FULL_N ; output EMPTY_N ; output[ RTL__near_mem__dcache__f_reset_reqs__width -1:0] D_OUT ; 
+    parameter RTL__near_mem__dcache__f_reset_reqs__width =1; parameter RTL__near_mem__dcache__f_reset_reqs__guarded =1; 
     reg RTL__near_mem__dcache__f_reset_reqs__full_reg ; 
     reg RTL__near_mem__dcache__f_reset_reqs__empty_reg ; reg[ RTL__near_mem__dcache__f_reset_reqs__width -1:0] RTL__near_mem__dcache__f_reset_reqs__data0_reg ; reg[ RTL__near_mem__dcache__f_reset_reqs__width -1:0] RTL__near_mem__dcache__f_reset_reqs__data1_reg ; 
   assign  RTL__near_mem__dcache__f_reset_reqs__FULL_N = RTL__near_mem__dcache__f_reset_reqs__full_reg ; 
@@ -6538,7 +6538,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg = RTL__near_mem__dcache__f_reset_reqs__empty_reg ; 
   assign  RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__near_mem__dcache__f_reset_reqs__full_reg ; 
   assign  RTL__near_mem__dcache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__near_mem__dcache__f_reset_reqs__empty_reg ;
-    parameter RTL__near_mem__dcache__f_reset_rsps__width =1; parameter RTL__near_mem__dcache__f_reset_rsps__guarded =1; input CLK ; input RST ; input[ RTL__near_mem__dcache__f_reset_rsps__width -1:0] D_IN ; input ENQ ; input DEQ ; input CLR ; output FULL_N ; output EMPTY_N ; output[ RTL__near_mem__dcache__f_reset_rsps__width -1:0] D_OUT ; 
+    parameter RTL__near_mem__dcache__f_reset_rsps__width =1; parameter RTL__near_mem__dcache__f_reset_rsps__guarded =1; 
     reg RTL__near_mem__dcache__f_reset_rsps__full_reg ; 
     reg RTL__near_mem__dcache__f_reset_rsps__empty_reg ; reg[ RTL__near_mem__dcache__f_reset_rsps__width -1:0] RTL__near_mem__dcache__f_reset_rsps__data0_reg ; reg[ RTL__near_mem__dcache__f_reset_rsps__width -1:0] RTL__near_mem__dcache__f_reset_rsps__data1_reg ; 
   assign  RTL__near_mem__dcache__f_reset_rsps__FULL_N = RTL__near_mem__dcache__f_reset_rsps__full_reg ; 
@@ -6636,7 +6636,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg = RTL__near_mem__dcache__f_reset_rsps__empty_reg ; 
   assign  RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__near_mem__dcache__f_reset_rsps__full_reg ; 
   assign  RTL__near_mem__dcache__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__near_mem__dcache__f_reset_rsps__empty_reg ;
-    parameter RTL__near_mem__dcache__master_xactor_f_rd_addr__width =1; parameter RTL__near_mem__dcache__master_xactor_f_rd_addr__guarded =1; input CLK ; input RST ; input[ RTL__near_mem__dcache__master_xactor_f_rd_addr__width -1:0] D_IN ; input ENQ ; input DEQ ; input CLR ; output FULL_N ; output EMPTY_N ; output[ RTL__near_mem__dcache__master_xactor_f_rd_addr__width -1:0] D_OUT ; 
+    parameter RTL__near_mem__dcache__master_xactor_f_rd_addr__width =1; parameter RTL__near_mem__dcache__master_xactor_f_rd_addr__guarded =1; 
     reg RTL__near_mem__dcache__master_xactor_f_rd_addr__full_reg ; 
     reg RTL__near_mem__dcache__master_xactor_f_rd_addr__empty_reg ; reg[ RTL__near_mem__dcache__master_xactor_f_rd_addr__width -1:0] RTL__near_mem__dcache__master_xactor_f_rd_addr__data0_reg ; reg[ RTL__near_mem__dcache__master_xactor_f_rd_addr__width -1:0] RTL__near_mem__dcache__master_xactor_f_rd_addr__data1_reg ; 
   assign  RTL__near_mem__dcache__master_xactor_f_rd_addr__FULL_N = RTL__near_mem__dcache__master_xactor_f_rd_addr__full_reg ; 
@@ -6734,7 +6734,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_rd_addr__empty_reg ; 
   assign  RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__near_mem__dcache__master_xactor_f_rd_addr__full_reg ; 
   assign  RTL__near_mem__dcache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_rd_addr__empty_reg ;
-    parameter RTL__near_mem__dcache__master_xactor_f_rd_data__width =1; parameter RTL__near_mem__dcache__master_xactor_f_rd_data__guarded =1; input CLK ; input RST ; input[ RTL__near_mem__dcache__master_xactor_f_rd_data__width -1:0] D_IN ; input ENQ ; input DEQ ; input CLR ; output FULL_N ; output EMPTY_N ; output[ RTL__near_mem__dcache__master_xactor_f_rd_data__width -1:0] D_OUT ; 
+    parameter RTL__near_mem__dcache__master_xactor_f_rd_data__width =1; parameter RTL__near_mem__dcache__master_xactor_f_rd_data__guarded =1; 
     reg RTL__near_mem__dcache__master_xactor_f_rd_data__full_reg ; 
     reg RTL__near_mem__dcache__master_xactor_f_rd_data__empty_reg ; reg[ RTL__near_mem__dcache__master_xactor_f_rd_data__width -1:0] RTL__near_mem__dcache__master_xactor_f_rd_data__data0_reg ; reg[ RTL__near_mem__dcache__master_xactor_f_rd_data__width -1:0] RTL__near_mem__dcache__master_xactor_f_rd_data__data1_reg ; 
   assign  RTL__near_mem__dcache__master_xactor_f_rd_data__FULL_N = RTL__near_mem__dcache__master_xactor_f_rd_data__full_reg ; 
@@ -6832,7 +6832,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_rd_data__empty_reg ; 
   assign  RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__near_mem__dcache__master_xactor_f_rd_data__full_reg ; 
   assign  RTL__near_mem__dcache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_rd_data__empty_reg ;
-    parameter RTL__near_mem__dcache__master_xactor_f_wr_addr__width =1; parameter RTL__near_mem__dcache__master_xactor_f_wr_addr__guarded =1; input CLK ; input RST ; input[ RTL__near_mem__dcache__master_xactor_f_wr_addr__width -1:0] D_IN ; input ENQ ; input DEQ ; input CLR ; output FULL_N ; output EMPTY_N ; output[ RTL__near_mem__dcache__master_xactor_f_wr_addr__width -1:0] D_OUT ; 
+    parameter RTL__near_mem__dcache__master_xactor_f_wr_addr__width =1; parameter RTL__near_mem__dcache__master_xactor_f_wr_addr__guarded =1; 
     reg RTL__near_mem__dcache__master_xactor_f_wr_addr__full_reg ; 
     reg RTL__near_mem__dcache__master_xactor_f_wr_addr__empty_reg ; reg[ RTL__near_mem__dcache__master_xactor_f_wr_addr__width -1:0] RTL__near_mem__dcache__master_xactor_f_wr_addr__data0_reg ; reg[ RTL__near_mem__dcache__master_xactor_f_wr_addr__width -1:0] RTL__near_mem__dcache__master_xactor_f_wr_addr__data1_reg ; 
   assign  RTL__near_mem__dcache__master_xactor_f_wr_addr__FULL_N = RTL__near_mem__dcache__master_xactor_f_wr_addr__full_reg ; 
@@ -6930,7 +6930,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_wr_addr__empty_reg ; 
   assign  RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__near_mem__dcache__master_xactor_f_wr_addr__full_reg ; 
   assign  RTL__near_mem__dcache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_wr_addr__empty_reg ;
-    parameter RTL__near_mem__dcache__master_xactor_f_wr_data__width =1; parameter RTL__near_mem__dcache__master_xactor_f_wr_data__guarded =1; input CLK ; input RST ; input[ RTL__near_mem__dcache__master_xactor_f_wr_data__width -1:0] D_IN ; input ENQ ; input DEQ ; input CLR ; output FULL_N ; output EMPTY_N ; output[ RTL__near_mem__dcache__master_xactor_f_wr_data__width -1:0] D_OUT ; 
+    parameter RTL__near_mem__dcache__master_xactor_f_wr_data__width =1; parameter RTL__near_mem__dcache__master_xactor_f_wr_data__guarded =1; 
     reg RTL__near_mem__dcache__master_xactor_f_wr_data__full_reg ; 
     reg RTL__near_mem__dcache__master_xactor_f_wr_data__empty_reg ; reg[ RTL__near_mem__dcache__master_xactor_f_wr_data__width -1:0] RTL__near_mem__dcache__master_xactor_f_wr_data__data0_reg ; reg[ RTL__near_mem__dcache__master_xactor_f_wr_data__width -1:0] RTL__near_mem__dcache__master_xactor_f_wr_data__data1_reg ; 
   assign  RTL__near_mem__dcache__master_xactor_f_wr_data__FULL_N = RTL__near_mem__dcache__master_xactor_f_wr_data__full_reg ; 
@@ -7028,7 +7028,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_wr_data__empty_reg ; 
   assign  RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__near_mem__dcache__master_xactor_f_wr_data__full_reg ; 
   assign  RTL__near_mem__dcache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__near_mem__dcache__master_xactor_f_wr_data__empty_reg ;
-    parameter RTL__near_mem__dcache__master_xactor_f_wr_resp__width =1; parameter RTL__near_mem__dcache__master_xactor_f_wr_resp__guarded =1; input CLK ; input RST ; input[ RTL__near_mem__dcache__master_xactor_f_wr_resp__width -1:0] D_IN ; input ENQ ; input DEQ ; input CLR ; output FULL_N ; output EMPTY_N ; output[ RTL__near_mem__dcache__master_xactor_f_wr_resp__width -1:0] D_OUT ; 
+    parameter RTL__near_mem__dcache__master_xactor_f_wr_resp__width =1; parameter RTL__near_mem__dcache__master_xactor_f_wr_resp__guarded =1; 
     reg RTL__near_mem__dcache__master_xactor_f_wr_resp__full_reg ; 
     reg RTL__near_mem__dcache__master_xactor_f_wr_resp__empty_reg ; reg[ RTL__near_mem__dcache__master_xactor_f_wr_resp__width -1:0] RTL__near_mem__dcache__master_xactor_f_wr_resp__data0_reg ; reg[ RTL__near_mem__dcache__master_xactor_f_wr_resp__width -1:0] RTL__near_mem__dcache__master_xactor_f_wr_resp__data1_reg ; 
   assign  RTL__near_mem__dcache__master_xactor_f_wr_resp__FULL_N = RTL__near_mem__dcache__master_xactor_f_wr_resp__full_reg ; 
@@ -7176,7 +7176,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     wire[RTL__near_mem__icache__ram_word64_set__DATA_WIDTH-1:0] RTL__near_mem__icache__ram_word64_set__DIB;
     wire[RTL__near_mem__icache__ram_word64_set__DATA_WIDTH-1:0] RTL__near_mem__icache__ram_word64_set__DOB;
 
-    parameter RTL__near_mem__dcache__ram_state_and_ctag_cset__PIPELINED =0; parameter RTL__near_mem__dcache__ram_state_and_ctag_cset__ADDR_WIDTH =1; parameter RTL__near_mem__dcache__ram_state_and_ctag_cset__DATA_WIDTH =1; parameter RTL__near_mem__dcache__ram_state_and_ctag_cset__MEMSIZE =1; input CLKA ; input ENA ; input WEA ; input[ RTL__near_mem__dcache__ram_state_and_ctag_cset__ADDR_WIDTH -1:0] ADDRA ; input[ RTL__near_mem__dcache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] DIA ; output[ RTL__near_mem__dcache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] DOA ; input CLKB ; input ENB ; input WEB ; input[ RTL__near_mem__dcache__ram_state_and_ctag_cset__ADDR_WIDTH -1:0] ADDRB ; input[ RTL__near_mem__dcache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] DIB ; output[ RTL__near_mem__dcache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] DOB ; reg[ RTL__near_mem__dcache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__dcache__ram_state_and_ctag_cset__DOA_R ; reg[ RTL__near_mem__dcache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__dcache__ram_state_and_ctag_cset__DOB_R ; reg[ RTL__near_mem__dcache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__dcache__ram_state_and_ctag_cset__DOA_R2 ; reg[ RTL__near_mem__dcache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__dcache__ram_state_and_ctag_cset__DOB_R2 ; (* RTL__near_mem__dcache__ram_state_and_ctag_cset__keep *)
+    reg[ RTL__near_mem__dcache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__dcache__ram_state_and_ctag_cset__DOA_R ; reg[ RTL__near_mem__dcache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__dcache__ram_state_and_ctag_cset__DOB_R ; reg[ RTL__near_mem__dcache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__dcache__ram_state_and_ctag_cset__DOA_R2 ; reg[ RTL__near_mem__dcache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__dcache__ram_state_and_ctag_cset__DOB_R2 ; parameter RTL__near_mem__dcache__ram_state_and_ctag_cset__PIPELINED =0; parameter RTL__near_mem__dcache__ram_state_and_ctag_cset__ADDR_WIDTH =1; parameter RTL__near_mem__dcache__ram_state_and_ctag_cset__DATA_WIDTH =1; parameter RTL__near_mem__dcache__ram_state_and_ctag_cset__MEMSIZE =1; (* RTL__near_mem__dcache__ram_state_and_ctag_cset__keep *)
     wire[ RTL__near_mem__dcache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__dcache__ram_state_and_ctag_cset__arb1 ; (* RTL__near_mem__dcache__ram_state_and_ctag_cset__keep *)
     wire[ RTL__near_mem__dcache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__dcache__ram_state_and_ctag_cset__arb2 ; 
   always @( posedge  RTL__near_mem__dcache__ram_state_and_ctag_cset__CLKA )
@@ -7211,7 +7211,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
          end
   assign  RTL__near_mem__dcache__ram_state_and_ctag_cset__DOA =( RTL__near_mem__dcache__ram_state_and_ctag_cset__PIPELINED ) ?  RTL__near_mem__dcache__ram_state_and_ctag_cset__DOA_R2 : RTL__near_mem__dcache__ram_state_and_ctag_cset__DOA_R ; 
   assign  RTL__near_mem__dcache__ram_state_and_ctag_cset__DOB =( RTL__near_mem__dcache__ram_state_and_ctag_cset__PIPELINED ) ?  RTL__near_mem__dcache__ram_state_and_ctag_cset__DOB_R2 : RTL__near_mem__dcache__ram_state_and_ctag_cset__DOB_R ;
-    parameter RTL__near_mem__dcache__ram_word64_set__PIPELINED =0; parameter RTL__near_mem__dcache__ram_word64_set__ADDR_WIDTH =1; parameter RTL__near_mem__dcache__ram_word64_set__DATA_WIDTH =1; parameter RTL__near_mem__dcache__ram_word64_set__MEMSIZE =1; input CLKA ; input ENA ; input WEA ; input[ RTL__near_mem__dcache__ram_word64_set__ADDR_WIDTH -1:0] ADDRA ; input[ RTL__near_mem__dcache__ram_word64_set__DATA_WIDTH -1:0] DIA ; output[ RTL__near_mem__dcache__ram_word64_set__DATA_WIDTH -1:0] DOA ; input CLKB ; input ENB ; input WEB ; input[ RTL__near_mem__dcache__ram_word64_set__ADDR_WIDTH -1:0] ADDRB ; input[ RTL__near_mem__dcache__ram_word64_set__DATA_WIDTH -1:0] DIB ; output[ RTL__near_mem__dcache__ram_word64_set__DATA_WIDTH -1:0] DOB ; reg[ RTL__near_mem__dcache__ram_word64_set__DATA_WIDTH -1:0] RTL__near_mem__dcache__ram_word64_set__DOA_R ; reg[ RTL__near_mem__dcache__ram_word64_set__DATA_WIDTH -1:0] RTL__near_mem__dcache__ram_word64_set__DOB_R ; reg[ RTL__near_mem__dcache__ram_word64_set__DATA_WIDTH -1:0] RTL__near_mem__dcache__ram_word64_set__DOA_R2 ; reg[ RTL__near_mem__dcache__ram_word64_set__DATA_WIDTH -1:0] RTL__near_mem__dcache__ram_word64_set__DOB_R2 ; (* RTL__near_mem__dcache__ram_word64_set__keep *)
+    reg[ RTL__near_mem__dcache__ram_word64_set__DATA_WIDTH -1:0] RTL__near_mem__dcache__ram_word64_set__DOA_R ; reg[ RTL__near_mem__dcache__ram_word64_set__DATA_WIDTH -1:0] RTL__near_mem__dcache__ram_word64_set__DOB_R ; reg[ RTL__near_mem__dcache__ram_word64_set__DATA_WIDTH -1:0] RTL__near_mem__dcache__ram_word64_set__DOA_R2 ; reg[ RTL__near_mem__dcache__ram_word64_set__DATA_WIDTH -1:0] RTL__near_mem__dcache__ram_word64_set__DOB_R2 ; parameter RTL__near_mem__dcache__ram_word64_set__PIPELINED =0; parameter RTL__near_mem__dcache__ram_word64_set__ADDR_WIDTH =1; parameter RTL__near_mem__dcache__ram_word64_set__DATA_WIDTH =1; parameter RTL__near_mem__dcache__ram_word64_set__MEMSIZE =1; (* RTL__near_mem__dcache__ram_word64_set__keep *)
     wire[ RTL__near_mem__dcache__ram_word64_set__DATA_WIDTH -1:0] RTL__near_mem__dcache__ram_word64_set__arb1 ; (* RTL__near_mem__dcache__ram_word64_set__keep *)
     wire[ RTL__near_mem__dcache__ram_word64_set__DATA_WIDTH -1:0] RTL__near_mem__dcache__ram_word64_set__arb2 ; 
   always @( posedge  RTL__near_mem__dcache__ram_word64_set__CLKA )
@@ -8574,17 +8574,17 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__rg_addr = RTL__near_mem__dcache__rg_addr ; 
   assign  RTL__near_mem__dcache__RTL__DOT__near_mem__DOT__dcache__DOT__rg_pa = RTL__near_mem__dcache__rg_pa ;
       
+    wire RTL__near_mem__f_reset_rsps__RST;
+    wire RTL__near_mem__f_reset_rsps__CLK;
+    wire RTL__near_mem__f_reset_rsps__ENQ;
+    wire RTL__near_mem__f_reset_rsps__CLR;
+    wire RTL__near_mem__f_reset_rsps__DEQ;
     wire RTL__near_mem__f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg;
     wire RTL__near_mem__f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg;
     wire RTL__near_mem__f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg;
     wire RTL__near_mem__f_reset_rsps__RTL__DOT__stage1_f_reset_reqs__DOT__full_reg;
-    wire RTL__near_mem__f_reset_rsps__RTL__DOT__stage1_f_reset_reqs__DOT__empty_reg;
-    wire RTL__near_mem__f_reset_rsps__RTL__DOT__stage3_f_reset_reqs__DOT__full_reg;
-    wire RTL__near_mem__f_reset_rsps__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
-    wire RTL__near_mem__f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__full_reg;
-    wire RTL__near_mem__f_reset_rsps__RTL__DOT__stage2_f_reset_reqs__DOT__empty_reg;
 
-    parameter RTL__near_mem__f_reset_rsps__guarded =1; input RST ; input CLK ; input ENQ ; input CLR ; input DEQ ; output FULL_N ; output EMPTY_N ; 
+    parameter RTL__near_mem__f_reset_rsps__guarded =1; 
     reg RTL__near_mem__f_reset_rsps__empty_reg ; 
     reg RTL__near_mem__f_reset_rsps__full_reg ; 
   assign  RTL__near_mem__f_reset_rsps__FULL_N = RTL__near_mem__f_reset_rsps__full_reg ; 
@@ -8652,18 +8652,18 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__near_mem__f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg = RTL__near_mem__f_reset_rsps__empty_reg ; 
   assign  RTL__near_mem__f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg = RTL__near_mem__f_reset_rsps__full_reg ; 
   assign  RTL__near_mem__f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg = RTL__near_mem__f_reset_rsps__empty_reg ;
+    assign RTL__near_mem__f_reset_rsps__RST = RTL__near_mem__RST_N;
+    assign RTL__near_mem__f_reset_rsps__CLK = RTL__near_mem__CLK;
+    assign RTL__near_mem__f_reset_rsps__ENQ = RTL__near_mem__f_reset_rsps$ENQ;
+    assign RTL__near_mem__f_reset_rsps__CLR = RTL__near_mem__f_reset_rsps$CLR;
+    assign RTL__near_mem__f_reset_rsps__DEQ = RTL__near_mem__f_reset_rsps$DEQ;
     assign RTL__near_mem__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg = RTL__near_mem__f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__near_mem__CLK = RTL__near_mem__f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg;
-    assign RTL__near_mem__f_reset_rsps$ENQ = RTL__near_mem__f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg;
-    assign RTL__near_mem__f_reset_rsps$DEQ = RTL__near_mem__f_reset_rsps__RTL__DOT__stage1_f_reset_reqs__DOT__full_reg;
-    assign RTL__near_mem__f_reset_rsps$CLR = RTL__near_mem__f_reset_rsps__RTL__DOT__stage1_f_reset_reqs__DOT__empty_reg;
-    assign RTL__near_mem__f_reset_rsps$FULL_N = RTL__near_mem__f_reset_rsps__RTL__DOT__stage3_f_reset_reqs__DOT__full_reg;
-    assign RTL__near_mem__f_reset_rsps$EMPTY_N = RTL__near_mem__f_reset_rsps__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__near_mem__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__full_reg = RTL__near_mem__f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__near_mem__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__full_reg = RTL__near_mem__f_reset_rsps__RTL__DOT__stage2_f_reset_reqs__DOT__empty_reg;
+    assign RTL__near_mem__f_reset_rsps$EMPTY_N = RTL__near_mem__f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg;
+    assign RTL__near_mem__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg = RTL__near_mem__f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg;
+    assign RTL__near_mem__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__full_reg = RTL__near_mem__f_reset_rsps__RTL__DOT__stage1_f_reset_reqs__DOT__full_reg;
       
     
-    parameter RTL__near_mem__icache__dmem_not_imem =1'b0; input CLK ; input RST_N ; input[3:0] set_verbosity_verbosity ; input EN_set_verbosity ; output RDY_set_verbosity ; input EN_server_reset_request_put ; output RDY_server_reset_request_put ; input EN_server_reset_response_get ; output RDY_server_reset_response_get ; input req_op ; input[2:0] req_f3 ; input[31:0] req_addr ; input[63:0] req_st_value ; input[1:0] req_priv ; input req_sstatus_SUM ; input req_mstatus_MXR ; input[31:0] req_satp ; input EN_req ; output valid ; output[31:0] addr ; output[63:0] word64 ; output[63:0] st_amo_val ; output exc ; output[3:0] exc_code ; input EN_server_flush_request_put ; output RDY_server_flush_request_put ; input EN_server_flush_response_get ; output RDY_server_flush_response_get ; input EN_tlb_flush ; output RDY_tlb_flush ; output mem_master_awvalid ; output[3:0] mem_master_awid ; output[63:0] mem_master_awaddr ; output[7:0] mem_master_awlen ; output[2:0] mem_master_awsize ; output[1:0] mem_master_awburst ; output mem_master_awlock ; output[3:0] mem_master_awcache ; output[2:0] mem_master_awprot ; output[3:0] mem_master_awqos ; output[3:0] mem_master_awregion ; input mem_master_awready ; output mem_master_wvalid ; output[63:0] mem_master_wdata ; output[7:0] mem_master_wstrb ; output mem_master_wlast ; input mem_master_wready ; input mem_master_bvalid ; input[3:0] mem_master_bid ; input[1:0] mem_master_bresp ; output mem_master_bready ; output mem_master_arvalid ; output[3:0] mem_master_arid ; output[63:0] mem_master_araddr ; output[7:0] mem_master_arlen ; output[2:0] mem_master_arsize ; output[1:0] mem_master_arburst ; output mem_master_arlock ; output[3:0] mem_master_arcache ; output[2:0] mem_master_arprot ; output[3:0] mem_master_arqos ; output[3:0] mem_master_arregion ; input mem_master_arready ; input mem_master_rvalid ; input[3:0] mem_master_rid ; input[63:0] mem_master_rdata ; input[1:0] mem_master_rresp ; input mem_master_rlast ; output mem_master_rready ; reg[63:0] RTL__near_mem__icache__word64 ; 
+    parameter RTL__near_mem__icache__dmem_not_imem =1'b0; reg[63:0] RTL__near_mem__icache__word64 ; 
     wire[63:0] RTL__near_mem__icache__mem_master_araddr , RTL__near_mem__icache__mem_master_awaddr , RTL__near_mem__icache__mem_master_wdata , RTL__near_mem__icache__st_amo_val ; 
     wire[31:0] RTL__near_mem__icache__addr ; 
     wire[7:0] RTL__near_mem__icache__mem_master_arlen , RTL__near_mem__icache__mem_master_awlen , RTL__near_mem__icache__mem_master_wstrb ; 
@@ -8817,7 +8817,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__near_mem__icache__WILL_FIRE_mem_master_m_rvalid =1'd1; 
   assign  RTL__near_mem__icache__mem_master_rready = RTL__near_mem__icache__master_xactor_f_rd_data$FULL_N ;  
     
-    parameter RTL__near_mem__icache__f_fabric_write_reqs__width =1; parameter RTL__near_mem__icache__f_fabric_write_reqs__guarded =1; input CLK ; input RST ; input[ RTL__near_mem__icache__f_fabric_write_reqs__width -1:0] D_IN ; input ENQ ; input DEQ ; input CLR ; output FULL_N ; output EMPTY_N ; output[ RTL__near_mem__icache__f_fabric_write_reqs__width -1:0] D_OUT ; 
+    parameter RTL__near_mem__icache__f_fabric_write_reqs__width =1; parameter RTL__near_mem__icache__f_fabric_write_reqs__guarded =1; 
     reg RTL__near_mem__icache__f_fabric_write_reqs__full_reg ; 
     reg RTL__near_mem__icache__f_fabric_write_reqs__empty_reg ; reg[ RTL__near_mem__icache__f_fabric_write_reqs__width -1:0] RTL__near_mem__icache__f_fabric_write_reqs__data0_reg ; reg[ RTL__near_mem__icache__f_fabric_write_reqs__width -1:0] RTL__near_mem__icache__f_fabric_write_reqs__data1_reg ; 
   assign  RTL__near_mem__icache__f_fabric_write_reqs__FULL_N = RTL__near_mem__icache__f_fabric_write_reqs__full_reg ; 
@@ -8915,7 +8915,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg = RTL__near_mem__icache__f_fabric_write_reqs__empty_reg ; 
   assign  RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__near_mem__icache__f_fabric_write_reqs__full_reg ; 
   assign  RTL__near_mem__icache__f_fabric_write_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__near_mem__icache__f_fabric_write_reqs__empty_reg ;
-    parameter RTL__near_mem__icache__f_reset_reqs__width =1; parameter RTL__near_mem__icache__f_reset_reqs__guarded =1; input CLK ; input RST ; input[ RTL__near_mem__icache__f_reset_reqs__width -1:0] D_IN ; input ENQ ; input DEQ ; input CLR ; output FULL_N ; output EMPTY_N ; output[ RTL__near_mem__icache__f_reset_reqs__width -1:0] D_OUT ; 
+    parameter RTL__near_mem__icache__f_reset_reqs__width =1; parameter RTL__near_mem__icache__f_reset_reqs__guarded =1; 
     reg RTL__near_mem__icache__f_reset_reqs__full_reg ; 
     reg RTL__near_mem__icache__f_reset_reqs__empty_reg ; reg[ RTL__near_mem__icache__f_reset_reqs__width -1:0] RTL__near_mem__icache__f_reset_reqs__data0_reg ; reg[ RTL__near_mem__icache__f_reset_reqs__width -1:0] RTL__near_mem__icache__f_reset_reqs__data1_reg ; 
   assign  RTL__near_mem__icache__f_reset_reqs__FULL_N = RTL__near_mem__icache__f_reset_reqs__full_reg ; 
@@ -9013,7 +9013,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg = RTL__near_mem__icache__f_reset_reqs__empty_reg ; 
   assign  RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__near_mem__icache__f_reset_reqs__full_reg ; 
   assign  RTL__near_mem__icache__f_reset_reqs__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__near_mem__icache__f_reset_reqs__empty_reg ;
-    parameter RTL__near_mem__icache__f_reset_rsps__width =1; parameter RTL__near_mem__icache__f_reset_rsps__guarded =1; input CLK ; input RST ; input[ RTL__near_mem__icache__f_reset_rsps__width -1:0] D_IN ; input ENQ ; input DEQ ; input CLR ; output FULL_N ; output EMPTY_N ; output[ RTL__near_mem__icache__f_reset_rsps__width -1:0] D_OUT ; 
+    parameter RTL__near_mem__icache__f_reset_rsps__width =1; parameter RTL__near_mem__icache__f_reset_rsps__guarded =1; 
     reg RTL__near_mem__icache__f_reset_rsps__full_reg ; 
     reg RTL__near_mem__icache__f_reset_rsps__empty_reg ; reg[ RTL__near_mem__icache__f_reset_rsps__width -1:0] RTL__near_mem__icache__f_reset_rsps__data0_reg ; reg[ RTL__near_mem__icache__f_reset_rsps__width -1:0] RTL__near_mem__icache__f_reset_rsps__data1_reg ; 
   assign  RTL__near_mem__icache__f_reset_rsps__FULL_N = RTL__near_mem__icache__f_reset_rsps__full_reg ; 
@@ -9111,7 +9111,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__near_mem__icache__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg = RTL__near_mem__icache__f_reset_rsps__empty_reg ; 
   assign  RTL__near_mem__icache__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__near_mem__icache__f_reset_rsps__full_reg ; 
   assign  RTL__near_mem__icache__f_reset_rsps__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__near_mem__icache__f_reset_rsps__empty_reg ;
-    parameter RTL__near_mem__icache__master_xactor_f_rd_addr__width =1; parameter RTL__near_mem__icache__master_xactor_f_rd_addr__guarded =1; input CLK ; input RST ; input[ RTL__near_mem__icache__master_xactor_f_rd_addr__width -1:0] D_IN ; input ENQ ; input DEQ ; input CLR ; output FULL_N ; output EMPTY_N ; output[ RTL__near_mem__icache__master_xactor_f_rd_addr__width -1:0] D_OUT ; 
+    parameter RTL__near_mem__icache__master_xactor_f_rd_addr__width =1; parameter RTL__near_mem__icache__master_xactor_f_rd_addr__guarded =1; 
     reg RTL__near_mem__icache__master_xactor_f_rd_addr__full_reg ; 
     reg RTL__near_mem__icache__master_xactor_f_rd_addr__empty_reg ; reg[ RTL__near_mem__icache__master_xactor_f_rd_addr__width -1:0] RTL__near_mem__icache__master_xactor_f_rd_addr__data0_reg ; reg[ RTL__near_mem__icache__master_xactor_f_rd_addr__width -1:0] RTL__near_mem__icache__master_xactor_f_rd_addr__data1_reg ; 
   assign  RTL__near_mem__icache__master_xactor_f_rd_addr__FULL_N = RTL__near_mem__icache__master_xactor_f_rd_addr__full_reg ; 
@@ -9209,7 +9209,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_rd_addr__empty_reg ; 
   assign  RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_rd_addr__full_reg ; 
   assign  RTL__near_mem__icache__master_xactor_f_rd_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_rd_addr__empty_reg ;
-    parameter RTL__near_mem__icache__master_xactor_f_rd_data__width =1; parameter RTL__near_mem__icache__master_xactor_f_rd_data__guarded =1; input CLK ; input RST ; input[ RTL__near_mem__icache__master_xactor_f_rd_data__width -1:0] D_IN ; input ENQ ; input DEQ ; input CLR ; output FULL_N ; output EMPTY_N ; output[ RTL__near_mem__icache__master_xactor_f_rd_data__width -1:0] D_OUT ; 
+    parameter RTL__near_mem__icache__master_xactor_f_rd_data__width =1; parameter RTL__near_mem__icache__master_xactor_f_rd_data__guarded =1; 
     reg RTL__near_mem__icache__master_xactor_f_rd_data__full_reg ; 
     reg RTL__near_mem__icache__master_xactor_f_rd_data__empty_reg ; reg[ RTL__near_mem__icache__master_xactor_f_rd_data__width -1:0] RTL__near_mem__icache__master_xactor_f_rd_data__data0_reg ; reg[ RTL__near_mem__icache__master_xactor_f_rd_data__width -1:0] RTL__near_mem__icache__master_xactor_f_rd_data__data1_reg ; 
   assign  RTL__near_mem__icache__master_xactor_f_rd_data__FULL_N = RTL__near_mem__icache__master_xactor_f_rd_data__full_reg ; 
@@ -9307,7 +9307,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_rd_data__empty_reg ; 
   assign  RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_rd_data__full_reg ; 
   assign  RTL__near_mem__icache__master_xactor_f_rd_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_rd_data__empty_reg ;
-    parameter RTL__near_mem__icache__master_xactor_f_wr_addr__width =1; parameter RTL__near_mem__icache__master_xactor_f_wr_addr__guarded =1; input CLK ; input RST ; input[ RTL__near_mem__icache__master_xactor_f_wr_addr__width -1:0] D_IN ; input ENQ ; input DEQ ; input CLR ; output FULL_N ; output EMPTY_N ; output[ RTL__near_mem__icache__master_xactor_f_wr_addr__width -1:0] D_OUT ; 
+    parameter RTL__near_mem__icache__master_xactor_f_wr_addr__width =1; parameter RTL__near_mem__icache__master_xactor_f_wr_addr__guarded =1; 
     reg RTL__near_mem__icache__master_xactor_f_wr_addr__full_reg ; 
     reg RTL__near_mem__icache__master_xactor_f_wr_addr__empty_reg ; reg[ RTL__near_mem__icache__master_xactor_f_wr_addr__width -1:0] RTL__near_mem__icache__master_xactor_f_wr_addr__data0_reg ; reg[ RTL__near_mem__icache__master_xactor_f_wr_addr__width -1:0] RTL__near_mem__icache__master_xactor_f_wr_addr__data1_reg ; 
   assign  RTL__near_mem__icache__master_xactor_f_wr_addr__FULL_N = RTL__near_mem__icache__master_xactor_f_wr_addr__full_reg ; 
@@ -9405,7 +9405,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_wr_addr__empty_reg ; 
   assign  RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_wr_addr__full_reg ; 
   assign  RTL__near_mem__icache__master_xactor_f_wr_addr__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_wr_addr__empty_reg ;
-    parameter RTL__near_mem__icache__master_xactor_f_wr_data__width =1; parameter RTL__near_mem__icache__master_xactor_f_wr_data__guarded =1; input CLK ; input RST ; input[ RTL__near_mem__icache__master_xactor_f_wr_data__width -1:0] D_IN ; input ENQ ; input DEQ ; input CLR ; output FULL_N ; output EMPTY_N ; output[ RTL__near_mem__icache__master_xactor_f_wr_data__width -1:0] D_OUT ; 
+    parameter RTL__near_mem__icache__master_xactor_f_wr_data__width =1; parameter RTL__near_mem__icache__master_xactor_f_wr_data__guarded =1; 
     reg RTL__near_mem__icache__master_xactor_f_wr_data__full_reg ; 
     reg RTL__near_mem__icache__master_xactor_f_wr_data__empty_reg ; reg[ RTL__near_mem__icache__master_xactor_f_wr_data__width -1:0] RTL__near_mem__icache__master_xactor_f_wr_data__data0_reg ; reg[ RTL__near_mem__icache__master_xactor_f_wr_data__width -1:0] RTL__near_mem__icache__master_xactor_f_wr_data__data1_reg ; 
   assign  RTL__near_mem__icache__master_xactor_f_wr_data__FULL_N = RTL__near_mem__icache__master_xactor_f_wr_data__full_reg ; 
@@ -9503,7 +9503,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__f_reset_reqs__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_wr_data__empty_reg ; 
   assign  RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__full_reg = RTL__near_mem__icache__master_xactor_f_wr_data__full_reg ; 
   assign  RTL__near_mem__icache__master_xactor_f_wr_data__RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_rd_addr__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_wr_data__empty_reg ;
-    parameter RTL__near_mem__icache__master_xactor_f_wr_resp__width =1; parameter RTL__near_mem__icache__master_xactor_f_wr_resp__guarded =1; input CLK ; input RST ; input[ RTL__near_mem__icache__master_xactor_f_wr_resp__width -1:0] D_IN ; input ENQ ; input DEQ ; input CLR ; output FULL_N ; output EMPTY_N ; output[ RTL__near_mem__icache__master_xactor_f_wr_resp__width -1:0] D_OUT ; 
+    parameter RTL__near_mem__icache__master_xactor_f_wr_resp__width =1; parameter RTL__near_mem__icache__master_xactor_f_wr_resp__guarded =1; 
     reg RTL__near_mem__icache__master_xactor_f_wr_resp__full_reg ; 
     reg RTL__near_mem__icache__master_xactor_f_wr_resp__empty_reg ; reg[ RTL__near_mem__icache__master_xactor_f_wr_resp__width -1:0] RTL__near_mem__icache__master_xactor_f_wr_resp__data0_reg ; reg[ RTL__near_mem__icache__master_xactor_f_wr_resp__width -1:0] RTL__near_mem__icache__master_xactor_f_wr_resp__data1_reg ; 
   assign  RTL__near_mem__icache__master_xactor_f_wr_resp__FULL_N = RTL__near_mem__icache__master_xactor_f_wr_resp__full_reg ; 
@@ -9811,7 +9811,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     assign RTL__near_mem__icache__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_resp__DOT__empty_reg = RTL__near_mem__icache__master_xactor_f_wr_resp__RTL__DOT__near_mem__DOT__dcache__DOT__master_xactor_f_wr_data__DOT__full_reg;
       
     
-    parameter RTL__near_mem__icache__ram_state_and_ctag_cset__PIPELINED =0; parameter RTL__near_mem__icache__ram_state_and_ctag_cset__ADDR_WIDTH =1; parameter RTL__near_mem__icache__ram_state_and_ctag_cset__DATA_WIDTH =1; parameter RTL__near_mem__icache__ram_state_and_ctag_cset__MEMSIZE =1; input CLKA ; input ENA ; input WEA ; input[ RTL__near_mem__icache__ram_state_and_ctag_cset__ADDR_WIDTH -1:0] ADDRA ; input[ RTL__near_mem__icache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] DIA ; output[ RTL__near_mem__icache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] DOA ; input CLKB ; input ENB ; input WEB ; input[ RTL__near_mem__icache__ram_state_and_ctag_cset__ADDR_WIDTH -1:0] ADDRB ; input[ RTL__near_mem__icache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] DIB ; output[ RTL__near_mem__icache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] DOB ; reg[ RTL__near_mem__icache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_state_and_ctag_cset__DOA_R ; reg[ RTL__near_mem__icache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_state_and_ctag_cset__DOB_R ; reg[ RTL__near_mem__icache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_state_and_ctag_cset__DOA_R2 ; reg[ RTL__near_mem__icache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_state_and_ctag_cset__DOB_R2 ; (* RTL__near_mem__icache__ram_state_and_ctag_cset__keep *)
+    reg[ RTL__near_mem__icache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_state_and_ctag_cset__DOA_R ; reg[ RTL__near_mem__icache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_state_and_ctag_cset__DOB_R ; reg[ RTL__near_mem__icache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_state_and_ctag_cset__DOA_R2 ; reg[ RTL__near_mem__icache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_state_and_ctag_cset__DOB_R2 ; parameter RTL__near_mem__icache__ram_state_and_ctag_cset__PIPELINED =0; parameter RTL__near_mem__icache__ram_state_and_ctag_cset__ADDR_WIDTH =1; parameter RTL__near_mem__icache__ram_state_and_ctag_cset__DATA_WIDTH =1; parameter RTL__near_mem__icache__ram_state_and_ctag_cset__MEMSIZE =1; (* RTL__near_mem__icache__ram_state_and_ctag_cset__keep *)
     wire[ RTL__near_mem__icache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_state_and_ctag_cset__arb1 ; (* RTL__near_mem__icache__ram_state_and_ctag_cset__keep *)
     wire[ RTL__near_mem__icache__ram_state_and_ctag_cset__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_state_and_ctag_cset__arb2 ; 
   always @( posedge  RTL__near_mem__icache__ram_state_and_ctag_cset__CLKA )
@@ -9846,7 +9846,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
          end
   assign  RTL__near_mem__icache__ram_state_and_ctag_cset__DOA =( RTL__near_mem__icache__ram_state_and_ctag_cset__PIPELINED ) ?  RTL__near_mem__icache__ram_state_and_ctag_cset__DOA_R2 : RTL__near_mem__icache__ram_state_and_ctag_cset__DOA_R ; 
   assign  RTL__near_mem__icache__ram_state_and_ctag_cset__DOB =( RTL__near_mem__icache__ram_state_and_ctag_cset__PIPELINED ) ?  RTL__near_mem__icache__ram_state_and_ctag_cset__DOB_R2 : RTL__near_mem__icache__ram_state_and_ctag_cset__DOB_R ;
-    parameter RTL__near_mem__icache__ram_word64_set__PIPELINED =0; parameter RTL__near_mem__icache__ram_word64_set__ADDR_WIDTH =1; parameter RTL__near_mem__icache__ram_word64_set__DATA_WIDTH =1; parameter RTL__near_mem__icache__ram_word64_set__MEMSIZE =1; input CLKA ; input ENA ; input WEA ; input[ RTL__near_mem__icache__ram_word64_set__ADDR_WIDTH -1:0] ADDRA ; input[ RTL__near_mem__icache__ram_word64_set__DATA_WIDTH -1:0] DIA ; output[ RTL__near_mem__icache__ram_word64_set__DATA_WIDTH -1:0] DOA ; input CLKB ; input ENB ; input WEB ; input[ RTL__near_mem__icache__ram_word64_set__ADDR_WIDTH -1:0] ADDRB ; input[ RTL__near_mem__icache__ram_word64_set__DATA_WIDTH -1:0] DIB ; output[ RTL__near_mem__icache__ram_word64_set__DATA_WIDTH -1:0] DOB ; reg[ RTL__near_mem__icache__ram_word64_set__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_word64_set__DOA_R ; reg[ RTL__near_mem__icache__ram_word64_set__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_word64_set__DOB_R ; reg[ RTL__near_mem__icache__ram_word64_set__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_word64_set__DOA_R2 ; reg[ RTL__near_mem__icache__ram_word64_set__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_word64_set__DOB_R2 ; (* RTL__near_mem__icache__ram_word64_set__keep *)
+    reg[ RTL__near_mem__icache__ram_word64_set__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_word64_set__DOA_R ; reg[ RTL__near_mem__icache__ram_word64_set__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_word64_set__DOB_R ; reg[ RTL__near_mem__icache__ram_word64_set__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_word64_set__DOA_R2 ; reg[ RTL__near_mem__icache__ram_word64_set__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_word64_set__DOB_R2 ; parameter RTL__near_mem__icache__ram_word64_set__PIPELINED =0; parameter RTL__near_mem__icache__ram_word64_set__ADDR_WIDTH =1; parameter RTL__near_mem__icache__ram_word64_set__DATA_WIDTH =1; parameter RTL__near_mem__icache__ram_word64_set__MEMSIZE =1; (* RTL__near_mem__icache__ram_word64_set__keep *)
     wire[ RTL__near_mem__icache__ram_word64_set__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_word64_set__arb1 ; (* RTL__near_mem__icache__ram_word64_set__keep *)
     wire[ RTL__near_mem__icache__ram_word64_set__DATA_WIDTH -1:0] RTL__near_mem__icache__ram_word64_set__arb2 ; 
   always @( posedge  RTL__near_mem__icache__ram_word64_set__CLKA )
@@ -11692,7 +11692,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
     assign RTL__soc_map$m_pc_reset_value = RTL__soc_map__m_pc_reset_value;
       
     
-    parameter RTL__stage1_f_reset_reqs__guarded =1; input RST ; input CLK ; input ENQ ; input CLR ; input DEQ ; output FULL_N ; output EMPTY_N ; 
+    parameter RTL__stage1_f_reset_reqs__guarded =1; 
     reg RTL__stage1_f_reset_reqs__empty_reg ; 
     reg RTL__stage1_f_reset_reqs__full_reg ; 
   assign  RTL__stage1_f_reset_reqs__FULL_N = RTL__stage1_f_reset_reqs__full_reg ; 
@@ -11760,7 +11760,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__stage1_f_reset_reqs__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg = RTL__stage1_f_reset_reqs__empty_reg ; 
   assign  RTL__stage1_f_reset_reqs__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg = RTL__stage1_f_reset_reqs__full_reg ; 
   assign  RTL__stage1_f_reset_reqs__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg = RTL__stage1_f_reset_reqs__empty_reg ;
-    parameter RTL__stage1_f_reset_rsps__guarded =1; input RST ; input CLK ; input ENQ ; input CLR ; input DEQ ; output FULL_N ; output EMPTY_N ; 
+    parameter RTL__stage1_f_reset_rsps__guarded =1; 
     reg RTL__stage1_f_reset_rsps__empty_reg ; 
     reg RTL__stage1_f_reset_rsps__full_reg ; 
   assign  RTL__stage1_f_reset_rsps__FULL_N = RTL__stage1_f_reset_rsps__full_reg ; 
@@ -11828,7 +11828,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__stage1_f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg = RTL__stage1_f_reset_rsps__empty_reg ; 
   assign  RTL__stage1_f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg = RTL__stage1_f_reset_rsps__full_reg ; 
   assign  RTL__stage1_f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg = RTL__stage1_f_reset_rsps__empty_reg ;
-    parameter RTL__stage2_f_reset_reqs__guarded =1; input RST ; input CLK ; input ENQ ; input CLR ; input DEQ ; output FULL_N ; output EMPTY_N ; 
+    parameter RTL__stage2_f_reset_reqs__guarded =1; 
     reg RTL__stage2_f_reset_reqs__empty_reg ; 
     reg RTL__stage2_f_reset_reqs__full_reg ; 
   assign  RTL__stage2_f_reset_reqs__FULL_N = RTL__stage2_f_reset_reqs__full_reg ; 
@@ -11896,7 +11896,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__stage2_f_reset_reqs__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg = RTL__stage2_f_reset_reqs__empty_reg ; 
   assign  RTL__stage2_f_reset_reqs__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg = RTL__stage2_f_reset_reqs__full_reg ; 
   assign  RTL__stage2_f_reset_reqs__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg = RTL__stage2_f_reset_reqs__empty_reg ;
-    parameter RTL__stage2_f_reset_rsps__guarded =1; input RST ; input CLK ; input ENQ ; input CLR ; input DEQ ; output FULL_N ; output EMPTY_N ; 
+    parameter RTL__stage2_f_reset_rsps__guarded =1; 
     reg RTL__stage2_f_reset_rsps__empty_reg ; 
     reg RTL__stage2_f_reset_rsps__full_reg ; 
   assign  RTL__stage2_f_reset_rsps__FULL_N = RTL__stage2_f_reset_rsps__full_reg ; 
@@ -11964,7 +11964,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__stage2_f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg = RTL__stage2_f_reset_rsps__empty_reg ; 
   assign  RTL__stage2_f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg = RTL__stage2_f_reset_rsps__full_reg ; 
   assign  RTL__stage2_f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg = RTL__stage2_f_reset_rsps__empty_reg ;
-    parameter RTL__stage3_f_reset_reqs__guarded =1; input RST ; input CLK ; input ENQ ; input CLR ; input DEQ ; output FULL_N ; output EMPTY_N ; 
+    parameter RTL__stage3_f_reset_reqs__guarded =1; 
     reg RTL__stage3_f_reset_reqs__empty_reg ; 
     reg RTL__stage3_f_reset_reqs__full_reg ; 
   assign  RTL__stage3_f_reset_reqs__FULL_N = RTL__stage3_f_reset_reqs__full_reg ; 
@@ -12032,7 +12032,7 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__stage3_f_reset_reqs__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg = RTL__stage3_f_reset_reqs__empty_reg ; 
   assign  RTL__stage3_f_reset_reqs__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg = RTL__stage3_f_reset_reqs__full_reg ; 
   assign  RTL__stage3_f_reset_reqs__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg = RTL__stage3_f_reset_reqs__empty_reg ;
-    parameter RTL__stage3_f_reset_rsps__guarded =1; input RST ; input CLK ; input ENQ ; input CLR ; input DEQ ; output FULL_N ; output EMPTY_N ; 
+    parameter RTL__stage3_f_reset_rsps__guarded =1; 
     reg RTL__stage3_f_reset_rsps__empty_reg ; 
     reg RTL__stage3_f_reset_rsps__full_reg ; 
   assign  RTL__stage3_f_reset_rsps__FULL_N = RTL__stage3_f_reset_rsps__full_reg ; 
@@ -12100,69 +12100,69 @@ assign post_value_holder_triggered__p228__ = (!(__IEND__))||((__auxvar9__recorde
   assign  RTL__stage3_f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg = RTL__stage3_f_reset_rsps__empty_reg ; 
   assign  RTL__stage3_f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg = RTL__stage3_f_reset_rsps__full_reg ; 
   assign  RTL__stage3_f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg = RTL__stage3_f_reset_rsps__empty_reg ;
-    assign RTL__csr_regfile__RST_N = RTL__csr_regfile__f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__csr_regfile__CLK = RTL__csr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg;
-    assign RTL__csr_regfile__f_reset_rsps$ENQ = RTL__csr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg;
-    assign RTL__csr_regfile__f_reset_rsps$DEQ = RTL__csr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_reqs__DOT__full_reg;
-    assign RTL__csr_regfile__f_reset_rsps$CLR = RTL__csr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_reqs__DOT__empty_reg;
-    assign RTL__csr_regfile__f_reset_rsps$FULL_N = RTL__csr_regfile__f_reset_rsps__RTL__DOT__stage3_f_reset_reqs__DOT__full_reg;
-    assign RTL__csr_regfile__f_reset_rsps$EMPTY_N = RTL__csr_regfile__f_reset_rsps__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__csr_regfile__RTL__DOT__csr_regfile__DOT__f_reset_rsps__DOT__full_reg = RTL__csr_regfile__f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__csr_regfile__RTL__DOT__csr_regfile__DOT__f_reset_rsps__DOT__empty_reg = RTL__csr_regfile__f_reset_rsps__RTL__DOT__stage2_f_reset_reqs__DOT__empty_reg;
-    assign RTL__RST_N = RTL__stage1_f_reset_reqs__RTL__DOT__stage3_f_reset_rsps__DOT__full_reg;
-    assign RTL__CLK = RTL__stage1_f_reset_reqs__RTL__DOT__csr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__stage1_f_reset_reqs$ENQ = RTL__stage1_f_reset_reqs__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__stage1_f_reset_reqs$DEQ = RTL__stage1_f_reset_reqs__RTL__DOT__stage3_f_reset_reqs__DOT__empty_reg;
-    assign RTL__stage1_f_reset_reqs$CLR = RTL__stage1_f_reset_reqs__RTL__DOT__csr_regfile__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__stage1_f_reset_reqs$FULL_N = RTL__stage1_f_reset_reqs__RTL__DOT__stage2_f_reset_reqs__DOT__full_reg;
-    assign RTL__stage1_f_reset_reqs$EMPTY_N = RTL__stage1_f_reset_reqs__RTL__DOT__stage3_f_reset_rsps__DOT__empty_reg;
-    assign RTL__RTL__DOT__stage1_f_reset_reqs__DOT__empty_reg = RTL__stage1_f_reset_reqs__RTL__DOT__stage2_f_reset_rsps__DOT__empty_reg;
-    assign RTL__RTL__DOT__stage1_f_reset_reqs__DOT__full_reg = RTL__stage1_f_reset_reqs__RTL__DOT__stage2_f_reset_rsps__DOT__full_reg;
-    assign RTL__stage1_f_reset_rsps__RST = RTL__RST_N;
-    assign RTL__stage1_f_reset_rsps__CLK = RTL__CLK;
-    assign RTL__stage1_f_reset_rsps__ENQ = RTL__stage1_f_reset_rsps$ENQ;
-    assign RTL__stage1_f_reset_rsps__CLR = RTL__stage1_f_reset_rsps$CLR;
-    assign RTL__stage1_f_reset_rsps__DEQ = RTL__stage1_f_reset_rsps$DEQ;
+    assign RTL__csr_regfile__f_reset_rsps__RST = RTL__csr_regfile__RST_N;
+    assign RTL__csr_regfile__f_reset_rsps__CLK = RTL__csr_regfile__CLK;
+    assign RTL__csr_regfile__f_reset_rsps__ENQ = RTL__csr_regfile__f_reset_rsps$ENQ;
+    assign RTL__csr_regfile__f_reset_rsps__CLR = RTL__csr_regfile__f_reset_rsps$CLR;
+    assign RTL__csr_regfile__f_reset_rsps__DEQ = RTL__csr_regfile__f_reset_rsps$DEQ;
+    assign RTL__csr_regfile__f_reset_rsps$FULL_N = RTL__csr_regfile__f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__csr_regfile__f_reset_rsps$EMPTY_N = RTL__csr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg;
+    assign RTL__csr_regfile__RTL__DOT__csr_regfile__DOT__f_reset_rsps__DOT__full_reg = RTL__csr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg;
+    assign RTL__csr_regfile__RTL__DOT__csr_regfile__DOT__f_reset_rsps__DOT__empty_reg = RTL__csr_regfile__f_reset_rsps__RTL__DOT__stage1_f_reset_reqs__DOT__full_reg;
+    assign RTL__RTL__DOT__stage1_f_reset_reqs__DOT__empty_reg = RTL__stage1_f_reset_reqs__RTL__DOT__stage1_f_reset_reqs__DOT__empty_reg;
+    assign RTL__CLK = RTL__stage1_f_reset_reqs__RTL__DOT__stage3_f_reset_reqs__DOT__full_reg;
+    assign RTL__stage1_f_reset_reqs$ENQ = RTL__stage1_f_reset_reqs__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__stage1_f_reset_reqs$DEQ = RTL__stage1_f_reset_reqs__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__full_reg;
+    assign RTL__stage1_f_reset_reqs$CLR = RTL__stage1_f_reset_reqs__RTL__DOT__stage2_f_reset_reqs__DOT__empty_reg;
+    assign RTL__stage1_f_reset_reqs$FULL_N = RTL__stage1_f_reset_reqs__RTL__DOT__stage3_f_reset_rsps__DOT__full_reg;
+    assign RTL__stage1_f_reset_reqs$EMPTY_N = RTL__stage1_f_reset_reqs__RTL__DOT__csr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__RTL__DOT__stage1_f_reset_reqs__DOT__empty_reg = RTL__stage1_f_reset_reqs__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__full_reg;
+    assign RTL__RTL__DOT__stage1_f_reset_reqs__DOT__full_reg = RTL__stage1_f_reset_reqs__RTL__DOT__stage3_f_reset_reqs__DOT__empty_reg;
+    assign RTL__RST_N = RTL__stage1_f_reset_rsps__RTL__DOT__csr_regfile__DOT__f_reset_rsps__DOT__full_reg;
+    assign RTL__CLK = RTL__stage1_f_reset_rsps__RTL__DOT__stage2_f_reset_reqs__DOT__full_reg;
+    assign RTL__stage1_f_reset_rsps$ENQ = RTL__stage1_f_reset_rsps__RTL__DOT__stage3_f_reset_rsps__DOT__empty_reg;
+    assign RTL__stage1_f_reset_rsps$DEQ = RTL__stage1_f_reset_rsps__RTL__DOT__stage2_f_reset_rsps__DOT__empty_reg;
+    assign RTL__stage1_f_reset_rsps$CLR = RTL__stage1_f_reset_rsps__RTL__DOT__stage2_f_reset_rsps__DOT__full_reg;
     assign RTL__stage1_f_reset_rsps$FULL_N = RTL__stage1_f_reset_rsps__FULL_N;
     assign RTL__stage1_f_reset_rsps$EMPTY_N = RTL__stage1_f_reset_rsps__EMPTY_N;
-    assign RTL__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg = RTL__stage1_f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg = RTL__stage1_f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg;
-    assign RTL__RST_N = RTL__stage2_f_reset_reqs__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg;
-    assign RTL__CLK = RTL__stage2_f_reset_reqs__RTL__DOT__stage1_f_reset_reqs__DOT__full_reg;
-    assign RTL__stage2_f_reset_reqs$ENQ = RTL__stage2_f_reset_reqs__RTL__DOT__stage1_f_reset_reqs__DOT__empty_reg;
-    assign RTL__stage2_f_reset_reqs$DEQ = RTL__stage2_f_reset_reqs__RTL__DOT__stage3_f_reset_reqs__DOT__full_reg;
-    assign RTL__stage2_f_reset_reqs$CLR = RTL__stage2_f_reset_reqs__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__stage2_f_reset_reqs$FULL_N = RTL__stage2_f_reset_reqs__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__RTL__DOT__stage2_f_reset_reqs__DOT__empty_reg = RTL__stage2_f_reset_reqs__RTL__DOT__stage2_f_reset_reqs__DOT__empty_reg;
-    assign RTL__RTL__DOT__stage2_f_reset_reqs__DOT__empty_reg = RTL__stage2_f_reset_reqs__RTL__DOT__stage3_f_reset_rsps__DOT__full_reg;
-    assign RTL__RTL__DOT__stage2_f_reset_reqs__DOT__full_reg = RTL__stage2_f_reset_reqs__RTL__DOT__csr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__RST_N = RTL__stage2_f_reset_rsps__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__CLK = RTL__stage2_f_reset_rsps__RTL__DOT__stage3_f_reset_reqs__DOT__empty_reg;
-    assign RTL__stage2_f_reset_rsps$ENQ = RTL__stage2_f_reset_rsps__RTL__DOT__csr_regfile__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__stage2_f_reset_rsps$DEQ = RTL__stage2_f_reset_rsps__RTL__DOT__stage2_f_reset_reqs__DOT__full_reg;
-    assign RTL__stage2_f_reset_rsps$CLR = RTL__stage2_f_reset_rsps__RTL__DOT__stage3_f_reset_rsps__DOT__empty_reg;
-    assign RTL__RTL__DOT__stage2_f_reset_rsps__DOT__empty_reg = RTL__stage2_f_reset_rsps__RTL__DOT__stage2_f_reset_rsps__DOT__empty_reg;
-    assign RTL__RTL__DOT__stage2_f_reset_rsps__DOT__full_reg = RTL__stage2_f_reset_rsps__RTL__DOT__stage2_f_reset_rsps__DOT__full_reg;
-    assign RTL__stage2_f_reset_rsps__RST = RTL__RST_N;
-    assign RTL__stage2_f_reset_rsps__CLK = RTL__CLK;
-    assign RTL__stage3_f_reset_reqs__ENQ = RTL__stage3_f_reset_reqs$ENQ;
-    assign RTL__stage3_f_reset_reqs__CLR = RTL__stage3_f_reset_reqs$CLR;
-    assign RTL__stage3_f_reset_reqs__DEQ = RTL__stage3_f_reset_reqs$DEQ;
+    assign RTL__stage1_f_reset_rsps__RST = RTL__RST_N;
+    assign RTL__stage1_f_reset_rsps__CLK = RTL__CLK;
+    assign RTL__stage2_f_reset_reqs__ENQ = RTL__stage2_f_reset_reqs$ENQ;
+    assign RTL__stage2_f_reset_reqs__CLR = RTL__stage2_f_reset_reqs$CLR;
+    assign RTL__stage2_f_reset_reqs__DEQ = RTL__stage2_f_reset_reqs$DEQ;
+    assign RTL__stage2_f_reset_reqs$DEQ = RTL__stage2_f_reset_reqs__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__stage2_f_reset_reqs$CLR = RTL__stage2_f_reset_reqs__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg;
+    assign RTL__stage2_f_reset_reqs$FULL_N = RTL__stage2_f_reset_reqs__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg;
+    assign RTL__stage2_f_reset_reqs$EMPTY_N = RTL__stage2_f_reset_reqs__RTL__DOT__stage1_f_reset_reqs__DOT__full_reg;
+    assign RTL__RTL__DOT__stage2_f_reset_reqs__DOT__empty_reg = RTL__stage2_f_reset_reqs__RTL__DOT__stage1_f_reset_reqs__DOT__empty_reg;
+    assign RTL__RTL__DOT__stage2_f_reset_reqs__DOT__full_reg = RTL__stage2_f_reset_reqs__RTL__DOT__stage3_f_reset_reqs__DOT__full_reg;
+    assign RTL__RST_N = RTL__stage2_f_reset_rsps__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__CLK = RTL__stage2_f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__full_reg;
+    assign RTL__stage2_f_reset_rsps$ENQ = RTL__stage2_f_reset_rsps__RTL__DOT__stage2_f_reset_reqs__DOT__empty_reg;
+    assign RTL__stage2_f_reset_rsps$DEQ = RTL__stage2_f_reset_rsps__RTL__DOT__stage3_f_reset_rsps__DOT__full_reg;
+    assign RTL__stage2_f_reset_rsps$CLR = RTL__stage2_f_reset_rsps__RTL__DOT__csr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__stage2_f_reset_rsps$FULL_N = RTL__stage2_f_reset_rsps__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__full_reg;
+    assign RTL__stage2_f_reset_rsps$EMPTY_N = RTL__stage2_f_reset_rsps__RTL__DOT__stage3_f_reset_reqs__DOT__empty_reg;
+    assign RTL__RTL__DOT__stage2_f_reset_rsps__DOT__full_reg = RTL__stage2_f_reset_rsps__RTL__DOT__csr_regfile__DOT__f_reset_rsps__DOT__full_reg;
+    assign RTL__RTL__DOT__stage2_f_reset_rsps__DOT__empty_reg = RTL__stage2_f_reset_rsps__RTL__DOT__stage2_f_reset_reqs__DOT__full_reg;
+    assign RTL__RST_N = RTL__stage3_f_reset_reqs__RTL__DOT__stage3_f_reset_rsps__DOT__empty_reg;
+    assign RTL__CLK = RTL__stage3_f_reset_reqs__RTL__DOT__stage2_f_reset_rsps__DOT__empty_reg;
+    assign RTL__stage3_f_reset_reqs$ENQ = RTL__stage3_f_reset_reqs__RTL__DOT__stage2_f_reset_rsps__DOT__full_reg;
     assign RTL__stage3_f_reset_reqs$FULL_N = RTL__stage3_f_reset_reqs__FULL_N;
     assign RTL__stage3_f_reset_reqs$EMPTY_N = RTL__stage3_f_reset_reqs__EMPTY_N;
-    assign RTL__stage3_f_reset_reqs$FULL_N = RTL__stage3_f_reset_reqs__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__stage3_f_reset_reqs$EMPTY_N = RTL__stage3_f_reset_reqs__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg;
-    assign RTL__RTL__DOT__stage3_f_reset_reqs__DOT__full_reg = RTL__stage3_f_reset_reqs__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg;
-    assign RTL__RTL__DOT__stage3_f_reset_reqs__DOT__empty_reg = RTL__stage3_f_reset_reqs__RTL__DOT__stage1_f_reset_reqs__DOT__full_reg;
-    assign RTL__RST_N = RTL__stage3_f_reset_rsps__RTL__DOT__stage1_f_reset_reqs__DOT__empty_reg;
-    assign RTL__CLK = RTL__stage3_f_reset_rsps__RTL__DOT__stage3_f_reset_reqs__DOT__full_reg;
-    assign RTL__stage3_f_reset_rsps$ENQ = RTL__stage3_f_reset_rsps__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__stage3_f_reset_rsps$DEQ = RTL__stage3_f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__stage3_f_reset_rsps$CLR = RTL__stage3_f_reset_rsps__RTL__DOT__stage2_f_reset_reqs__DOT__empty_reg;
-    assign RTL__RTL__DOT__stage3_f_reset_rsps__DOT__full_reg = RTL__stage3_f_reset_rsps__RTL__DOT__stage3_f_reset_rsps__DOT__full_reg;
-    assign RTL__stage3_f_reset_rsps$EMPTY_N = RTL__stage3_f_reset_rsps__RTL__DOT__csr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
-    assign RTL__RTL__DOT__stage3_f_reset_rsps__DOT__full_reg = RTL__stage3_f_reset_rsps__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__full_reg;
-    assign RTL__RTL__DOT__stage3_f_reset_rsps__DOT__empty_reg = RTL__stage3_f_reset_rsps__RTL__DOT__stage3_f_reset_reqs__DOT__empty_reg;
+    assign RTL__stage3_f_reset_reqs__RST = RTL__RST_N;
+    assign RTL__stage3_f_reset_reqs__CLK = RTL__CLK;
+    assign RTL__stage3_f_reset_reqs__ENQ = RTL__stage3_f_reset_reqs$ENQ;
+    assign RTL__stage3_f_reset_reqs__CLR = RTL__stage3_f_reset_reqs$CLR;
+    assign RTL__stage3_f_reset_rsps__DEQ = RTL__stage3_f_reset_rsps$DEQ;
+    assign RTL__CLK = RTL__stage3_f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__stage3_f_reset_rsps$ENQ = RTL__stage3_f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__full_reg;
+    assign RTL__stage3_f_reset_rsps$DEQ = RTL__stage3_f_reset_rsps__RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg;
+    assign RTL__stage3_f_reset_rsps$CLR = RTL__stage3_f_reset_rsps__RTL__DOT__stage1_f_reset_reqs__DOT__full_reg;
+    assign RTL__stage3_f_reset_rsps$FULL_N = RTL__stage3_f_reset_rsps__RTL__DOT__stage1_f_reset_reqs__DOT__empty_reg;
+    assign RTL__stage3_f_reset_rsps$EMPTY_N = RTL__stage3_f_reset_rsps__RTL__DOT__stage3_f_reset_reqs__DOT__full_reg;
+    assign RTL__RTL__DOT__stage3_f_reset_rsps__DOT__full_reg = RTL__stage3_f_reset_rsps__RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__empty_reg;
+    assign RTL__RTL__DOT__stage3_f_reset_rsps__DOT__empty_reg = RTL__stage3_f_reset_rsps__RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__full_reg;
      
   assign  RTL__CAN_FIRE_RL_rl_show_pipe = RTL__NOT_IF_csr_regfile_read_csr_minstret__1_ULT_cf_ETC___d17 && RTL__rg_state !=4'd0&& RTL__rg_state !=4'd1&& RTL__rg_state !=4'd12; 
   assign  RTL__WILL_FIRE_RL_rl_show_pipe = RTL__CAN_FIRE_RL_rl_show_pipe ; 

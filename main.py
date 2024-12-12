@@ -1,5 +1,6 @@
 import argparse, pathlib
-import os, shutil
+import os, shutil,sys
+sys.setrecursionlimit(3000)
 
 import flatten
 
