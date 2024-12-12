@@ -3634,11 +3634,6 @@ module FIFO20(CLK,
               EMPTY_N,
               CLR
               , RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg, RTL__DOT__stage1_f_reset_rsps__DOT__full_reg, RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg, RTL__DOT__stage1_f_reset_reqs__DOT__full_reg, RTL__DOT__stage1_f_reset_reqs__DOT__empty_reg, RTL__DOT__stage3_f_reset_reqs__DOT__full_reg, RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__empty_reg, RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__full_reg, RTL__DOT__stage2_f_reset_reqs__DOT__empty_reg, RTL__DOT__stage3_f_reset_rsps__DOT__full_reg, RTL__DOT__csr_regfile__DOT__f_reset_rsps__DOT__empty_reg, RTL__DOT__gpr_regfile__DOT__f_reset_rsps__DOT__full_reg, RTL__DOT__stage3_f_reset_reqs__DOT__empty_reg, RTL__DOT__csr_regfile__DOT__f_reset_rsps__DOT__full_reg, RTL__DOT__stage2_f_reset_reqs__DOT__full_reg, RTL__DOT__stage3_f_reset_rsps__DOT__empty_reg, RTL__DOT__stage2_f_reset_rsps__DOT__empty_reg, RTL__DOT__stage2_f_reset_rsps__DOT__full_reg);
- input  RST;
-   input  CLK;
-   input  ENQ;
-   input  CLR;
-   input  DEQ;
  output  RTL__DOT__near_mem__DOT__f_reset_rsps__DOT__empty_reg;
  output  RTL__DOT__stage1_f_reset_rsps__DOT__full_reg;
  output  RTL__DOT__stage1_f_reset_rsps__DOT__empty_reg;
@@ -3657,13 +3652,16 @@ module FIFO20(CLK,
  output  RTL__DOT__stage3_f_reset_rsps__DOT__empty_reg;
  output  RTL__DOT__stage2_f_reset_rsps__DOT__empty_reg;
  output  RTL__DOT__stage2_f_reset_rsps__DOT__full_reg;
- output FULL_N;
-   output EMPTY_N;
    parameter guarded = 1;
 
-   
+   input  RST;
+   input  CLK;
+   input  ENQ;
+   input  CLR;
+   input  DEQ;
 
-   
+   output FULL_N;
+   output EMPTY_N;
 
    reg    empty_reg;
    reg    full_reg;
@@ -3847,7 +3845,8 @@ module FIFO2(CLK,
  output  RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__full_reg;
  output  RTL__DOT__f_reset_rsps__DOT__full_reg;
 
-   
+   parameter width = 1;
+   parameter guarded = 1;
 
    input     CLK ;
    input     RST ;
@@ -3859,9 +3858,6 @@ module FIFO2(CLK,
    output                FULL_N;
    output                EMPTY_N;
    output [width - 1 : 0] D_OUT;
-
-   parameter width = 1;
-   parameter guarded = 1;
 
    reg                    full_reg;
    reg                    empty_reg;
@@ -12532,7 +12528,10 @@ module BRAM2(CLKA,
              DOB
              );
 
- 
+   parameter                      PIPELINED  = 0;
+   parameter                      ADDR_WIDTH = 1;
+   parameter                      DATA_WIDTH = 1;
+   parameter                      MEMSIZE    = 1;
 
    input                          CLKA;
    input                          ENA;
@@ -12553,11 +12552,6 @@ module BRAM2(CLKA,
    reg [DATA_WIDTH-1:0]           DOB_R;
    reg [DATA_WIDTH-1:0]           DOA_R2;
    reg [DATA_WIDTH-1:0]           DOB_R2;
-
-     parameter                      PIPELINED  = 0;
-   parameter                      ADDR_WIDTH = 1;
-   parameter                      DATA_WIDTH = 1;
-   parameter                      MEMSIZE    = 1;
 
    (* keep *)wire [DATA_WIDTH-1:0]  arb1;
    (* keep *)wire [DATA_WIDTH-1:0]  arb2;
@@ -12854,7 +12848,7 @@ module mkMMU_Cache(CLK,
  output  RTL__DOT__near_mem__DOT__dcache__DOT__f_reset_reqs__DOT__full_reg;
  output  RTL__DOT__near_mem__DOT__icache__DOT__master_xactor_f_wr_data__DOT__empty_reg;
  output [31:0] RTL__DOT__near_mem__DOT__dcache__DOT__rg_addr;
- 
+  parameter dmem_not_imem = 1'b0;
   input  CLK;
   input  RST_N;
 
@@ -13022,8 +13016,6 @@ module mkMMU_Cache(CLK,
 
   // value method mem_master_m_rready
   output mem_master_rready;
-
-   parameter dmem_not_imem = 1'b0;
 
   // signals for module outputs
   reg [63 : 0] word64;
@@ -18270,7 +18262,10 @@ module RegFile(CLK,
  output [31:0] RTL__DOT__gpr_regfile__DOT__regfile__DOT__arr_7_;
  output [31:0] RTL__DOT__gpr_regfile__DOT__regfile__DOT__arr_12_;
  output [31:0] RTL__DOT__gpr_regfile__DOT__regfile__DOT__arr_15_;
-
+   parameter                   addr_width = 1;
+   parameter                   data_width = 1;
+   parameter                   lo = 0;
+   parameter                   hi = 1;
 
    input                       CLK;
    input [addr_width - 1 : 0]  ADDR_IN;
@@ -18291,11 +18286,6 @@ module RegFile(CLK,
 
    input [addr_width - 1 : 0]  ADDR_5;
    output [data_width - 1 : 0] D_OUT_5;
-
-     parameter                   addr_width = 1;
-   parameter                   data_width = 1;
-   parameter                   lo = 0;
-   parameter                   hi = 1;
 
    reg [data_width - 1 : 0]    arr[lo:hi];
 
