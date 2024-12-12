@@ -95,11 +95,11 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "Debug pico",
+            "name": "Debug piccolo",
             "type": "debugpy",
             "request": "launch",
             "program": "main.py",
-            "args": ["tests/regression/pico","-f","filelist.f","-t","wrapper","-o","f_pico.v","-g"],
+            "args": ["tests/regression/piccolo","-f","filelist.f","-t","wrapper","-o","f_pico.v","-g"],
             "cwd": "${workspaceFolder}",
             "console": "integratedTerminal"
         },

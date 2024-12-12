@@ -313,7 +313,7 @@ class InstModuleVisitor(SystemVerilogParserVisitor):
             
 
 class RenameModuleVisitor(SystemVerilogParserVisitor):
-    def __init__(self,cur_prefixs_index,cur_prefixs,cur_module_identifier):
+    def __init__(self,cur_prefixs_index,cur_prefixs,cur_module_identifier, cur_dict_lhs_to_rhs):
         self.inst_module_node = None
         self.inst_module_design = None
         self.start = None
@@ -324,6 +324,10 @@ class RenameModuleVisitor(SystemVerilogParserVisitor):
         self.port_parameter_flag = False
         self.cur_prefixs =cur_prefixs
         self.cur_module_identifier = cur_module_identifier
+        self.cur_dict_lhs_to_rhs = cur_dict_lhs_to_rhs
+
+        self.repeat_declr = set()
+        
     
     def is_parents_parameter_port_list(self,ctx):
         if ctx is None:
@@ -387,6 +391,21 @@ class RenameModuleVisitor(SystemVerilogParserVisitor):
                         SystemVerilogParser.Param_assignmentContext,
                     ):
                         pass
+                    elif isinstance(
+                        child.parentCtx.parentCtx.parentCtx,
+                        SystemVerilogParser.Net_decl_assignmentContext
+                    ) or isinstance(
+                        child.parentCtx.parentCtx.parentCtx,
+                        SystemVerilogParser.Variable_decl_assignmentContext):
+                        if child.start.text in self.cur_dict_lhs_to_rhs:
+                            self.repeat_declr.add(child.start.text)
+                        child.start.text = (
+                            ""
+                            + self.cur_prefixs[self.cur_prefixs_index]
+                            + "__"
+                            +child.start.text
+                            + ""
+                        )
                     else:
                         child.start.text = (
                             ""
@@ -899,12 +918,16 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
         visitor = TopModuleNodeFinder(top_module)
         visitor.visit(tree)
         top_node_tree = visitor.top_module_node
+
+    # We should identify repeat decleration
+    repeat_decl_dict = {}
     for k in range(0,len(cur_prefixs)):
         tmp_inst_module_design = parse_design_to_tree(inst_module_design)
-        visitor = RenameModuleVisitor(k,cur_prefixs,cur_module_identifier)
+        visitor = RenameModuleVisitor(k,cur_prefixs,cur_module_identifier, dict_of_lhs_to_rhs[cur_prefixs[k]])
         visitor.visit(tmp_inst_module_design)
         inst_module_design_trees.append(tmp_inst_module_design)
         inst_module_nodes.append(visitor.inst_module_node)
+        repeat_decl_dict[cur_prefixs[k]] = visitor.repeat_declr
         
     # Step 3.2. 进一步收集信息
     cur_list_of_ports_lhs = []
@@ -956,7 +979,7 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
                         +";"
                     )
                 elif cur_list_of_ports_type[k * len_instance_port + i] == "reg":
-                    if True:
+                    if cur_list_of_ports_lhs[k * len_instance_port + i] not in repeat_decl_dict[cur_prefixs[k]]:
                         cur_new_variable.append(
                             "reg"
                             + ports_lhs_width[k * len_instance_port +i]
@@ -967,15 +990,16 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
                             + ";"
                         )
                 else:
-                    cur_new_variable.append(
-                        "wire"
-                        + ports_lhs_width[k *len_instance_port +i]
-                        + " "
-                        +cur_prefixs[k]
-                        + "__"
-                        + cur_list_of_ports_lhs[k * len_instance_port +i]
-                        + ";"
-                    )
+                    if cur_list_of_ports_lhs[k * len_instance_port +i] not in repeat_decl_dict[cur_prefixs[k]]:
+                        cur_new_variable.append(
+                            "wire"
+                            + ports_lhs_width[k *len_instance_port +i]
+                            + " "
+                            +cur_prefixs[k]
+                            + "__"
+                            + cur_list_of_ports_lhs[k * len_instance_port +i]
+                            + ";"
+                        )
                 if cur_list_of_ports_direction[k * len_instance_port + i] == "input":
                     rhs = dict_of_lhs_to_rhs[cur_prefixs[k]].get(
                         cur_list_of_ports_lhs[k * len_instance_port + i]
