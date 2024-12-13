@@ -967,7 +967,7 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
     cur_new_assign = []
     
     for k in range(0,len(cur_prefixs)):
-        len_instance_port = int(len(cur_list_of_ports_rhs)/len(cur_prefixs))
+        len_instance_port = int(len(cur_list_of_ports_lhs)/len(cur_prefixs))
         ports_lhs_width = copy.deepcopy(cur_list_of_ports_lhs_width)
         try:
             for i in range(0,len_instance_port):
