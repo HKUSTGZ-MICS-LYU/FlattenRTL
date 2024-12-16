@@ -969,89 +969,79 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
     for k in range(0,len(cur_prefixs)):
         len_instance_port = int(len(cur_list_of_ports_lhs)/len(cur_prefixs))
         ports_lhs_width = copy.deepcopy(cur_list_of_ports_lhs_width)
-        try:
-            for i in range(0,len_instance_port):
-                if cur_list_of_data_type[k * len_instance_port + i]!= "":
+        for i in range(0,len_instance_port):
+            if cur_list_of_data_type[k * len_instance_port + i]!= "":
+                cur_new_variable.append(
+                    cur_list_of_data_type[k * len_instance_port + i]
+                    + ports_lhs_width[k * len_instance_port + i]
+                    + " "
+                    + cur_prefixs[k]
+                    + "__"
+                    + cur_list_of_ports_lhs[k * len_instance_port +i]
+                    +";"
+                )
+            elif cur_list_of_ports_type[k * len_instance_port + i] == "reg":
+                if cur_list_of_ports_lhs[k * len_instance_port + i] not in repeat_decl_dict[cur_prefixs[k]]:
                     cur_new_variable.append(
-                        cur_list_of_data_type[k * len_instance_port + i]
-                        + ports_lhs_width[k * len_instance_port + i]
+                        "reg"
+                        + ports_lhs_width[k * len_instance_port +i]
                         + " "
-                        + cur_prefixs[k]
-                        + "__"
-                        + cur_list_of_ports_lhs[k * len_instance_port +i]
-                        +";"
-                    )
-                elif cur_list_of_ports_type[k * len_instance_port + i] == "reg":
-                    if cur_list_of_ports_lhs[k * len_instance_port + i] not in repeat_decl_dict[cur_prefixs[k]]:
-                        cur_new_variable.append(
-                            "reg"
-                            + ports_lhs_width[k * len_instance_port +i]
-                            + " "
-                            + cur_prefixs[k]
-                            + "__"
-                            + cur_list_of_ports_lhs[k * len_instance_port + i]
-                            + ";"
-                        )
-                else:
-                    if cur_list_of_ports_lhs[k * len_instance_port +i] not in repeat_decl_dict[cur_prefixs[k]]:
-                        cur_new_variable.append(
-                            "wire"
-                            + ports_lhs_width[k *len_instance_port +i]
-                            + " "
-                            +cur_prefixs[k]
-                            + "__"
-                            + cur_list_of_ports_lhs[k * len_instance_port +i]
-                            + ";"
-                        )
-                if cur_list_of_ports_direction[k * len_instance_port + i] == "input":
-                    rhs = dict_of_lhs_to_rhs[cur_prefixs[k]].get(
-                        cur_list_of_ports_lhs[k * len_instance_port + i]
-                    )
-                    if rhs is None:
-                        rhs = cur_list_of_ports_rhs[k* len_instance_port +i]
-                    if rhs == "" or rhs.strip()=="":
-                        continue
-                    cur_new_assign.append(
-                        "assign "
-                        + cur_prefixs[k]
-                        + "__" 
-                        + cur_list_of_ports_lhs[k * len_instance_port +i]
-                        + " = "
-                        + rhs
-                        + ";"
-                    )
-                else:
-                    rhs = dict_of_lhs_to_rhs[cur_prefixs[k]].get(
-                        cur_list_of_ports_lhs[k * len_instance_port + i]
-                    )
-                    if rhs is None:
-                        rhs = cur_list_of_ports_rhs[k * len_instance_port + i]
-                    if rhs == "" or rhs.strip()=="":
-                        continue
-                    cur_new_assign.append(
-                        "assign "
-                        + rhs
-                        + " = "
                         + cur_prefixs[k]
                         + "__"
                         + cur_list_of_ports_lhs[k * len_instance_port + i]
                         + ";"
                     )
-        except Exception as e:
-            print(e)
-            # print all variable in the loop above
-            print("cur_list_of_ports_rhs: ", cur_list_of_ports_rhs)
-            print("cur_list_of_ports_lhs: ", cur_list_of_ports_lhs)
-            print("cur_list_of_ports_lhs_width: ", cur_list_of_ports_lhs_width)
-            print("cur_list_of_ports_width: ", cur_list_of_ports_width)
-            print("cur_list_of_ports_direction: ", cur_list_of_ports_direction)
-            print("cur_list_of_ports_type: ", cur_list_of_ports_type)
-            print("cur_list_of_data_type: ", cur_list_of_data_type)
-            print("cur_dict_of_ports: ", cur_dict_of_ports)
-            print("cur_new_variable: ", cur_new_variable)
-            print("cur_new_assign: ", cur_new_assign)
-            print(f"index {i} & {k}: ")
-            exit(0)
+            else:
+                if cur_list_of_ports_lhs[k * len_instance_port +i] not in repeat_decl_dict[cur_prefixs[k]]:
+                    cur_new_variable.append(
+                        "wire"
+                        + ports_lhs_width[k *len_instance_port +i]
+                        + " "
+                        +cur_prefixs[k]
+                        + "__"
+                        + cur_list_of_ports_lhs[k * len_instance_port +i]
+                        + ";"
+                    )
+            if cur_list_of_ports_direction[k * len_instance_port + i] == "input":
+                rhs = dict_of_lhs_to_rhs[cur_prefixs[k]].get(
+                    cur_list_of_ports_lhs[k * len_instance_port + i]
+                )
+                if rhs is None:
+                    if len(cur_list_of_ports_rhs) <= k * len_instance_port + i:
+                        continue
+                    else:
+                        rhs = cur_list_of_ports_rhs[k* len_instance_port +i] # DANGEROUS: Maybe bug here
+                if rhs == "" or rhs.strip()=="":
+                    continue
+                cur_new_assign.append(
+                    "assign "
+                    + cur_prefixs[k]
+                    + "__" 
+                    + cur_list_of_ports_lhs[k * len_instance_port +i]
+                    + " = "
+                    + rhs
+                    + ";"
+                )
+            else:
+                rhs = dict_of_lhs_to_rhs[cur_prefixs[k]].get(
+                    cur_list_of_ports_lhs[k * len_instance_port + i]
+                )
+                if rhs is None:
+                    if len(cur_list_of_ports_rhs) <= k * len_instance_port + i:
+                        continue
+                    else:
+                        rhs = cur_list_of_ports_rhs[k * len_instance_port + i] # DANGEROUS: Maybe bug here
+                if rhs == "" or rhs.strip()=="":
+                    continue
+                cur_new_assign.append(
+                    "assign "
+                    + rhs
+                    + " = "
+                    + cur_prefixs[k]
+                    + "__"
+                    + cur_list_of_ports_lhs[k * len_instance_port + i]
+                    + ";"
+                )
 
     inst_module_designs = []
     for k in range(0,len(cur_prefixs)):
