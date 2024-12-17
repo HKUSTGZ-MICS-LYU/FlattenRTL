@@ -146,6 +146,13 @@ module expand_key_128(clk, in, out_1, out_2, rcon);
 output xxx;
 wire xxx;
 ```
+
+9. Mismatch of instiation and port definition.e.g. 
+```
+    A a(.x(x),.y(y));
+    A b(.x(x), .z(z));
+    module A(input x, input y, input z);
+```
 ## Verification
 
 1. Currently, benchmarks such as adder, usb_phy, and Rocket-Chip have passed equivalence checking with Formality.
