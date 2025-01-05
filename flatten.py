@@ -762,6 +762,10 @@ class InstBodyVisitor(SystemVerilogParserVisitor):
                     child.start.text = (
                         chr(31) + " " *indent + child.start.text + " "
                     )
+                if isinstance(child,SystemVerilogParser.Unary_operatorContext):
+                    child.start.text = (
+                        " " + child.start.text
+                    )
                 self._traverse_children(child, indent+1)
         
     def visitModule_declaration(self, ctx:SystemVerilogParser.Module_declarationContext):
@@ -967,6 +971,10 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
     cur_new_assign = []
     
     for k in range(0,len(cur_prefixs)):
+        if len(cur_list_of_ports_lhs) % len(cur_prefixs) != 0:
+            print('[ERROR] Current module identifier: %s' % cur_module_identifier)
+            print("[ERROR] Current name of module instance: %s" % cur_name_of_module_instances)
+            raise ValueError("The potential bug in the code, the instiation of the module is not correct")
         len_instance_port = int(len(cur_list_of_ports_lhs)/len(cur_prefixs))
         ports_lhs_width = copy.deepcopy(cur_list_of_ports_lhs_width)
         for i in range(0,len_instance_port):

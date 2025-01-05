@@ -1,5 +1,4 @@
-./src/aes_128.v
-./src/round.v
-./src/table.v
-./src/top.v
-
+aes_128.v
+round.v
+table.v
+top.v

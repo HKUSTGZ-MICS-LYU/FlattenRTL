@@ -153,6 +153,15 @@ wire xxx;
     A b(.x(x), .z(z));
     module A(input x, input y, input z);
 ```
+10. `input wire`, `output wire`.
+11. Unary operation would cause error
+```
+    wire magJustBelowOne = ~magGeOne & &posExp; // Flatten
+    wire xxx =~ xxx && xxx ;  // Flattened
+```
+12. Problem of parameters, correct definition
+```
+    module #(parameter A, parameter B, ...)
 ## Verification
 
 1. Currently, benchmarks such as adder, usb_phy, and Rocket-Chip have passed equivalence checking with Formality.
