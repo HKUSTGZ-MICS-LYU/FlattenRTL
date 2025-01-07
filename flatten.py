@@ -975,6 +975,7 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
             print('[ERROR] Current module identifier: %s' % cur_module_identifier)
             print("[ERROR] Current name of module instance: %s" % cur_name_of_module_instances)
             raise ValueError("The potential bug in the code, the instiation of the module is not correct")
+        # assert(len(cur_list_of_ports_lhs)==len(cur_list_of_ports_rhs))
         len_instance_port = int(len(cur_list_of_ports_lhs)/len(cur_prefixs))
         ports_lhs_width = copy.deepcopy(cur_list_of_ports_lhs_width)
         for i in range(0,len_instance_port):
@@ -1015,6 +1016,7 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
                     cur_list_of_ports_lhs[k * len_instance_port + i]
                 )
                 if rhs is None:
+                    continue # DANGEROUS: Maybe bug here
                     if len(cur_list_of_ports_rhs) <= k * len_instance_port + i:
                         continue
                     else:
@@ -1035,6 +1037,7 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
                     cur_list_of_ports_lhs[k * len_instance_port + i]
                 )
                 if rhs is None:
+                    continue # DANGEROUS: Maybe bug here
                     if len(cur_list_of_ports_rhs) <= k * len_instance_port + i:
                         continue
                     else:
