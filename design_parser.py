@@ -93,6 +93,36 @@ def extract_module(verilog_code: str, module_name: str) -> str:
     else:
         # 如果没有找到对应模块，返回空字符串或者提示
         return f"Error: Module '{module_name}' not found."
+    
+def extract_modules(verilog_code: str, module_name: dict) -> str:
+    """
+    从Verilog代码中提取指定模块的定义。
+
+    :param verilog_code: 包含整个设计的Verilog代码字符串
+    :param module_name: 要提取的模块名称
+    :return: 提取出的模块字符串
+    """
+    
+    # 使用正则表达式匹配模块开头和结尾
+    # 这个正则表达式匹配 "module module_name" 到 "endmodule" 之间的内容
+    # \b 确保 module_name 是全词匹配，后面可以跟空白字符或括号等
+    instance_design_str_list = []
+    for key in module_name:
+         module_pattern = re.compile(rf'\bmodule\s+{key}\b\s*.*?endmodule', re.S)
+         match = module_pattern.search(verilog_code)
+         if match:
+            instance_design_str_list.append(match.group(0))
+   #  module_pattern = re.compile(rf'\bmodule\s+{module_name}\b\s*.*?endmodule', re.S)
+    
+   #  # 搜索模块
+   #  match = module_pattern.search(verilog_code)
+    
+    if instance_design_str_list != []:
+        # 返回匹配到的模块字符串
+        return instance_design_str_list
+    else:
+        # 如果没有找到对应模块，返回空字符串或者提示
+        return f"Error: Module '{module_name}' not found."
      
 def replace_module(verilog_code: str, module_name: str, new_module_code: str) -> str:
     """

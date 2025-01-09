@@ -86,6 +86,15 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "Debug multi adder",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "args": ["tests/regression/multi_adder","-f","filelist.f","-t","top_module","-o","f_multi_adder.v","-g"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "Debug usb_phy",
             "type": "debugpy",
             "request": "launch",
