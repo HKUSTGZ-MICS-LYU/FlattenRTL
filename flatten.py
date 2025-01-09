@@ -955,10 +955,10 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
             + visitor.ports_param_str
             + top_instance_str[visitor.parameter_stop+1:]
         )
-        tree = parse_design_to_tree(top_instance_str)
-        visitor = TopModuleNodeFinder(top_module)
-        visitor.visit(tree)
-        top_node_tree = visitor.top_module_node
+    tree = parse_design_to_tree(top_instance_str)
+    visitor = TopModuleNodeFinder(top_module)
+    visitor.visit(tree)
+    top_node_tree = visitor.top_module_node
 
     # We should identify repeat decleration
     repeat_decl_dict = {}
@@ -1095,7 +1095,7 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
         
     # 3.4 拼接所获得素材，获得最终数据
     insert_parts = {}
-    for k in range (0,len(cur_prefixs)):
+    for k in range(0,len(cur_prefixs)):
         visitor = InstBodyVisitor2()
         visitor.visit(inst_module_nodes[k])
         insert_parts[cur_prefixs[k]] = inst_module_designs[k][visitor.start : visitor.stop]

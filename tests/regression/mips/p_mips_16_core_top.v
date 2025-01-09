@@ -511,4 +511,3 @@ module register_file (
 	assign reg_read_data_1 = (reg_read_addr_1 == 0 ? 15'b000000000000000 : reg_array[reg_read_addr_1]);
 	assign reg_read_data_2 = (reg_read_addr_2 == 0 ? 15'b000000000000000 : reg_array[reg_read_addr_2]);
 endmodule
-
