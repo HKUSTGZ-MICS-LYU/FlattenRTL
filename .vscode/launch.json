@@ -41,6 +41,15 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "Debug pico_verify",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "args": ["tests/regression/pico_verify","-f","filelist.f","-t","top","-o","f_test.v","-g"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "Debug rocket",
             "type": "debugpy",
             "request": "launch",

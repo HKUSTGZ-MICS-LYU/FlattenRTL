@@ -818,7 +818,7 @@ class InstBodyVisitor2(SystemVerilogParserVisitor):
         self.ExtractStartAndStop(ctx)
                     
 class IdentifierVisitor(SystemVerilogParserVisitor):
-    def __init__(self,cur_name_of_module_instance,top_module,design,cur_new_variable,insert_parts,cur_new_assign,port_index):
+    def __init__(self,cur_name_of_module_instance,top_module,design,cur_new_variable,insert_parts,cur_new_assign,port_index, assign_index):
         self.start = []
         self.stop = []
         self.tmp_design = ''
@@ -828,7 +828,8 @@ class IdentifierVisitor(SystemVerilogParserVisitor):
         self.cur_new_variable = cur_new_variable
         self.insert_parts = insert_parts
         self.cur_new_assign = cur_new_assign
-        self.port_index = port_index
+        self.new_var_index = port_index
+        self.new_assign_index = assign_index
     
     def _traverse_children(self,ctx):
         if isinstance(ctx, TerminalNodeImpl):
@@ -858,16 +859,17 @@ class IdentifierVisitor(SystemVerilogParserVisitor):
         if ctx.module_header().module_identifier().getText() == self.top_module:
             self._traverse_children(ctx)
             self.tmp_design += self.design[ : self.start[0]]
-            keys = list(self.port_index.keys())
+            keys = list(self.new_var_index.keys())
             key_0 = keys[0]
             self.tmp_design += f"\n    // INSTANCE: [{key_0}]\n"
-            index_0_left = self.port_index[key_0][0]
-            index_0_right =  self.port_index[key_0][1]
+            index_0_left = self.new_var_index[key_0][0]
+            index_0_right =  self.new_var_index[key_0][1]
             for i in range(index_0_left, index_0_right):
                 if not self.tmp_design[-3:].isspace():
                     self.tmp_design += 4*" "+ self.cur_new_variable[i] + '\n'
                 else:
                     self.tmp_design += self.cur_new_variable[i] + '\n'
+            for i in range(self.new_assign_index[key_0][0], self.new_assign_index[key_0][1]):
                 self.tmp_design += " "*4 + self.cur_new_assign[i] + '\n'
             # for i in range(0,len(self.cur_new_variable)):
             #     if i == 0:
@@ -880,14 +882,16 @@ class IdentifierVisitor(SystemVerilogParserVisitor):
             self.tmp_design += '\n' + 4*" "+ remove_leading_whitespace(self.insert_parts[key_0]) + '\n'
             for i in range(1,len(self.start)):
                 key_i = keys[i]
-                index_left = self.port_index[key_i][0]
-                index_right = self.port_index[key_i][1]
+                index_left = self.new_var_index[key_i][0]
+                index_right = self.new_var_index[key_i][1]
                 substring = " "*4+self.design[self.stop[i-1] + 1 : self.start[i]] + '\n'
                 if not substring.isspace():
                     self.tmp_design += substring
                 self.tmp_design += f"\n    // INSTANCE: [{key_i}]\n"
                 for j in range(index_left, index_right):
                     self.tmp_design += 4*" "+ self.cur_new_variable[j] + '\n'
+
+                for j in range(self.new_assign_index[key_i][0], self.new_assign_index[key_i][1]):
                     self.tmp_design += " "*4 + self.cur_new_assign[j] + '\n'
                 self.tmp_design += 4*" " + remove_leading_whitespace(self.insert_parts[key_i])+ '\n'
             # for assign in self.cur_new_assign:
@@ -1017,11 +1021,13 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
     # Step 3.3 组合需要替换的素材
     cur_new_variable = []
     cur_new_assign = []
-    
+    new_assign_index_dict = {}
+
     for key in cur_module_identifier_dict:
         instance_names = cur_module_identifier_dict[key]
         for instance_name in instance_names:
             indexs = index_dict_of_ports[instance_name]
+            index_left = len(cur_new_assign)
             for i in range(indexs[0],indexs[1]):
                 if cur_list_of_data_type[i]!= "":
                     cur_new_variable.append(
@@ -1085,6 +1091,8 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
                         + cur_list_of_ports_lhs[i]
                         + ";"
                     )
+                    
+            new_assign_index_dict[instance_name] = [index_left, len(cur_new_assign)]
 
     inst_module_designs = []
     for k in range(0,len(cur_prefixs)):
@@ -1101,7 +1109,7 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
         insert_parts[cur_prefixs[k]] = inst_module_designs[k][visitor.start : visitor.stop]
     
     visitor = IdentifierVisitor(cur_name_of_module_instance=cur_name_of_module_instances,design=top_instance_str,
-                                top_module = top_module, cur_new_variable=cur_new_variable,insert_parts = insert_parts,cur_new_assign=cur_new_assign, port_index=index_dict_of_ports)
+                                top_module = top_module, cur_new_variable=cur_new_variable,insert_parts = insert_parts,cur_new_assign=cur_new_assign, port_index=index_dict_of_ports, assign_index=new_assign_index_dict)
     visitor.visit(top_node_tree)
 
     
