@@ -818,13 +818,25 @@ class InstBodyVisitor2(SystemVerilogParserVisitor):
         self.ExtractStartAndStop(ctx)
                     
 class IdentifierVisitor(SystemVerilogParserVisitor):
-    def __init__(self,cur_name_of_module_instance,top_module,design,cur_new_variable,insert_parts,cur_new_assign,port_index, assign_index):
+    def __init__(
+        self,
+        cur_name_of_module_instance,
+        top_module,
+        design,
+        cur_dict_of_parameters,
+        cur_new_variable,
+        insert_parts,
+        cur_new_assign,
+        port_index,
+        assign_index,
+    ):
         self.start = []
         self.stop = []
         self.tmp_design = ''
         self.cur_name_of_module_instance = cur_name_of_module_instance
         self.top_module = top_module
         self.design = design
+        self.cur_dict_of_parameters = cur_dict_of_parameters
         self.cur_new_variable = cur_new_variable
         self.insert_parts = insert_parts
         self.cur_new_assign = cur_new_assign
@@ -864,6 +876,13 @@ class IdentifierVisitor(SystemVerilogParserVisitor):
             self.tmp_design += f"\n    // INSTANCE: [{key_0}]\n"
             index_0_left = self.new_var_index[key_0][0]
             index_0_right =  self.new_var_index[key_0][1]
+
+            if key_0 in self.cur_dict_of_parameters:
+                for param_name, param_value in self.cur_dict_of_parameters[key_0].items():
+                    self.tmp_design += " "*2 + "parameter " + param_name + " = " + param_value + ';\n'
+
+                self.tmp_design += "\n"
+
             for i in range(index_0_left, index_0_right):
                 if not self.tmp_design[-3:].isspace():
                     self.tmp_design += 4*" "+ self.cur_new_variable[i] + '\n'
@@ -1107,9 +1126,18 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
         visitor = InstBodyVisitor2()
         visitor.visit(inst_module_nodes[k])
         insert_parts[cur_prefixs[k]] = inst_module_designs[k][visitor.start : visitor.stop]
-    
-    visitor = IdentifierVisitor(cur_name_of_module_instance=cur_name_of_module_instances,design=top_instance_str,
-                                top_module = top_module, cur_new_variable=cur_new_variable,insert_parts = insert_parts,cur_new_assign=cur_new_assign, port_index=index_dict_of_ports, assign_index=new_assign_index_dict)
+
+    visitor = IdentifierVisitor(
+        cur_name_of_module_instance=cur_name_of_module_instances,
+        design=top_instance_str,
+        cur_dict_of_parameters=cur_dict_of_parameters,
+        top_module=top_module,
+        cur_new_variable=cur_new_variable,
+        insert_parts=insert_parts,
+        cur_new_assign=cur_new_assign,
+        port_index=index_dict_of_ports,
+        assign_index=new_assign_index_dict,
+    )
     visitor.visit(top_node_tree)
 
     
