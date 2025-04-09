@@ -35,7 +35,7 @@ python main.py tests/regression/adder4bit -f filelist.f -t adder_4bit -o f_adder
 ### Example Input
 
 ```verilog
-module adder_2bit ( 
+module adder_2bit (
     input [1:0] a,
     input [1:0] b,
     output [2:0] sum
@@ -43,7 +43,7 @@ module adder_2bit (
     assign sum = a + b;
 endmodule
 
-module adder_4bit ( 
+module adder_4bit (
     input [3:0] a,
     input [3:0] b,
     output [4:0] sum
@@ -119,18 +119,18 @@ If you use this repository in your work, please cite:
 
 ## Known Issues
 
-1. Cannot handle macros; requires preprocessing with iverilog.
+1. Cannot handle macros; requires preprocessing with `iverilog`.
 2. Bad support of `syscall` like `$display` or `$fwrite`.
 3. Some syntax is unsupported.
 4. Unable to handle mix using of named port assign and ordered port assign
 e.g.
-```
+```verilog
 AES a (.clk(clk), .reset(reset))
 AES b (clk, reset)
 ```
 
-5. The input and output must keep togother, the wrong syntax woule like e.g.
-```
+5. The input and output must keep together, the wrong syntax would be like e.g.
+```verilog
 module expand_key_128(clk, in, out_1, out_2, rcon);
     input              clk;
     input      [127:0] in;
@@ -139,29 +139,30 @@ module expand_key_128(clk, in, out_1, out_2, rcon);
     output     [127:0] out_2;
 ```
 
-6. filelist.f cannot contain empty line.
-7. Unable to handle port like input [32-1]
-8. Cannot support e.g.:
-```
+6. Unable to handle port like `input [32-1]`
+7. Cannot support e.g.:
+```verilog
 output xxx;
 wire xxx;
 ```
 
-9. Mismatch of instiation and port definition.e.g. 
-```
+8. Mismatch of instantiation and port definition.e.g.
+```verilog
     A a(.x(x),.y(y));
     A b(.x(x), .z(z));
     module A(input x, input y, input z);
 ```
-10. `input wire`, `output wire`.
-11. Unary operation would cause error
-```
+9. `input wire`, `output wire`.
+10. Unary operation would cause error
+```verilog
     wire magJustBelowOne = ~magGeOne & &posExp; // Flatten
     wire xxx =~ xxx && xxx ;  // Flattened
 ```
-12. Problem of parameters, correct definition
-```
+11. Problem with parameters, correct definition
+```verilog
     module #(parameter A, parameter B, ...)
+```
+
 ## Verification
 
 1. Currently, benchmarks such as adder, usb_phy, and Rocket-Chip have passed equivalence checking with Formality.
