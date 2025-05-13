@@ -21,13 +21,13 @@ module BRAM2 (
 	input WEA;
 	input [ADDR_WIDTH - 1:0] ADDRA;
 	input [DATA_WIDTH - 1:0] DIA;
-	output wire [DATA_WIDTH - 1:0] DOA;
+	output [DATA_WIDTH - 1:0] DOA;
 	input CLKB;
 	input ENB;
 	input WEB;
 	input [ADDR_WIDTH - 1:0] ADDRB;
 	input [DATA_WIDTH - 1:0] DIB;
-	output wire [DATA_WIDTH - 1:0] DOB;
+	output [DATA_WIDTH - 1:0] DOB;
 	reg [DATA_WIDTH - 1:0] RAM [0:MEMSIZE - 1];
 	reg [DATA_WIDTH - 1:0] DOA_R;
 	reg [DATA_WIDTH - 1:0] DOB_R;
@@ -70,6 +70,7 @@ endmodule
 
 module top (A);
 	input A;
+  // submodule ram_cword_set
   BRAM2 #(.PIPELINED(1'd0),
 	  .ADDR_WIDTH(32'd9),
 	  .DATA_WIDTH(32'd54),
@@ -85,6 +86,5 @@ module top (A);
 					   .ENB(btb_bramcore2$ENB),
 					   .DOA(btb_bramcore2$DOA),
 					   .DOB());
-
 
 endmodule

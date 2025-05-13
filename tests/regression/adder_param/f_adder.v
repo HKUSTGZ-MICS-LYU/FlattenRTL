@@ -1,39 +1,48 @@
-module TopModule(a1, b1, a2, b2, sum1, sum2);
-    input [7:0] a1, b1;         // Inputs for the first adder
-    input [15:0] a2, b2;         // Inputs for the second adder
-    output [7:0] sum1;           // Output for the first adder (no shift applied, acts as before)
-    output [15+1:0] sum2;         // Output for the second adder with an extra bit to accommodate for shift
+module TopModule #(
+    parameter adder1___WIDTH=8,
+    parameter adder1___SHIFT=0,
+    parameter adder2___WIDTH=16,
+    parameter adder2___SHIFT=1) (
+	a1,
+	b1,
+	a2,
+	b2,
+	sum1,
+	sum2
+);
+	input [7:0] a1;
+	input [7:0] b1;
+	input [15:0] a2;
+	input [15:0] b2;
+	output wire [7:0] sum1;
+	output wire [16:0] sum2;
+	
+    // INSTANCE: [adder3]
+    wire[1:0] adder3___a;
+    wire[1:0] adder3___b;
+    wire adder3___sum;
+    assign adder3___a = a1[1:0];
+    assign adder3___b = b1[1:0];
+    assign sum1[1:0] = adder3___sum;
 
-    wire[1:0] adder3_a;
-    wire[1:0] adder3_b;
-    wire[1:0] adder3_sum;
+    assign  adder3___sum =( adder3___a + adder3___b )<< adder3___SHIFT ;
 
-    assign  adder3_sum =( adder3_a + adder3_b )<< adder3_SHIFT ;
-    assign adder3_a = a1[1:0];
-    assign adder3_b = b1[1:0];
-    assign sum1[1:0] = adder3_sum;
+    // INSTANCE: [adder1]
+    wire[adder1___WIDTH-1:0] adder1___a;
+    wire[adder1___WIDTH-1:0] adder1___b;
+    wire adder1___sum;
+    assign adder1___a = a1;
+    assign adder1___b = b1;
+    assign sum1 = adder1___sum;
+    assign  adder1___sum =( adder1___a + adder1___b )<< adder1___SHIFT ;
+
+    // INSTANCE: [adder2]
+    wire[adder2___WIDTH-1:0] adder2___a;
+    wire[adder2___WIDTH-1:0] adder2___b;
+    wire adder2___sum;
+    assign adder2___a = a2;
+    assign adder2___b = b2;
+    assign sum2 = adder2___sum;
+    assign  adder2___sum =( adder2___a + adder2___b )<< adder2___SHIFT ;
     
-
-// Instantiate the first adder with a width of 8 bits and no shift
-Adder #(
-    .WIDTH(8),
-    .SHIFT(0)
-) adder1 (
-    .a(a1),
-    .b(b1),
-    .sum(sum1)
-);
-
-
-
-// Instantiate the second adder with a width of 16 bits and a shift of 1 bit
-Adder #(
-    .WIDTH(16),
-    .SHIFT(1)
-) adder2 (
-    .a(a2),
-    .b(b2),
-    .sum(sum2)
-);
-
 endmodule

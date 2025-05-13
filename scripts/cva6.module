@@ -1,0 +1,245 @@
+ariane_tiny_soc -> ariane_mem_top
+tc_sram_impl -> tc_sram
+generic_memory -> genblk1
+pulp_clock_gating_async -> pulp_clock_gating
+cluster_clock_and2 -> tc_clk_and2
+cluster_clock_buffer -> tc_clk_buffer
+cluster_clock_gating -> tc_clk_gating
+cluster_clock_inverter -> tc_clk_inverter
+cluster_clock_mux2 -> tc_clk_mux2
+cluster_clock_xor2 -> tc_clk_xor2
+pulp_clock_and2 -> tc_clk_and2
+pulp_clock_buffer -> tc_clk_buffer
+pulp_clock_gating -> tc_clk_gating
+pulp_clock_inverter -> tc_clk_inverter
+pulp_clock_mux2 -> tc_clk_mux2
+pulp_clock_xor2 -> tc_clk_xor2
+clk_int_div -> tc_clk_gating, tc_clk_xor2, tc_clk_mux2
+exp_backoff -> p_regs
+lfsr -> p_regs
+lfsr_16bit -> proc_
+lfsr_8bit -> proc_
+rr_arb_tree -> lzc, p_rr_regs, p_req_regs, gen_first_level, p_lock_reg
+rr_arb_tree_14F7C_E5B9D -> lzc, p_rr_regs, p_req_regs, gen_first_level, p_lock_reg
+rr_arb_tree_88014 -> lzc, p_rr_regs, p_req_regs, gen_first_level, p_lock_reg
+rr_arb_tree_07E69_6A911 -> lzc, p_rr_regs, p_req_regs, gen_first_level, p_lock_reg
+rr_arb_tree_E4D85_FE53C -> lzc, p_rr_regs, p_req_regs, gen_first_level, p_lock_reg
+rr_arb_tree_10FCB_64749 -> lzc, p_rr_regs, p_req_regs, gen_first_level, p_lock_reg
+rr_arb_tree_2BB1D_AD33D -> lzc, p_rr_regs, p_req_regs, gen_first_level, p_lock_reg
+rr_arb_tree_36817_A990F -> lzc, p_rr_regs, p_req_regs, gen_first_level, p_lock_reg
+rr_arb_tree_47864_3B2E1 -> lzc, p_rr_regs, p_req_regs, gen_first_level, p_lock_reg
+rr_arb_tree_988DD_A0382 -> lzc, p_rr_regs, p_req_regs, gen_first_level, p_lock_reg
+rr_arb_tree_25AF9 -> lzc, p_rr_regs, p_req_regs, gen_first_level, p_lock_reg
+rr_arb_tree_79FBE_62ECB -> lzc, p_rr_regs, p_req_regs, gen_first_level, p_lock_reg
+rr_arb_tree_7CFB9_1E87D -> lzc, p_rr_regs, p_req_regs, gen_first_level, p_lock_reg
+rr_arb_tree_DE92D_1AEBD -> lzc, p_rr_regs, p_req_regs, gen_first_level, p_lock_reg
+rstgen_bypass -> tc_clk_mux2
+shift_reg_1F3E0_50B1B -> shift_reg_gated_E854E_A4928
+shift_reg_gated_E854E_A4928 -> gen_regs
+spill_register_flushable_34EC4_BB3EF -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_85721_128B8 -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_A657E_6677B -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_E126B -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_F622A_4CD6C -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_2E307_462CC -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_36EED_9889F -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_5FDB2_78836 -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_66964_DA40E -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_7485C_406EA -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_92808_B0C8C -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_A4532_7C856 -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_A5F3D_06E2F -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_C4540_6C6F6 -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_DA040_C4892 -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_EFE4F_03E1A -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_3CC1A_7BA11 -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_44DFF_A7F01 -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_5EDC2 -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_9E476_61BDA -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_A56FF_769FE -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_E9218_0D494 -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_EB43C_B2B72 -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_F2F8D_2A9C1 -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_FC01A_25E69 -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_03CD9_5A5ED -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_C27AA -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+spill_register_flushable_C4179 -> ps_b_full, ps_b_data, ps_a_data, ps_a_full
+sub_per_hash -> gen_sub_per
+sync_wedge -> pulp_clock_gating, sync
+clk_int_div_static -> clk_int_div
+addr_decode_napot -> addr_decode_E74CA
+cdc_2phase_BE29E_38CE2 -> cdc_2phase_src_9755D_125C3, cdc_2phase_dst_97DEC_4F4C6
+cdc_4phase -> cdc_4phase_dst_D907C, cdc_4phase_src_884EF
+cdc_4phase_src_61018 -> sync
+cdc_4phase_src_884EF -> sync
+cdc_4phase_dst_389E3 -> spill_register_7628B, sync
+cdc_4phase_dst_D907C -> spill_register_F2424, sync
+cb_filter -> proc_bucket_control, hash_block, counter
+hash_block -> sub_per_hash
+cdc_fifo_2phase -> cdc_2phase_BE29E_38CE2
+counter -> delta_counter
+edge_detect -> sync_wedge
+lzc -> g_levels, g_level
+max_counter -> delta_counter
+rstgen -> rstgen_bypass
+spill_register_33389 -> spill_register_flushable_C27AA
+spill_register_7B892_8EA64 -> spill_register_flushable_03CD9_5A5ED
+spill_register_0ECDF_8EEBE -> spill_register_flushable_A657E_6677B
+spill_register_1C649_EBCB4 -> spill_register_flushable_F622A_4CD6C
+spill_register_655A4_AD8B1 -> spill_register_flushable_85721_128B8
+spill_register_926A5_06452 -> spill_register_flushable_34EC4_BB3EF
+spill_register_B98DA -> spill_register_flushable_E126B
+spill_register_065B0_E552F -> spill_register_flushable_5FDB2_78836
+spill_register_07A0E_A3090 -> spill_register_flushable_2E307_462CC
+spill_register_0B3E6_2840A -> spill_register_flushable_A5F3D_06E2F
+spill_register_4C58A_2A290 -> spill_register_flushable_EFE4F_03E1A
+spill_register_4E359_85D95 -> spill_register_flushable_92808_B0C8C
+spill_register_B3039_1820E -> spill_register_flushable_7485C_406EA
+spill_register_B90E1_17052 -> spill_register_flushable_66964_DA40E
+spill_register_B9B83_B2C88 -> spill_register_flushable_A4532_7C856
+spill_register_C99AF_8A425 -> spill_register_flushable_C4540_6C6F6
+spill_register_EF58C_46ACE -> spill_register_flushable_36EED_9889F
+spill_register_FFEEF_8D678 -> spill_register_flushable_DA040_C4892
+spill_register_2EA73_AA901 -> spill_register_flushable_EB43C_B2B72
+spill_register_6B80B_B49E8 -> spill_register_flushable_3CC1A_7BA11
+spill_register_7628B -> spill_register_flushable_5EDC2
+spill_register_B1DC5_DC275 -> spill_register_flushable_44DFF_A7F01
+spill_register_B49F1_DD0AE -> spill_register_flushable_FC01A_25E69
+spill_register_B8AF3_E2109 -> spill_register_flushable_E9218_0D494
+spill_register_DD6A5_01A11 -> spill_register_flushable_9E476_61BDA
+spill_register_F0C36_81629 -> spill_register_flushable_A56FF_769FE
+spill_register_F2424 -> spill_register_flushable_C4179
+stream_delay_8DD7D -> lfsr_16bit, counter
+stream_fifo_B5D4D_82522 -> fifo_v3_E548E_8DFEF
+stream_fifo_8D6A7_F656E -> fifo_v3_71EA6_711C3
+stream_fifo_DA2B4 -> fifo_v3_CE4E5
+stream_fork_dynamic -> stream_fork
+clk_mux_glitch_free -> rstgen, sync, tc_clk_gating, clk_or_tree, tc_clk_mux2
+clk_or_tree -> clk_or_tree, tc_clk_or2
+cdc_reset_ctrlr -> cdc_reset_ctrlr_half
+cdc_reset_ctrlr_half -> cdc_4phase_dst_389E3, cdc_4phase_src_61018
+cdc_fifo_gray -> cdc_fifo_gray_src_FAFA5_05A1F, cdc_fifo_gray_dst_E4F48_4DA4E
+cdc_fifo_gray_src_2BAE2 -> gray_to_binary, binary_to_gray, sync
+cdc_fifo_gray_src_FAFA5_05A1F -> gray_to_binary, binary_to_gray, sync
+cdc_fifo_gray_dst_A36B1 -> gray_to_binary, spill_register_B98DA, binary_to_gray, sync
+cdc_fifo_gray_dst_E4F48_4DA4E -> gray_to_binary, binary_to_gray, spill_register_0B3E6_2840A, sync
+fall_through_register -> fifo_v3_CE4E5
+id_queue_133AB_66C9C -> onehot_to_bin, lzc
+id_queue_6B97F_BDE88 -> onehot_to_bin, lzc
+stream_to_mem -> stream_fifo_DA2B4
+stream_arbiter_flushable_9919D -> rr_arb_tree_25AF9
+stream_fifo_optimal_wrap -> gen_fifo, stream_fifo_DA2B4, gen_spill, spill, spill_register_flushable_C4179
+stream_xbar_C3E9F_1B2E9 -> spill_register_4C58A_2A290, stream_demux, rr_arb_tree_47864_3B2E1
+stream_xbar_CE0C8_2FD41 -> rr_arb_tree_10FCB_64749, stream_demux, spill_register_B9B83_B2C88
+cdc_fifo_gray_clearable -> cdc_reset_ctrlr, cdc_fifo_gray_src_clearable_52135_32928, gen_elaboration_assertion, cdc_fifo_gray_dst_clearable_02AD8_466DA
+cdc_fifo_gray_src_clearable_52135_32928 -> gray_to_binary, binary_to_gray, sync
+cdc_fifo_gray_dst_clearable_02AD8_466DA -> gray_to_binary, binary_to_gray, spill_register_flushable_F2F8D_2A9C1, sync
+cdc_2phase_clearable -> cdc_2phase_dst_clearable_F132E, cdc_reset_ctrlr, gen_elaboration_assertion, cdc_2phase_src_clearable_2751D
+cdc_2phase_src_clearable_2751D -> sync
+cdc_2phase_dst_clearable_F132E -> sync
+mem_to_banks -> fifo_v3, stream_fifo_B5D4D_82522, stream_fifo_8D6A7_F656E
+stream_arbiter -> stream_arbiter_flushable_9919D
+stream_omega_net -> gen_outputs, stream_xbar_C3E9F_1B2E9, gen_shuffle_inp, stream_xbar_CE0C8_2FD41
+clock_divider_counter -> pulp_clock_mux2, pulp_clock_xor2, pulp_clock_inverter
+clk_div -> same, clk_int_div
+find_first_one -> genblk1, genblk3
+generic_fifo -> cluster_clock_gating, Invalid
+prioarbiter -> p_regs, onehot_to_bin
+pulp_sync_wedge -> pulp_clock_gating, pulp_sync
+rrarbiter -> rr_arb_tree
+clock_divider -> pulp_sync_wedge, pulp_clock_gating, rstgen, clock_divider_counter
+fifo_v2_96492_6B3C3 -> fifo_v3_4A5EB_49DD0
+fifo -> fifo_v2_96492_6B3C3
+edge_propagator_ack -> pulp_sync_wedge
+edge_propagator -> edge_propagator_ack
+edge_propagator_rx -> pulp_sync_wedge
+control_mvp -> genblk4, iteration_div_sqrt_mvp
+preprocess_mvp -> lzc
+nrbd_nrsc_mvp -> control_mvp
+div_sqrt_top_mvp -> norm_div_sqrt_mvp, nrbd_nrsc_mvp, preprocess_mvp
+div_sqrt_mvp_wrapper -> div_sqrt_top_mvp
+axi_atop_filter_E9192 -> stream_register_DD1B0
+axi_burst_splitter -> axi_burst_splitter_ax_chan_84C8F_EA551, axi_burst_splitter_ax_chan_CCAEB_574B0, axi_err_slv_29C08, axi_demux_EE8B5_33E0E
+axi_burst_splitter_ax_chan_84C8F_EA551 -> axi_burst_splitter_counters
+axi_burst_splitter_ax_chan_CCAEB_574B0 -> axi_burst_splitter_counters
+axi_burst_splitter_counters -> id_queue_133AB_66C9C, lzc, counter
+axi_cdc_dst_A917E -> cdc_fifo_gray_dst_A36B1, cdc_fifo_gray_src_2BAE2
+axi_cdc_src_91189 -> cdc_fifo_gray_dst_A36B1, cdc_fifo_gray_src_2BAE2
+axi_cut_4CAAA -> spill_register_F2424
+axi_delayer -> stream_delay_8DD7D
+axi_demux_7F3B6_E5B88 -> spill_register_655A4_AD8B1, rr_arb_tree_07E69_6A911, spill_register_1C649_EBCB4, spill_register_B1DC5_DC275, spill_register_926A5_06452, fifo_v3_E2F85_343D8, rr_arb_tree_E4D85_FE53C, spill_register_0ECDF_8EEBE, axi_demux_id_counters_62B1B_828D5
+axi_demux_C0B0D -> rr_arb_tree_25AF9, fifo_v3_E2F85_343D8, spill_register_B3039_1820E, spill_register_B90E1_17052, spill_register_F2424, axi_demux_id_counters_62B1B_828D5
+axi_demux_EE8B5_33E0E -> spill_register_065B0_E552F, rr_arb_tree_988DD_A0382, spill_register_FFEEF_8D678, spill_register_4E359_85D95, spill_register_C99AF_8A425, rr_arb_tree_2BB1D_AD33D, fifo_v3_E2F85_343D8, axi_demux_id_counters_62B1B_828D5, spill_register_EF58C_46ACE
+axi_demux_id_counters_62B1B_828D5 -> delta_counter
+axi_dw_downsizer_69A02 -> onehot_to_bin, lzc, axi_err_slv_29C08, fifo_v3, rr_arb_tree_25AF9, axi_demux_C0B0D, rr_arb_tree, id_queue_6B97F_BDE88
+axi_dw_upsizer_F5D7B -> onehot_to_bin, lzc, axi_err_slv_29C08, rr_arb_tree_25AF9, axi_demux_C0B0D, rr_arb_tree
+axi_id_remap_C090E -> axi_id_remap_table, lzc
+axi_id_remap_table -> lzc
+axi_id_prepend_433F4_FD959 -> gen_id_prepend
+axi_id_prepend_567FC_96F70 -> gen_id_prepend
+axi_id_prepend_D1C46 -> gen_id_prepend
+axi_id_prepend_D575D_67CA9 -> gen_id_prepend
+axi_lite_demux -> fifo_v3_7956D_80B67, fifo_v3_18E6D_F7E20, spill_register_DD6A5_01A11, spill_register_F2424, fifo_v3_1FB51_AF6E2, spill_register_B49F1_DD0AE
+axi_lite_mailbox -> axi_lite_mailbox_slave_A5E8B_46C4C, fifo_v3_CF6A3_3CBCE, gen_irq_conversion
+axi_lite_mailbox_slave_A5E8B_46C4C -> addr_decode_A16C2_3DB96, spill_register_07A0E_A3090, spill_register_33389
+axi_lite_mux -> fifo_v3_6C991_CD7EF, fifo_v3_9469D_21EA2, rr_arb_tree_25AF9, fifo_v3_E1ADD_F4863, spill_register_F2424
+axi_lite_regs -> addr_decode_29AFD_EA88D, spill_register_33389, spill_register_7B892_8EA64
+axi_mux_5CB36_69D3F -> spill_register_F0C36_81629, spill_register_6B80B_B49E8, fifo_v3_46451_657B6, spill_register_B8AF3_E2109, rr_arb_tree_7CFB9_1E87D, spill_register_B1DC5_DC275, spill_register_2EA73_AA901, rr_arb_tree_DE92D_1AEBD, axi_id_prepend_D575D_67CA9
+axi_mux_621CA -> rr_arb_tree_25AF9, spill_register_F2424, axi_id_prepend_D1C46, fifo_v3_46451_657B6
+axi_serializer_486C0 -> fifo_v3_92B55_4DA67
+axi_cdc -> axi_cdc_dst_A917E, axi_cdc_src_91189
+axi_err_slv_29C08 -> axi_atop_filter_E9192, counter, fifo_v3_3C50A_8E0A0, fifo_v3_92B55_4DA67
+axi_dw_converter -> axi_dw_upsizer_F5D7B, axi_dw_downsizer_69A02
+axi_id_serialize_FEC5B -> axi_serializer_486C0, axi_mux_5CB36_69D3F, axi_id_prepend_567FC_96F70, axi_demux_7F3B6_E5B88
+axi_multicut -> axi_cut_4CAAA
+axi_iw_converter -> axi_id_prepend_433F4_FD959, axi_id_remap_C090E, axi_id_serialize_FEC5B, gen_downsize
+axi_xbar -> addr_decode_160C3_D7085, axi_demux_C0B0D, axi_err_slv_29C08, axi_mux_621CA
+fpnew_cast_multi_5BCFE_D3186 -> lzc, fpnew_rounding, fpnew_classifier
+fpnew_divsqrt_multi_C04AD_31CA4 -> translate_fmt, div_sqrt_top_mvp
+fpnew_fma_F8EAE -> lzc, fpnew_rounding, norm_shift_amount, addend_shift_amount, fpnew_classifier
+fpnew_fma_multi_FF0B0_361DB -> lzc, fpnew_rounding, norm_shift_amount, addend_shift_amount, fpnew_classifier
+fpnew_noncomp_CF7FE -> select_result, classify, fpnew_classifier
+fpnew_opgroup_block_AC56A -> fpnew_opgroup_multifmt_slice_F1CBB, fpnew_opgroup_fmt_slice_BAB27, rr_arb_tree_36817_A990F
+fpnew_opgroup_fmt_slice_BAB27 -> genblk2, fpnew_fma_F8EAE, fpnew_noncomp_CF7FE
+fpnew_opgroup_multifmt_slice_F1CBB -> fpnew_fma_multi_FF0B0_361DB, int_results_disabled, fpnew_divsqrt_multi_C04AD_31CA4, fpnew_cast_multi_5BCFE_D3186
+fpnew_rounding -> rounding_decision
+fpnew_top_60D59 -> rr_arb_tree_79FBE_62ECB, fpnew_opgroup_block_AC56A
+mmu -> ptw, tlb, pmp
+ptw -> pmp
+cvxif_example_coprocessor -> regs, counter, instr_decoder, fifo_v3_C3CB8_97EC6
+ariane -> cva6_AA86D_3DA7C, cvxif_example_coprocessor
+cva6_AA86D_3DA7C -> ex_stage, controller, issue_stage, frontend, csr_regfile, perf_counters, commit_stage, wt_cache_subsystem_2591E_BFB97, id_stage, std_cache_subsystem_FD2E6_A1272
+alu -> lzc, popcount
+fpu_wrap -> fp_hold_reg, fpnew_top_60D59
+ex_stage -> csr_buffer, load_store_unit, branch_unit, cvxif_fu, mult, alu, fpu_wrap
+id_stage -> compressed_decoder, decoder
+issue_read_operands -> ariane_regfile, unit_busy, ariane_regfile_fpga
+issue_stage -> scoreboard, re_name, issue_read_operands
+load_unit -> p_regs
+load_store_unit -> load_unit, store_unit, lsu_bypass, gen_no_mmu, shift_reg_1F3E0_50B1B, cva6_mmu_sv32, mmu
+lsu_bypass -> output_assignments
+mult -> serdiv, multiplier
+multiplier -> p_selmux
+serdiv -> p_regs, lzc
+ariane_regfile -> register_write_behavioral
+scoreboard -> rr_arb_tree_88014, regs, rr_arb_tree
+store_buffer -> p_commit, p_spec
+amo_buffer -> fifo_v3_4F30F_AEF03
+store_unit -> store_buffer, amo_buffer
+btb -> SyncDpRam, unread
+bht -> unread, AsyncThreePortRam
+instr_queue -> fifo_v3_AECA2_3F763, lzc, fifo_v3, unread, popcount
+frontend -> ras, instr_queue, bht, btb, instr_scan, instr_realign
+wt_dcache_ctrl -> p_regs
+wt_dcache_mem -> p_regs, sram, lzc, rr_arb_tree
+wt_dcache_missunit -> lzc, exp_backoff, p_regs, lfsr, gen_axi_rtrn_mux
+wt_dcache_wbuffer -> lzc, fifo_v3, p_regs, rr_arb_tree_14F7C_E5B9D, rr_arb_tree
+wt_dcache -> wt_dcache_mem, wt_dcache_missunit, wt_dcache_ctrl, wt_dcache_wbuffer
+cva6_icache -> p_regs, sram, lzc, lfsr
+wt_cache_subsystem_2591E_BFB97 -> wt_axi_adapter_D97BC_BA347, cva6_icache, wt_dcache
+wt_axi_adapter_D97BC_BA347 -> fifo_v3_6C4C9_F309C, p_rd_buf, fifo_v3, axi_shim_E1DF2_4FA5F, rr_arb_tree, fifo_v3_94E38_BB8F9
+pmp -> pmp_entry
+pmp_entry -> lzc
+sram -> gen_cut, dromajo_ram, tc_sram_wrapper
+tc_sram_wrapper -> tc_sram
+ariane_mem_top -> ariane

@@ -5,6 +5,8 @@ from antlr4_systemverilog.systemverilog import SystemVerilogParser, SystemVerilo
 
 from design_parser import parse_design_to_tree, extract_module, replace_module, extract_modules
 
+from collections import OrderedDict
+
 class TopModuleNodeFinder(SystemVerilogParserVisitor):
     def __init__(self, top_module):
         self.top_module_node= None
@@ -22,9 +24,9 @@ class MyModuleInstantiationVisitor(SystemVerilogParserVisitor):
         self.module_param = []
         self.name_of_module_instances = []
         self.list_of_ports_rhs = []
-        self.dict_of_lhs_to_rhs = {}
+        self.dict_of_lhs_to_rhs = OrderedDict()
         self.list_of_ports_rhs_width = []
-        self.dict_of_parameters = {}
+        self.dict_of_parameters = OrderedDict()
         
         self.exclude_module = exclude_module
 
@@ -123,11 +125,11 @@ class ParamVisitor(SystemVerilogParserVisitor):
         for _key in item.keys():
             if isinstance(_key,int):
                 continue 
-            tmp_item = _key[len(prefix) + 1 :]
+            tmp_item = _key[len(prefix) + len('___') :]
             # Find whole word 'item' in param_value
             pattern = r"\b{}\b".format(tmp_item)
             if re.search(pattern, param_value):
-                if prefix + '_' + tmp_item in item:
+                if prefix + '___' + tmp_item in item:
                     param_value = re.sub(pattern, _key, param_value)
         return param_value
 
@@ -136,8 +138,10 @@ class ParamVisitor(SystemVerilogParserVisitor):
         # Whether current parameter assignment is under module header, if not, we should not collect it
         # module xxx();
         # parameter xxx; <- would not affect the header
-        if not self.is_parents_parameter_port_list(ctx):
-            return 
+        # if not self.is_parents_parameter_port_list(ctx):
+        #     return 
+        if type(ctx.parentCtx.parentCtx) == SystemVerilogParser.Local_parameter_declarationContext:
+            return
         if ctx.getChildCount() == 3:
             param_name = ctx.getChild(0).getText().replace(" ", "")
             param_value = ctx.getChild(2).getText().replace(" ", "")
@@ -145,9 +149,9 @@ class ParamVisitor(SystemVerilogParserVisitor):
             for item in self.cur_prefixs:
                 if self.cur_dict_of_parameters.get(item) is None:
                     self.cur_dict_of_parameters[item] = {}
-                if (self.cur_dict_of_parameters[item].get(item + "___" + param_name)is None):
+                if (self.cur_dict_of_parameters[item].get(item + "___" + param_name) is None):
                     # Handle the ordered parameter
-                    if (self.cur_dict_of_parameters[item].get(self.counter)is not None):
+                    if (self.cur_dict_of_parameters[item].get(self.counter) is not None):
                         self.cur_dict_of_parameters[item][item + "___" + param_name] = self.cur_dict_of_parameters[item].get(self.counter)
                     else:
                         param_value = self.find_and_repalce_param_in_param_value(
@@ -166,6 +170,7 @@ class OrderedModulePortVisitor(SystemVerilogParserVisitor):
         self.cur_lhs = cur_lhs
 
     def visitList_of_port_declarations(self, ctx:SystemVerilogParser.List_of_port_declarationsContext):
+        self.index = 0
         for item in ctx.port_decl():
             self.dict_of_lhs_to_rhs[self.instance_name][item.ansi_port_declaration().port_identifier().getText()] = self.port_var_list[self.index]
             self.cur_lhs.append(item.ansi_port_declaration().port_identifier().getText())
@@ -300,7 +305,7 @@ class InstModuleVisitor(SystemVerilogParserVisitor):
             self.stops.append(ctx.stop.stop)
             self.starts_stops_dict[module_name] = len(self.starts) - 1
             self.inst_module_nodes.append(ctx)
-            self.inst_module_designs.append(self.design)
+            self.inst_module_designs = self.design
             paramVisitor = ParamVisitor(self.cur_dict_of_parameters, self.cur_prefixs)
             paramVisitor.visit(ctx)
             # Ordered port assign
@@ -706,6 +711,37 @@ class InstBodyVisitor(SystemVerilogParserVisitor):
             pass
         else:
             for child in ctx.getChildren():
+                if isinstance(child,SystemVerilogParser.Tf_port_directionContext):
+                    child.start.text = (
+                        " " * (indent - 2) + child.start.text + " "
+                    )
+                if isinstance(child,SystemVerilogParser.Function_declarationContext):
+                    child.start.text = (
+                        chr(31)+" " * (indent - 2) + child.start.text + " "
+                    )
+                    if child.getChildCount() > 1 and child.getChild(1).getText() == "automatic":
+                        child.children[1].start.text = " " + child.children[1].start.text + " "
+                if isinstance(child,SystemVerilogParser.Function_body_declarationContext):
+                    if child.children[-1].getText() == "endfunction":
+                        child.stop.text = " " + child.stop.text + chr(31)
+                if isinstance(child, SystemVerilogParser.Case_statementContext):
+                    if child.children[-1].getText() == "endcase":
+                        child.stop.text = (
+                            chr(31) + " " * (indent - 2) + child.stop.text + chr(31)
+                        )
+                if isinstance(child,SystemVerilogParser.If_generate_constructContext):
+                    child.start.text = (
+                        " " * (indent - 2) + child.start.text + " "
+                    )
+                if isinstance(child, SystemVerilogParser.Generate_regionContext):
+                    if child.getChild(0).getText() == "generate":
+                        child.start.text = (
+                            chr(31) + " " * (indent - 2) + child.start.text + " " + chr(31)
+                        )
+                    if child.children[-1].getText() == "endgenerate":
+                        child.stop.text = (
+                            chr(31) + " " * (indent - 2) + child.stop.text + chr(31)
+                        )
                 if isinstance(child,SystemVerilogParser.List_of_port_declarationsContext):
                     child.start.text = (
                         chr(31) + " " * (indent - 2) + child.start.text + " "
@@ -808,7 +844,7 @@ class InstBodyVisitor2(SystemVerilogParserVisitor):
                         self.firstTerminal = True
         else:
             for child in ctx.module_item():
-                if child.getText().startswith("input") or child.getText().startswith("output") or child.getText().startswith("inout") or child.getText().startswith("parameter"):
+                if child.getText().startswith("input") or child.getText().startswith("output") or child.getText().startswith("inout") or child.getText().startswith("parameter") or child.getText().startswith("localparam"):
                     pass
                 else:
                     self.start = child.start.start
@@ -818,7 +854,7 @@ class InstBodyVisitor2(SystemVerilogParserVisitor):
         self.ExtractStartAndStop(ctx)
                     
 class IdentifierVisitor(SystemVerilogParserVisitor):
-    def __init__(self,cur_name_of_module_instance,top_module,design,cur_new_variable,insert_parts,cur_new_assign,port_index, assign_index):
+    def __init__(self,cur_name_of_module_instance,top_module,design,cur_new_variable,insert_parts,cur_new_assign,var_dict, assign_dict):
         self.start = []
         self.stop = []
         self.tmp_design = ''
@@ -828,8 +864,8 @@ class IdentifierVisitor(SystemVerilogParserVisitor):
         self.cur_new_variable = cur_new_variable
         self.insert_parts = insert_parts
         self.cur_new_assign = cur_new_assign
-        self.new_var_index = port_index
-        self.new_assign_index = assign_index
+        self.var_dict = var_dict
+        self.assign_dict = assign_dict
     
     def _traverse_children(self,ctx):
         if isinstance(ctx, TerminalNodeImpl):
@@ -859,18 +895,25 @@ class IdentifierVisitor(SystemVerilogParserVisitor):
         if ctx.module_header().module_identifier().getText() == self.top_module:
             self._traverse_children(ctx)
             self.tmp_design += self.design[ : self.start[0]]
-            keys = list(self.new_var_index.keys())
+            keys = list(self.var_dict.keys())
             key_0 = keys[0]
             self.tmp_design += f"\n    // INSTANCE: [{key_0}]\n"
-            index_0_left = self.new_var_index[key_0][0]
-            index_0_right =  self.new_var_index[key_0][1]
-            for i in range(index_0_left, index_0_right):
+            for new_var in self.var_dict[key_0]:
                 if not self.tmp_design[-3:].isspace():
-                    self.tmp_design += 4*" "+ self.cur_new_variable[i] + '\n'
+                    self.tmp_design += 4*" "+ new_var + '\n'
                 else:
-                    self.tmp_design += self.cur_new_variable[i] + '\n'
-            for i in range(self.new_assign_index[key_0][0], self.new_assign_index[key_0][1]):
-                self.tmp_design += " "*4 + self.cur_new_assign[i] + '\n'
+                    self.tmp_design += new_var + '\n'
+            for new_assign in self.assign_dict[key_0]:
+                self.tmp_design += " "*4 + new_assign + '\n'
+            # index_0_left = self.new_var_index[key_0][0]
+            # index_0_right =  self.new_var_index[key_0][1]
+            # for i in range(index_0_left, index_0_right):
+            #     if not self.tmp_design[-3:].isspace():
+            #         self.tmp_design += 4*" "+ self.cur_new_variable[i] + '\n'
+            #     else:
+            #         self.tmp_design += self.cur_new_variable[i] + '\n'
+            # for i in range(self.new_assign_index[key_0][0], self.new_assign_index[key_0][1]):
+            #     self.tmp_design += " "*4 + self.cur_new_assign[i] + '\n'
             # for i in range(0,len(self.cur_new_variable)):
             #     if i == 0:
             #         if not self.tmp_design[-3:].isspace():
@@ -881,18 +924,23 @@ class IdentifierVisitor(SystemVerilogParserVisitor):
             #         self.tmp_design += 4*" "+self.cur_new_variable[i] + '\n'
             self.tmp_design += '\n' + 4*" "+ remove_leading_whitespace(self.insert_parts[key_0]) + '\n'
             for i in range(1,len(self.start)):
+                print('keys: ', keys)
                 key_i = keys[i]
-                index_left = self.new_var_index[key_i][0]
-                index_right = self.new_var_index[key_i][1]
                 substring = " "*4+self.design[self.stop[i-1] + 1 : self.start[i]] + '\n'
                 if not substring.isspace():
                     self.tmp_design += substring
                 self.tmp_design += f"\n    // INSTANCE: [{key_i}]\n"
-                for j in range(index_left, index_right):
-                    self.tmp_design += 4*" "+ self.cur_new_variable[j] + '\n'
+                for new_var in self.var_dict[key_i]:
+                    self.tmp_design += 4*" "+ new_var + '\n'
+                for new_assign in self.assign_dict[key_i]:
+                    self.tmp_design += " "*4 + new_assign + '\n'
+                # index_left = self.new_var_index[key_i][0]
+                # index_right = self.new_var_index[key_i][1]
+                # for j in range(index_left, index_right):
+                #     self.tmp_design += 4*" "+ self.cur_new_variable[j] + '\n'
 
-                for j in range(self.new_assign_index[key_i][0], self.new_assign_index[key_i][1]):
-                    self.tmp_design += " "*4 + self.cur_new_assign[j] + '\n'
+                # for j in range(self.new_assign_index[key_i][0], self.new_assign_index[key_i][1]):
+                #     self.tmp_design += " "*4 + self.cur_new_assign[j] + '\n'
                 self.tmp_design += 4*" " + remove_leading_whitespace(self.insert_parts[key_i])+ '\n'
             # for assign in self.cur_new_assign:
             #     self.tmp_design += " "*4+assign +'\n'
@@ -982,13 +1030,20 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
             repeat_decl_dict[cur_module_identifier_dict[key][k]] = visitor.repeat_declr
         
     # Step 3.2. 进一步收集信息
-    cur_list_of_ports_lhs = []
-    cur_list_of_ports_lhs_width = []
-    cur_list_of_ports_width = []
-    cur_list_of_ports_direction = []
-    cur_list_of_ports_type = []
-    cur_list_of_data_type = []
-    cur_dict_of_ports = {}
+    # cur_list_of_ports_lhs = []
+    # cur_list_of_ports_lhs_width = []
+    # cur_list_of_ports_width = []
+    # cur_list_of_ports_direction = []
+    # cur_list_of_ports_type = []
+    # cur_list_of_data_type = []
+    # cur_dict_of_ports = {}
+    
+    cur_list_of_ports_lhs_dict = OrderedDict()
+    # cur_list_of_ports_lhs_width_dict = {}
+    # cur_list_of_ports_width_dict = {}
+    # cur_list_of_ports_direction_dict = {}
+    # cur_list_of_ports_type_dict = {}
+    # cur_list_of_data_type_dict = {}
 
     index_dict_of_ports = {}
 
@@ -997,102 +1052,191 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
         for i in indexs:
             visitor = InstModulePortVisitor(cur_module_identifier_dict, cur_prefixs, cur_dict_of_parameters)
             visitor.visit(inst_module_design_trees[i])
-            index_left = len(cur_list_of_ports_lhs)
-            index_right = index_left + len(visitor.list_of_ports_lhs)
-            index_dict_of_ports[key] = [index_left, index_right]
-            cur_list_of_ports_lhs = cur_list_of_ports_lhs + visitor.list_of_ports_lhs
-            cur_list_of_ports_lhs_width = (
-                cur_list_of_ports_lhs_width + visitor.list_of_ports_width
-            )
-            cur_list_of_ports_width = cur_list_of_ports_width + visitor.list_of_ports_width
-            cur_list_of_ports_direction = (
-                cur_list_of_ports_direction + visitor.list_of_ports_direction
-            )
-            cur_list_of_ports_type = cur_list_of_ports_type + visitor.list_of_ports_type
-            cur_list_of_data_type = cur_list_of_data_type + visitor.list_of_data_type
+            for j in range(0,len(visitor.list_of_ports_lhs)):
+                if key not in cur_list_of_ports_lhs_dict:
+                    cur_list_of_ports_lhs_dict[key] = {}
+                if visitor.list_of_ports_lhs[j] not in cur_list_of_ports_lhs_dict[key]:
+                    cur_list_of_ports_lhs_dict[key][visitor.list_of_ports_lhs[j]] = {}
+                    cur_list_of_ports_lhs_dict[key][visitor.list_of_ports_lhs[j]]['lhs_width'] = visitor.list_of_ports_width[j]
+                    cur_list_of_ports_lhs_dict[key][visitor.list_of_ports_lhs[j]]['direction'] = visitor.list_of_ports_direction[j]
+                    cur_list_of_ports_lhs_dict[key][visitor.list_of_ports_lhs[j]]['ports_type'] = visitor.list_of_ports_type[j]
+                    cur_list_of_ports_lhs_dict[key][visitor.list_of_ports_lhs[j]]['data_type'] = visitor.list_of_data_type[j]
+                
+            # index_left = len(cur_list_of_ports_lhs)
+            # index_right = index_left + len(visitor.list_of_ports_lhs)
+            # index_dict_of_ports[key] = [index_left, index_right]
+            # cur_list_of_ports_lhs = cur_list_of_ports_lhs + visitor.list_of_ports_lhs
+            # cur_list_of_ports_lhs_width = (
+            #     cur_list_of_ports_lhs_width + visitor.list_of_ports_width
+            # )
+            # cur_list_of_ports_width = cur_list_of_ports_width + visitor.list_of_ports_width
+            # cur_list_of_ports_direction = (
+            #     cur_list_of_ports_direction + visitor.list_of_ports_direction
+            # )
+            # cur_list_of_ports_type = cur_list_of_ports_type + visitor.list_of_ports_type
+            # cur_list_of_data_type = cur_list_of_data_type + visitor.list_of_data_type
         
-    for i in range(0,len(cur_list_of_ports_lhs)):
-        cur_dict_of_ports[cur_list_of_ports_lhs[i]] = {
-            "width": cur_list_of_ports_lhs_width[i],
-            "direction": cur_list_of_ports_direction[i],
-            "type":cur_list_of_ports_type[i],
-        } 
+    # for i in range(0,len(cur_list_of_ports_lhs)):
+    #     cur_dict_of_ports[cur_list_of_ports_lhs[i]] = {
+    #         "width": cur_list_of_ports_lhs_width[i],
+    #         "direction": cur_list_of_ports_direction[i],
+    #         "type":cur_list_of_ports_type[i],
+    #     } 
         
     # Step 3.3 组合需要替换的素材
     cur_new_variable = []
     cur_new_assign = []
-    new_assign_index_dict = {}
+    new_assign_dict = OrderedDict()
+    new_var_dict = OrderedDict()
+    
 
     for key in cur_module_identifier_dict:
         instance_names = cur_module_identifier_dict[key]
         for instance_name in instance_names:
-            indexs = index_dict_of_ports[instance_name]
-            index_left = len(cur_new_assign)
-            for i in range(indexs[0],indexs[1]):
-                if cur_list_of_data_type[i]!= "":
+            # indexs = index_dict_of_ports[instance_name]
+            # index_left = len(cur_new_assign)
+            if instance_name not in new_var_dict:
+                new_var_dict[instance_name] = []
+            if instance_name not in new_assign_dict:
+                new_assign_dict[instance_name] = []
+            for key in cur_list_of_ports_lhs_dict[instance_name]:
+                if cur_list_of_ports_lhs_dict[instance_name][key]['data_type']!= "":
                     cur_new_variable.append(
-                        cur_list_of_data_type[i]
-                        + cur_list_of_ports_lhs_width[i]
+                        cur_list_of_ports_lhs_dict[instance_name][key]['data_type']
+                        + cur_list_of_ports_lhs_dict[instance_name][key]['lhs_width']
                         + " "
                         + instance_name
                         + "___"
-                        + cur_list_of_ports_lhs[i]
-                        + ";"
-                    )
-                elif cur_list_of_ports_type[i] == "reg":
-                    if cur_list_of_ports_lhs[i] not in repeat_decl_dict[instance_name]:
-                        cur_new_variable.append(
-                            "reg"
-                            + cur_list_of_ports_lhs_width[i]
-                            + " "
-                            + instance_name
-                            + "___"
-                            + cur_list_of_ports_lhs[i]
-                            + ";"
-                        )
-                else:
-                    if cur_list_of_ports_lhs[i] not in repeat_decl_dict[instance_name]:
-                        cur_new_variable.append(
-                            "wire"
-                            + cur_list_of_ports_lhs_width[i]
-                            + " "
-                            + instance_name
-                            + "___"
-                            + cur_list_of_ports_lhs[i]
-                            + ";"
-                        )
-                if cur_list_of_ports_direction[i] == "input":
-                    rhs = dict_of_lhs_to_rhs[instance_name].get(cur_list_of_ports_lhs[i])
-                    if rhs is None:
-                        continue
-                    if rhs == "" or rhs.strip() == "":
-                        continue
-                    cur_new_assign.append(
-                        "assign "
-                        + instance_name
-                        + "___"
-                        + cur_list_of_ports_lhs[i]
-                        + " = "
-                        + rhs
-                        + ";"
-                    )
-                else:
-                    rhs = dict_of_lhs_to_rhs[instance_name].get(cur_list_of_ports_lhs[i])
-                    if rhs is None:
-                        continue
-                    if rhs == "" or rhs.strip() == "":
-                        continue
-                    cur_new_assign.append(
-                        "assign "
-                        + rhs
-                        + " = "
-                        + instance_name
-                        + "___"
-                        + cur_list_of_ports_lhs[i]
+                        + key
                         + ";"
                     )
                     
-            new_assign_index_dict[instance_name] = [index_left, len(cur_new_assign)]
+                    new_var_dict[instance_name].append(cur_new_variable[-1])
+                elif cur_list_of_ports_lhs_dict[instance_name][key]['ports_type'] == "reg":
+                    if key not in repeat_decl_dict[instance_name]:
+                        cur_new_variable.append(
+                            "reg"
+                            + cur_list_of_ports_lhs_dict[instance_name][key]['lhs_width']
+                            + " "
+                            + instance_name
+                            + "___"
+                            + key
+                            + ";"
+                        )
+                        new_var_dict[instance_name].append(cur_new_variable[-1])
+                else:
+                    if key not in repeat_decl_dict[instance_name]:
+                        cur_new_variable.append(
+                            "wire"
+                            + cur_list_of_ports_lhs_dict[instance_name][key]['lhs_width']
+                            + " "
+                            + instance_name
+                            + "___"
+                            + key
+                            + ";"
+                        )
+                        new_var_dict[instance_name].append(cur_new_variable[-1])
+                if cur_list_of_ports_lhs_dict[instance_name][key]['direction'] == "input":
+                    rhs = dict_of_lhs_to_rhs[instance_name].get(key)
+                    if rhs is None:
+                        continue
+                    if rhs == "" or rhs.strip() == "":
+                        continue
+                    cur_new_assign.append(
+                        "assign "
+                        + instance_name
+                        + "___"
+                        + key
+                        + " = "
+                        + rhs
+                        + ";"
+                    )
+                    new_assign_dict[instance_name].append(cur_new_assign[-1])
+                else:
+                    rhs = dict_of_lhs_to_rhs[instance_name].get(key)
+                    if rhs is None:
+                        continue
+                    if rhs == "" or rhs.strip() == "":
+                        continue
+                    cur_new_assign.append(
+                        "assign "
+                        + rhs
+                        + " = "
+                        + instance_name
+                        + "___"
+                        + key
+                        + ";"
+                    )
+                    new_assign_dict[instance_name].append(cur_new_assign[-1])
+                    
+            # new_assign_index_dict[instance_name] = [index_left, len(cur_new_assign)]
+                
+                
+            # for i in range(indexs[0],indexs[1]):
+            #     if cur_list_of_data_type[i]!= "":
+            #         cur_new_variable.append(
+            #             cur_list_of_data_type[i]
+            #             + cur_list_of_ports_lhs_width[i]
+            #             + " "
+            #             + instance_name
+            #             + "___"
+            #             + cur_list_of_ports_lhs[i]
+            #             + ";"
+            #         )
+            #     elif cur_list_of_ports_type[i] == "reg":
+            #         if cur_list_of_ports_lhs[i] not in repeat_decl_dict[instance_name]:
+            #             cur_new_variable.append(
+            #                 "reg"
+            #                 + cur_list_of_ports_lhs_width[i]
+            #                 + " "
+            #                 + instance_name
+            #                 + "___"
+            #                 + cur_list_of_ports_lhs[i]
+            #                 + ";"
+            #             )
+            #     else:
+            #         if cur_list_of_ports_lhs[i] not in repeat_decl_dict[instance_name]:
+            #             cur_new_variable.append(
+            #                 "wire"
+            #                 + cur_list_of_ports_lhs_width[i]
+            #                 + " "
+            #                 + instance_name
+            #                 + "___"
+            #                 + cur_list_of_ports_lhs[i]
+            #                 + ";"
+            #             )
+            #     if cur_list_of_ports_direction[i] == "input":
+            #         rhs = dict_of_lhs_to_rhs[instance_name].get(cur_list_of_ports_lhs[i])
+            #         if rhs is None:
+            #             continue
+            #         if rhs == "" or rhs.strip() == "":
+            #             continue
+            #         cur_new_assign.append(
+            #             "assign "
+            #             + instance_name
+            #             + "___"
+            #             + cur_list_of_ports_lhs[i]
+            #             + " = "
+            #             + rhs
+            #             + ";"
+            #         )
+            #     else:
+            #         rhs = dict_of_lhs_to_rhs[instance_name].get(cur_list_of_ports_lhs[i])
+            #         if rhs is None:
+            #             continue
+            #         if rhs == "" or rhs.strip() == "":
+            #             continue
+            #         cur_new_assign.append(
+            #             "assign "
+            #             + rhs
+            #             + " = "
+            #             + instance_name
+            #             + "___"
+            #             + cur_list_of_ports_lhs[i]
+            #             + ";"
+            #         )
+                    
+            # new_assign_index_dict[instance_name] = [index_left, len(cur_new_assign)]
 
     inst_module_designs = []
     for k in range(0,len(cur_prefixs)):
@@ -1109,7 +1253,7 @@ def pyflattenverilog(design: str, top_module: str, exlude_module : set):
         insert_parts[cur_prefixs[k]] = inst_module_designs[k][visitor.start : visitor.stop]
     
     visitor = IdentifierVisitor(cur_name_of_module_instance=cur_name_of_module_instances,design=top_instance_str,
-                                top_module = top_module, cur_new_variable=cur_new_variable,insert_parts = insert_parts,cur_new_assign=cur_new_assign, port_index=index_dict_of_ports, assign_index=new_assign_index_dict)
+                                top_module = top_module, cur_new_variable=cur_new_variable,insert_parts = insert_parts,cur_new_assign=cur_new_assign, var_dict=new_var_dict, assign_dict=new_assign_dict)
     visitor.visit(top_node_tree)
 
     

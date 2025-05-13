@@ -27,7 +27,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "main.py",
-            "args": ["tests/regression/_adder_param","-f","filelist.f","-ex","Adder","-t","TopModule","-o","f_adder.v","-g"],
+            "args": ["tests/regression/adder_param","-f","filelist.f","-t","TopModule","-o","f_adder.v","-g"],
             "cwd": "${workspaceFolder}",
             "console": "integratedTerminal"
         },
@@ -50,11 +50,47 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "Debug rocket",
+            "name": "Debug rocket small",
             "type": "debugpy",
             "request": "launch",
             "program": "main.py",
-            "args": ["tests/regression/rocket","-f","filelist.f","-t","RocketTile","-o","f_rocket.v","-g"],
+            "args": ["tests/regression/Rocket_Small","-f","filelist.f","-t","RocketTile","-o","f_rocket.v","-g"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Debug cascade-rocket",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "args": ["tests/regression/cascade_rocket","-f","filelist.f","-t","top_tiny_soc","-o","f_rocket.v","-g"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Debug cascade-boom",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "args": ["tests/regression/cascade_boom","-f","filelist.f","-t","boom_mem_top","-o","f_boom.v","-g"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Debug vexriscv",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "args": ["tests/regression/cascade-vexriscv","-f","filelist.f","-t","vexriscv_tiny_soc","-o","f_vexriscv.v","-g"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Debug cva6",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "args": ["tests/regression/cascade_cva6","-f","filelist.f","-t","ariane_tiny_soc","-o","f_cva6.v","-g","-ex","sram_mem"],
             "cwd": "${workspaceFolder}",
             "console": "integratedTerminal"
         },

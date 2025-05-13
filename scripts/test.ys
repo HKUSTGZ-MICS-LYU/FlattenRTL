@@ -1,0 +1,5 @@
+read_verilog -sv cva6.v
+proc -nomux -noopt
+opt_clean
+rename -hide
+write_verilog -noattr -norename -simple-lhs result.v

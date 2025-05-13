@@ -4,6 +4,7 @@ module top #(
     parameter btb_bramcore2___DATA_WIDTH=32'd54,
     parameter btb_bramcore2___MEMSIZE=10'd512) (A);
 	input A;
+  // submodule ram_cword_set
   
     // INSTANCE: [btb_bramcore2]
     wire btb_bramcore2___CLKA;
@@ -11,13 +12,13 @@ module top #(
     wire btb_bramcore2___WEA;
     wire[btb_bramcore2___ADDR_WIDTH-1:0] btb_bramcore2___ADDRA;
     wire[btb_bramcore2___DATA_WIDTH-1:0] btb_bramcore2___DIA;
-    wire btb_bramcore2___DOA;
+    wire[btb_bramcore2___DATA_WIDTH-1:0] btb_bramcore2___DOA;
     wire btb_bramcore2___CLKB;
     wire btb_bramcore2___ENB;
     wire btb_bramcore2___WEB;
     wire[btb_bramcore2___ADDR_WIDTH-1:0] btb_bramcore2___ADDRB;
     wire[btb_bramcore2___DATA_WIDTH-1:0] btb_bramcore2___DIB;
-    wire btb_bramcore2___DOB;
+    wire[btb_bramcore2___DATA_WIDTH-1:0] btb_bramcore2___DOB;
     assign btb_bramcore2___CLKA = CLK;
     assign btb_bramcore2___ENA = btb_bramcore2$ENA;
     assign btb_bramcore2___WEA = btb_bramcore2$WEA;
@@ -70,6 +71,5 @@ module top #(
   assign  btb_bramcore2___DOA =( btb_bramcore2___PIPELINED  ?  btb_bramcore2___DOA_R2 : btb_bramcore2___DOA_R ); 
   assign  btb_bramcore2___DOB =( btb_bramcore2___PIPELINED  ?  btb_bramcore2___DOB_R2 : btb_bramcore2___DOB_R );
     
-
 
 endmodule
