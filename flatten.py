@@ -170,7 +170,6 @@ class OrderedModulePortVisitor(SystemVerilogParserVisitor):
         self.cur_lhs = cur_lhs
 
     def visitList_of_port_declarations(self, ctx:SystemVerilogParser.List_of_port_declarationsContext):
-        self.index = 0
         for item in ctx.port_decl():
             self.dict_of_lhs_to_rhs[self.instance_name][item.ansi_port_declaration().port_identifier().getText()] = self.port_var_list[self.index]
             self.cur_lhs.append(item.ansi_port_declaration().port_identifier().getText())
