@@ -1,6 +1,6 @@
 # Description
 
-This is a project that flattens Verilog.
+This is a project that flattens Verilog. You can refer to our new version [VeriFlatten](https://github.com/MrWater98/VeriFlatten).
 
 ## Install
 
